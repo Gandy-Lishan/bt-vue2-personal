@@ -11,7 +11,7 @@
                   <span slot="content">
                     Indicator type or symbol fundamental data, currently encompassing four indicator categories
                   </span>
-                  <i class="iconfont icon-wenhao"></i>
+                  <i class="fa fa-question-circle right" aria-hidden="true"></i>
                 </el-tooltip>
               </label>
             </template>
@@ -43,7 +43,7 @@
                   <span slot="content">
                     Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
-                  <i class="iconfont icon-wenhao"></i>
+                  <i class="fa fa-question-circle right" aria-hidden="true"></i>
                 </el-tooltip>
               </label>
             </template>
@@ -69,7 +69,7 @@
                   <span slot="content">
                     Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
-                  <i class="iconfont icon-wenhao"></i>
+                  <i class="fa fa-question-circle right" aria-hidden="true"></i>
                 </el-tooltip>
               </label>
             </template>
@@ -95,7 +95,7 @@
                   <span slot="content">
                     Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
-                  <i class="iconfont icon-wenhao"></i>
+                  <i class="fa fa-question-circle right" aria-hidden="true"></i>
                 </el-tooltip>
               </label>
             </template>
@@ -152,7 +152,7 @@
                   <span slot="content">
                     Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
-                  <i class="iconfont icon-wenhao"></i>
+                  <i class="fa fa-question-circle right" aria-hidden="true"></i>
                 </el-tooltip>
               </label>
             </template>
@@ -210,7 +210,7 @@
                   <span slot="content">
                     Here, you have access to multiple indicators, which you can select from a dropdown menu based on your preferences.
                   </span>
-                  <i class="iconfont icon-wenhao"></i>
+                  <i class="fa fa-question-circle right" aria-hidden="true"></i>
                 </el-tooltip>
               </label>
             </template>

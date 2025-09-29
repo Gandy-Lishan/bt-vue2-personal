@@ -410,7 +410,7 @@ export default {
    gap: 16px;
    
    .date-time {
-     color: #606266;
+     color: #000000;
      font-size: 14px;
    }
    

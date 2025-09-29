@@ -10,7 +10,7 @@
           <el-tooltip effect="dark" placement="top">
             <span slot="content" v-html="trendEstimateContent">
             </span>
-            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </h3>
         <BarChart
@@ -62,7 +62,7 @@
           <el-tooltip effect="dark" placement="top">
             <span slot="content" v-html="EPSGrowthRateContent">
             </span>
-            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </h3>
         <ESPGrowthChart :data="EPSGrowthRate" />
@@ -73,7 +73,7 @@
           <el-tooltip effect="dark" placement="top">
             <span slot="content" v-html="earningsSuprisesContent">
             </span>
-            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </h3>
         <BarChart
@@ -95,7 +95,7 @@
           <el-tooltip effect="dark" placement="top">
             <span slot="content" v-html="revenueSuprisesContent">
             </span>
-            <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </h3>
         <BarChart

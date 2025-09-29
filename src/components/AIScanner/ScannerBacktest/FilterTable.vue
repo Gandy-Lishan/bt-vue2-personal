@@ -72,7 +72,7 @@
 							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['Trend']">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -96,7 +96,7 @@
 						<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent[midTermMap[scope.row[l.value]]?midTermMap[scope.row[l.value]]:scope.row[l.value]]">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -119,7 +119,7 @@
 							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['ExpectedReturn']">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
           <template slot-scope="scope">
@@ -278,6 +278,7 @@ export default {
 				item['StopLoss'] = this.displayData(item['StopLoss'])
 				item['ProfitTarget'] = this.displayData(item['ProfitTarget'])
 				item['ExpectedReturn'] = this.displayData(item['ExpectedReturn'])
+				item['Optix'] = this.displayData(item['Optix'])
 			})
 			return this.data.content?.slice(startIndex, endIndex);
 		},
@@ -452,7 +453,7 @@ export default {
 			console.log('this.data.content', this.data.content)
 			const data = this.data.content
 			const processedData = data.map(item => {
-				return {
+				const obj = {
 					'Date': item.Date,
 					'Symbol': item.Symbol,
 					'Close': item.Close,
@@ -464,6 +465,10 @@ export default {
 					'Best Time In Market(Bars)': item.TimeInMarket,
 					'Expected Return(%)': `${item.ExpectedReturn}%`,
 				}
+				if(item.TrendScore) obj['Trend'] = item.TrendScore
+				if(item.RelTrendScore) obj['RelTrend Score'] = item.RelTrendScore
+				if(item.Optix) obj['Optix'] = item.Optix
+				return obj
 			})
 			return processedData
 		},
@@ -498,7 +503,7 @@ export default {
 	margin: 20px 0;
 }
 .el-table /deep/ thead .iconfont{
-	color: #606266;
+	color: #000000;
 }
 .filterTableDes {
   padding: 0px 0px 20px 0px;

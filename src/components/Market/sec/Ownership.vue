@@ -37,7 +37,7 @@
             <el-tooltip effect="dark" placement="top">
               <span slot="content" v-html="tab.desc">
               </span>
-              <i class="iconfont icon-wenhao" style="font-size: 14px;font-weight: 300;"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </span>
       </div>

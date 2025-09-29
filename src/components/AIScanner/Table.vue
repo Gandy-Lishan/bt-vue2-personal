@@ -15,7 +15,7 @@
 			style="width: 100%; height: 100%"
 			border
 		>
-			<el-table-column type="expand" width="20px">
+			<el-table-column type="expand" width="20px" v-if="currTabPage !== 'OptionScanner'">
 				<template slot-scope="props">
 					<el-form label-position="left" inline class="demo-table-expand">
 						<!-- <el-form-item label="Description">
@@ -105,7 +105,9 @@
 					min-width="70"
 				>
 					<template slot-scope="scope">
+						<span v-if="currTabPage === 'OptionScanner'">{{ scope.row[l.value] }}</span>
 						<router-link
+						v-else
 							:to="{
 								path: '/scannerai/scannerai_chart',
 								query: {
@@ -128,7 +130,7 @@
 					:label="l.label"
 					:prop="l.value"
 					:key="index"
-					width="120"
+					:width="l.width || '60'"
 					:sortable="
 						[
 							'Trend'
@@ -142,7 +144,7 @@
 							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['Trend']">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -166,7 +168,7 @@
 						<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent[scope.row[l.value]]">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -188,7 +190,7 @@
 							<el-tooltip effect="dark" placement="top" style="display: inline">
 							<span slot="content" v-html="textContent['ExpectedReturn']">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -210,7 +212,19 @@
 							'Date',
 							'Z-Score',
 							'Expected Return(%)',
-							'Close','Direction'
+							'Close','Direction',
+							'Last Close',
+							'Expire Date',
+							'DTE',
+							'Strike',
+							'Break Even',
+							'Prob. of Profit',
+							'Credit',
+							'Margin',
+							'Return %',
+							'CAGR %',
+							'Earnings Date',
+							'Trend Score',
 						].indexOf(l.label) !== -1
 							? 'custom'
 							: false
@@ -400,7 +414,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			// 数字字符串转数字类型排序
-			if(['StopLoss','TimeInMarket','ProfitTarget'].indexOf(colName) !== -1){
+			if(['StopLoss','TimeInMarket','ProfitTarget', 'stkpx', 'DTE', 'strike', 'be', 'POP_est', 'credit', 'margin', 'return_per', 'cagr', 'Trend Score'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
@@ -430,7 +444,7 @@ export default {
 				}
 			}
 			// 日期类型排序
-			if(['Date'].indexOf(colName) !== -1){
+			if(['Date', 'expirDate'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a,b) => {
 						return new Date(b[colName]) - new Date(a[colName])
@@ -562,11 +576,11 @@ export default {
 	margin: 20px 0;
 }
 .el-table /deep/ thead .iconfont{
-	color: #606266;
+	color: #000000;
 }
 /deep/ .el-form--inline .el-form-item__label {
 	font-weight: 600;
-	color: #606266;
+	color: #000000;
 }
 /deep/ .el-form-item__content {
 	font-weight: 500;

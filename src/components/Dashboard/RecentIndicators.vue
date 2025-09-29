@@ -308,7 +308,7 @@ th {
 }
 
 .tg td {
-  color: #333;
+  color: #000000;
   background-color: #fff;
 }
 
@@ -351,7 +351,7 @@ th {
   overflow: hidden;
   word-break: normal;
   border-color: #ccc;
-  color: #333;
+  color: #000000;
   background-color: #fff;
   border-top-width: 1px;
   border-bottom-width: 1px;
@@ -485,7 +485,7 @@ table.dataTable.display tbody tr:first-child td {
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_processing,
 .dataTables_wrapper .dataTables_paginate {
-  color: #333;
+  color: #000000;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {

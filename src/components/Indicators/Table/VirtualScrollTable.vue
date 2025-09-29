@@ -1,7 +1,7 @@
 <template>
 <div>
   <div>
-    <div class="header-span" v-if="(!showReport && !showRelated)">
+    <div class="header-span" v-if="(!showReport && !showRelated && !showConstituentConditions)">
       <span>
         {{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}
         <i v-show="isMostPopular" class="el-icon-download" @click="downloadCSV" title="Download List" style="cursor: pointer;"></i>
@@ -21,7 +21,7 @@
           <svg @click="fullScreenTrendScorePage" v-else-if="isTrendScoreFullScreen && isTrendScorePage" t="1746518175001" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2581" width="200" height="200"><path d="M597.333333 395.861333V192a21.333333 21.333333 0 0 0-42.666666 0v256a21.333333 21.333333 0 0 0 21.333333 21.333333h256a21.333333 21.333333 0 0 0 0-42.666666h-205.12L890.24 163.306667a21.333333 21.333333 0 0 0-30.165333-30.165334L597.333333 395.861333z m-170.666666 232.277334V832a21.333333 21.333333 0 0 0 42.666666 0V576a21.333333 21.333333 0 0 0-21.333333-21.333333H192a21.333333 21.333333 0 0 0 0 42.666666h205.12L133.76 860.693333a21.333333 21.333333 0 0 0 30.165333 30.165334L426.666667 628.138667z" fill="#3D3D3D" p-id="2582"></path></svg>
       </el-tooltip>
     </div>
-    <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated) && !isMostPopular">
+    <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated && !showConstituentConditions) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}
           <i v-show="(checkedType  == item.value) && isShowFilter" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
@@ -202,7 +202,7 @@
               </template>
             </div>
           </template> -->
-          <el-table-column align="center" width="35px" v-if="!showRelated">
+          <el-table-column align="center" width="35px" v-if="!showRelated && !showConstituentConditions">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorite indicators" :loading="scope.row.loading"></el-button>
@@ -275,6 +275,7 @@ export default {
     firstRow: Object,
     showReport: Boolean,
     showRelated: Boolean,
+    showConstituentConditions: Boolean,
     sourceType: String,
     subTypeOptions: Array,
     breadthIndicatorsOption: Array
@@ -413,6 +414,23 @@ export default {
               minWidth: '100px'
             }
             ]
+        ],
+        [
+          'ConstituentConditionsColumns',
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '120px'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            }
+          ]
         ],
         ['macroeconomicColumns', 
           [
@@ -1770,6 +1788,7 @@ export default {
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
       if(this.type === 'related' && !this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns')}
       if(this.type === 'related' && this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
+      if(this.type === 'constituent_conditions') return columnsMap.get(`${'ConstituentConditions'}Columns`)
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
       if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
@@ -1954,7 +1973,7 @@ export default {
       return ['TSCRP', 'RTSCRP'].includes(this.checkedType)
     },
     isShowFilter() {
-      return this.enlarged && (!this.showReport && !this.showRelated && (this.checkedType !== 'TrendSector'))
+      return this.enlarged && (!this.showReport && !this.showRelated && !this.showConstituentConditions && (this.checkedType !== 'TrendSector'))
     }
   },
   watch: {
@@ -1965,7 +1984,7 @@ export default {
           this.isMostPopular = true
           this.enlarged = true
         }
-        if(newValue === 'Research & Blog Posts' || newValue === 'Related Charts') {
+        if(newValue === 'Research & Blog Posts' || newValue === 'Related Charts' || newValue === 'Constituent Conditions') {
           this.enlarged = true
         }
 			},
@@ -2015,7 +2034,7 @@ export default {
     }
     this.filteredList = this.symbolList
     this.symbolList.map(item => {
-      const urlLower = item.url.toLowerCase()
+      const urlLower = item.url?.toLowerCase?.() || ''
       if(!this.symbolListMap.has(urlLower)) this.symbolListMap.set(urlLower, item)
     })
     console.log('filteredList', this.filteredList)
@@ -2242,7 +2261,7 @@ export default {
       //   this.$emit("updateChart", row)
       //   return
       // }
-      if(this.showRelated) {
+      if(this.showRelated || this.showConstituentConditions) {
         await this.clickRelated(row)
         return
       }
@@ -2286,7 +2305,7 @@ export default {
         }).filter(item => item.length > 0).flat()
         if(sourceTable.length) {
           const source_list = sourceTable[0].source_list // 只取第一个匹配到的 Table
-          this.enLargeTableFromIndex(source_list, sourceTable[0], 'related')
+          this.enLargeTableFromIndex(source_list, sourceTable[0], this.showRelated ? 'related' : 'constituent_conditions')
         }else {
           let res = {}
           try {
@@ -2363,7 +2382,7 @@ export default {
             })
             return
           }
-          await this.enLargeTableFromIndex(_sourceList.source_list, _sourceList, 'related')
+          await this.enLargeTableFromIndex(_sourceList.source_list, _sourceList, this.showRelated ? 'related' : 'constituent_conditions')
         /* 如果匹配不到, 使用下面的规则请求个别表单
         ndx_100_complete_list: type: stock_nasdaq
         sp_1500_complete_list: type: stock_sent
@@ -3330,7 +3349,7 @@ export default {
     text-align: center;
     background-color: #d9d9d9;
     font-weight: 600;
-    color: #333;
+    color: #000000;
     padding: 0px;
     .cell {
       padding-left: 0px;
@@ -3346,7 +3365,7 @@ export default {
     text-align: center;
     .cell {
       font-weight: 600;
-      color: #333;
+      color: #000000;
       padding: 5px 0px 5px 0px;
     }
   }
@@ -3361,7 +3380,7 @@ export default {
   /deep/ .el-select .el-input__inner {
     background-color: #d9d9d9;
     font-weight: 600;
-    color: #333;
+    color: #000000;
     padding: 0px;
     margin: 0px;
     width: 100%;
@@ -3370,7 +3389,7 @@ export default {
   }
   /deep/ .el-select .el-input .el-select__caret {
     font-weight: 600;
-    color: #333;
+    color: #000000;
   }
   /deep/ .el-button--mini, .el-button--small {
     font-size: 14px;
@@ -3390,7 +3409,7 @@ export default {
   }
 }
 .dataTables_info {
-  color: #333;
+  color: #000000;
   font-weight: 500;
   margin-top: 5px;
 }
@@ -3481,11 +3500,11 @@ export default {
   margin-bottom: 10px;
   /deep/ .el-tag {
     background-color: #ffffff;
-    color: #333;
+    color: #000000;
     font-weight: bold;
   }
   /deep/ .el-tag .el-tag__close {
-    color: #333;
+    color: #000000;
   }
 }
 /deep/ .el-select__input {

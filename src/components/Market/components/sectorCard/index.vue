@@ -68,7 +68,7 @@ export default {
 .section-title {
  font-size: 20px;
  font-weight: 600;
- color: #333;
+ color: #000000;
  margin-bottom: 20px;
 }
 

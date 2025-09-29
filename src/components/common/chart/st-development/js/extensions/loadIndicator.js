@@ -121,21 +121,19 @@ import { formatStandardTime } from '@/utils'
          var savedTechSD = []
          if(type == 'updateIndicators' || type == 'addBuiltTech'){
             /** 这个加载indicatorlist时保存savedTechSD的逻辑是错误又多余的，只有在runbt时运行saveIndicatorLayoutData才会保存其值，rerun也只是直接读取其值再运行 */
-            for(var i in stx.layout.studies){
-                /** 跳过非参与回测的indicator */
-                //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
-                
-                /** 跳过MA和SymbolHove指标,它们只靠MALayout维护 */
-                // if(stx.layout.studies[i].type == 'ma') continue
-                if(CIQ.store.getters.getMaLikeTech.includes(stx.layout.studies[i].type)) continue
-                savedTechSD.push({
-                    type: stx.layout.studies[i].type,
-                    inputs: stx.layout.studies[i].inputs,
-                    outputs: stx.layout.studies[i].outputs,
-                    parameters: stx.layout.studies[i].parameters,
-                    panel: stx.layout.studies[i].panel
-                })
-            }
+            // for(var i in stx.layout.studies){
+            //     /** 跳过非参与回测的indicator */
+            //     //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
+            //     /** 跳过MA指标,MA只靠MALayout维护 */
+            //     if(stx.layout.studies[i].type == 'ma') continue
+            //     savedTechSD.push({
+            //         type: stx.layout.studies[i].type,
+            //         inputs: stx.layout.studies[i].inputs,
+            //         outputs: stx.layout.studies[i].outputs,
+            //         parameters: stx.layout.studies[i].parameters,
+            //         panel: stx.layout.studies[i].panel
+            //     })
+            // }
          }else{
             /** 如果type为loadFromBakctest或者outputSignalsResult的话,
              * vuex有techSD则存入savedTechSD */
@@ -233,33 +231,35 @@ import { formatStandardTime } from '@/utils'
                     CIQ.resetSupportLineWithChannel()
                 }; 
                 const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-                if(comparisonSymbol.url){
-                    /** dual symbol */
-                    var start = config.timestampToTime(CIQ.initialDate.start)
-                    var end = config.timestampToTime(CIQ.initialDate.end)
-                    const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, comparisonSymbol.url)
-                    debugger
-                    let _data = formatData(res.data)
-                    stx.addSeries(comparisonSymbol.url, {
-                        highlightable: false,
-                        display:comparisonSymbol.name, 
-                        data:_data,
-                        isComparison: false, 
-                        color: "#368DF0",
-                        permanent: true,
-                        // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.        
-                        yAxis:{ 
-                            position:"left",
-                            textStyle:"#FFBE00"
-                        },
-                    },commonOperations);    // 确保addSeries后再触发后续逻辑以及最后的回调，最终确保study在数据源出现后加载以及csv的生成时机正确
-                }else commonOperations();
-
+                await CIQ.addComparison(stx, comparisonSymbol, commonOperations)
                 favBtnContainerToggle()
          })
         })
  }
 
+ CIQ.addComparison = async function(stx, comparison, cb) {
+    const {url,name} = comparison
+    if(url){
+        /** dual symbol */
+        var start = config.timestampToTime(CIQ.initialDate.start)
+        var end = config.timestampToTime(CIQ.initialDate.end)
+        const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, url)
+        let _data = formatData(res.data)
+        stx.addSeries(url, {
+            highlightable: false,
+            display:name, 
+            data:_data,
+            isComparison: false, 
+            color: "#368DF0",
+            permanent: true,
+            // This setting is only applicable when using the primary y-axis and has no effect when using a renderer that has its own axis.        
+            yAxis:{ 
+                position:"left",
+                textStyle:"#FFBE00"
+            },
+        },cb);    // 确保addSeries后再触发后续逻辑以及最后的回调，最终确保study在数据源出现后加载以及csv的生成时机正确
+    }else cb();
+ }
  const formatData = function(data) {
     if(data == null){
         data = []
@@ -686,7 +686,7 @@ import { formatStandardTime } from '@/utils'
         CIQ.Studies.removeStudy(stx, stx.layout.studies[studyInstanceName]);
     }
     //console.log('****************Clear existing studies from the chart Done')
-    const senti_color = ["#000000"];
+    const senti_color = document.querySelector("cq-context").classList.value.indexOf("ciq-night") != -1 ? ["#FFFFFF"] : ["#000000"];
     // const tech_color_1 = ["#5B9BD1", "#368DF0"]; // Not used in the provided code
     // const tech_color_2 = ["#000000", "#6b7280"]; // Not used in the provided code
 

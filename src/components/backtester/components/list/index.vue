@@ -44,12 +44,28 @@ export default {
     },
     openUserFunction() {
       const email = getCookieData()?.username
-      const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+      const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'daniel@sentimentrader.com', 'jinny@sentimentrader.com']
       return allowedUserList.includes(email)
 		},
+    canOnlyAccessPartOfReport() {
+      const access_level = getCookieData()?.access_level
+      return access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
+    }
   },
   mounted() {
     console.log('openUserFunction', this.openUserFunction)
+    if(this.canOnlyAccessPartOfReport) {
+      this.menuItems = [
+        {
+          index: 'sample',
+          lable: 'Sample Backtests'
+        },
+        {
+          index: 'analyst',
+          lable: "Analysts' Backtests"
+        }
+      ]
+    }
     if(this.openUserFunction) {
       this.menuItems.push({
         index: 'shared',

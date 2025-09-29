@@ -35,56 +35,56 @@
               <span>Rel Trend</span>
             </li>
         </ul>
-        <cq-separator></cq-separator>
-        <div class="menu-heading">
-          Manage Chart Layout
-          <div class="search-container">
-            <input type="search" v-model="searchQuery" placeholder="Search" />
+        <div class="manageChartLayout">
+          <cq-separator></cq-separator>
+          <div class="menu-heading">
+            Manage Chart Layout
+            <div class="search-container">
+              <input type="search" v-model="searchQuery" placeholder="Search" />
+            </div>
           </div>
-        </div>
-  
-        <div class="save-btn-wrapper"><button class="create-new-button" @click="toggleCreatePanel">
-          Save current chart layout
-        </button></div>
-  
-        <!-- 布局列表 -->
-        <ul class="layout-list">
-          <li
-            v-if="!isLoading"
-            v-for="layout in filteredLayouts"
-            :key="layout.id"
-            @mouseenter="hoveredLayoutId = layout.id"
-            @mouseleave="hoveredLayoutId = null"
-            @click="handleItemSelected(layout)"
-          >
-            <span>{{ layout.name }}</span>
-            <!-- v-if="hoveredLayoutId === layout.id" -->
-            <button
-  
-              class="remove-button"
-              @click.stop="handleRemoveLayout(layout.id)"
+          <div class="save-btn-wrapper"><button class="create-new-button" @click="toggleCreatePanel">
+            Save current chart layout
+          </button></div>
+    
+          <!-- 布局列表 -->
+          <ul class="layout-list">
+            <li
+              v-if="!isLoading"
+              v-for="layout in filteredLayouts"
+              :key="layout.id"
+              @mouseenter="hoveredLayoutId = layout.id"
+              @mouseleave="hoveredLayoutId = null"
+              @click="handleItemSelected(layout)"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+              <span>{{ layout.name }}</span>
+              <button
+                v-if="hoveredLayoutId === layout.id"
+                class="remove-button"
+                @click.stop="handleRemoveLayout(layout.id)"
               >
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </li>
-           <li v-if="isLoading" class="loading-item">Updating List...</li>
-           <li v-if="!isLoading && filteredLayouts.length === 0" class="no-results-item">
-              No layouts found.
-           </li>
-        </ul>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </li>
+            <li v-if="isLoading" class="loading-item">Updating List...</li>
+            <li v-if="!isLoading && filteredLayouts.length === 0" class="no-results-item">
+                No layouts found.
+            </li>
+          </ul>
+        </div>
       </div>
   
       <!-- 新建布局面板 -->
@@ -172,7 +172,9 @@
         this.isDropdownVisible = !this.isDropdownVisible;
         // 如果菜单刚被打开，就获取数据
         if (this.isDropdownVisible) {
-          this.fetchLayouts();
+          //if(this.$store.getters.getIsAdmin) {
+            this.fetchLayouts();
+          //}
         } else {
           // 如果是关闭主菜单，确保新建面板也一起关闭
           this.isCreatePanelVisible = false;
@@ -509,6 +511,8 @@
   
   /* 移除按钮 */
   .remove-button {
+    position: absolute;
+    right: 30px;
     background: transparent;
     border: none;
     padding: 2px;
@@ -521,7 +525,7 @@
   }
   
   .remove-button:hover {
-    color: #333;
+    color: #000000;
     background-color: #e0e0e0;
   }
   

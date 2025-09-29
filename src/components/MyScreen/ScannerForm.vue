@@ -95,7 +95,7 @@
             <label v-if="criteria_option === 'CommonPattern'" style="margin-left: 5px;">
               <el-tooltip effect="dark" placement="top">
                 <span slot="content">Select a preset technical pattern and the system will match you with a similar move in the historical data of the underlying.</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
           </div>
@@ -1289,7 +1289,7 @@ try {
   }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #606266;
+  color: #000000;
   font-size: 14px;
 }
 /deep/ .el-button, /deep/ .el-input__inner, /deep/ .el-input-group__append, /deep/ .el-tag, .category-text, .sign {
@@ -1300,8 +1300,8 @@ try {
 }
 .scanner-form /deep/ .el-input__inner {
   margin-left: 0px;
-  color: #606266;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 600;
   font-size: 14px;
 }
 .set-up-container /deep/ .el-input__inner {
@@ -1315,7 +1315,7 @@ try {
 }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #333;
+  color: #000000;
   white-space: nowrap;
 }
 /deep/ .el-button--small, .el-button--small.is-round {
@@ -1327,8 +1327,8 @@ try {
     font-size: 14px;
     line-height: 32px;
     margin: 42px 0px 0px 0px;
-    font-weight: 500;
-    color: #606266;
+    font-weight: 600;
+    color: #000000;
   }
   .processTipsBox {
     height: 100%;

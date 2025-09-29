@@ -423,7 +423,7 @@ body .#{$DARK} .stx-trade-positions .stx-current-position .stx-btn.click:not(.up
 body .#{$DARK} .stx-trade-positions .stx-head-bar .stx-btn.click {
 	color: #999;
 	background-color: #1f1f1f;
-	border-color: #333;
+	border-color: #000000;
 }
 body .#{$DARK} .stx-trade-positions .stx-current-position .stx-btn.click:active:not(.up):not(.down),
 #{$hovering} body .#{$DARK} .stx-trade-positions .stx-current-position .stx-btn.click:hover:not(.up):not(.down),

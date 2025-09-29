@@ -616,7 +616,7 @@ export default {
 	margin: 20px 0;
 }
 .el-table /deep/ thead .iconfont{
-	color: #606266;
+	color: #000000;
 }
 .des-container {
 	border-bottom: 2px solid #dddddd;

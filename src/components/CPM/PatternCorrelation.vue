@@ -146,7 +146,7 @@
         <el-tooltip effect="dark" placement="top" style="display: inline">
           <span slot="content" v-html="patternCorrelationTooltip">
           </span>
-          <i class="iconfont icon-wenhao"></i>
+          <i class="fa fa-question-circle right" aria-hidden="true"></i>
         </el-tooltip>
       </h3>
       <div style="height: 400px;">
@@ -270,6 +270,8 @@ export default {
       await this.fetchSPXDT();
       this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].Date
       this.setPeriod()
+      this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
+      this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
       // this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
       // this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
     },
@@ -583,10 +585,10 @@ export default {
         }
       },
     measureBarDistance(quotes, d1,d2) {
-    const standardStartDate = formatStandardTime(d1)
-    const standardEndDate = formatStandardTime(d2)
+    const standardStartDate = d1
+    const standardEndDate = d2
     debugger
-    const subQuotes = quotes.filter(item => new Date(item.Date).getTime()>=standardStartDate.getTime() && new Date(item.Date).getTime()<=standardEndDate.getTime())
+    const subQuotes = quotes.filter(item => new Date(item.Date).getTime()>=new Date(standardStartDate).getTime() && new Date(item.Date).getTime()<=new Date(standardEndDate).getTime())
     return subQuotes.length
     },
     changeComparisonNumberOfBars(val) {
@@ -626,7 +628,7 @@ export default {
       if (startDateIndex === -1) return;
       
       // 计算开始日期索引
-      const endDateIndex = startDateIndex + barDistance - 1;
+      const endDateIndex = startDateIndex + barDistance;
       
       // 如果开始索引小于0，返回 undefined
       if (endDateIndex >= quotes.length) return quotes[quotes.length - 1].Date;
@@ -663,7 +665,7 @@ export default {
   margin-top: 30px;
   /deep/ .el-form-item__label {
     font-weight: 600;
-    color: #333;
+    color: #000000;
     width: 100%;
   }
   /deep/ .el-date-editor.el-input, .el-date-editor.el-input__inner {
@@ -671,6 +673,8 @@ export default {
   }
   /deep/ .el-input__inner {
     margin: 0px;
+    color: #000000;
+    font-weight: 600;
   }
   /deep/ .el-button--warning {
     width: 100%;
@@ -682,10 +686,11 @@ export default {
   }
   /deep/ .el-form-item__label {
     font-weight: 600;
-    color: #333;
+    color: #000000;
   }
-  /deep/ .el-button--primary, /deep/ .el-input__inner, /deep/ .el-input-group__append {
+  /deep/ .el-input__inner, /deep/ .el-input-group__append {
     font-weight: 600;
+    color: #000000;
   }
   .el-date-editor.el-input.el-input--mini.el-input--prefix.el-input--suffix.el-date-editor--year {
     width: 100%;

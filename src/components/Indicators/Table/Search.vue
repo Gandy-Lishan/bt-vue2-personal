@@ -216,13 +216,16 @@ export default {
         }else if(groups === 'macroeconomic') {
           requireUrl = 'macro_indicator_list'
         }
-        if(!requireUrl) return
-        await this.fetchIndicatorsPageList(requireUrl)
-        const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
-        let _sourceList = _list.map(item => {
-            if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
-        }).filter(item => item !== undefined).shift()
-        console.log('_sourceList', _sourceList)
+        // if(!requireUrl) return
+        let _sourceList = null
+        if(requireUrl) {
+          await this.fetchIndicatorsPageList(requireUrl)
+          const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
+          _sourceList = _list.map(item => {
+              if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
+          }).filter(item => item !== undefined).shift()
+          console.log('_sourceList', _sourceList)
+        }
         if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
           // 尝试看在不在 most_popular
           requireUrl = 'most_popular'
@@ -294,7 +297,7 @@ export default {
     box-shadow: 4px 4px 0 rgba(241, 241, 241, 0.35);
     font-size: 14px;
     box-sizing: border-box;
-    color: #333;
+    color: #000000;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -367,7 +370,7 @@ export default {
 }
 
 .aa-suggestion>span:first-child {
-    color: #333;
+    color: #000000;
 }
 
 .aa-suggestion>span:last-child {

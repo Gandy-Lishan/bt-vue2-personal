@@ -43,9 +43,9 @@ export function setRouterPermission(router) {
 		printConsole(process.env.NODE_ENV)
 		if(process.env.NODE_ENV == 'development'){
 			// hao@sentimentrader
-			const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
+			// const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 			// reports 权限
-			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdQrcuNNKjaFjCDJpptbkKEBBGDtuUiNycG03w9h1VkezpvTm0BdvYrnHrJbQm8XdjDG75olOAHnLoIzuBhH95QQh9lQK52awOyIAnQ55MrzxDroVR6gZhkF/lWfNUwC2dgagWW04VYkeLys1phd3Yifupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6DFMSvHKMNTeEVXtvptbBy2eqB1l3OX5WjCbfJJFtkotn4LL1LUML6evLgl6Tdr+zBBGDtuUiNycG03w9h1Vke5Pi4P3OVvyNrt7/sdPUBdPk9hdfGaP97xE2my/HuAne"
+			const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdQrcuNNKjaFjCDJpptbkKEBBGDtuUiNycG03w9h1VkezpvTm0BdvYrnHrJbQm8XdjDG75olOAHnLoIzuBhH95QQh9lQK52awOyIAnQ55MrzxDroVR6gZhkF/lWfNUwC2dgagWW04VYkeLys1phd3Yifupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6DFMSvHKMNTeEVXtvptbBy2eqB1l3OX5WjCbfJJFtkotn4LL1LUML6evLgl6Tdr+zBBGDtuUiNycG03w9h1Vke5Pi4P3OVvyNrt7/sdPUBdPk9hdfGaP97xE2my/HuAne"
 			// daniel@sentimentrader.com
 
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdEMzpmhxCv6gNShtTcDmbal9HogiBIRYhxP9M5JqBxhvRAoCi9fuRYJjeTsdb0VjwkMB27XTL0g1I3dW7w5v9XL6qlKrueeGC0Uli9jUq0AK3hz2XcFQbELMaMVR3TpMWSl4OV46kBaEQ2+X15NdZRq9pBUXsik/FD8n+xznUaxs3rtxKFbWFMbK9jCJEzgPrUiEHWHKBM5MlWrFsdG08U4TE+l7hXmVyAsAMMv03AduZoAdot4ilWWHEdg3Fzj4Bpeb4MJv9j3/w8hSd47J4Pfupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6hncazwRWKGcmprbtmXVye7J9mNxarng0OJsRRSvDEF8/H719MKJbl9GknLd5DZxGl9HogiBIRYhxP9M5JqBxhrAZERQfwQ5uPEnPN5jrE78M0Y+6xdHCfexMWtmR0Z1r"
@@ -192,15 +192,17 @@ export function setRouterPermission(router) {
 				}
 				// 只能访问 Reports 页面: reports
 				else if(access_level.some(str => str.includes('reports')))  {
-					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/favorites', '/tags']
-					if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix))){next()}
-					else next('/MR/sentimentedge')
+					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
+					if((to.path.includes('/MR') || to.path.includes('/backtester') || to.path.includes('/doc') || to.path.includes('/contact')) && requiredPrefixes.some(prefix => to.path.includes(prefix))){next()}
+					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
+					else next('/MR') 
 				}
 				// 只能访问部分页面(report（仅限三类）,strategies, scanner): corelite
 				else if(access_level.some(str => str.includes('corelite'))) {
-					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge','/favorites', '/tags']
-					if(to.path.includes('/MR') && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
-					else next('/MR/sentimentedge')
+					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge','/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
+					if((to.path.includes('/MR') || to.path.includes('/backtester') || to.path.includes('/doc') || to.path.includes('/contact')) && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
+					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
+					else next('/MR') 
 				}
 				// report 所有人都能看， 但是部分是没有编辑功能的只能看
 			}
@@ -266,8 +268,8 @@ async function initiateList(pathname) {
 	// refactoredConcatList = uniqWith(refactoredConcatList, isEqual)
 
 
-	const storedSentimentList = localStorage.getItem('refactoredSentimentList');
-	const storedConcatList = localStorage.getItem('refactoredConcatList');
+	const storedSentimentList = localStorage.getItem('refactoredSentimentList') || '';
+	const storedConcatList = localStorage.getItem('refactoredConcatList') || '';
 	if (
 		JSON.stringify(refactoredSentimentList) !== storedSentimentList ||
 		JSON.stringify(refactoredConcatList) !== storedConcatList 

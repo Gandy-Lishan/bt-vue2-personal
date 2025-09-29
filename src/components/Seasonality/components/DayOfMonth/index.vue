@@ -18,7 +18,7 @@
               <el-tooltip effect="dark" placement="top">
                 <span slot="content"
                   >Choose a stock/index/ETF as symbol.(default:SPX)</span>
-                <i class="iconfont icon-wenhao"></i>
+                <i class="fa fa-question-circle right" aria-hidden="true"></i>
               </el-tooltip>
             </label>
         </template>
@@ -40,7 +40,7 @@
               >Select the start and end dates for the selected symbol data. <br/>
               For instance, the start date is 2020, and the end date is 2022. <br/>
               The selected symbol data will cover the period from January 1, 2020, to December 31, 2022.</span>
-            <i class="iconfont icon-wenhao"></i>
+            <i class="fa fa-question-circle right" aria-hidden="true"></i>
           </el-tooltip>
         </label>
       </template>
@@ -87,7 +87,7 @@
               <span slot="content"
                 >Calendar day refers to a natural date on the calendar. <br/>
                 Trading day refers to a day when the stock market<br/> is open for regular trading activities</span>
-              <i class="iconfont icon-wenhao"></i>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
             </el-tooltip>
           </label>
         </template>
@@ -280,7 +280,7 @@ export default {
 }
 /deep/ .el-form-item__label {
   font-weight: 600;
-  color: #333;
+  color: #000000;
 }
 /deep/ .el-button--primary, /deep/ .el-input__inner, /deep/ .el-input-group__append {
   font-weight: 600;

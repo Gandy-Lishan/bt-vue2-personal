@@ -7,7 +7,7 @@
         <el-tooltip effect="dark" placement="top">
           <span slot="content" v-html="analystRecommendationsContent">
           </span>
-          <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          <i class="fa fa-question-circle right" aria-hidden="true"></i>
         </el-tooltip>
       </div>
       <div class="analysts__chart-container">
@@ -76,7 +76,7 @@
         <el-tooltip effect="dark" placement="top">
           <span slot="content" v-html="analystPredictSummaryContent">
           </span>
-          <i class="iconfont icon-wenhao" style="font-size: 18px;font-weight: 300;"></i>
+          <i class="fa fa-question-circle right" aria-hidden="true"></i>
         </el-tooltip>
       </div>
       <base-table :tableData="tableData" :columns="columns" :loading="isLoading" tip-text=""

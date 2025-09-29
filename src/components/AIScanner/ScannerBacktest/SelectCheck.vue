@@ -160,7 +160,7 @@ export default {
     .el-tag {
       background-color: #fff;
       border: none;
-      color: #606266;
+      color: #000000;
       font-size: 13px;
       padding-right: 0;
       & ~ .el-tag {

@@ -29,7 +29,7 @@
         <template v-slot:title>
           <div class="title" ref="scrollTargetTable">
             <p @click.stop="() => {changeSecondTab('MySignal')}" :class="{ secondActive: activeSecondTab == 'MySignal' || '' }" title="Refresh List">My Signals List</p>
-            <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeSecondTab == 'Sample' || '' }" title="Refresh List">Sentimentrader Siganls List</p>
+            <!-- <p @click.stop="() => {changeSecondTab('Sample')}" :class="{ secondActive: activeSecondTab == 'Sample' || '' }" title="Refresh List">Sentimentrader Siganls List</p> -->
             <el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
               <span>Watch My Signals Tutorial</span>
             </el-button>
@@ -372,7 +372,7 @@ h2.title {
   padding: 0 20px;
   font-weight: 400;
   font-size: 14px;
-  color: #333;
+  color: #000000;
   p {
     margin: 0 0 3px 0;
   }

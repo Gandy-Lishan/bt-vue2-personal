@@ -74,8 +74,9 @@
 				effect="dark"
 				content="Complete the form filling, run the backtest, and view the results"
 				placement="bottom"
+				v-if="!canOnlyAccessPartOfReport"
 			>
-				<el-button :disabled="isDisabled" type="success" @click="runBacktest"
+				<el-button :disabled="isDisabled" type="success" @click="runBacktest" v-if="!canOnlyAccessPartOfReport"
 					>Run Backtest</el-button
 				></el-tooltip
 			>
@@ -105,6 +106,7 @@ import { seeParams} from '@/service/service'
 import UUID from '@/utils/cryptoUtils/uuid'
 import { CommonMethodsMixin } from "@/components/common/mixins/commonMethodsMixin"
 const debounce = require('lodash/debounce')
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export default {
 	name: 'SetUp',
@@ -268,6 +270,10 @@ export default {
 	isBTChartReady() {
       return this.$store.state.chart.isBTChartReady
     },
+	canOnlyAccessPartOfReport() {
+		const access_level = getCookieData()?.access_level
+		return access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
+	},
   },
 	watch: {
     setUpLoadingSetting: {
@@ -586,6 +592,10 @@ export default {
 			}
 			const findSignal = (item, index) => {
 				let signal = CIQ.findSentiIndicator(item.indicator, null)
+				if(signal) {
+					// if inbdicator is sentiment indciator
+					return signal?.url || ''
+				}
 				if (!signal) {
 					signal = CIQ.findBuiltinTechIndicator(item.indicator, null)
 				}
@@ -882,20 +892,20 @@ export default {
 	margin-right: 20px;
 	padding-bottom: 10px;
 	margin-bottom: 12px;
-	.el-button:first-child {
+	.el-button--danger {
 		background: rgb(251, 192, 92);
 		border: none;
 		width: 250px;
 	}
-	.el-button:first-child:hover {
+	.el-button--danger:hover {
 		background-color: #f59e0b;
 	}
-	.el-button:last-child {
+	.el-button--success {
 		background: #5b9bd1;
 		border: none;
 		width: 250px;
 	}
-	.el-button:last-child:hover {
+	.el-button--success:hover {
 		background-color: #409eff;
 	}
 }
@@ -962,6 +972,8 @@ export default {
 	}
 	.criteria-title {
 		font-size: 15px;
+		color: #000000;
+		font-weight: 600;
 	}
 }
 .set-up-container /deep/ .Single > .el-tabs__header.is-top {

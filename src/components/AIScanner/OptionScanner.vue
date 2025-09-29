@@ -25,7 +25,7 @@
 				:label="tableData.label" 
 				:key="index" 
 				:tableCol="tableData.tableCol" 
-				currTabPage="AIRecommendation" 
+				currTabPage="OptionScanner" 
 				:loading="loading"
 				ref="tableChild">
 			</Table>
@@ -323,6 +323,7 @@ import { createPositiveScopeIntegerRule, createTPSLScopeValidateRule } from '@/u
 import SelectCheck from "./ScannerBacktest/SelectCheck";
 import OptionData from "./OptionScanner.json";
 import Table from "./Table.vue";
+import { getOptionScanner } from '@/service/service'
 
 export default {
   name: 'scannerai',
@@ -488,10 +489,7 @@ export default {
 	},
 	handleQuery: throttle(async function () { this.$nextTick(async () => {await this.filterData()}) }, 1000),
 	async filterData(){
-		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
-		this.tableData.content.forEach(item => {
-		})
-		console.log('signals', this.tableData.content.map(item => item._Signal))
+		this.tableData.content =(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
 		this.$refs.tableChild.pageReset()
 	},
 	filterPLSCondition(searchResult){
@@ -508,39 +506,7 @@ export default {
 		return await validateForm(formName)
 	},
 	filterRangeCondition(searchResult){
-		debugger
-		if(this.showFilterDialog || this.disabledFilter) return searchResult
-		const {stop_loss_condition, stop_loss, 
-			take_profit_condition, take_profit, 
-			time_in_market_condition, time_in_market,
-			signals,
-			max_risk_condition, max_risk,
-			z_score_condition, z_score,
-			sharpe_ratio_condition, sharpe_ratio,
-			std_dev_condition, std_dev,
-			expected_return_condition, expected_return,
-			win_rate_condition, win_rate,
-			trend_score_condition, trend_score
-		} = this.data
-		console.log('this.data', this.data)
-		console.log('signals filter', signals)
-		console.log('signals options', this.options)
-		const condition = (signals.length === 1 && signals[0] === 'All') || (signals.length === 0)
 		return searchResult
-		.filter(item=>(
-			(item['StopLoss'] === null || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
-			&& (item['ProfitTarget'] === null || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
-			&& (item['TimeInMarket'] === null ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
-			&& (item['MaxRisk'] === null  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
-			&& (item['Z_Score'] === null  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
-			&& (item['SharpeRatio'] === null  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
-			&& (item['StdDev'] === null  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
-			&& (item['ExpectedReturn'] === null  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
-			&& (item['WinRate'] === null  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
-			&& (item['TrendScore'] === null  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
-		))
-	},
-	filterShowShortCondition(searchResult){
 	},
 	getSearchresult() {
 	if (!this.searchItem) {
@@ -609,19 +575,29 @@ getMatchScore(target, keyword) {
 		AIPickObj['title'] = 'Scanner Option'
 		AIPickObj['tableCol'] = [
 			{label:'Symbol',value:'ticker',labelHtml: 'Symbol'},
-			{label:'Last Close',value:'POP_est',labelHtml: 'Last Close'},
-			{label:'Expire Date',value:'expirDate',labelHtml: 'Expire Date'},
-			{label:'DTE',value:'distance',labelHtml: 'DTE'},
+			{label:'Last Close',value:'stkpx',labelHtml: 'Last<br/>Close'},
+			{label:'Expire Date',value:'expirDate',labelHtml: 'Expire<br/>Date'},
+			{label:'DTE',value:'DTE',labelHtml: 'DTE'},
 			{label:'Strike',value:'strike',labelHtml: 'Strike'},
-			{label:'Break Even',value:'be',labelHtml: 'Break Even', width: '80px'},
+			{label:'Break Even',value:'be',labelHtml: 'Break<br/>Even'},
 			{label:'Prob. of Profit',value:'POP_est',labelHtml: 'Prob. of Profit'},
-			{label:'Credit',value:'credit_per_contract',labelHtml: 'Credit'},
+			{label:'Credit',value:'credit',labelHtml: 'Credit'},
 			{label:'Margin',value:'margin',labelHtml: 'Margin'},
-			{label:'Return %',value:'return_on_full',labelHtml: 'Return %'},
-			{label:'CAGR %',value:'yte',labelHtml: 'CAGR %'},
-			{label:'Earnings Date',value:'EarningsDate',labelHtml: 'Earnings Date'}
+			{label:'Return %',value:'return_per',labelHtml: 'Return %'},
+			{label:'CAGR %',value:'cagr',labelHtml: 'CAGR %'},
+			// {label:'Earnings Date',value:'earnings_date',labelHtml: 'Earnings Date'}
 		]
-        AIPickObj.content = OptionData
+		const res = await getOptionScanner()
+        AIPickObj.content = res.data.map(item => {
+			for (const key in item) {
+				if (Object.prototype.hasOwnProperty.call(item, key)) {
+					if(key === 'stkpx') item[key] = item[key].toFixed(2)
+					else if(key === 'expirDate') item[key] = item[key].split('T')[0]
+					else item[key] = this.displayData(item[key])
+				}
+			}
+			return item
+		})
 		this.originData = AIPickObj
 		this.tableData = AIPickObj
 	},
@@ -696,8 +672,8 @@ h4 {
 	justify-content: space-between;
 }
 .direction {
-	font-weight: 500;
-	color: #606266;
+	font-weight: 600;
+	color: #000000;
 	margin: 0 10px 0 5px;
 	align-items: center;
  display: flex
@@ -759,7 +735,7 @@ h4 {
 }
 .longShortLine{
 	text-align: center;
-	color: #606266;
+	color: #000000;
 	font-weight: 600;
 }
 ._conditionBox {
@@ -787,8 +763,8 @@ h4 {
   line-height: 28px;
   border-radius: 4px;
 		margin-top: 10px;
-		color: #606266;
-		font-weight: 500;
+		color: #000000;
+		font-weight: 600;
 		font-size: 14px;
   }
   .portfolioCheckedBox a {

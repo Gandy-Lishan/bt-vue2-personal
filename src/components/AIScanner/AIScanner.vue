@@ -524,7 +524,7 @@ export default {
 		reltrend_score_condition: 0,
 		reltrend_score: 10,
 		optix_condition: 0,
-		optix: 60,
+		optix: 100,
 		signals: ['All']
 	},
 	options: ['All'],
@@ -625,24 +625,24 @@ export default {
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
 			],
 			trend_score: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, 10)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, 10)(rule, value, callback), trigger: 'change' }
 			],
 			reltrend_score_condition: [
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'blur' },
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
 			],
 			reltrend_score: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, 10)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('reltrend score', 0, 10)(rule, value, callback), trigger: 'change' }
 			],
 			optix_condition: [
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'blur' },
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, this.data.optix, true)(rule, value, callback), trigger: 'change' }
 			],
 			optix: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', this.data.optix_condition, null)(rule, value, callback), trigger: 'change' }
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'change' }
 			],
     }
   }
@@ -965,7 +965,7 @@ getMatchScore(target, keyword) {
 			{label:'Win Rate(%)',value:'WinRate',labelHtml: 'Win<br/>Rate(%)'},
 			{label:'Stop Loss(%)',value:'StopLoss',labelHtml: 'Stop<br/>Loss(%)'},
 			{label:'Profit Target(%)',value:'ProfitTarget',labelHtml: 'Profit<br/>Target(%)'},
-			{label:'Best Time In Market(Bars)',value:'TimeInMarket',labelHtml: 'Best Time In<br/>Market(Bars)'},
+			{label:'Best Time In Market(Bars)',value:'TimeInMarket',labelHtml: 'Best<br/>Time In<br/>Market<br/>(Bars)'},
 			//{label:'Cash Alloc(%)',value:'Alloc'},//'Cash Alloc(%)'
 			{label:'Expected Return(%)',value:'ExpectedReturn',labelHtml: 'Expected<br/>Return(%)'},
 			{label:'Z-Score',value:'Z_Score',labelHtml: 'Z-Score'}, // 数据有误，先不显示	
@@ -1069,8 +1069,8 @@ h4 {
 	justify-content: space-between;
 }
 .direction {
-	font-weight: 500;
-	color: #606266;
+	font-weight: 600;
+	color: #000000;
 	margin: 0 10px 0 5px;
 	align-items: center;
  display: flex
@@ -1132,7 +1132,7 @@ h4 {
 }
 .longShortLine{
 	text-align: center;
-	color: #606266;
+	color: #000000;
 	font-weight: 600;
 }
 ._conditionBox {
@@ -1160,8 +1160,8 @@ h4 {
   line-height: 28px;
   border-radius: 4px;
 		margin-top: 10px;
-		color: #606266;
-		font-weight: 500;
+		color: #000000;
+		font-weight: 600;
 		font-size: 14px;
   }
   .portfolioCheckedBox a {

@@ -2474,7 +2474,7 @@ export async function fetchAISuplineData(vm, ticker, latest_date, frequency) {
 		vm.$notify.info({
 			title: 'Analysis in Progress',
 			message: 'Our AI is analyzing the chart data to identify key trends and levels. This process can take one to two minutes to complete. Thank you for your patience.',
-			duration: 0
+			duration: 5000
 		});
 		
 		let retries = 0;
@@ -2551,4 +2551,19 @@ export function sendContactTicketFront(payload) {
 	};
 
 	return axios.post(url, form, { headers });
+}
+
+export function getOptionScanner() {
+	const path = `/dev/option_scanner_app/option_scanner_data?type=call`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
 }

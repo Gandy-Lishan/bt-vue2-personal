@@ -30,11 +30,24 @@
     </div>
   </div>
   <main>
-
     <el-menu :default-active="activeIndex" class="el-menu-demo" :mode="mode" @select="handleSelect">
     <!-- <el-menu-item index="1">Set Up</el-menu-item>
     <el-menu-item index="2">Results</el-menu-item> -->
-    <el-menu-item v-for="item in menuItems" :key="item.index" :index="item.index">{{item.lable}}</el-menu-item>
+    <el-menu-item v-for="item in menuItems" :key="item.index" :index="item.index">
+      {{item.lable}}
+      <span
+        v-if="item.lable === 'Analysts\' Backtests' && analystCountRedDot"
+        class="new-badge"
+      >
+        NEW
+      </span>
+      <span
+        v-else-if="item.lable === 'Subscriber Shared Backtests' && sharedCountRedDot"
+        class="new-badge"
+      >
+        NEW
+      </span>
+    </el-menu-item>
     </el-menu>
     <!-- <keep-alive> -->
       <router-view></router-view>
@@ -44,6 +57,10 @@
 </template>
 
 <script>
+import {
+	getAnalystList,
+	getUserSharedBacktestList
+} from '@/service/service.js'
 export default {
   name: 'Tabs',
   props: {
@@ -53,30 +70,64 @@ export default {
     menuItems: Array
   },
   data() {
-      return {
-      };
-    },
-    methods: {
-      refreshPageTemp(){
-        //this.$router.go(0)
-        this.$router.push('/backtester/').finally(()=>{location.reload()})
-      },
-      jumpToTutoiral(){
-        let path
-        if (this.$route.name == 'strategy') {
-
-        } else if (this.$route.path.includes('/backtester')) {
-          path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxPgRS4tQryQ-efk2cNFf0hb'
-        } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart') {
-
-        } else if(this.$route.path.includes('myindicator') || this.$route.path.includes('MIList')){
-          path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
-        } else if(this.$route.name == 'seasonality' || this.$route.name == 'seasonality'){
-
-        }
-            window.open(path, '_blank')
-      },
+    return {
+      analystCountRedDot: false,
+      sharedCountRedDot: false,
+      analystCount: 0,
+      sharedCount: 0,
     }
+  },
+  watch: {
+    activeIndex() {
+      if(this.activeIndex === 'analyst') {
+        this.analystCountRedDot = false
+        localStorage.setItem('analystCount', this.analystCount)
+      } else if(this.activeIndex === 'shared') {
+        this.sharedCountRedDot = false
+        localStorage.setItem('sharedCount', this.sharedCount)
+      }
+    }
+  },
+  async mounted() {
+    if (this.$route.path.startsWith('/backtester/list')) {
+      await this.checkTabCount(getAnalystList, 'analystCount');
+      await this.checkTabCount(getUserSharedBacktestList, 'sharedCount');
+    }
+  },
+  methods: {
+    async checkTabCount(fetchFn, storageKey) {
+      const res = await fetchFn(1, null, null, null);
+      const { count } = res.data;
+      this[storageKey] = count
+      const lastCount = parseInt(localStorage.getItem(storageKey) || '0', 10);
+      // 第一次进入 || count 变化
+      if ((!lastCount || count > lastCount)) {
+        this[`${storageKey}RedDot`] = true
+      }
+    },
+    refreshPageTemp(){
+      //this.$router.go(0)
+      this.$router.push('/backtester/').finally(()=>{location.reload()})
+    },
+    jumpToTutoiral(){
+      let path
+      if (this.$route.name == 'strategy') {
+
+      } else if (this.$route.path.includes('/backtester')) {
+        path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxPgRS4tQryQ-efk2cNFf0hb'
+      } else if (this.$route.name == 'scannerai' || this.$route.name == 'scannerai_chart') {
+
+      } else if(this.$route.path.includes('myindicator') || this.$route.path.includes('MIList')){
+        path = 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxNvxaxmrJmLlzizXe38Is_d'
+      } else if(this.$route.name == 'seasonality' || this.$route.name == 'seasonality'){
+
+      }
+      window.open(path, '_blank')
+    },
+    async fetchListCount() {
+
+    }
+  }
 }
 </script>
 
@@ -96,7 +147,7 @@ main .el-menu--horizontal > .el-menu-item{
   height: 40px;
   width: 50%;
   text-align: center;
-  color: #333;
+  color: #000000;
   font-weight: 700;
   font-size: 16px;
   background-color: #d7d7d7;
@@ -164,5 +215,25 @@ main .el-menu--horizontal>.el-menu-item.is-active {
       }
   }
 }
-
+.red-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 4px;
+  background-color: red;
+  border-radius: 50%;
+}
+.new-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background-color: red;
+  border-radius: 8px;
+  line-height: 14px;
+  height: 14px;
+  vertical-align: middle;
+}
 </style>

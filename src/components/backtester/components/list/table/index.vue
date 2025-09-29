@@ -413,7 +413,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="['History', 'Favorites', 'Sample', 'Analyst', 'SubscriberShared'].includes(currentPage)"
+										v-if="['History', 'Favorites', 'Sample', 'Analyst', 'SubscriberShared'].includes(currentPage) && !canOnlyAccessPartOfReport"
 										:disabled="scope.row.status == 0"
 										type="info"
 										icon="el-icon-copy-document"
@@ -509,7 +509,7 @@
 									placement="bottom-start"
 								>
 									<el-button
-										v-if="currentPage == 'Analyst'"
+										v-if="currentPage == 'Analyst' && !canOnlyAccessPartOfReport"
 										:disabled="scope.row.status == 0 || scope.row.status == 3"
 										plain
 										icon="el-icon-link"
@@ -526,6 +526,7 @@
 									placement="bottom-start"
 								>
 									<el-button
+										v-if="!canOnlyAccessPartOfReport"
 										:disabled="getIsBacktestRunningFlagState"
 										type="primary"
 										icon="el-icon-plus"
@@ -541,7 +542,7 @@
 									placement="bottom-start"
 								>
 								<el-button
-									 v-if="['History', 'Favorites'].includes(currentPage) && openUserFunction"
+									 v-if="['History', 'Favorites'].includes(currentPage) && !canOnlyAccessPartOfReport && openUserFunction"
 										:disabled="scope.row.status == 0 || scope.row.status == 3 || getIsBacktestRunningFlagState"
 										icon="el-icon-share"
 										circle
@@ -566,41 +567,34 @@
    >
      <!-- 提示 -->
      <div style="margin-bottom: 15px; color:#666;">
-						Your backtest will be reviewed before being published. Please confirm the name and author information below.
+		Click Share to submit your backtest for review. Once approved, it will be published and visible to others. Please confirm the details below.
      </div>
 
      <!-- 回测名称 -->
-     <el-form :model="shareForm" label-width="100px" label-position="top" size="small">
-       <el-form-item label="Backtest Name">
+     <el-form :model="shareForm" label-width="100px" label-position="top" size="small" class="shareForm">
+       <el-form-item label="Backtest Title">
          <el-input
            v-model="shareForm.backtestName"
            placeholder="Name your shared backtest"
          />
        </el-form-item>
-							<el-row :gutter="20">
-								<el-col :span="12">
-									<!-- First Name -->
-									<el-form-item label="First Name">
-											<el-input
-													v-model="shareForm.firstName"
-													placeholder="First Name (optional, shown as author)"
-											/>
-       </el-form-item>
-								</el-col>
-								<el-col :span="12">
-								<!-- Last Name -->
-								<el-form-item label="Last Name">
-										<el-input
-												v-model="shareForm.lastName"
-												placeholder="Last Name (optional, shown as author)"
-										/>
-								</el-form-item>
-								</el-col>
-							</el-row>
+		<el-form-item label-width="0">
+			<template slot="label">
+			<label>
+				Author name
+				<el-tooltip effect="dark" placement="top">
+				<span slot="content">The name you prefer to be known by when your backtest is shared
+				</span>
+				<i class="fa fa-question-circle right" aria-hidden="true"></i>
+				</el-tooltip>
+			</label>
+			</template>
+			<el-input v-model="shareForm.nickName" placeholder="Author Nickname (optional, shown as author)"/>
+		</el-form-item>
      </el-form>
 
      <!-- 预览区域 -->
-     <div v-if="previewShareBy" style="margin: 5px 0; padding: 10px; background: #f9f9f9; border-radius: 6px; color: #333;">
+     <div v-if="previewShareBy" style="margin: 5px 0; padding: 10px; background: #f9f9f9; border-radius: 6px; color: #000000;">
        <strong>Preview Shared Backtest Name: </strong> {{ previewShareBy }}
      </div>
 
@@ -678,8 +672,7 @@ export default {
 			shareDialogVisible: false,
 			shareForm: {
 					backtestName: "",
-					firstName: "",
-					lastName: "",
+					nickName: "",
 			},
 			shareBacktestInfo: {}
 		}
@@ -711,16 +704,20 @@ export default {
 			return this.$refs['OPT'].optimizeState
 		},
 		previewShareBy() {
-				const { firstName, lastName } = this.shareForm;
-				if (firstName || lastName) {
-						return `${this.shareForm.backtestName} (Shared by ${firstName} ${lastName})`.trim();
+				const { nickName } = this.shareForm;
+				if (nickName) {
+						return `${this.shareForm.backtestName} (Shared by ${nickName})`.trim();
 				}
 				return this.shareForm.backtestName || '';
 		},
 		openUserFunction() {
-    const email = getCookieData()?.username
-				const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
-				return allowedUserList.includes(email)
+			const email = getCookieData()?.username
+			const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'daniel@sentimentrader.com', 'jinny@sentimentrader.com']
+			return allowedUserList.includes(email)
+		},
+		canOnlyAccessPartOfReport() {
+			const access_level = getCookieData()?.access_level
+			return access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
 		},
 		...mapGetters(['getIsBacktestRunningFlagState']),
 	},
@@ -1157,9 +1154,14 @@ export default {
 }
 /deep/ .el-button--info.is-plain {
 	font-weight: 600;
-	color: #606266;
+	color: #000000;
 }
 /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
 	color: #333341;
+}
+.shareForm {
+	/deep/ .el-form-item__label {
+		width: 100%;
+	}
 }
 </style>

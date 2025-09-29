@@ -155,7 +155,7 @@ export default {
 .chart-title {
   font-size: 18px;
   font-weight: 500;
-  color: #333;
+  color: #000000;
   margin-bottom: 20px;
 }
 .chart-container {

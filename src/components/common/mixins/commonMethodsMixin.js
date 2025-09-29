@@ -201,10 +201,9 @@ export const CommonMethodsMixin = {
 						const hour = String(now.getHours()).padStart(2, '0');
 						const minute = String(now.getMinutes()).padStart(2, '0');
 						const second = String(now.getSeconds()).padStart(2, '0');
-						const firstName = this.shareForm.firstName || ''
-						const lastName = this.shareForm.lastName || ''
-						if(firstName || lastName) {
-							return `${name} <br/> (Shared by ${firstName} ${lastName})`;
+						const nickName = this.shareForm.nickName || ''
+						if(nickName) {
+							return `${name} <br/> (Shared by ${nickName})`;
 						}
 						return name || data.name;
 					}
@@ -255,7 +254,7 @@ export const CommonMethodsMixin = {
 					// if (['History', 'Favorites'].includes(this.currentPage)) {
 					// 	this.$router.push('/backtester/list/shared')
 					// }
-					this.popUpMsgBox('Submitted for review. It will be published once approved.')
+					this.popUpMsgBox('Your backtest has been submitted for review and will be published once approved.')
 				}
 				this.loading = false
 			} catch (error) {
@@ -1369,6 +1368,8 @@ export const CommonMethodsMixin = {
 					_this.$store.dispatch('states/set_isBacktestRunning_flag', true)
 					//After saving successfully, clear the backtestinfo back to the original state
 					_this.$store.commit('form/initialBacktestInfo')
+					// 清除 userIndicator 残存的 Hash 值
+					_this.$store.commit('form/initialUsersOwnFileHash')
 					// _this.$refs.historyChild.refreshHistory(res.data.id)
 					const pollingRes = await _this.pollingRunAllBTRunResults(res.data)
 					console.log('pollingRes', pollingRes)

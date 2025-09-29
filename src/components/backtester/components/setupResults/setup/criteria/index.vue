@@ -5,9 +5,8 @@
 			<div class="entry-title-box">
 				<p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p>
 				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
-					<span slot="content" v-html="config['criteriaTitleTP']">
-          </span>
-					<i class="iconfont icon-wenhao"></i>
+					<span slot="content" v-html="config['criteriaTitleTP']"></span>
+					<i class="fa fa-question-circle right color" aria-hidden="true"></i>
 				</el-tooltip>
 			</div>
 			<div class="signal-container">
@@ -19,7 +18,7 @@
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content" v-html="config['criteriaScore']">
 								</span>
-								<i class="iconfont icon-wenhao"></i>
+								<i class="fa fa-question-circle right" aria-hidden="true"></i>
 							</el-tooltip>
 						</el-checkbox>
 					</div> -->
@@ -44,9 +43,8 @@
 				<span class="scoreNote" v-if="relation === 2">
 					<span>Score: </span>
 					<el-tooltip effect="dark" placement="top" style="display: inline">
-						<span slot="content" v-html="config['scoreTP']">
-            </span>
-						<i class="iconfont icon-wenhao"></i>
+						<span slot="content" v-html="config['scoreTP']"></span>
+						<i class="fa fa-question-circle right color" aria-hidden="true"></i>
 					</el-tooltip>
 				</span>
 				<el-input-number
@@ -65,7 +63,7 @@
 							<el-tooltip effect="dark" placement="top">
 								<span slot="content" v-html="config['timeLimitTP']">
 								</span>
-								<i class="iconfont icon-wenhao"></i>
+								<i class="fa fa-question-circle right" aria-hidden="true"></i>
 							</el-tooltip>
 						</el-checkbox>
 					</div>
@@ -74,7 +72,7 @@
 						<el-tooltip effect="dark" placement="top" style="display: inline; margin-right: 5px;">
 							<span slot="content" v-html="config['periodTP']">
 							</span>
-							<i class="iconfont icon-wenhao"></i>
+							<i class="fa fa-question-circle right" aria-hidden="true"></i>
 						</el-tooltip>
 						<el-input-number
 							v-model="signals_in_market"
@@ -437,7 +435,7 @@
 								>
 									<span slot="content" v-html="config['DOBTP']">
 									</span>
-									<i class="iconfont icon-wenhao"></i> </el-tooltip
+									<i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
 							></el-checkbox>
 							<el-input-number
 								v-model="delay_bars"
@@ -1349,6 +1347,7 @@ export default {
 	margin-right: 5px;
 	display: inline-block;
 	margin: 0;
+	color: #000000;
 }
 .radioBox .el-form-item {
 	display: flex;
@@ -1411,9 +1410,10 @@ export default {
 	align-items: center;
 }
 .scoreNote {
-	font-size: 16px;
-	font-weight: 500;
+	font-size: 14px;
+	font-weight: 600;
 	margin-right: 5px;
+	color: #000000;
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
