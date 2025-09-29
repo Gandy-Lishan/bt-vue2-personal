@@ -789,8 +789,6 @@ import { formatStandardTime } from '@/utils'
                     }
                 } else {
                     // Handle other technical indicators
-                    console.log("savedTechSDs",CIQ.store.state.chart.savedTechSD)
-                    debugger
                     // If not found in savedTechSD, use activatedTechLayout
                     const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorName);
                     const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType

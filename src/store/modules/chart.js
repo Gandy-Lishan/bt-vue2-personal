@@ -71,6 +71,7 @@ const state = {
 		'Symbol Low',
 		'Symbol Close',
 		'Symbol Volume',
+		'Symbol Ratio',
 		// 'Awesome',
 		// 'cci'
 	],

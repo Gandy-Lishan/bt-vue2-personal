@@ -1036,37 +1036,33 @@ if (!CIQ.Studies) {
 			quotes = sd.chart.scrubbed
 		}
 		
-		// var start = config.timestampToTime(CIQ.initialDate.start)
-		// var end = config.timestampToTime(CIQ.initialDate.end)
-		// const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, sd.parameters.ticker)
-		// let _data = formatData(res.data)
-		// // 1. 创建一个 Map 以便快速通过 DT 查找 Close 值
-		// // O(M) 复杂度, M 是 _data 的长度
-		// const ohlcvDataMap = new Map();
-		// for (const item of _data) {
-		// 	if (item.DT && item[field] !== undefined) {
-		// 		ohlcvDataMap.set(item.DT.getTime(), item[field]);
-		// 	}
-		// }
-
-		// 创建一个 Map 以便快速通过 DT 查找 Close 值
-		// 1. O(M) 复杂度, M 是 _data 的长度
-		const ohlcvDataMap = new Map();
-		for (const item of CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker]) {
-			if (item.DT && item[subField] !== undefined) {
-				ohlcvDataMap.set(item.DT.getTime(), item[subField]);
+		if(field == 'Ratio') {
+			for (var i = sd.startFrom; i < quotes.length; i++) {
+				let quote = quotes[i];
+				quote["Result " + sd.name] = quote[field];
 			}
 		}
-		// 2. 遍历数据源，匹配并添加/更新属性
-		// O(N) 复杂度, N 是 quotes 的长度
-		for (var i = sd.startFrom; i < quotes.length; i++) {
-			let quote = quotes[i];
-			const timestamp = quote.DT.getTime();
-			// 检查当前项的 DT 是否在 Map 中存在
-			if (ohlcvDataMap.has(timestamp)) {
-				// 如果存在，获取对应的 Close 值
-				const ohlcvValue = ohlcvDataMap.get(timestamp);
-				quote["Result " + sd.name] = ohlcvValue;
+		else {
+			// 创建一个 Map 以便快速通过 DT 查找 Close 值
+			// 1. O(M) 复杂度, M 是 _data 的长度
+			const ohlcvDataMap = new Map();
+			for (const item of CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker]) {
+				if (item.DT && item[subField] !== undefined) {
+					ohlcvDataMap.set(item.DT.getTime(), item[subField]);
+				}
+			}
+			// 2. 遍历数据源，匹配并添加/更新属性
+			// O(N) 复杂度, N 是 quotes 的长度
+			for (var i = sd.startFrom; i < quotes.length; i++) {
+				let quote = quotes[i];
+
+				const timestamp = quote.DT.getTime();
+				// 检查当前项的 DT 是否在 Map 中存在
+				if (ohlcvDataMap.has(timestamp)) {
+					// 如果存在，获取对应的 Close 值
+					const ohlcvValue = ohlcvDataMap.get(timestamp);
+					quote["Result " + sd.name] = ohlcvValue;
+				}
 			}
 		}
 		// 强制刷新一次
