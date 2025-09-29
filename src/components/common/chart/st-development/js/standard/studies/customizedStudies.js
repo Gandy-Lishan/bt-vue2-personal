@@ -25,6 +25,8 @@ import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
 import { getPropertyByString,getCoresSymbolDual } from "@/utils/globalFunc"
 import { formatStandardTime } from '@/utils'
+import {config} from "@/components/common/chart/st-development/examples/feeds/STDataFeedAccessUrl"
+import { getPairData } from '@/service/service'
 
 let __js_st_studies_customized_ = (_exports) => {
 
@@ -214,7 +216,422 @@ if (!CIQ.Studies) {
 	};
 
 	// customized Studies
-	CIQ.Studies.calculateSTROCLike = function (stx, sd) {
+	CIQ.Studies.TickerOHLCV = function (
+		name,
+		stx,
+		sd,
+		field,
+		ticker
+	) {
+		var ohlcv = new CIQ.Studies.StudyDescriptor(
+			name + " " + sd.name,
+			field,
+			sd.panel
+		);
+		
+		ohlcv.chart = sd.chart;
+		ohlcv.startFrom = sd.startFrom;
+		ohlcv.inputs = {};
+		if (field) ohlcv.inputs.Field = CIQ.findSymbolIndicator(field, null).field;
+	
+		// dual symbol new features
+		ohlcv.parameters = {
+			criteria: sd.parameters.criteria,
+			index: sd.parameters.index,
+			ticker: ticker,
+		}
+		CIQ.Studies.calculateSymbolOhlcv(stx, ohlcv);
+	};
+	CIQ.Studies.calculateSymbolROCLike = function (stx, sd) {
+		var condition = sd.inputs.condition;
+		var period = sd.inputs.period;
+
+		var field = sd.inputs.Field;
+		if (!field || field == "field") field = "Close";
+		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
+		if (field == 'Ratio') CIQ.stxx.calculateSymbolRatio(sd.chart);
+		
+		/** 计算前先计算并储存好tickerOHLCV在sd.chart内 */
+		let symbolOhlcvLayout
+		var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+		// remove a MA tat already exists in current criteria
+		symbolOhlcvLayout = activatedMALayoutList.find(
+			(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
+		)
+		CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+		field = "Result _OHLCV " + sd.name
+
+		var quotes = sd.chart.scrubbed;
+
+		/** 判断Study用来计算的数据源 */
+		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
+			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+		}else{
+			sd.yAxis = null
+			quotes = sd.chart.scrubbed
+		} 
+
+		/** myIndicator 区分shift前后的指标 */
+		if(window.location.pathname.includes('/myindicator')) {
+			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
+        	let display = `(${symbolLabel})${symbolOhlcvLayout?symbolOhlcvLayout.ticker:''} Symbol Close Rate Of Change(${period}-Bar)`
+			const miShift = CIQ.store.getters.getMiFormShift
+			// 左侧ma
+			if(!sd.parameters.criteria.endsWith('2')) {
+				sd.inputs.display = display
+			}
+			else if(miShift.showInput && miShift.display) sd.inputs.display = `${display}(shift-${miShift.value || 0})`
+			// myindicator情况下显示带空格的display以区分左侧的ma
+			else if(!(miShift.showInput && miShift.display)) sd.inputs.display = `${display} `
+		}
+
+		// 下面为计算 ROC, ROR, MAR 的具体公式。
+		// 使用中公式
+		let resArr = []
+		switch(condition){
+			case 'ROC':
+				// ROC
+				// 从当前indicator数据出现那天开始计算
+				let indexROC = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexROC) 
+
+				resArr = quotes.map((row, i) => {
+					// before:	if(field in quotes[i] &&  quotes[i][field]!=null){}
+					if(field in row && row[field]!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(quotes[i - period][field] == 0) return 0
+							
+							const change = parseFloat((100 * (
+								row[field] / 
+								quotes[i - period][field]- 1
+							)).toFixed(4))
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
+			case 'OPR':
+				// OPR
+				// 从当前indicator数据出现那天开始计算
+				let indexOPR = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexOPR) 
+				const minCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "min", period, 0);
+				const maxCloseArrOPR = getPeriodParam(quotes.map(row => row[field]), "max", period, 0);
+				resArr = quotes.map((row, i) => {
+					if(field in row && row[field]!=null){
+						if(i>=period){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrOPR[i] - minCloseArrOPR[i] == 0) return 0
+
+							/** 因为minClose,maxClose也保留了三位小数 */
+							const change = parseFloat((100 * 
+								(row[field] - minCloseArrOPR[i]) / 
+								(maxCloseArrOPR[i] - minCloseArrOPR[i])
+							).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'RR':
+				// Range Rank
+				// 计算含当天值的排名，即数值保证在 0 - 100 之间
+				let indexRR = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexRR) 
+				const minCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
+				const maxCloseArrRR = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in row && row[field]!=null){
+						if(i>=period - 1){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrRR[i] - minCloseArrRR[i] == 0) return 0
+							
+							/** 因为minClose,maxClose也保留了三位小数 */
+							const change = parseFloat((100 * 
+								(row[field] - minCloseArrRR[i]) / 
+								(maxCloseArrRR[i] - minCloseArrRR[i])
+							).toFixed(4))
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'MA':
+				// MA
+				// 从当前indicator数据出现那天开始计算
+				let indexMA = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexMA) 
+				const maArr = quotes.map((row, i, arr) => {
+					if(field in row && row[field]!=null){
+						if(i>=period - 1){
+							return arr.slice(i - period + 1, i + 1).reduce((a, b) => a + b[field], 0) / period
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				resArr = quotes.map((row, i) => {
+					if(field in row && row[field]!=null){
+						if(i>=period - 1){
+							return parseFloat((row[field] / maArr[i]).toFixed(4))
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the MA Ratio value, please change a value')
+				} 
+				break;
+			case 'DD':
+				// 公式：(Current close - Highest Close) / Highest Close
+				let indexDD = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexDD) 
+				const maxCloseArrDD = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in row && row[field]!=null){
+						if(i>=period - 1){
+							// 如果分母为0，直接返回0
+							if(maxCloseArrDD[i] == 0) return 0
+
+							/** 因为minClose,maxClose也保留了三位小数 */
+							const change = parseFloat((100 * 
+								(row[field] - maxCloseArrDD[i]) / 
+								maxCloseArrDD[i]
+							).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'DU':
+				// 公式：(Current close - Highest Close) / Highest Close
+				let indexDU = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexDU) 
+				const minCloseArrDU = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
+				resArr = quotes.map((row, i) => {
+					if(field in row && row[field]!=null){
+						if(i>=period - 1){
+							// 如果分母为0，直接返回0
+							if(minCloseArrDU[i] == 0) return 0
+
+							/** 因为minClose,maxClose也保留了三位小数 */
+							const change = parseFloat((100 * 
+								(row[field] - minCloseArrDU[i]) / 
+								minCloseArrDU[i]
+							).toFixed(4))
+							
+							return (change==Infinity || change==-Infinity) ? 0 : change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+				break;
+			case 'NC':
+				// ROC
+				// 从当前indicator数据出现那天开始计算
+				let indexNC = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexNC) 
+				resArr = quotes.map((row, i) => {
+					if(field in row && row[field]!=null){
+						if(i>=period){
+							
+							const change = parseFloat((
+								row[field] - 
+								quotes[i - period][field]
+							).toFixed(4))
+							return change
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				break;
+			case 'ATH':
+				// 从当前indicator数据出现那天开始计算
+				let indexATH = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexATH) 
+				let indicatorATH = 0
+				let maxSoFar = -Infinity;
+
+				resArr = quotes.map((row, i) => {
+					if (field in row && row[field] != null) {
+						if (row[field] >= maxSoFar) {
+							maxSoFar = row[field];
+							indicatorATH = 1;
+						} else {
+							indicatorATH = 0;
+						}
+						return indicatorATH;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
+			case 'ATL':
+				// 从当前indicator数据出现那天开始计算
+				let indexATL = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexATL) 
+				let indicatorATL = 0
+				let minSoFar = Infinity;
+
+				resArr = quotes.map((row, i) => {
+					if (field in row && row[field] != null) {
+						if (row[field] <= minSoFar) {
+							minSoFar = row[field];
+							indicatorATL = 1;
+						} else {
+							indicatorATL = 0;
+						}
+						return indicatorATL;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				}
+				break;
+			case 'CNDA':
+				// 从当前indicator数据出现那天开始计算
+				let indexCNDA = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexCNDA)
+				let indicatorCNDA = 0
+				resArr = quotes.map((row, i) => {
+					if (field in row && row[field] != null) {
+						if (row[field] > period) {
+							indicatorCNDA++
+						} else {
+							indicatorCNDA = 0;
+						}
+						return indicatorCNDA;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				} 
+				break;
+			case 'CNDB':
+				// 从当前indicator数据出现那天开始计算
+				let indexCNDB = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexCNDB)
+				let indicatorCNDB = 0
+				resArr = quotes.map((row, i) => {
+					if (field in row && row[field] != null) {
+						if (row[field] < period) {
+							indicatorCNDB++
+						} else {
+							indicatorCNDB = 0;
+						}
+						return indicatorCNDB;
+					} else {
+						return NaN;
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROC value, please change a value')
+				} 
+			break;
+			case 'NH':
+				// NH
+				// 从当前indicator数据出现那天开始计算
+				let indexNH = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexNH) 
+				const maxCloseArrNH = getPeriodParam(quotes.map(row => row[field]), "max", period, 1);
+				resArr = maxCloseArrNH
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+			break;
+			case 'NL':
+				// NL
+				// 从当前indicator数据出现那天开始计算
+				let indexNL = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexNL) 
+				const maxCloseArrNL = getPeriodParam(quotes.map(row => row[field]), "min", period, 1);
+				resArr = maxCloseArrNL
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
+				} 
+			break;
+			default:
+			console.error('no such condition')
+		}
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			var quote = quotes[i];
+			quote[sd.inputs.display] = resArr[i];
+		}
+
+		sd.outputMap = {}
+		sd.outputMap[sd.inputs.display] = "Result";
+	};
+	CIQ.Studies.calculateSentiROCLike = function (stx, sd) {
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
@@ -228,17 +645,16 @@ if (!CIQ.Studies) {
 		var subField = field
 		/** 判断Study用来计算的数据源 */
 		if(sd.parameters.criteria && sd.parameters.criteria.endsWith('2')){
-			var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
-			// 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）
-			if(CIQ.findSymbolIndicator(null, field)){
-				field = comparisonSymbol?.url
-				quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
-			}
+			// var comparisonSymbol = CIQ.store.getters.getComparisonSymbol
+			// // 只处理计算数据源和symbol2相关的逻辑（symbol2 symbolClose）
+			// if(CIQ.findSymbolIndicator(null, field)){
+			// 	field = comparisonSymbol?.url
+			// 	quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+			// }
 		}else{
 			sd.yAxis = null
 			quotes = sd.chart.scrubbed
 		} 
-
 		/** myIndicator 区分shift前后的指标 */
 		if(window.location.pathname.includes('/myindicator')) {
 			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
@@ -600,8 +1016,7 @@ if (!CIQ.Studies) {
 		sd.outputMap = {}
 		sd.outputMap[sd.inputs.display] = "Result";
 	};
-	CIQ.Studies.calculateSymbolOhlcv = function (stx, sd) {
-		
+	CIQ.Studies.calculateSymbolOhlcv = async function (stx, sd) {
 
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
@@ -612,26 +1027,50 @@ if (!CIQ.Studies) {
 		var subField = field
 		var quotes = sd.chart.scrubbed;
 		/** 
-		 * 用isComparison属性判断Study用来计算的数据源
-		 * 不能用criteria判断,要是加了有些判断就没法锁定目的study（比如csv）
-		 * ma和roc就是用critria判断Study用来计算的数据源
+		 * symbol ohlcv改用maLayout管理状态，不是传统tech， 弃用isComparison
 		 *  */
-		if(sd.parameters.isComparison){
+		if(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')){
 			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
 			quotes = sd.chart.scrubbed
 		}
 		
-		// 默认study模板
-		for (var i = sd.startFrom; i < quotes.length; i++) {
-			var quote = quotes[i];
-			var RSIValue = getPropertyByString(quote, field, subField);
-			if (RSIValue) {
-				var customStudyValue = RSIValue; // add code here to operate on the RSI to compute your final value based on it.
-				quote["Result " + sd.name] = customStudyValue; // assign to the final field to be used by your display function.
+		// var start = config.timestampToTime(CIQ.initialDate.start)
+		// var end = config.timestampToTime(CIQ.initialDate.end)
+		// const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, sd.parameters.ticker)
+		// let _data = formatData(res.data)
+		// // 1. 创建一个 Map 以便快速通过 DT 查找 Close 值
+		// // O(M) 复杂度, M 是 _data 的长度
+		// const ohlcvDataMap = new Map();
+		// for (const item of _data) {
+		// 	if (item.DT && item[field] !== undefined) {
+		// 		ohlcvDataMap.set(item.DT.getTime(), item[field]);
+		// 	}
+		// }
+
+		// 创建一个 Map 以便快速通过 DT 查找 Close 值
+		// 1. O(M) 复杂度, M 是 _data 的长度
+		const ohlcvDataMap = new Map();
+		for (const item of CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker]) {
+			if (item.DT && item[subField] !== undefined) {
+				ohlcvDataMap.set(item.DT.getTime(), item[subField]);
 			}
 		}
+		// 2. 遍历数据源，匹配并添加/更新属性
+		// O(N) 复杂度, N 是 quotes 的长度
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			let quote = quotes[i];
+			const timestamp = quote.DT.getTime();
+			// 检查当前项的 DT 是否在 Map 中存在
+			if (ohlcvDataMap.has(timestamp)) {
+				// 如果存在，获取对应的 Close 值
+				const ohlcvValue = ohlcvDataMap.get(timestamp);
+				quote["Result " + sd.name] = ohlcvValue;
+			}
+		}
+		// 强制刷新一次
+		stx.draw();
 		//sd.outputMap["Result " + sd.name] = "Symbol High";
 	};
 	CIQ.Studies.calculateSTMACDGap = function (stx, sd) {
@@ -1459,7 +1898,11 @@ if (!CIQ.Studies) {
 				var yAxis = CIQ.stxx.panels[sd.panel].yAxis
 				CIQ.Studies.drawHorizontal(stx, sd, null, showSupLine, yAxis);
 			},
-            calculateFN: CIQ.Studies.calculateSTROCLike,
+            calculateFN: function (stx, sd) {
+				if(CIQ.findSymbolIndicator(null, sd.inputs.Field)) {
+					CIQ.Studies.calculateSymbolROCLike(stx, sd)
+				}else CIQ.Studies.calculateSentiROCLike(stx, sd)	
+			}, 
             inputs: { Field: "field", condition: "ROC",period: 21,overlay: false},
 			outputs: { Result: "auto" },
         },
@@ -1776,6 +2219,40 @@ if (!CIQ.Studies) {
 		}
 
 		return dataArr;
+		}
+	function formatData(data) {
+		if(data == null){
+			data = []
+		}
+		
+		var newQuotes = [];
+		if('High' in data[0]){
+			for (var i = 0; i < data.length; i++) {
+				newQuotes[i] = {};
+				
+				newQuotes[i].DT = formatStandardTime(data[i].DT)   
+				newQuotes[i].Open = data[i].Open;
+				newQuotes[i].High = data[i].High;
+				newQuotes[i].Low = data[i].Low;
+				newQuotes[i].Close = data[i].Close;
+				newQuotes[i].Volume = data[i].Volume;  
+			} 
+		}else{
+			for (var i = 0; i < data.length; i++) {
+				newQuotes[i] = {};
+	
+				newQuotes[i].DT = formatStandardTime(data[i].DT)
+				newQuotes[i].Open = data[i].Close;
+				newQuotes[i].High = data[i].Close;
+				newQuotes[i].Low = data[i].Close;
+				newQuotes[i].Close = data[i].Close;
+				
+				if(data[i].Volume){
+					newQuotes[i].Volume = data[i].Volume
+				}
+			}
+		}
+		return newQuotes
 		}
 }
 

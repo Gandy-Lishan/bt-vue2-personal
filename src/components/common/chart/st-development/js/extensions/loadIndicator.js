@@ -99,7 +99,6 @@ import { formatStandardTime } from '@/utils'
             ...CIQ.store.state.chart.indicators.formIndicators.entry2,
             ...CIQ.store.state.chart.indicators.formIndicators.exit2
         ]
-
         // remove redundant elements and empty string
         for(var i=0;i<indicatorsList.length;i++){
             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
@@ -125,7 +124,6 @@ import { formatStandardTime } from '@/utils'
             // for(var i in stx.layout.studies){
             //     /** 跳过非参与回测的indicator */
             //     //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
-                
             //     /** 跳过MA指标,MA只靠MALayout维护 */
             //     if(stx.layout.studies[i].type == 'ma') continue
             //     savedTechSD.push({
@@ -678,8 +676,8 @@ import { formatStandardTime } from '@/utils'
 }
 
 // 实现批处理的metadata, 并优化结构, 把addStudyToChart提取出
-  CIQ.getIndicatorMatedata = function(indicatorList, stx) {
-    if (!stx) return Promise.resolve(); // If no stx, nothing to do.
+  CIQ.getIndicatorMatedata = async function(indicatorList, stx) {
+    if (!stx) return; // If no stx, nothing to do.
 
     // Clear existing studies from the chart
     //console.log('*************Clear existing studies from the chart',stx.layout.studies,CIQ.store.state.chart.activatedMA)
@@ -698,7 +696,15 @@ import { formatStandardTime } from '@/utils'
     // --- Helper Function: Add a study to the chart and handle related logic ---
     // This function encapsulates the logic for adding a study,
     // updating extreme values, and attaching MAs.
-    const addStudyToChart = (studyType, inputs, outputs, parameters, panel, indicatorKey, extremeInfo = null) => {
+    const addStudyToChart = async (studyType, inputs, outputs, parameters, panel, indicatorKey, extremeInfo = null) => {
+        // TODO symbol ohlcv特殊处理，在addStudy之前先获取异步数据源
+        if(CIQ.findSymbolIndicator(studyType)) {
+            var start = config.timestampToTime(CIQ.initialDate.start)
+            var end = config.timestampToTime(CIQ.initialDate.end)
+            const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, parameters.ticker)
+            let _data = formatData(res.data)
+            await CIQ.store.dispatch('chart/set_ticker_ohlcv_pairdata', {ticker:parameters.ticker, data: _data})
+        }
         const sd = CIQ.Studies.addStudy(stx, studyType, inputs, outputs, parameters, panel);
         // Update extreme values if provided
         if (extremeInfo && sd) {
@@ -743,7 +749,7 @@ import { formatStandardTime } from '@/utils'
         }
     };
     
-    return new Promise(async resolve => {
+
         // --- Phase 1: Categorize and Prepare Studies ---
         for (const indicatorName of indicatorList) {
             let indicatorObj = CIQ.findBuiltinTechIndicator(null, indicatorName) || CIQ.findSymbolIndicator(indicatorName, null);
@@ -751,25 +757,33 @@ import { formatStandardTime } from '@/utils'
             if (indicatorObj) {
                 // It's a technical indicator (including MA-like)
                 const techSymbolName = indicatorObj.value ? indicatorObj.value : indicatorObj.label;
-
                 if (CIQ.store.getters.getMaLikeTech.includes(indicatorName)) {
                     // Handle MA-like technical indicators
                     for (const maLayoutItem of CIQ.store.state.chart.activatedMALayout) {
                         if (maLayoutItem.url === indicatorName) {
-                            const criteria = maLayoutItem.criteria;
-                            // const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
-                            const inputs = indicatorName === 'ma' ?
-                                { Type: maLayoutItem.type, Field: maLayoutItem.field, Period: maLayoutItem.period } : {};
-                            const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, maLayoutItem.index);
-                            const outputs = indicatorName === 'ma' ? { MA: ma_color } : null;
+                            if(indicatorName == 'ma') {
+                                const criteria = maLayoutItem.criteria;
+                                const inputs = { Type: maLayoutItem.type, Field: maLayoutItem.field, Period: maLayoutItem.period };
+                                const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, maLayoutItem.index);
+                                const outputs = { MA: ma_color };
 
-                            studiesToLoad.push({
-                                type: indicatorName,
-                                inputs,
-                                outputs,
-                                parameters: { criteria: criteria, index: maLayoutItem.index },
-                                indicatorKey: indicatorName // Use indicatorName as the key for MA processing later
-                            });
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs,
+                                    outputs,
+                                    parameters: { criteria: criteria, index: maLayoutItem.index },
+                                    indicatorKey: indicatorName // Use indicatorName as the key for MA processing later
+                                });
+                            }
+                            if(CIQ.findSymbolIndicator(indicatorName, null)) {
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs: { display: `${maLayoutItem.ticker} ${indicatorName}` }, // Using placeholder for symbolLabel
+                                    outputs: null,
+                                    parameters: {  criteria: maLayoutItem.criteria, index: maLayoutItem.index, ticker: maLayoutItem.ticker },
+                                    indicatorKey: indicatorName
+                                });
+                            }
                         }
                     }
                 } else {
@@ -869,7 +883,55 @@ import { formatStandardTime } from '@/utils'
                 } catch (err) {
                     console.error(`Error fetching metadata for own indicator ${indicatorName}:`, err);
                 }
-            } else {
+            } 
+            // else if (CIQ.isSymbolOHLCVIndicator(indicatorName)) {
+            //     // It's a user-defined or "own" indicator, requires individual API call
+            //     const indicatorTicker = indicatorName.split(/OHLCV/)[0];
+            //     const indicatorOHLCV = indicatorName.split(/OHLCV/)[1];
+            //     debugger
+            //     // Handle other technical indicators
+            //     const savedTechSDs = CIQ.store.state.chart.savedTechSD.filter(sd => sd.type === indicatorOHLCV);
+            //     if (savedTechSDs.length > 0) {
+            //         for (const savedSD of savedTechSDs) {
+            //             const isComparison = savedSD.parameters.isComparison;
+            //             const symbolLabel = getCoresSymbolDual(isComparison);
+            //             savedSD.inputs.display = `(${symbolLabel})${indicatorTicker} ${indicatorOHLCV}`; // Using placeholder for symbolLabel
+            //             studiesToLoad.push({
+            //                 type: indicatorOHLCV,
+            //                 inputs: savedSD.inputs,
+            //                 outputs: savedSD.outputs,
+            //                 parameters: savedSD.parameters,
+            //                 panel: savedSD.panel,
+            //                 indicatorKey: indicatorOHLCV
+            //             });
+            //         }
+            //     } else {
+            //         // If not found in savedTechSD, use activatedTechLayout
+            //         const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorOHLCV);
+            //         const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType
+            //         for (let item of activatedTechLayouts) {
+            //             if (item.criteria && item.criteria.endsWith("2")) {
+            //                 item.symbolType = 'symbol2';
+            //             } else {
+            //                 item.symbolType = 'symbol1';
+            //             }
+
+            //             if (!processedSymbols.has(item.symbolType)) {
+            //                 processedSymbols.add(item.symbolType);
+            //                 const criteria = item.criteria;
+            //                 const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
+            //                 // studiesToLoad.push({
+            //                 //     type: indicatorOHLCV,
+            //                 //     inputs: { display: `(${symbolLabel})${indicatorTicker} ${indicatorOHLCV}` }, // Using placeholder for symbolLabel
+            //                 //     outputs: null,
+            //                 //     parameters: { isComparison: item.symbolType === 'symbol2', ticker: indicatorTicker },
+            //                 //     indicatorKey: indicatorOHLCV
+            //                 // });
+            //             }
+            //         }
+            //     }
+            // } 
+            else {
                 // It's a sentiment indicator
                 sentiUrlList.push(indicatorName);
             }
@@ -938,11 +1000,9 @@ import { formatStandardTime } from '@/utils'
 
         // --- Phase 3: Add all prepared studies to the chart ---
         for (const study of studiesToLoad) {
-            addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
+            await addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
         }
 
-        resolve();
-    });
 };
  }
  export {__st_js_loadIndicator_}

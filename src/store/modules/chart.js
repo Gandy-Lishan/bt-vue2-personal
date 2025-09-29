@@ -66,6 +66,11 @@ const state = {
 	builtinList: [], //chartiq 包含完整techList
 	maLikeTech: [
 		'ma',
+		'Symbol Open',
+		'Symbol High',
+		'Symbol Low',
+		'Symbol Close',
+		'Symbol Volume',
 		// 'Awesome',
 		// 'cci'
 	],
@@ -129,6 +134,8 @@ const state = {
 
 	// drawing states
 	drawingObjList: [],
+
+	tickerOhlcvPairdata: {},	//用来暂存symbol ohlcv的ticker data
 }
 
 const mutations = {
@@ -362,7 +369,11 @@ const mutations = {
 	},
 	SET_JUMP_TO_BT_SYMBOL(state, index) {
 		state.JumpToBTSymbol = index
-	}
+	},
+	SET_TICKER_OHLCV_PAIRDATA(state, { ticker, data }) {
+		if(!ticker) return
+		state.tickerOhlcvPairdata[ticker] = data
+	},
 }
 
 const actions = {
@@ -1013,7 +1024,13 @@ get_indicator_page_btv1_list({ commit, state }) {
 				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: [] });
 			}
 		}
-}
+},
+	set_ticker_ohlcv_pairdata({ commit }, { ticker, data }) {
+		return new Promise(resolve => {
+			commit('SET_TICKER_OHLCV_PAIRDATA', { ticker, data })
+			resolve()
+		})
+	},
 }
 export default {
 	namespaced: true,

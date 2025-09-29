@@ -2,7 +2,6 @@
 <template>
 	<div class="indicator-box">
 		<el-form :model="si" ref="siForm" :rules="rules" label-position="left" size="mini">
-      
       <div class="labelWithSelectBox indicatorTypeBox">
         <el-form-item prop="indicatorRadio">
             <template slot="label">
@@ -88,7 +87,7 @@
         </el-form-item>
       </div>
       <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'Symbol OHLCV'">
-        <el-form-item prop="symbolIndicator">
+        <el-form-item>
             <template slot="label">
               <label>
                 Indicator
@@ -100,20 +99,47 @@
                 </el-tooltip>
               </label>
             </template>
-            <div class="selectBox">
+            <div class="selectBox">   
               <el-select
-                v-model="si.symbolIndicator"
-                placeholder="Select Symbol Open/High/Low/Close/Volume"
-                @change="handleSymbolSelect"
+                ref="symbolInput"
+                v-model="symbolTicker"
+                id="symbolName"
+                filterable
+                remote
+                reserve-keyword
+                automatic-dropdown
+                @change="getTicker"
+                placeholder="enter keywords"
+                :remote-method="remoteMethod"
+                @visible-change="remoteMethod"
+                :value-key="'key'"
+                :loading="loading"
+                style="margin-right: 5px"
               >
                 <el-option
-                  v-for="item in filteredSymbolConditions"
+                  
+                  v-for="item in options"
                   :key="item.value"
-                  :label="item.obj.label"
-                  :value="item.obj"
+                  :label="item.label"
+                  :value="item.value"
                 >
                 </el-option>
               </el-select>
+              <el-form-item prop="symbolIndicator" style="width: auto;">
+                <el-select
+                  v-model="si.symbolIndicator"
+                  placeholder="Select Symbol Open/High/Low/Close/Volume"
+                  @change="handleSymbolSelect"
+                >
+                  <el-option
+                    v-for="item in filteredSymbolConditions"
+                    :key="item.value"
+                    :label="item.obj.label"
+                    :value="item.obj"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </div>
         </el-form-item>
       </div>
@@ -216,7 +242,6 @@
 						</el-upload>
         </el-form-item>
       </div>
-      <!-- <Uploader/> -->
       <el-dialog :title="previewFileName" :visible.sync="previewVisible">
 							<el-table
 								:data="previewData"
@@ -334,14 +359,11 @@ import {
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
-import {compareArrays, LocalStorageUtil, formatStandardTime, capitalizeFirstLetter, getQueryVariable} from '@/utils'
+import {compareArrays, formatStandardTime, capitalizeFirstLetter, getQueryVariable} from '@/utils'
 import {createStateFilter,maxNumOfStudy,getSymbolInfo} from '@/utils/globalFunc'
-import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import moment from 'moment'
 import { mapMutations,mapGetters } from 'vuex'
 
-import searchBar from "@/components/common/searchBar"
-import Uploader from "@/components/common/chart/st-development/js/webcomponents/Uploader.vue"
 import { SearchAutocomplete } from "@/components/common"
 const throttle = require('lodash/throttle')
 
@@ -357,8 +379,6 @@ export default {
     relation: Number
   },
   components: {
-    searchBar,
-    Uploader,
     SearchAutocomplete
   },
   data() {
@@ -411,7 +431,8 @@ export default {
         riskIndicator: '',
         userIndicator: '',
       },
-     // sentimentIndicatorList: JSON.parse(JSON.stringify(this.$store.getters.getIndicatorsList).replace(/chart_name/g, 'value')),
+      // symbol ohlcv related data
+      symbolTicker: this.$store.getters.getBacktestSymbol,
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },
@@ -420,13 +441,13 @@ export default {
         { value: 4, obj: { label: 'Symbol Volume', field: 'Volume' } },
         { value: 5, obj: { label: 'Symbol Ratio', field: 'Ratio' } }
       ],
+
       rules: {
         sentimentIndicator: [{ validator: validateSenti, trigger: 'change' }],
         technicalIndicator: [{ validator: validateTech, trigger: 'change' }],
         symbolIndicator: [{ validator: validateSym, trigger: 'change' }],
         riskIndicator: [{ validater: validateRisk, trigger: 'change' }]
       },
-      category: 'all',
       fileList: [],
       fileDatesList: [],
       actionUrl: '', // 文件上传的接口地址
@@ -504,6 +525,14 @@ export default {
       ],
       createdIndicatorOptions: [],
       pairDataDate: [],
+
+      // 自定义动态渲染下拉栏
+      searchResults: [],
+      currentPage: 1,
+      pageSize: 20,
+      hasMore: true, // 是否还有更多数据
+      options: [],
+      loading: false,
     }
   },
   computed: {
@@ -531,12 +560,25 @@ export default {
       return this.getComparisonSymbol.url?true:false
     },
     filteredSymbolConditions() {
-      if (this.isComparisonSymbol) {
+      // First, define the specific conditions under which the "symbol ratio" (value: 5) should be shown.
+      const isPrimarySymbolMatched = 
+        !this.criteria.endsWith("2") && this.symbolTicker === this.$store.getters.getBacktestSymbol;
+
+      const isComparisonSymbolMatched = 
+        this.criteria.endsWith("2") && this.symbolTicker === this.getComparisonSymbol.url;
+
+      // The full list is only returned if it's a comparison AND one of the specific symbols is matched.
+      if (this.isComparisonSymbol && (isPrimarySymbolMatched || isComparisonSymbolMatched)) {
         return this.symbolConditions;
-      } else {
-        return this.symbolConditions.filter(item => item.value !== 5);
       }
+      
+      // In ALL other cases, return the filtered list. This handles the `else` case and the `if` fall-through case simultaneously.
+      return this.symbolConditions.filter(item => item.value !== 5);
     },
+    ...mapGetters({
+      symbolList: 'getStockList',
+      indexList: 'getIndexList',
+    }),
   },
   watch: {
     // Listen to freq on the indicator Vue is to make the indicators loaded by the form within the timeframe range
@@ -755,9 +797,6 @@ export default {
     },
     relation: {
       handler(newVal) {
-        // const email = getCookieData()?.username
-		    // const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
-        // const isAllowUser = allowedUserList.includes(email)
         if(newVal === 1 && this.criteria.startsWith('entry') && !this.typeOptions.find(item => item.value === "User Defined Dates")) {
           this.typeOptions.push({value: "User Defined Dates", label: "User Defined Dates"})
         }else {
@@ -805,15 +844,70 @@ export default {
     }
   },
   methods: {
+    /** START 加载更多数据且保持滚动条位置 */
+    // 绑定滚动事件
+    attachScrollListener(strategy) {
+      let tab = strategy
+      if(!strategy){
+        // 首次加载设初值，不清空绑定的监听器
+        tab = 'Single'
+      }else{
+        this.detachScrollListener() // 防止切换tab时重复添加监听器，统一移除
+      }
+
+      let refs // 要监听的下拉框的 ref 名称
+      refs = ['symbolInput'];
+
+      refs.length != 0 && refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName].$el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
+        if (inputDropdown) {
+          inputDropdown.addEventListener("scroll", (event) => this.handleDropdownScroll(event));
+        }
+      });
+    },
+    // 解绑滚动事件
+    detachScrollListener() {
+      const refs = ['symbolInput']; // 要监听的下拉框的 ref 名称
+      refs.forEach(refName => {
+        const inputDropdown = this.$refs[refName].$el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
+        if (inputDropdown) {
+          inputDropdown.removeEventListener("scroll", (event) => this.handleDropdownScroll(event, refName));
+        }
+      });
+    },
+    // 监听滚动事件，触发加载更多
+    handleDropdownScroll(event) {
+      var self = this;
+      const dropdown = event.target;
+
+      if (
+        dropdown.scrollHeight - dropdown.scrollTop - 10 <
+        dropdown.clientHeight
+      ) {
+        // 判断是否有更多数据
+        if (!this.hasMore) return;
+
+        // 记录滚动位置
+        const currentScrollTop = dropdown.scrollTop;
+
+        self.currentPage++;
+        self.loadMore()
+      }
+    },
+    loadMore() {
+      // 根据页码从过滤后的结果中分页
+      console.log('paginated results',this.currentPage, this.searchResults.length)
+      this.options = this.searchResults.slice(0, this.currentPage * this.pageSize);
+      if(this.currentPage * this.pageSize > this.searchResults.length) this.hasMore = false
+      this.loading = false
+    },
+    /** END 加载更多数据且保持滚动条位置 */
+
     /** disable enter while naming a custom symbol */
 		onEnter(event) {
       event.preventDefault();
     },
     ...mapMutations('form',['setFrequencyArray', 'setFreqencyLP']),
-    /* 当用户选择indicator类别，进行搜索筛选*/
-    selectCategory(e) {
-      this.category = e.target.innerHTML
-    },
     // Clear form authentication
     clearFormValidate() {
       this.$refs.siForm.clearValidate()
@@ -991,7 +1085,7 @@ export default {
       })
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
+       CIQ.setMALayout(item.url, this.criteria, this.panelIndex)
        CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
        CIQ.addIndicators({})
     },
@@ -1056,6 +1150,9 @@ export default {
       this.$emit('getIndicatorUrl', {
         url: item.label, index: this.panelIndex
       })
+      // this.$emit('getIndicatorTicker', {
+      //   ticker: this.symbolTicker, index: this.panelIndex
+      // })
 
       // remove a MA tat already exists in current criteria before loading
       let activatedMAList = this.$store.state.chart.activatedMA
@@ -1075,22 +1172,13 @@ export default {
         criteria: this.criteria
       })
 
-
-
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout(item.label, null, null, null, this.criteria, this.panelIndex)
+       CIQ.setMALayout(item.label, this.criteria, this.panelIndex, {ticker: this.symbolTicker})
        CIQ.setTechLayout(item.label, this.criteria, this.panelIndex)
-
-      // avoid add indicator redundantly
-      // for (let studyInstanceName in CIQ.stxx.layout.studies) {
-      //   let sd = CIQ.stxx.layout.studies[studyInstanceName]
-      //   // 当url相同,且都为同一symbol下时，跳过加载       
-      //   if (sd.type == item.label && 
-      //     (sd.parameters.isComparison == this.criteria.endsWith('2'))
-      //   ) {
-      //     return
-      //   }
-      // }
+       CIQ.addIndicators({})
+    },
+    getTicker() {
+      CIQ.setMALayout(this.si.symbolIndicator, this.criteria, this.panelIndex, {ticker: this.symbolTicker})
       CIQ.addIndicators({})
     },
     clearTechnicalSelect(value) {
@@ -1178,7 +1266,7 @@ export default {
 
 
       // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      CIQ.setMALayout(item.url, null, null, null, this.criteria, this.panelIndex)
+      CIQ.setMALayout(item.url, this.criteria, this.panelIndex)
       CIQ.setTechLayout(item.url, this.criteria, this.panelIndex)
 
       // if (arguments[1] != true) {
@@ -1301,7 +1389,7 @@ export default {
       })
 
        // 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-       CIQ.setMALayout('', null, null, null, this.criteria, this.panelIndex)
+       CIQ.setMALayout('', this.criteria, this.panelIndex)
        CIQ.setTechLayout('', this.criteria, this.panelIndex)
        
       // avoid add indicator redundantly
@@ -1314,7 +1402,6 @@ export default {
       CIQ.addIndicators({})
     },
     changeIndicatorChecked(val) {
-      debugger
       this.clearFormValidate()
       const arr = [
         'Sentiment Indicator',
@@ -1675,6 +1762,11 @@ export default {
             obj.index = vm.panelIndex
             obj.url = this.si.symbolIndicator
             vm.$emit('getIndicatorUrl', obj)
+
+            // 直接通过从activatedMALayout获取对应criteria和index的symbolTicker信息
+            this.symbolTicker = CIQ.store.state.chart.activatedMALayout.find(
+              item=>item.url == this.si.symbolIndicator && item.criteria == this.criteria && item.index == this.panelIndex
+            )?.ticker
           }
           if (newVal[this.criteria].signals[index].analysis === 'Technical') {
             vm.indicatorRadio = 'Technical Indicator'
@@ -3309,7 +3401,69 @@ export default {
         }))
         this.previewDatesPage.total = res.data.total_rows
       }
-    }
+    },
+    remoteMethod: throttle(async function(query) {
+      let vm = this
+      if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        })
+
+        this.searchResults = symbolListTemp.concat(IndexListTemp)
+        
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        //vm.loading = false
+      }
+      else if (typeof query != 'boolean' && query !== '') {
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+       
+        let list = symbolListTemp.concat(IndexListTemp)
+        let options = []
+        let wholeWord = []
+        // keyword全匹配
+        for (let item of list) {
+          if (
+            item.value.toLowerCase() === query.toLowerCase() ||
+            item.label.toLowerCase() === query.toLowerCase()
+          ) {
+            wholeWord.push(item)
+            continue
+          }
+          options.push(item)
+        }
+        options.unshift(...wholeWord)
+        // 去重
+        this.searchResults = options
+
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        // // 解除遮罩
+        // vm.loading = false
+      } else {
+        this.options = []
+      }
+    }, 500),
   }
 }
 </script>

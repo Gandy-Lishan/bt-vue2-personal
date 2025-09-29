@@ -512,7 +512,6 @@ if (!CIQ.Marker) {
                      var sd = this.layout.studies[study];
                      const isSymbol2 = sd.parameters.criteria?.endsWith("2") || sd.parameters.isComparison
                      const symbolLabel = getCoresSymbolDual(isSymbol2)
-
                      panel = this.panels[sd.panel];
                      yAxis = panel && sd.getYAxis(this);
                      if(sd.type == 'ST MA' || sd.type == 'ma'){    // stma不需要symbol信息，有独立显示
@@ -560,7 +559,7 @@ if (!CIQ.Marker) {
                             if (output && !dupMap[output]) {
                                  fields.push({
                                      member: output,
-                                     display: `(${symbolLabel})${sd.type}`,
+                                     display: sd.inputs.display?sd.inputs.display:`(${symbolLabel})${sd.type}`,
                                      panel: panel,
                                      yAxis: yAxis
                                  });
