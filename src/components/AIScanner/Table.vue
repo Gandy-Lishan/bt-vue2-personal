@@ -104,8 +104,19 @@
 					:key="index"
 					min-width="70"
 				>
+				<template slot="header">
+							<span v-html="l.labelHtml"></span>
+							<template v-if="currTabPage === 'OptionScanner'">
+									<el-tooltip effect="dark" placement="top" style="display: inline">
+										<span slot="content" v-html="textContent['Symbol']"></span>
+									<i class="fa fa-question-circle right" aria-hidden="true"></i>
+								</el-tooltip>
+							</template>
+					</template>
 					<template slot-scope="scope">
-						<span v-if="currTabPage === 'OptionScanner'">{{ scope.row[l.value] }}</span>
+						<span v-if="currTabPage === 'OptionScanner'">
+							{{ scope.row[l.value] }}
+						</span>
 						<router-link
 						v-else
 							:to="{
@@ -239,6 +250,13 @@
 				>
 				<template #header>
 						<span v-html="l.labelHtml"></span>
+						<template v-if="textContent[l.label]">
+								<el-tooltip effect="dark" placement="top" style="display: inline">
+								<span slot="content" v-html="textContent[l.label]">
+								</span>
+								<i class="fa fa-question-circle right" aria-hidden="true"></i>
+							</el-tooltip>
+						</template>
 				</template>
 					<template slot-scope="scope">
 						<p class="tableText">
@@ -329,6 +347,17 @@ export default {
 					'Symbol 13-Week Low': "Symbol 13-Week Low refers to the lowest closing price a symbol has traded at over the past 13 weeks (3 months). <br/>Symbols trading at or near their 13-week lows are often seen as being in a medium-term downtrend or under selling <br/>pressure. The 13-week low gives a longer-term view on a symbol's recent price weakness. Hitting a new 13-week <br/>low can be a bearish signal, suggesting the symbol is in a downward trend.",
 					'Trend Score Breakout': "When a stock's Trend Score rises above 7, it indicates a strong positive market trend. <br/>This score aggregates ten trend-following indicators, with values ranging from 0 (weakest) to 10 (strongest).",
 					'Trend Score Breakdown': "When a stock's Trend Score falls below 3, it indicates a weak market trend. <br/>This score aggregates ten trend-following indicators, with values ranging from 0 (weakest) to 10 (strongest).",
+					'Symbol': 'The ticker symbol for the underlying asset (e.g., stock, index, ETF),<br/> extracted from the option\'s contract symbol.<br/> It identifies the asset the option is based on.',
+					'Last Close': 'The most recent closing price of the underlying asset.<br/> This price is a fundamental component for calculating various option metrics.',
+				 'Expire Date': 'The date on which the option contract becomes void.<br/> An unexercised option has no value after this date.',
+					'DTE': 'An abbreviation for "Days to Expiration." It is calculated as: Expire Date - Last Trade Date.<br/> This value indicates how much time is left until the option expires, which is critical for assessing time decay.',
+					'Strike': 'The predetermined price at which the holder of the option can buy (for a call) or sell (for a put) the underlying asset.',
+					'Break Even': 'The price the underlying asset must reach for an option seller to incur no profit and no loss at expiration.<br/> For a short option position, it is calculated as: Strike + Credit.',
+					'Prob. of Profit': 'The estimated probability that the option will be profitable for the seller if held to expiration.<br/> It is derived from the Black-Scholes model.<br/> Calculation: • Short Call: 100 * norm.cdf(-d1) • Short Put: 100 * norm.cdf(d1)',
+					'Credit': 'The premium (price) received by an option seller from the buyer for selling one option contract.<br/> Sourced from the lastPrice.',
+					'Margin': 'The estimated amount of collateral a broker requires an option seller to hold to cover potential losses.<br/> Calculation: (Strike + Credit - 0.1 * LastClose) * 100',
+					'Return %': 'The return on margin, representing the efficiency of the trade by showing the potential profit as a percentage of the required collateral.<br/> Calculation: (Credit / Margin) * 100',
+					'CAGR %': 'An abbreviation for "Compound Annual Growth Rate."<br/> This metric annualizes the return on margin to help compare the long-term profitability of options with different expiration dates.<br/> Potential Calculation: Return % * (252 / DTE)'
 				},
 				midTermMap: {
 					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
