@@ -121,19 +121,20 @@ import { formatStandardTime } from '@/utils'
          var savedTechSD = []
          if(type == 'updateIndicators' || type == 'addBuiltTech'){
             /** 这个加载indicatorlist时保存savedTechSD的逻辑是错误又多余的，只有在runbt时运行saveIndicatorLayoutData才会保存其值，rerun也只是直接读取其值再运行 */
-            // for(var i in stx.layout.studies){
-            //     /** 跳过非参与回测的indicator */
-            //     //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
-            //     /** 跳过MA指标,MA只靠MALayout维护 */
-            //     if(stx.layout.studies[i].type == 'ma') continue
-            //     savedTechSD.push({
-            //         type: stx.layout.studies[i].type,
-            //         inputs: stx.layout.studies[i].inputs,
-            //         outputs: stx.layout.studies[i].outputs,
-            //         parameters: stx.layout.studies[i].parameters,
-            //         panel: stx.layout.studies[i].panel
-            //     })
-            // }
+            for(var i in stx.layout.studies){
+                /** 跳过非参与回测的indicator */
+                //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
+                /** 跳过MA指标,MA只靠MALayout维护 */
+                // if(stx.layout.studies[i].type == 'ma') continue
+                if(CIQ.store.getters.getMaLikeTech.includes(stx.layout.studies[i].type)) continue
+                savedTechSD.push({
+                    type: stx.layout.studies[i].type,
+                    inputs: stx.layout.studies[i].inputs,
+                    outputs: stx.layout.studies[i].outputs,
+                    parameters: stx.layout.studies[i].parameters,
+                    panel: stx.layout.studies[i].panel
+                })
+            }
          }else{
             /** 如果type为loadFromBakctest或者outputSignalsResult的话,
              * vuex有techSD则存入savedTechSD */
@@ -788,34 +789,40 @@ import { formatStandardTime } from '@/utils'
                     }
                 } else {
                     // Handle other technical indicators
-                    const savedTechSDs = CIQ.store.state.chart.savedTechSD.filter(sd => sd.type === indicatorName);
-                    if (savedTechSDs.length > 0) {
-                        for (const savedSD of savedTechSDs) {
-                            const isComparison = savedSD.parameters.isComparison;
-                            const symbolLabel = getCoresSymbolDual(isComparison);
-                            savedSD.inputs.display = `(${symbolLabel})${techSymbolName}`; // Using placeholder for symbolLabel
-                            studiesToLoad.push({
-                                type: indicatorName,
-                                inputs: savedSD.inputs,
-                                outputs: savedSD.outputs,
-                                parameters: savedSD.parameters,
-                                panel: savedSD.panel,
-                                indicatorKey: indicatorName
-                            });
+                    console.log("savedTechSDs",CIQ.store.state.chart.savedTechSD)
+                    debugger
+                    // If not found in savedTechSD, use activatedTechLayout
+                    const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorName);
+                    const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType
+                    for (let item of activatedTechLayouts) {
+                        if (item.criteria && item.criteria.endsWith("2")) {
+                            item.symbolType = 'symbol2';
+                        } else {
+                            item.symbolType = 'symbol1';
                         }
-                    } else {
-                        // If not found in savedTechSD, use activatedTechLayout
-                        const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorName);
-                        const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType
-                        for (let item of activatedTechLayouts) {
-                            if (item.criteria && item.criteria.endsWith("2")) {
-                                item.symbolType = 'symbol2';
-                            } else {
-                                item.symbolType = 'symbol1';
-                            }
 
-                            if (!processedSymbols.has(item.symbolType)) {
-                                processedSymbols.add(item.symbolType);
+                        if (!processedSymbols.has(item.symbolType)) {
+                            processedSymbols.add(item.symbolType);
+
+                            // TODO, 把第一个判断，即saveTechSD加转移到这里
+                            const _isComparison = item.symbolType == 'symbol2'
+                            const savedTechSD = CIQ.store.state.chart.savedTechSD.find(
+                                sd => sd.type === indicatorName && sd.parameters.isComparison === _isComparison
+                            );
+                            if (savedTechSD) {
+                                const isComparison = savedTechSD.parameters.isComparison;
+                                const symbolLabel = getCoresSymbolDual(isComparison);
+                                savedTechSD.inputs.display = `(${symbolLabel})${techSymbolName}`; // Using placeholder for symbolLabel
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs: savedTechSD.inputs,
+                                    outputs: savedTechSD.outputs,
+                                    parameters: savedTechSD.parameters,
+                                    panel: savedTechSD.panel,
+                                    indicatorKey: indicatorName
+                                });
+                            }
+                            else {
                                 const criteria = item.criteria;
                                 const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
                                 studiesToLoad.push({
