@@ -441,7 +441,6 @@ export default {
 		},
 		changeTableSort(column){
 			var sortingOrder = column.order
-			debugger
 			var colName = column.prop
 			// 数字字符串转数字类型排序
 			if(['StopLoss','TimeInMarket','ProfitTarget', 'stkpx', 'DTE', 'strike', 'be', 'POP_est', 'credit', 'margin', 'return_per', 'cagr'].indexOf(colName) !== -1){
