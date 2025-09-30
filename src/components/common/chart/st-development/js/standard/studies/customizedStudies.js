@@ -1030,7 +1030,6 @@ if (!CIQ.Studies) {
 		 * symbol ohlcv改用maLayout管理状态，不是传统tech， 弃用isComparison
 		 *  */
 		if(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')){
-			field = CIQ.store.getters.getComparisonSymbol.url
 			quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
 		}else{
 			quotes = sd.chart.scrubbed
