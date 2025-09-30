@@ -704,6 +704,11 @@ export default {
           type: 'BondSeasonality'
         },
         {
+          label: 'Index Market Seasonality',
+          value: 'index_seasonality',
+          type: 'IndexSeasonality'
+        },
+        {
           label: 'ETF Seasonality',
           value: 'etf_seasonality',
           type: 'ETFSeasonality'
@@ -753,7 +758,7 @@ export default {
       */
       let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment' ]
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
-      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date']
+      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality' || type === 'index_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date']
       const keysMap = new Map([
         ['chart_name', 'Name'],
         ['sub_type', 'Group'],
@@ -765,7 +770,7 @@ export default {
         ['sentiment', 'Sentiment']
       ])
       if(type === 'etf_breadth' || type === 'country_breadth' || type === 'crypto_breadth') keysMap.set('chart_name', 'Breadth Measure')
-      if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
+      if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality' || type === 'index_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') keysMap.set('avg_net_return', 'Avg Net Return')
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || url === 'russell_3000_complete_list'|| url === 'russell_1000_complete_list'|| url === 'russell_2000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
