@@ -443,7 +443,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			// 数字字符串转数字类型排序
-			if(['StopLoss','TimeInMarket','ProfitTarget', 'stkpx', 'DTE', 'strike', 'be', 'POP_est', 'credit', 'margin', 'return_per', 'cagr', 'Trend Score'].indexOf(colName) !== -1){
+			if(['StopLoss','TimeInMarket','ProfitTarget', 'stkpx', 'DTE', 'strike', 'be', 'POP_est', 'credit', 'margin', 'return_per', 'cagr', 'TrendScore'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a,b) => {
 						let _b = b[colName].match(/\d+([\/.]\d+)?/g).reduce((pre,cur)=>{ return Number(pre) + Number(cur) })
