@@ -843,6 +843,12 @@ export default {
       // sessionStorage.removeItem('indicator')
     }
   },
+  mounted() {
+    this.attachScrollListener()
+  },
+  beforeDestroy() {
+    this.detachScrollListener(); // 在组件销毁前解绑滚动事件
+  },
   methods: {
     /** START 加载更多数据且保持滚动条位置 */
     // 绑定滚动事件
@@ -879,7 +885,6 @@ export default {
     handleDropdownScroll(event) {
       var self = this;
       const dropdown = event.target;
-
       if (
         dropdown.scrollHeight - dropdown.scrollTop - 10 <
         dropdown.clientHeight
@@ -1754,7 +1759,6 @@ export default {
           }
           // todo 加入symbol analysis
           if (newVal[this.criteria].signals[index].analysis === 'Symbol') {
-            debugger
             this.indicatorRadio = 'Symbol OHLCV'
             this.si.symbolIndicator =
               newVal[this.criteria].signals[index].indicator
@@ -1906,7 +1910,6 @@ export default {
       }
     },
     uploadFile(file) {
-      debugger
       console.log('文件上传', file)
       const self = this
       let suffix = ''
@@ -1960,7 +1963,6 @@ export default {
           }
         })
         .then((response) => {
-          debugger
           CIQ.hideCover()
           CIQ.nprogress.done()
 
@@ -2027,7 +2029,6 @@ export default {
         })
     },
     uploadDatesFile(file) {
-      debugger
       CIQ.addCover('Uploading the user defined dates file....')
       CIQ.nprogress.start()
       const _file = file.file || file
@@ -2227,7 +2228,6 @@ export default {
     async handlePreview(file) {
       CIQ.addCover('Parsing the file....')
       CIQ.nprogress.start()
-      debugger
       const str = this.previewFileID
       const page = this.previewPage.page
       const startIndex = str.indexOf('HASH')
@@ -2260,7 +2260,6 @@ export default {
     async handleDatesPreview(file) {
       CIQ.addCover('Parsing the file....')
       CIQ.nprogress.start()
-      debugger
       const str = this.previewDatesFileID
       const page = this.previewDatesPage.page
       const startIndex = str.indexOf('HASH')
@@ -2296,7 +2295,6 @@ export default {
           } else {
             this.file_hash = hash
           }
-          debugger
 					resolve(event.target.result);
 				};
 				reader.onerror = (error) => {
@@ -2616,7 +2614,6 @@ export default {
     },
     async _uploadDatesFile(file) {
       const _this = this
-      debugger
 
       // 1. 校验文件类型
       if (file.file.type !== 'text/csv') {
@@ -2768,7 +2765,6 @@ export default {
         self.csvDatesContent = []
         let cleaned = []
         try {
-          debugger
           const content = await self.readFileContent(file);
           const rows = content.trim().split('\n')
           const headers = rows[0].trim().split(',')
