@@ -803,12 +803,11 @@ import { formatStandardTime } from '@/utils'
                             processedSymbols.add(item.symbolType);
 
                             // TODO, 把第一个判断，即saveTechSD加转移到这里
-                            const _isComparison = item.symbolType == 'symbol2'
+                            const isComparison = item.symbolType == 'symbol2'
                             const savedTechSD = CIQ.store.state.chart.savedTechSD.find(
                                 sd => sd.type === indicatorName && sd.parameters.isComparison === _isComparison
                             );
                             if (savedTechSD) {
-                                const isComparison = savedTechSD.parameters.isComparison;
                                 const symbolLabel = getCoresSymbolDual(isComparison);
                                 savedTechSD.inputs.display = `(${symbolLabel})${techSymbolName}`; // Using placeholder for symbolLabel
                                 studiesToLoad.push({
@@ -827,7 +826,7 @@ import { formatStandardTime } from '@/utils'
                                     type: indicatorName,
                                     inputs: { display: `(${symbolLabel})${techSymbolName}` }, // Using placeholder for symbolLabel
                                     outputs: null,
-                                    parameters: { isComparison: item.symbolType === 'symbol2' },
+                                    parameters: { isComparison: isComparison },
                                     indicatorKey: indicatorName
                                 });
                             }
