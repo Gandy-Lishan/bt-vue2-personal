@@ -94,7 +94,7 @@
             </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
             <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related" :type="type"></Related>
-            <ConstituentConditions v-show="selectedTitle === 'ConstituentConditions' && isShowConstituentConditions" ref="ConstituentConditions" :constituentConditions="constituentConditions" :type="type"></ConstituentConditions>
+            <!-- <ConstituentConditions v-show="selectedTitle === 'ConstituentConditions' && isShowConstituentConditions" ref="ConstituentConditions" :constituentConditions="constituentConditions" :type="type"></ConstituentConditions> -->
           </div>
         </div>
   </div>
