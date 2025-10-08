@@ -1045,7 +1045,9 @@ if (!CIQ.Studies) {
 			// 创建一个 Map 以便快速通过 DT 查找 Close 值
 			// 1. O(M) 复杂度, M 是 _data 的长度
 			const ohlcvDataMap = new Map();
-			for (const item of CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker]) {
+			const tickerPairdata = await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata',sd.parameters.ticker)
+			debugger
+			for (const item of tickerPairdata) {
 				if (item.DT && item[subField] !== undefined) {
 					ohlcvDataMap.set(item.DT.getTime(), item[subField]);
 				}

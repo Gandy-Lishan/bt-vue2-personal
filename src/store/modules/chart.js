@@ -9,14 +9,18 @@ import {
     getSymbollistForecast,
 	getFavorite,updateFavorite,
 	obtainIndicatorsList,
-	obtainBTV1IndicatorsList
+	obtainBTV1IndicatorsList,
+	getPairData
 } from '@/service/service.js'
 import {Toast, capitalizeFirstLetter, isJson, unifyNumber } from '@/utils'
+import { formatStandardTime } from '@/utils'
 import { uniqueObjectArray } from '@/utils/formValidate'
 import stocksData from '@/assets/stocks_list.json';
 import indexsData from '@/assets/indexes_list.json';
 // import indicatorsData from '@/assets/indicatorsList.json';
 import indicatorsData from '@/assets/indicatorsWithSymbolList.json';
+import {config} from "@/components/common/chart/st-development/examples/feeds/STDataFeedAccessUrl"
+
 
 const toggleOverlaySymbol = function(displayStyle) {
 	var filters = document.querySelectorAll("cq-lookup-filters");
@@ -1032,7 +1036,64 @@ get_indicator_page_btv1_list({ commit, state }) {
 			resolve()
 		})
 	},
+	get_ticker_ohlcv_pairdata({ commit }, ticker) {
+		return new Promise(async (resolve,reject) => {
+			const result = state.tickerOhlcvPairdata[ticker]
+			if(!result){
+				try{
+					var start = config.timestampToTime(CIQ.initialDate.start)
+					var end = config.timestampToTime(CIQ.initialDate.end)
+					const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, ticker)
+					let _data = formatData(res.data)
+
+					commit('SET_TICKER_OHLCV_PAIRDATA', { ticker, data: _data })
+					resolve(_data)
+					
+				}catch(err){
+					reject(err)
+				}
+			}else{
+				resolve(result)
+			}
+		})
+	},
 }
+
+const formatData = function(data) {
+    if(data == null){
+        data = []
+    }
+    
+    var newQuotes = [];
+    if('High' in data[0]){
+        for (var i = 0; i < data.length; i++) {
+            newQuotes[i] = {};
+            
+            newQuotes[i].DT = formatStandardTime(data[i].DT)   
+            newQuotes[i].Open = data[i].Open;
+            newQuotes[i].High = data[i].High;
+            newQuotes[i].Low = data[i].Low;
+            newQuotes[i].Close = data[i].Close;
+            newQuotes[i].Volume = data[i].Volume;  
+        } 
+    }else{
+        for (var i = 0; i < data.length; i++) {
+            newQuotes[i] = {};
+
+            newQuotes[i].DT = formatStandardTime(data[i].DT)
+            newQuotes[i].Open = data[i].Close;
+            newQuotes[i].High = data[i].Close;
+            newQuotes[i].Low = data[i].Close;
+            newQuotes[i].Close = data[i].Close;
+            
+            if(data[i].Volume){
+                newQuotes[i].Volume = data[i].Volume
+            }
+        }
+    }
+    return newQuotes
+ }
+
 export default {
 	namespaced: true,
 	state,
