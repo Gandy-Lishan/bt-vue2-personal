@@ -542,7 +542,7 @@
 									placement="bottom-start"
 								>
 								<el-button
-									 v-if="['History', 'Favorites'].includes(currentPage) && !canOnlyAccessPartOfReport && openUserFunction"
+									 v-if="['History', 'Favorites'].includes(currentPage) && !canOnlyAccessPartOfReport"
 										:disabled="scope.row.status == 0 || scope.row.status == 3 || getIsBacktestRunningFlagState"
 										icon="el-icon-share"
 										circle

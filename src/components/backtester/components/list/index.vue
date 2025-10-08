@@ -42,18 +42,18 @@ export default {
     activeItem() {
       return this.$route.meta.activeItem;
     },
-    openUserFunction() {
-      const email = getCookieData()?.username
-      const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'daniel@sentimentrader.com', 'jinny@sentimentrader.com']
-      return allowedUserList.includes(email)
-		},
+    // openUserFunction() {
+    //   const email = getCookieData()?.username
+    //   const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'daniel@sentimentrader.com', 'jinny@sentimentrader.com']
+    //   return allowedUserList.includes(email)
+		// },
     canOnlyAccessPartOfReport() {
       const access_level = getCookieData()?.access_level
       return access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
     }
   },
   mounted() {
-    console.log('openUserFunction', this.openUserFunction)
+    // console.log('openUserFunction', this.openUserFunction)
     if(this.canOnlyAccessPartOfReport) {
       this.menuItems = [
         {
@@ -65,8 +65,7 @@ export default {
           lable: "Analysts' Backtests"
         }
       ]
-    }
-    if(this.openUserFunction) {
+    }else {
       this.menuItems.push({
         index: 'shared',
         lable: "Subscriber Shared Backtests"
