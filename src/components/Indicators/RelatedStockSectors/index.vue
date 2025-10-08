@@ -340,6 +340,8 @@ export default {
         requireUrl = 'etf_seasonality'
       }else if(type === 'bond_seasonality') {
         requireUrl = 'bond_seasonality'
+      }else if(type === 'index_seasonality') {
+        requireUrl = 'index_seasonality'
       }else if(groups === 'commod') {
         requireUrl = 'commodity_complete_list'
       }else if(groups === 'bonds'){

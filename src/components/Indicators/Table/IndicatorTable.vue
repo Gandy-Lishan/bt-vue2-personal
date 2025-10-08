@@ -244,6 +244,12 @@ export default {
               type: 'seasonality',
               url: 'bond_seasonality'
             },
+            // {
+            //   label: 'Index Seasonality',
+            //   value: 'IndexSeasonality',
+            //   type: 'seasonality',
+            //   url: 'index_seasonality'
+            // },
           ]
         },
         // {

@@ -102,13 +102,15 @@
               {{subItem.label}}
             </el-menu-item>
             <template v-if="Array.isArray(subItem.subMenuItem) && subItem.subMenuItem.length > 0">
-              <el-submenu :index="subItem.keyPath" :key="subIndex">
-                <template slot="title">
-                  <span @click.stop="handleSubmenuClick(subItem)">{{subItem.label}}</span>
-                </template>
-                <el-menu-item v-for="(subItem, subIndex) in subItem.subMenuItem" :index="subItem.keyPath" :key="subIndex">{{subItem.label}}</el-menu-item>
-              </el-submenu>
-            </template>
+            <el-divider :key="subIndex"></el-divider>
+            <el-menu-item
+              v-for="(child, childIndex) in subItem.subMenuItem"
+              :index="child.keyPath"
+              :key="childIndex"
+            >
+              {{ child.label }}
+            </el-menu-item>
+          </template>
           </template>
         </el-submenu>
         </template>
@@ -121,7 +123,7 @@
 </template>
 
 <script>
-import { getTokenRole } from '@/utils'
+
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import autocomplete from "./component/AlgoliaAutocomplete.vue";
 
@@ -251,6 +253,11 @@ export default {
               label: 'Analysts\' Backtests',
               keyPath: '4-5',
               path: '/backtester/list/analyst'
+            },
+            {
+              label: 'Subscriber Shared Backtests',
+              keyPath: '4-7',
+              path: '/backtester/list/shared'
             },
             {
               label: 'Backtest Concierge Setup Service',
@@ -517,17 +524,12 @@ export default {
           }
         ]
       }
-      if(backtestIndex !== -1) {
+      if(backtestIndex !== -1 && canOnlyAccessPartOfReport) {
         this.navs[backtestIndex].subMenu = [
             {
               label: 'Backtest Set Up',
               keyPath: '4-1',
               path: '/backtester/sr/setup'
-            },
-            {
-              label: 'Backtest List',
-              keyPath: '4-2',
-              path: '/backtester/list/history'
             },
             {
               label: 'Sample Backtests',
@@ -699,7 +701,7 @@ export default {
         return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
       }
       if(label === 'Reports') return accessAllPage || cannotAccessScanner || canOnlyAccessReport || canOnlyAccessReportStategyScanner
-      if(label === 'Tools') return true
+      if(label === 'Tools') return email === 'hao@sentimentrader.com'
       // if(label === 'Reports') {
       //   const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
       //   return allowedReportEmails.includes(email)
