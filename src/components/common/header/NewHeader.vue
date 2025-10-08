@@ -256,7 +256,7 @@ export default {
             },
             {
               label: 'Subscriber Shared Backtests',
-              keyPath: '4-6',
+              keyPath: '4-7',
               path: '/backtester/list/shared'
             },
             {
