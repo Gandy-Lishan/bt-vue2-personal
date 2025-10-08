@@ -469,7 +469,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 0 0 20px;
     margin: 0 10px;
     cursor: pointer;
     font-size: 16px;
@@ -511,8 +511,8 @@
   
   /* 移除按钮 */
   .remove-button {
-    position: absolute;
-    right: 30px;
+    position: relative;
+    // right: 30px;
     background: transparent;
     border: none;
     padding: 2px;
