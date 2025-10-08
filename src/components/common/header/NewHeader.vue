@@ -255,6 +255,11 @@ export default {
               path: '/backtester/list/analyst'
             },
             {
+              label: 'Subscriber Shared Backtests',
+              keyPath: '4-6',
+              path: '/backtester/list/shared'
+            },
+            {
               label: 'Backtest Concierge Setup Service',
               keyPath: '4-6',
               path: '/contact'
@@ -519,17 +524,12 @@ export default {
           }
         ]
       }
-      if(backtestIndex !== -1) {
+      if(backtestIndex !== -1 && canOnlyAccessPartOfReport) {
         this.navs[backtestIndex].subMenu = [
             {
               label: 'Backtest Set Up',
               keyPath: '4-1',
               path: '/backtester/sr/setup'
-            },
-            {
-              label: 'Backtest List',
-              keyPath: '4-2',
-              path: '/backtester/list/history'
             },
             {
               label: 'Sample Backtests',
