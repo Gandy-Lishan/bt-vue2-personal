@@ -25,8 +25,6 @@ import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
 import { getPropertyByString,getCoresSymbolDual } from "@/utils/globalFunc"
 import { formatStandardTime } from '@/utils'
-import {config} from "@/components/common/chart/st-development/examples/feeds/STDataFeedAccessUrl"
-import { getPairData } from '@/service/service'
 
 let __js_st_studies_customized_ = (_exports) => {
 
@@ -216,7 +214,7 @@ if (!CIQ.Studies) {
 	};
 
 	// customized Studies
-	CIQ.Studies.TickerOHLCV = function (
+	CIQ.Studies.TickerOHLCV = async function (
 		name,
 		stx,
 		sd,
@@ -240,9 +238,9 @@ if (!CIQ.Studies) {
 			index: sd.parameters.index,
 			ticker: ticker,
 		}
-		CIQ.Studies.calculateSymbolOhlcv(stx, ohlcv);
+		await CIQ.Studies.calculateSymbolOhlcv(stx, ohlcv);
 	};
-	CIQ.Studies.calculateSymbolROCLike = function (stx, sd) {
+	CIQ.Studies.calculateSymbolROCLike = async function (stx, sd) {
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
@@ -258,7 +256,7 @@ if (!CIQ.Studies) {
 		symbolOhlcvLayout = activatedMALayoutList.find(
 			(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
 		)
-		CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+		await CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
 		field = "Result _OHLCV " + sd.name
 
 		var quotes = sd.chart.scrubbed;
