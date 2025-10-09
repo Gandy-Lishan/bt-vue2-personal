@@ -252,7 +252,8 @@ if (!CIQ.Studies) {
 		/** 计算前先计算并储存好tickerOHLCV在sd.chart内 */
 		let symbolOhlcvLayout
 		var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
-		// remove a MA tat already exists in current criteria
+		// 和sentiment indciator roc不同，symnol的需要定位到具体位置因为可以显示多个
+		// 而这也会导致计算函数介入了MAlayout, manageChartLayout功能在还原layout前需要还原MAlayout
 		symbolOhlcvLayout = activatedMALayoutList.find(
 			(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
 		)
