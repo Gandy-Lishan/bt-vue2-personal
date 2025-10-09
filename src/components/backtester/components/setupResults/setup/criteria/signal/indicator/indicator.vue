@@ -100,6 +100,9 @@
               </label>
             </template>
             <div class="selectBox">   
+              {{ $store.getters.getBacktestSymbol }}
+              {{ symbolTicker }}
+              {{ criteria }}
               <el-select
                 ref="symbolInput"
                 v-model="symbolTicker"
@@ -432,7 +435,7 @@ export default {
         userIndicator: '',
       },
       // symbol ohlcv related data
-      symbolTicker: this.$store.getters.getBacktestSymbol,
+      symbolTicker: this.criteria.endsWith('2') ? this.$store.getters.getComparisonSymbol.url : this.$store.getters.getBacktestSymbol,
       symbolConditions: [
         { value: 0, obj: { label: 'Symbol Open', field: 'Open' } },
         { value: 1, obj: { label: 'Symbol High', field: 'High' } },

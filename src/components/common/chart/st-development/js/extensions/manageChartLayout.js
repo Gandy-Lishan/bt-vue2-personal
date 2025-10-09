@@ -103,6 +103,8 @@ let __st_js_manage_chart_layout_ = (_exports) => {
     }
 
     const restoreComparison = async function(stx, comparison,cb) {
+        debugger
+        CIQ.store.commit('form/setComparisonSymbol', JSON.parse(comparison))
         // addSeire前移除当前序列,防止出现多个序列
         for(var s in stx.chart.series){
             var series=stx.chart.series[s];
