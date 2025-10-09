@@ -100,9 +100,6 @@
               </label>
             </template>
             <div class="selectBox">   
-              {{ $store.getters.getBacktestSymbol }}
-              {{ symbolTicker }}
-              {{ criteria }}
               <el-select
                 ref="symbolInput"
                 v-model="symbolTicker"
