@@ -25,8 +25,6 @@ import { CIQ as _CIQ } from "chartiq/js/chartiq.js";
 import "chartiq/js/standard/studies.js";
 import { getPropertyByString,getCoresSymbolDual } from "@/utils/globalFunc"
 import { formatStandardTime } from '@/utils'
-import {config} from "@/components/common/chart/st-development/examples/feeds/STDataFeedAccessUrl"
-import { getPairData } from '@/service/service'
 
 let __js_st_studies_customized_ = (_exports) => {
 
@@ -216,7 +214,7 @@ if (!CIQ.Studies) {
 	};
 
 	// customized Studies
-	CIQ.Studies.TickerOHLCV = function (
+	CIQ.Studies.TickerOHLCV = async function (
 		name,
 		stx,
 		sd,
@@ -240,9 +238,9 @@ if (!CIQ.Studies) {
 			index: sd.parameters.index,
 			ticker: ticker,
 		}
-		CIQ.Studies.calculateSymbolOhlcv(stx, ohlcv);
+		await CIQ.Studies.calculateSymbolOhlcv(stx, ohlcv);
 	};
-	CIQ.Studies.calculateSymbolROCLike = function (stx, sd) {
+	CIQ.Studies.calculateSymbolROCLike = async function (stx, sd) {
 		var condition = sd.inputs.condition;
 		var period = sd.inputs.period;
 
@@ -254,11 +252,12 @@ if (!CIQ.Studies) {
 		/** 计算前先计算并储存好tickerOHLCV在sd.chart内 */
 		let symbolOhlcvLayout
 		var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
-		// remove a MA tat already exists in current criteria
+		// 和sentiment indciator roc不同，symnol的需要定位到具体位置因为可以显示多个
+		// 而这也会导致计算函数介入了MAlayout, manageChartLayout功能在还原layout前需要还原MAlayout
 		symbolOhlcvLayout = activatedMALayoutList.find(
 			(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
 		)
-		CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+		await CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
 		field = "Result _OHLCV " + sd.name
 
 		var quotes = sd.chart.scrubbed;
@@ -1045,7 +1044,9 @@ if (!CIQ.Studies) {
 			// 创建一个 Map 以便快速通过 DT 查找 Close 值
 			// 1. O(M) 复杂度, M 是 _data 的长度
 			const ohlcvDataMap = new Map();
-			for (const item of CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker]) {
+			const tickerPairdata = await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata',sd.parameters.ticker)
+			debugger
+			for (const item of tickerPairdata) {
 				if (item.DT && item[subField] !== undefined) {
 					ohlcvDataMap.set(item.DT.getTime(), item[subField]);
 				}
