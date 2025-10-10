@@ -3,22 +3,22 @@
 	<div class="senti-container">
 		<el-form :model="senti" :rules="rules" ref="sentiForm" label-position="left" size="mini">
 			<div class="ids-container" v-if="indicatorRadio === 'sentiment'">
-				<el-form-item label="Extreme Optimism" prop="extreme_optimism" size="mini" class="extreme-optimism">
-					<span slot="label">
-						<span class="span-box">
-							<span>Extreme Optimism:</span>
-						</span>
-					</span>
-					<el-input disabled v-model="senti.extreme_optimism"></el-input>
-				</el-form-item>
-				<el-form-item label="Extreme Pessimism" prop="extreme_pessimism"  size="mini">
-					<span slot="label">
-						<span class="span-box">
-							<span>Extreme Pessimism:</span>
-						</span>
-					</span>
-					<el-input disabled v-model="senti.extreme_pessimism"></el-input>
-				</el-form-item>
+            <el-form-item label="Extreme Optimism" prop="extreme_optimism" size="mini" class="extreme-optimism">
+              <template slot="label">
+                <span class="span-box">
+                  Extreme Optimism:
+                </span>
+              </template>
+              <el-input disabled v-model="senti.extreme_optimism"></el-input>
+            </el-form-item>
+            <el-form-item label="Extreme Pessimism" prop="extreme_pessimism"  size="mini">
+              <template slot="label">
+                <span class="span-box">
+                  Extreme Pessimism:
+                </span>
+              </template>
+              <el-input disabled v-model="senti.extreme_pessimism"></el-input>
+            </el-form-item>
 			</div>
 			<div class="condition-container">
 				<el-form-item class="indicator-alignment">
@@ -30,9 +30,6 @@
 					>
 					</el-radio>
 				</el-form-item>
-				<!-- <el-form-item  v-show="isROCLike">
-
-				</el-form-item> -->
 				<div class="conditionSelect new">
 					<el-form-item size="mini">
 						<el-select
@@ -41,7 +38,7 @@
 							class="newCond"
 							filterable
 							placeholder="Please select condition"
-				@change="ROCLikeChange"	
+				      @change="ROCLikeChange"	
 						>
 							<el-option
 								v-for="item in newConditions"
@@ -1132,5 +1129,16 @@ export default {
 }
 .ISL-text:hover {
 	color: #909399;
+}
+@media (max-width: 768px) {
+  .ids-container {
+    flex-wrap: wrap;
+  }
+  .condition-container {
+    display: block;
+  }
+  /deep/ .el-select {
+    margin: 0;
+  }
 }
 </style>

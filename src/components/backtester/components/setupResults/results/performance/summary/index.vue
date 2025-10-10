@@ -267,30 +267,14 @@
             >
                 <el-empty image-size="80" description="No Data"></el-empty>
             </div>
-            <div class="benchmarkReturnImg">
-                <el-image v-if="tableData[0]?.equityCurveFileURL" style="width: 1000px; height: 600px; margin: 40px 0px 20px 0px;" :src="tableData[0]?.equityCurveFileURL" :fit="'contain'" lazy></el-image>
-            </div>
-            <div class="benchmarkReturnImg">
-                <el-image v-if="tableData[0]?.returnsFileURL" style="width: 1000px; height: 600px; margin: 20px 0px 20px 0px;" :src="tableData[0]?.returnsFileURL" :fit="'contain'" lazy></el-image>
-            </div>
-            <div class="drawDownReturnImg">
-                <el-image v-if="tableData[0]?.ddFileURL" style="width: 1000px; height: 600px; margin: 20px 0px 20px 0px;" :src="tableData[0]?.ddFileURL" :fit="'contain'" lazy></el-image>
-            </div>
-            <div class="monthReturnImg">
-                <el-image v-if="tableData[0]?.returnsHeatmapFileURL" style="width: 1000px; height: 600px; margin: 20px 0px 20px 0px;" :src="tableData[0]?.returnsHeatmapFileURL" :fit="'contain'" lazy></el-image>
-            </div>
-            <div class="annualReturnImg">
-                <el-image v-if="tableData[0]?.annualReturnsFileURL" style="width: 1000px; height: 600px; margin: 20px 0px 20px 0px;" :src="tableData[0]?.annualReturnsFileURL" :fit="'contain'" lazy></el-image>
-            </div>
-            <div class="benchmarkReturnImg">
-                <el-image v-if="tableData[0]?.wfd_file_url" style="width: 1000px; height: 600px; margin: 20px 0px 0px 0px;" :src="tableData[0]?.wfd_file_url" :fit="'contain'" lazy></el-image>
-            </div>
-            <div class="benchmarkReturnImg">
-                <el-image v-if="tableData[0]?.eoy_file_url" style="width: 1000px; height: 700px" :src="tableData[0]?.eoy_file_url" :fit="'contain'" lazy></el-image> 
-            </div>
-            <div class="benchmarkReturnImg">
-                <el-image v-if="tableData[0]?.rb_file_url" style="width: 1000px; height: 700px" :src="tableData[0]?.rb_file_url" :fit="'contain'" lazy></el-image> 
-            </div>
+            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.equityCurveFileURL" :src="tableData[0]?.equityCurveFileURL" :fit="'contain'" lazy></el-image>
+            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.returnsFileURL" :src="tableData[0]?.returnsFileURL" :fit="'contain'" lazy></el-image>
+            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.ddFileURL" :src="tableData[0]?.ddFileURL" :fit="'contain'" lazy></el-image>
+            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.returnsHeatmapFileURL" :src="tableData[0]?.returnsHeatmapFileURL" :fit="'contain'" lazy></el-image>
+            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.annualReturnsFileURL" :src="tableData[0]?.annualReturnsFileURL" :fit="'contain'" lazy></el-image>
+            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.wfd_file_url" :src="tableData[0]?.wfd_file_url" :fit="'contain'" lazy></el-image>
+            <el-image class="EOYImg" v-if="tableData[0]?.eoy_file_url" :src="tableData[0]?.eoy_file_url" :fit="'contain'" lazy></el-image> 
+            <el-image class="EOYImg" v-if="tableData[0]?.rb_file_url" :src="tableData[0]?.rb_file_url" :fit="'contain'" lazy></el-image> 
         </div>
     </div>
 </template>
@@ -340,5 +324,20 @@ export default {
 // }
 .summary-table{
     margin-top: 20px
+}
+.benchmarkReturnImg {
+    width: 1000px; 
+    height: 600px; 
+    margin: 20px 0px 20px 0px;
+}
+.EOYImg {
+    width: 1000px; 
+    height: 700px
+}
+@media (max-width: 1200px) {
+.benchmarkReturnImg, .EOYImg {
+    width: auto;
+    height: auto;
+}
 }
 </style>

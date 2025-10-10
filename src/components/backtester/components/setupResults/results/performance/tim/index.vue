@@ -1731,4 +1731,13 @@ export default {
 	margin: 0 auto;
 	width: 855px;
 }
+@media (max-width: 1200px) {
+	.history-container, .zscore-container, .hr {
+		width: unset;
+	}
+	.editWithCustomBtn{
+		position: static;
+		margin-bottom: 10px;
+	}
+}
 </style>

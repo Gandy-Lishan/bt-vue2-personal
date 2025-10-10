@@ -417,4 +417,15 @@ delay_bars: [String, Number],
 .ISL-text:hover {
 	color: #909399;
 }
+@media (max-width: 768px) {
+  .ids-container {
+    flex-wrap: wrap;
+  }
+  .condition-container {
+    display: block;
+  }
+  /deep/ .el-select {
+    margin: 0;
+  }
+}
 </style>

@@ -236,4 +236,19 @@ main .el-menu--horizontal>.el-menu-item.is-active {
   height: 14px;
   vertical-align: middle;
 }
+@media (max-width: 768px) {
+  .gradient  {
+    padding-top: 20px;
+  }
+	.btn-group{
+    padding: 0px 30px;
+    display: block;
+		position: static;
+    button.createNew, .tutorial {
+      width: 100%;
+      margin: 0 0 20px 0;
+      height: 30px;
+    }
+  }
+}
 </style>

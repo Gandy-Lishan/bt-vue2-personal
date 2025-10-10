@@ -849,6 +849,19 @@ li.el-menu-item.is-active.menu-item-active {
   background-color: black;
   position: absolute;
 }
+@media (max-width: 768px) {
+.main-nav {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  img {
+    margin-right: 35px;
+  }
+  &.bottom {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+}
+}
 li.el-menu-item.tutorial-svg:hover {
   color: #909399;
 }

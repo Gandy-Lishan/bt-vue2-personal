@@ -909,36 +909,21 @@ export default {
 		background-color: #409eff;
 	}
 }
-
-@media (min-width: 820px) and (max-width: 1279px) {
-	.criteria-container {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
-}
-@media (min-width: 768px) and (max-width: 819px) {
-	.criteria-container {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
-}
 @media (min-width: 375px) and (max-width: 767px) {
-	.criteria-container {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
 	.backtest-btns {
 		.el-button {
 			padding: 7px;
 			font-size: 12px;
 		}
 	}
+}
+@media (max-width: 1200px) {
+  .criteria-container {
+    display: block;
+  }
+  .criteria {
+	margin-bottom: 10px;
+  }
 }
 .divider {
 	width: 1.5px;
