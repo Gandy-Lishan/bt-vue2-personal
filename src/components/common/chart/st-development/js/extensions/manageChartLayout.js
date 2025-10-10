@@ -22,7 +22,10 @@ let __st_js_manage_chart_layout_ = (_exports) => {
 
         let comparison = JSON.stringify(CIQ.store.getters.getComparisonSymbol) || ''
 
-        let obj = {id:uid,name,layout,layoutFreq,chartType,pref,themes,customizedLayouts,comparison}
+        // symbol ohlcv的roc计算函数需要用到Layout
+        let activatedMALayout = JSON.stringify(CIQ.store.state.chart.activatedMALayout) || ''
+
+        let obj = {id:uid,name,layout,layoutFreq,chartType,pref,themes,customizedLayouts,comparison, activatedMALayout}
         return obj
     }
     
@@ -48,6 +51,7 @@ let __st_js_manage_chart_layout_ = (_exports) => {
             CIQ.addCover()
             CIQ.store.commit('form/getFrequency', layout.layoutFreq)
             CIQ.store.dispatch('chart/set_chart_type', layout.chartType)
+            CIQ.store.commit('chart/getMALayout', JSON.parse(layout.activatedMALayout))
             CIQ.isRestoreLayout = true          
             CIQ.stxx.importLayout(JSON.parse(layout.layout), {
                 ...importOptions, // This includes any other options you might have
@@ -99,6 +103,8 @@ let __st_js_manage_chart_layout_ = (_exports) => {
     }
 
     const restoreComparison = async function(stx, comparison,cb) {
+        debugger
+        CIQ.store.commit('form/setComparisonSymbol', JSON.parse(comparison))
         // addSeire前移除当前序列,防止出现多个序列
         for(var s in stx.chart.series){
             var series=stx.chart.series[s];
