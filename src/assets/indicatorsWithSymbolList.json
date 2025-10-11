@@ -96010,5 +96010,33 @@
         "market_symbol": "PHYS",
         "type": "reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Hyperliquid",
+        "url": "crp_HYPE32196",
+        "market_symbol": "crp_HYPE32196",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hyperliquid Trend Score",
+        "url": "crp_HYPE32196_trend",
+        "market_symbol": "crp_HYPE32196",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hyperliquid RelTrend Score",
+        "url": "crp_HYPE32196_reltrend",
+        "market_symbol": "crp_HYPE32196",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Number of S&P 500 Sectors Above 200-Day MA",
+        "url": "sp500_sector_breadth_200ma_count",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
