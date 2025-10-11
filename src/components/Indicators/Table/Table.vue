@@ -281,6 +281,8 @@ export default {
                   const M = (datatime.getUTCMonth() + 1).toString().padStart(2, '0') + '-';
                   const D = datatime.getUTCDate().toString().padStart(2, '0');
                   obj['Date'] = Y+M+D
+                }else if(key === 'Symbol') {
+                  obj['url'] = obj[key]
                 }
               }
             }

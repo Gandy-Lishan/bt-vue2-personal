@@ -1800,7 +1800,7 @@ export default {
             ..._columnKeys.filter(item => item === "Symbol"),   // Symbol 最前
             ..._columnKeys.filter(item => item !== "Symbol" && item !== "Date"), // 其他保持原顺序
             ..._columnKeys.filter(item => item === "Date")      // Date 最后
-          ];
+          ].filter(key => key !== 'url')
           columnsMap.set('ConstituentConditionsColumns', columnKeys.map(ele => ({
             key: ele,
             label: ele,
