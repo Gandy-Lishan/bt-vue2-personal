@@ -7,7 +7,7 @@
        </span>
        <form
         @submit.prevent
-        style="display:inline;float:right; margin-left:75px; margin-top:-5px;"
+        class="view-large-chart-btn"
        >
          <button type="submit" class="btn grey-cascade" @click="JumpToBacktest">View larger chart</button>
        </form>
@@ -352,5 +352,18 @@ export default {
 .highcharts-chart-container {
  min-width: 400px;
  height: 500px;
+}
+.view-large-chart-btn {
+  display:inline;
+  float:right; 
+  margin-left:75px; 
+  margin-top:-5px;
+}
+@media (max-width: 768px) {
+  .view-large-chart-btn {
+    display: block;
+    float: none;
+    margin: 10px 0px 0px 0px;
+  }
 }
 </style>

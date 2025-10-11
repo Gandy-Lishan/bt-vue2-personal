@@ -250,5 +250,11 @@ main .el-menu--horizontal>.el-menu-item.is-active {
       height: 30px;
     }
   }
+  main .el-menu--horizontal > .el-menu-item{
+    // width: auto;
+  }
+  .el-menu.el-menu--horizontal {
+    overflow-x: auto;
+  }
 }
 </style>

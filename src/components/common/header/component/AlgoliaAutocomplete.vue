@@ -125,9 +125,22 @@
                         return html`<div>📝 Blog Posts</div>`;
                     },
                     item({ item, html }) {
-                        return html`<a href="/MR/${item.category}/${item.url.split('/').pop()}" class="aa-ItemTitle">
-                        ${item.title}
-                        </a>`;
+                        const validCategories = ["quantedge", "kaeppelscorner", "SentimentEdge", "ModelEdge", "TradingEdge"];
+                        let href = "";
+
+                        if (validCategories.includes(item.category)) {
+                            href = `/MR/${item.category}/${item.url.split('/').pop()}`;
+                        } else {
+                            // 提取 /blog/ 及其后面的部分
+                            const match = item.url.match(/\/blog\/.*/);
+                            href = `/MR${match}` ? `/MR${match[0]}` : item.url; // 如果没有匹配到，兜底用原始链接
+                        }
+
+                        return html`
+                            <a href="${href}" class="aa-ItemTitle">
+                            ${item.title}
+                            </a>
+                        `;
                     },
                     footer({ html }) {
                         return html`

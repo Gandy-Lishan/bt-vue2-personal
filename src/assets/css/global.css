@@ -22,6 +22,7 @@
     left: 0px;
     transition: all 0.5s;
     flex: 0 0 100vw;
+    overflow-x: auto;
   }
   .el-tabs__header.is-left {
     left: 0px;
