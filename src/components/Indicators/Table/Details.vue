@@ -102,7 +102,7 @@
             </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
             <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related" :type="type"></Related>
-            <!-- <ConstituentConditions v-show="selectedTitle === 'ConstituentConditions' && isShowConstituentConditions" ref="ConstituentConditions" :constituentConditions="constituentConditions" :type="type"></ConstituentConditions> -->
+            <ConstituentConditions v-show="selectedTitle === 'ConstituentConditions' && isShowConstituentConditions" ref="ConstituentConditions" :constituentConditions="constituentConditions" :type="type"></ConstituentConditions>
           </div>
         </div>
   </div>
@@ -114,6 +114,7 @@ import Construction from "./Construction";
 import Related from "./Related";
 import ConstituentConditions from "./ConstituentConditions";
 import { getIndicatorsRowData } from '@/service/service'
+import { isJson } from '@/utils';
 
 export default {
   props: {
@@ -193,7 +194,7 @@ export default {
           console.log('originalData', originalData)
           this.blog_results = originalData.blog_results
           this.related = originalData.related
-          this.constituentConditions = originalData.constituent_conditions || null
+          this.constituentConditions = isJson(originalData.constituent_conditions) ? JSON.parse(originalData.constituent_conditions) : (originalData.constituent_conditions || null)
           this.type  = originalData.type
           this.title = originalData.chart_name
 				  this.convertedHTML = convertToHTML(originalData.description)
