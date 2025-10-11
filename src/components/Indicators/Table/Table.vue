@@ -276,11 +276,7 @@ export default {
                 if(!isNaN(obj[key])) {
                   obj[key] = unifyNumber(obj[key], 2)
                 }else if(key === 'Date') {
-                  const datatime = new Date(obj['Date']);
-                  const Y = datatime.getUTCFullYear() + '-';
-                  const M = (datatime.getUTCMonth() + 1).toString().padStart(2, '0') + '-';
-                  const D = datatime.getUTCDate().toString().padStart(2, '0');
-                  obj['Date'] = Y+M+D
+                  obj['Date'] = typeof obj['Date'] === 'string' ? obj['Date'].slice(0, 10) : '-'
                 }else if(key === 'Symbol') {
                   obj['url'] = obj[key]
                 }
