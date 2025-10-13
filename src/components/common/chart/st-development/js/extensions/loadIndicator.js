@@ -806,7 +806,7 @@ import { formatStandardTime } from '@/utils'
                             // TODO, 把第一个判断，即saveTechSD加转移到这里
                             const isComparison = item.symbolType == 'symbol2'
                             const savedTechSD = CIQ.store.state.chart.savedTechSD.find(
-                                sd => sd.type === indicatorName && sd.parameters.isComparison === _isComparison
+                                sd => sd.type === indicatorName && sd.parameters.isComparison === isComparison
                             );
                             if (savedTechSD) {
                                 const symbolLabel = getCoresSymbolDual(isComparison);
