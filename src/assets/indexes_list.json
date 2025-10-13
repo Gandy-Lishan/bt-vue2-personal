@@ -144,6 +144,12 @@
     "inception": "2025/1/13"
   },
   {
+    "symbol": "COMP",
+    "name": "NASDAQ Composite (COMP)",
+    "category": "Index",
+    "inception": "2021/4/1"
+  },
+  {
     "symbol": "COPX",
     "name": "Copper Miners (COPX)",
     "category": "ETF",
@@ -1728,6 +1734,12 @@
     "inception": "2020/6/8"
   },
   {
+    "symbol": "crp_HYPE32196",
+    "name": "Hyperliquid",
+    "category": "Crypto",
+    "inception": "2024/11/29"
+  },
+  {
     "symbol": "crp_ICP",
     "name": "Internet Computer",
     "category": "Crypto",
@@ -2388,10 +2400,76 @@
     "inception": "2010/01/08"
   },
   {
+    "symbol": "PSQ",
+    "name": "ProShares Short QQQ (PSQ)",
+    "category": "ETF",
+    "inception": "2006/06/21"
+  },
+  {
+    "symbol": "QID",
+    "name": "ProShares UltraShort QQQ (QID)",
+    "category": "ETF",
+    "inception": "2006/07/13"
+  },
+  {
+    "symbol": "QLD",
+    "name": "ProShares Ultra QQQ (QLD)",
+    "category": "ETF",
+    "inception": "2006/06/21"
+  },
+  {
+    "symbol": "SDS",
+    "name": "ProShares UltraShort S&P500 (SDS)",
+    "category": "ETF",
+    "inception": "2006/07/13"
+  },
+  {
+    "symbol": "SH",
+    "name": "ProShares Short S&P500 (SH)",
+    "category": "ETF",
+    "inception": "2006/06/21"
+  },
+  {
+    "symbol": "SPXU",
+    "name": "ProShares UltraPro Short S&P500 (SPXU)",
+    "category": "ETF",
+    "inception": "2009/06/25"
+  },
+  {
+    "symbol": "SQQQ",
+    "name": "ProShares UltraPro Short QQQ (SQQQ)",
+    "category": "ETF",
+    "inception": "2010/02/11"
+  },
+  {
+    "symbol": "SSO",
+    "name": "ProShares Ultra S&P500 (SSO)",
+    "category": "ETF",
+    "inception": "2006/06/21"
+  },
+  {
+    "symbol": "TQQQ",
+    "name": "ProShares UltraPro QQQ (TQQQ)",
+    "category": "ETF",
+    "inception": "2010/02/11"
+  },
+  {
+    "symbol": "UPRO",
+    "name": "ProShares UltraPro S&P500 (UPRO)",
+    "category": "ETF",
+    "inception": "2009/06/25"
+  },
+  {
     "symbol": "XETUSD",
     "name": "Ethereum",
     "category": "Crypto",
     "inception": "2018/02/08"
+  },
+  {
+    "symbol": "bitcoin",
+    "name": "Bitcoin",
+    "category": "Crypto",
+    "inception": "2010/7/19"
   },
   {
     "symbol": "crp_BTC",
@@ -2404,17 +2482,5 @@
     "name": "Ethereum",
     "category": "Crypto",
     "inception": "2017/11/09"
-  },
-  {
-    "stock": "bitcoin",
-    "name": "Bitcoin",
-    "category": "Crypto",
-    "inception": "2014/09/17"
-  },
-  {
-    "symbol": "crp_HYPE32196",
-    "name": "Hyperliquid",
-    "category": "Crypto",
-    "inception": "2024/11/29"
   }
 ]
