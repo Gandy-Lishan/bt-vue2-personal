@@ -15,15 +15,15 @@
          @showDetails="showDetails"
          @forceUpdateTable="(type, condition) => {_forceUpdateTable(type, condition)}"
          :style="{ 
-              'width': ((enlargedTable === item.label && checkedType === 'TrendSector')) ? '100%' : '50%', 
               'display': (enlargedTable === item.label || enlargedTable === null) && !isShowDetails ? 'block' : 'none' 
           }"
+          :class="{'indicators-table': true, 'TrendSector': enlargedTable === item.label && checkedType === 'TrendSector'}"
          ></Table>
       </template>
       <!-- 点击之后详情页放在这里 -->
-      <Details v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" :style="{ width: '50%' }" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :id="'indiChart'" v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
-      <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px', width: '50%' }"></SeasonalityChart>
+      <Details class="details-container" v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
+      <Chart :id="'indiChart'"  v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
+      <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px' }"></SeasonalityChart>
       <AboutUs></AboutUs>
     </div>
   </div>
@@ -489,4 +489,15 @@ export default {
 // /deep/ .el-table__footer-wrapper, /deep/ .el-table__header-wrapper {
 //   width: 100% !important; /* 确保宽度占满父容器 */
 // }
+.indicators-table, .details-container, #indiChart {
+  width: 50%;
+}
+.TrendSector {
+  width: 100%;
+}
+@media (max-width: 1200px) {
+.indicators-table, .details-container, #indiChart {
+  width: 100%;
+}
+}
 </style>

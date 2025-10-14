@@ -12,12 +12,13 @@
           ref="favoriteVirtualScroll"
           @updateChart="updateChart" 
           @showDetails="showDetails"
-          :style="{ width: '50%', display: !isShowDetails ? 'block' : 'none' }"
+          class="indicator-table"
+          :style="{ display: !isShowDetails ? 'block' : 'none' }"
         ></FavTable>
       </template>
-      <Details v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" :style="{width: '50%'}" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <SeasonalityChart :id="'FavChart'" :isShowDetails="isShowDetails" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px', width: '50%'}"></SeasonalityChart>
-      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: isShowDetails ? '830px' : '725px', width: '50%'}" @passIndicatorData="passIndicatorData"></Chart>
+      <Details class="details-container" v-show="isShowDetails" :row="(isShowDetails) ? displayRow : {}" :checkedTitle="'Favorite\'s Indicator List'" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
+      <SeasonalityChart :id="'FavChart'" :isShowDetails="isShowDetails" :row="displayRow"  v-if="displayRow && displayRow.type && displayRow.type.includes('seasonality')" class="indicators-chart" :style="{ height: isShowDetails ? '830px' : '725px'}"></SeasonalityChart>
+      <Chart :row="displayRow"  v-else :id="'FavChart'" class="indicators-chart" :style="{height: isShowDetails ? '830px' : '725px'}" @passIndicatorData="passIndicatorData"></Chart>
       <AboutUs></AboutUs>
     </div>
   </div>
@@ -136,5 +137,13 @@ import { getIndicatorsDownloadData } from "@/service/service";
   // .indicators-chart {
   //   width: 50%;
   // }
+ }
+ .indicator-table, #FavChart, .details-container {
+  width: 50%;
+ }
+ @media (max-width: 1200px) {
+  .indicator-table, #FavChart, .details-container {
+    width: 100%;
+  }
  }
  </style>

@@ -444,7 +444,6 @@ h3 {
   }
 }
 .details-container {
-  padding: 15px;
   .well {
     font-size: 18px;
     background-color: #eee;

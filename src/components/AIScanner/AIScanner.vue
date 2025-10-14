@@ -1100,29 +1100,6 @@ h4 {
 		margin-top: 10px;
 	}
 }
-
-// mobile
-@media only screen and (max-width: 992px) {
-	.table-header {
-		display: flex;
-		align-items: flex-end;
-		> :nth-child(1) {
-			flex: 1;
-			.el-input {
-				width: 100%;
-			}
-		}
-		> :nth-child(2) {
-			flex: 1;
-			margin-left: 8px;
-			button {
-				width: fit-content;
-				height: 4rem;
-				border-radius: 8px;
-			}
-		}
-	}
-}
 .el-popper[x-placement^=right] .popper__arrow::after{
 	border-right-color: aqua;
 }
@@ -1224,5 +1201,31 @@ h4 {
 	width: 100%;
 	justify-content: space-between;
 	align-items: center;
+}
+@media (max-width: 1200px) {
+.title-container {
+	display: block;
+	font-size: 10px;
+	h2 {
+		margin: 0;
+	}
+	.searchBox {
+		position: absolute;
+	}
+}
+.table-header {
+	margin-top: 50px;
+	display: block;
+}
+.date-picker-container {
+	display: block;
+	/deep/ .el-input-group {
+		margin: 10px;
+		width: 100%;
+	}
+}
+.filter-section {
+	display: block;
+}
 }
 </style>

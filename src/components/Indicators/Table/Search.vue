@@ -401,4 +401,9 @@ export default {
 input#aa-search-input {
   width: 500px;
 }
+@media (max-width: 1200px) {
+  div#aa-input-container {
+    display: none;
+  }
+}
 </style>

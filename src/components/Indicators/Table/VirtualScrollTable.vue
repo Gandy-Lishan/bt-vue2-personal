@@ -3578,4 +3578,10 @@ export default {
 /deep/ .el-select__input {
   margin-left: 2px;
 }
+@media (max-width: 1200px) {
+.header-span-grid {
+ display: flex;
+ flex-wrap: wrap; 
+}
+}
 </style>
