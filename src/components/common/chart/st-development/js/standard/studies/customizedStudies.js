@@ -213,7 +213,7 @@ if (!CIQ.Studies) {
 		
 	};
 
-	// customized Studies
+	// 计算中间量（OHLCV value）函数
 	CIQ.Studies.TickerOHLCV = async function (
 		name,
 		stx,
@@ -223,6 +223,7 @@ if (!CIQ.Studies) {
 	) {
 		var ohlcv = new CIQ.Studies.StudyDescriptor(
 			name + " " + sd.name,
+			// sd.name,
 			field,
 			sd.panel
 		);
@@ -252,6 +253,9 @@ if (!CIQ.Studies) {
 		/** 计算前先计算并储存好tickerOHLCV在sd.chart内 */
 		let symbolOhlcvLayout
 		var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+		
+		if(activatedMALayoutList.length == 0) return
+
 		// 和sentiment indciator roc不同，symnol的需要定位到具体位置因为可以显示多个
 		// 而这也会导致计算函数介入了MAlayout, manageChartLayout功能在还原layout前需要还原MAlayout
 		symbolOhlcvLayout = activatedMALayoutList.find(
@@ -629,6 +633,9 @@ if (!CIQ.Studies) {
 
 		sd.outputMap = {}
 		sd.outputMap[sd.inputs.display] = "Result";
+
+		// 强制刷新一次
+		stx.draw();
 	};
 	CIQ.Studies.calculateSentiROCLike = function (stx, sd) {
 		var condition = sd.inputs.condition;
@@ -1016,7 +1023,6 @@ if (!CIQ.Studies) {
 		sd.outputMap[sd.inputs.display] = "Result";
 	};
 	CIQ.Studies.calculateSymbolOhlcv = async function (stx, sd) {
-
 		var field = sd.inputs.Field;
 		if (!field || field == "field") field = "Close";
 		/** 计算前先计算并储存好symbolRatio在sd.chart内 */
@@ -1045,10 +1051,9 @@ if (!CIQ.Studies) {
 			// 1. O(M) 复杂度, M 是 _data 的长度
 			const ohlcvDataMap = new Map();
 			const tickerPairdata = await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata',sd.parameters.ticker)
-			debugger
 			for (const item of tickerPairdata) {
 				if (item.DT && item[subField] !== undefined) {
-					ohlcvDataMap.set(item.DT.getTime(), item[subField]);
+					ohlcvDataMap.set(item.DT.getTime(), item);
 				}
 			}
 			// 2. 遍历数据源，匹配并添加/更新属性
@@ -1061,7 +1066,7 @@ if (!CIQ.Studies) {
 				if (ohlcvDataMap.has(timestamp)) {
 					// 如果存在，获取对应的 Close 值
 					const ohlcvValue = ohlcvDataMap.get(timestamp);
-					quote["Result " + sd.name] = ohlcvValue;
+					quote["Result " + sd.name] = ohlcvValue[subField];
 				}
 			}
 		}
@@ -1930,8 +1935,65 @@ if (!CIQ.Studies) {
 			name: "Symbol Volume Chart",
 			range: "0 to max",
 			yAxis: { ground: true, initialMarginTop: 0, zoom: 0 },
-			seriesFN: CIQ.Studies.createVolumeChart,
-			calculateFN: CIQ.Studies.calculateVolume,
+			seriesFN: CIQ.Studies.createVolumeChart, 
+			calculateFN: async function (stx, sd) {
+				// console.log('envoke Volume calculateFN')
+				// 不知道为什么调用TickerOHLCV会改变sd.outputMap, 改用直接复制粘贴内部逻辑
+				var quotes = sd.chart.scrubbed;
+				/** 
+				 * symbol ohlcv改用maLayout管理状态，不是传统tech， 弃用isComparison
+				 *  */
+				if(sd?.parameters?.criteria && sd?.parameters?.criteria?.endsWith('2')){
+					quotes = sd.chart.dataSet.filter(item => item.hasOwnProperty(field))
+				}else{
+					quotes = sd.chart.scrubbed
+				}
+				const ohlcvDataMap = new Map();
+				const tickerPairdata = await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata',sd.parameters.ticker)
+				for (const item of tickerPairdata) {
+					if (item.DT && item['Volume'] !== undefined) {
+						ohlcvDataMap.set(item.DT.getTime(), item);
+					}
+				}
+				// 2. 遍历数据源，匹配并添加/更新属性
+				// O(N) 复杂度, N 是 quotes 的长度
+				for (var i = sd.startFrom; i < quotes.length; i++) {
+					let quote = quotes[i];
+					if (!quote) continue;
+					var lastBar = quote
+					if(i >= 1) lastBar = quotes[i-1]
+
+					const timestamp = quote.DT.getTime();
+					const preTimestamp = lastBar.DT.getTime();
+					
+
+					// 检查当前项的 DT 是否在 Map 中存在
+					if (ohlcvDataMap.has(timestamp) && ohlcvDataMap.has(preTimestamp)) {
+						// 如果存在，获取对应的 Close 值
+						const ohlcvVal = ohlcvDataMap.get(timestamp);
+						const preOhlcvVal = ohlcvDataMap.get(preTimestamp);
+						// 还需另外存前后两天的收盘价用来计算Volume着色（不是比较O和C）
+						quote["Close " + sd.name] = ohlcvVal['Close'];
+						quote["PreClose " + sd.name] = preOhlcvVal['Close'];
+						quote["Result " + sd.name] = ohlcvVal['Volume'];
+					}
+				}
+				CIQ.Studies.calculateVolume(stx, sd)
+			}, 
+			// calculateFN: async function (stx, sd) {
+			// 	console.log('envoke Volume calculateFN')
+			// 	/** 计算前先计算并储存好tickerOHLCV在sd.chart内 */
+			// 	let symbolOhlcvLayout
+			// 	var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+			// 	// 和sentiment indciator roc不同，symnol的需要定位到具体位置因为可以显示多个
+			// 	// 而这也会导致计算函数介入了MAlayout, manageChartLayout功能在还原layout前需要还原MAlayout
+			// 	symbolOhlcvLayout = activatedMALayoutList.find(
+			// 		(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
+			// 	)
+			// 	await CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+			// 	CIQ.Studies.calculateVolume(stx, sd)
+			// },
+			// calculateFN: CIQ.Studies.calculateVolume,
 			inputs: { Field: "Volume",overlay: false},
 			outputs: { "Up Volume": "#8cc176", "Down Volume": "#b82c0c" }
 		},
