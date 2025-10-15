@@ -1087,7 +1087,7 @@ export default {
 						str += 'Condition' + Number(sameItem[n]) + ' '
 					}
 					this.popUpMsgBox(`The current ${capitalizeFirstLetter(this.criteriaNum)} ${str} are the same, please change`)
-					//return false
+					return false
         	}
 			}
 			return true
