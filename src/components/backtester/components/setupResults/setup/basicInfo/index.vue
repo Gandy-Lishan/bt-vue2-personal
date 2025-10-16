@@ -12,7 +12,7 @@
 				<div class="setupTop">
 						<div class="setupCenter">
               <el-row :gutter="20">
-                <el-col :span="12" :xs="24" :sm="12" :md="12">
+                <el-col :span="12" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                   <el-form-item prop="strategy" inline="true" class="strategyBox">
                     <template slot="label">
                       <label>
@@ -46,7 +46,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6">
                   <el-form-item prop="symbol">
                     <template slot="label">
                       <label>
@@ -96,7 +96,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6">
                   <el-form-item
                     prop="capital"
                   >
@@ -118,7 +118,7 @@
                     ></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="commission">
                     <template slot="label">
                       <label>
@@ -142,7 +142,7 @@
                   </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="slippage">
                     <template slot="label">
                       <label>
@@ -165,7 +165,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="benchmark" label="Benchmark">
                     <template slot="label">
                       <label>
@@ -206,7 +206,7 @@
                     </div>
 							    </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="frequency">
                     <template slot="label">
                       <label>
@@ -247,7 +247,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="trade_price">
                     <template slot="label">
                       <label>
@@ -280,7 +280,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="direction">
                     <el-form-item prop="direction">
                       <template slot="label">
@@ -313,7 +313,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="backtestHistory" label="Backtest Period">
                     <template slot="label">
                       <label>
@@ -344,7 +344,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="dateBox">
                     <el-form-item :label="bdFormLabel['start_date']">
                       <el-date-picker
@@ -362,7 +362,7 @@
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="dateBox">
                     <el-form-item prop="endDate" :label="bdFormLabel['end_date']">
                       <el-date-picker
@@ -379,7 +379,7 @@
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="excludeBox" :style="{ 'margin-bottom': isExcludeOO ? 'auto' : '17px' }" v-if="bd.strategy === 'Single'">
                     <!-- <el-form-item prop="exclude_oo"> -->
                     <el-checkbox v-model="isExcludeOO" @change="changeExcludeOO"
@@ -462,7 +462,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="market_environment" label="Market Environment" v-if="bd.strategy === 'Single'">
                     <template slot="label">
                       <label>
@@ -518,7 +518,7 @@
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="index_moving_average_slope" label="Index Moving Average Slope" v-if="bd.strategy === 'Single'">
                     <template slot="label">
                       <label>
@@ -545,7 +545,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="use_tag" v-if="is_admin">
                   <template slot="label">
                     <label>
@@ -574,7 +574,7 @@
 									</div>
 								</el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item
 									prop="report_url"
 									size="mini"
@@ -596,7 +596,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="12" :xs="24" :sm="12" :md="12">
+                <el-col :span="12" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                   <div class="nameBox">
                     <el-form-item
                       prop="name"
@@ -691,7 +691,7 @@
                   <!-- <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'"> -->
                     <div class="riskItem">
                       <el-row :gutter="20">
-                      <el-col :span="24" :xs="24" :sm="12" :md="12">
+                      <el-col :span="24" :xs="24" :sm="12" :md="12" :lg="24" :xl="24">
                         <el-checkbox
                           v-model="isRiskControl"
                           border
@@ -717,7 +717,7 @@
                       </el-row>
                     </div>
                     <el-row :gutter="20">
-                      <el-col :span="8" :xs="24" :sm="12" :md="12">
+                      <el-col :span="8" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <div class="tpContainer riskItem" v-if="isRiskControl">
                           <el-checkbox v-model="isTakeProfit" @change="generateRiskControl">
                             Take Profit
@@ -742,7 +742,7 @@
                           </div>
                         </div>
                       </el-col>
-                      <el-col :span="8" :xs="24" :sm="12" :md="12">
+                      <el-col :span="8" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <div class="slContainer riskItem" v-if="isRiskControl">
                           <el-checkbox v-model="isStopLoss" @change="generateRiskControl"
                             >Stop Loss
@@ -766,7 +766,7 @@
                           </div>
                         </div>
                       </el-col>
-                      <el-col :span="8" :xs="24" :sm="12" :md="12">
+                      <el-col :span="8" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <div class="timContainer riskItem" v-if="isRiskControl">
                           <el-checkbox v-model="isTimeInMarket" @change="generateRiskControl"
                           size="mini"
