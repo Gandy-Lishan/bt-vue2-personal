@@ -12,7 +12,7 @@
 				<div class="setupTop">
 						<div class="setupCenter">
               <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :span="12" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                   <el-form-item prop="strategy" inline="true" class="strategyBox">
                     <template slot="label">
                       <label>
@@ -46,7 +46,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6">
                   <el-form-item prop="symbol">
                     <template slot="label">
                       <label>
@@ -96,7 +96,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6">
                   <el-form-item
                     prop="capital"
                   >
@@ -118,7 +118,7 @@
                     ></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="commission">
                     <template slot="label">
                       <label>
@@ -142,7 +142,7 @@
                   </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="slippage">
                     <template slot="label">
                       <label>
@@ -165,7 +165,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="benchmark" label="Benchmark">
                     <template slot="label">
                       <label>
@@ -206,7 +206,7 @@
                     </div>
 							    </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="frequency">
                     <template slot="label">
                       <label>
@@ -247,7 +247,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="trade_price">
                     <template slot="label">
                       <label>
@@ -280,7 +280,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="direction">
                     <el-form-item prop="direction">
                       <template slot="label">
@@ -313,7 +313,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="backtestHistory" label="Backtest Period">
                     <template slot="label">
                       <label>
@@ -344,7 +344,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="dateBox">
                     <el-form-item :label="bdFormLabel['start_date']">
                       <el-date-picker
@@ -362,7 +362,7 @@
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="dateBox">
                     <el-form-item prop="endDate" :label="bdFormLabel['end_date']">
                       <el-date-picker
@@ -379,7 +379,7 @@
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <div class="excludeBox" :style="{ 'margin-bottom': isExcludeOO ? 'auto' : '17px' }" v-if="bd.strategy === 'Single'">
                     <!-- <el-form-item prop="exclude_oo"> -->
                     <el-checkbox v-model="isExcludeOO" @change="changeExcludeOO"
@@ -462,7 +462,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="market_environment" label="Market Environment" v-if="bd.strategy === 'Single'">
                     <template slot="label">
                       <label>
@@ -518,7 +518,7 @@
                     </el-form-item>
                   </div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="index_moving_average_slope" label="Index Moving Average Slope" v-if="bd.strategy === 'Single'">
                     <template slot="label">
                       <label>
@@ -545,7 +545,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="use_tag" v-if="is_admin">
                   <template slot="label">
                     <label>
@@ -574,7 +574,7 @@
 									</div>
 								</el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item
 									prop="report_url"
 									size="mini"
@@ -596,7 +596,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :span="12" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                   <div class="nameBox">
                     <el-form-item
                       prop="name"
@@ -686,106 +686,114 @@
                     </div>
                   </div>
                 </el-col>
-                <el-col :span="6">
-                </el-col>
-                <el-col :span="6">
-                </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="24">
                   <div class="risk-control-container border-set">
                   <!-- <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'"> -->
                     <div class="riskItem">
-                      <el-checkbox
-                        v-model="isRiskControl"
-                        border
-                        @change="selectRiskControl"
-                        >Risk Control at Exit
+                      <el-row :gutter="20">
+                        <el-col :span="24" :xs="24" :sm="12" :md="12" :lg="24" :xl="24">
+                          <el-checkbox
+                            v-model="isRiskControl"
+                            border
+                            @change="selectRiskControl"
+                            >Risk Control at Exit
 
-                        <el-tooltip effect="dark" placement="top">
-                          <span slot="content">
-                            Check this option to include three methods of risk control to
-                            exit position.<br />
-                            The specified methods will serve as first-come,
-                            first-execute.<br />
-                            This option will be used combinedly as an OR condition with the <br/>
-                            Exit Criteria selection or be solely used in the Exit Criteria
-                            "Only Use Risk Control".<br/>
-                            Note: When short selling, to prevent unlimited additional margin, <br/>
-                            it is mandatory to ensure that the take-profit is greater than the stop-loss. <br>
-                            When short selling, Take Profit must be greater than Stop Loss.
-                          </span>
-                          <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
-                      ></el-checkbox>
+                          <el-tooltip effect="dark" placement="top">
+                            <span slot="content">
+                              Check this option to include three methods of risk control to
+                              exit position.<br />
+                              The specified methods will serve as first-come,
+                              first-execute.<br />
+                              This option will be used combinedly as an OR condition with the <br/>
+                              Exit Criteria selection or be solely used in the Exit Criteria
+                              "Only Use Risk Control".<br/>
+                              Note: When short selling, to prevent unlimited additional margin, <br/>
+                              it is mandatory to ensure that the take-profit is greater than the stop-loss. <br>
+                              When short selling, Take Profit must be greater than Stop Loss.
+                            </span>
+                            <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
+                        ></el-checkbox>
+                        </el-col>
+                      </el-row>
                     </div>
-                    <div class="tpContainer riskItem" v-if="isRiskControl">
-                      <el-checkbox v-model="isTakeProfit" @change="generateRiskControl">
-                        Take Profit
-                        <el-tooltip effect="dark" placement="top">
-                          <span slot="content"
-                            >Input a value of percentage to exit position when the
-                            specified profit is reached. (default: 10%)<br
-                          /></span>
-                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
-                        </el-tooltip>
-                      </el-checkbox>
-                      <el-input
-                        v-model="tp"
-                        @blur="tp = removeDecimalPlaces(tp); validateTP(tp)"
-                        size="mini"
-                      ><template v-slot:append>
-                        (%)
-                        </template>
-                      </el-input>
-                      <div class="error-message" v-if="tpValidErrMsg">
-                      {{ tpValidErrMsg }}
-                      </div>
-                    </div>
-                    <div class="slContainer riskItem" v-if="isRiskControl">
-                      <el-checkbox v-model="isStopLoss" @change="generateRiskControl"
-                        >Stop Loss
+                    <el-row :gutter="20">
+                      <el-col :span="8" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="tpContainer riskItem" v-if="isRiskControl">
+                          <el-checkbox v-model="isTakeProfit" @change="generateRiskControl">
+                            Take Profit
+                            <el-tooltip effect="dark" placement="top">
+                              <span slot="content"
+                                >Input a value of percentage to exit position when the
+                                specified profit is reached. (default: 10%)<br
+                              /></span>
+                              <i class="fa fa-question-circle right" aria-hidden="true"></i>
+                            </el-tooltip>
+                          </el-checkbox>
+                          <el-input
+                            v-model="tp"
+                            @blur="tp = removeDecimalPlaces(tp); validateTP(tp)"
+                            size="mini"
+                          ><template v-slot:append>
+                            (%)
+                            </template>
+                          </el-input>
+                          <div class="error-message" v-if="tpValidErrMsg">
+                          {{ tpValidErrMsg }}
+                          </div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="slContainer riskItem" v-if="isRiskControl">
+                          <el-checkbox v-model="isStopLoss" @change="generateRiskControl"
+                            >Stop Loss
 
-                        <el-tooltip effect="dark" placement="top">
-                          <span slot="content"
-                            >Input a value of percentage to exit position when the
-                            specified loss is reached. (default: 5%)<br
-                          /></span>
-                          <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
-                      ></el-checkbox>
-                      <el-input
-                        v-model="sl"
-                        @blur="sl = removeDecimalPlaces(sl); validateSL(sl)"
-                        size="mini"
-                      ><template v-slot:append>
-                        (%)
-                        </template></el-input>
-                      <div class="error-message" v-if="slValidErrMsg">
-                      {{ slValidErrMsg }}
-                      </div>
-                    </div>
-                    <div class="timContainer riskItem" v-if="isRiskControl">
-                      <el-checkbox v-model="isTimeInMarket" @change="generateRiskControl"
-                      size="mini"
-                        >Time In Market
-                        <el-tooltip effect="dark" placement="top">
-                          <span slot="content"
-                            >Input a value of bars to stay in market after entry.<br />Exit
-                            position when the specified Time In Market is reached.
-                            (default: 20)<br
-                          /></span>
-                          <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
-                      ></el-checkbox>
-                      <el-input
-                        v-model="tim"
-                        @blur="validateTIM(tim)"
-                        size="mini"
-                      ><template v-slot:append>
-                        (bars)
-                        </template></el-input>
-                      <div class="error-message" v-if="timValidErrMsg">
-                      {{ timValidErrMsg }}
-                      </div>
-                    </div>
+                            <el-tooltip effect="dark" placement="top">
+                              <span slot="content"
+                                >Input a value of percentage to exit position when the
+                                specified loss is reached. (default: 5%)<br
+                              /></span>
+                              <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
+                          ></el-checkbox>
+                          <el-input
+                            v-model="sl"
+                            @blur="sl = removeDecimalPlaces(sl); validateSL(sl)"
+                            size="mini"
+                          ><template v-slot:append>
+                            (%)
+                            </template></el-input>
+                          <div class="error-message" v-if="slValidErrMsg">
+                          {{ slValidErrMsg }}
+                          </div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <div class="timContainer riskItem" v-if="isRiskControl">
+                          <el-checkbox v-model="isTimeInMarket" @change="generateRiskControl"
+                          size="mini"
+                            >Time In Market
+                            <el-tooltip effect="dark" placement="top">
+                              <span slot="content"
+                                >Input a value of bars to stay in market after entry.<br />Exit
+                                position when the specified Time In Market is reached.
+                                (default: 20)<br
+                              /></span>
+                              <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
+                          ></el-checkbox>
+                          <el-input
+                            v-model="tim"
+                            @blur="validateTIM(tim)"
+                            size="mini"
+                          ><template v-slot:append>
+                            (bars)
+                            </template></el-input>
+                          <div class="error-message" v-if="timValidErrMsg">
+                          {{ timValidErrMsg }}
+                          </div>
+                        </div>
+                      </el-col>                      
+                    </el-row>
                   </div>
                 </el-col>
               </el-row>
