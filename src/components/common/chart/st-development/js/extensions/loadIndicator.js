@@ -698,14 +698,10 @@ import { formatStandardTime } from '@/utils'
     // This function encapsulates the logic for adding a study,
     // updating extreme values, and attaching MAs.
     const addStudyToChart = async (studyType, inputs, outputs, parameters, panel, indicatorKey, extremeInfo = null) => {
-        // // TODO symbol ohlcv特殊处理，在addStudy之前先获取异步数据源
-        // if(CIQ.findSymbolIndicator(studyType)) {
-        //     var start = config.timestampToTime(CIQ.initialDate.start)
-        //     var end = config.timestampToTime(CIQ.initialDate.end)
-        //     const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, parameters.ticker)
-        //     let _data = formatData(res.data)
-        //     await CIQ.store.dispatch('chart/set_ticker_ohlcv_pairdata', {ticker:parameters.ticker, data: _data})
-        //}
+        // TODO symbol ohlcv特殊处理，在addStudy之前先获取异步数据源, 因为在计算函数内获取数据无法异步处理
+        if(CIQ.findSymbolIndicator(studyType)) {  
+            await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata', parameters.ticker)
+        }
         const sd = CIQ.Studies.addStudy(stx, studyType, inputs, outputs, parameters, panel);
         // Update extreme values if provided
         if (extremeInfo && sd) {

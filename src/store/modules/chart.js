@@ -1030,12 +1030,6 @@ get_indicator_page_btv1_list({ commit, state }) {
 			}
 		}
 },
-	set_ticker_ohlcv_pairdata({ commit }, { ticker, data }) {
-		return new Promise(resolve => {
-			commit('SET_TICKER_OHLCV_PAIRDATA', { ticker, data })
-			resolve()
-		})
-	},
 	get_ticker_ohlcv_pairdata({ commit }, ticker) {
 		return new Promise(async (resolve,reject) => {
 			const result = state.tickerOhlcvPairdata[ticker]
@@ -1045,7 +1039,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 					var end = config.timestampToTime(CIQ.initialDate.end)
 					const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, ticker)
 					let _data = formatData(res.data)
-
+					console.log('获取到指定Ticker的OHLCV数据并缓存至本地...')
 					commit('SET_TICKER_OHLCV_PAIRDATA', { ticker, data: _data })
 					resolve(_data)
 					
@@ -1053,6 +1047,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 					reject(err)
 				}
 			}else{
+				console.log('读取缓存Ticker的OHLCV数据...')
 				resolve(result)
 			}
 		})
