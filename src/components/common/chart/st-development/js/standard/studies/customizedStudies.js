@@ -213,6 +213,7 @@ if (!CIQ.Studies) {
 		
 	};
 
+	// Symbol Ohlcv convenience function.
 	// 计算中间量（OHLCV value）函数
 	CIQ.Studies.TickerOHLCV = async function (
 		name,
@@ -232,7 +233,6 @@ if (!CIQ.Studies) {
 		ohlcv.startFrom = sd.startFrom;
 		ohlcv.inputs = {};
 		if (field) ohlcv.inputs.Field = CIQ.findSymbolIndicator(field, null).field;
-	
 		// dual symbol new features
 		ohlcv.parameters = {
 			criteria: sd.parameters.criteria,
