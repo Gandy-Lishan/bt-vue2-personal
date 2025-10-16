@@ -273,14 +273,12 @@ export default {
           this.tableData = arr.map(obj => {
             for (const key in obj) {
               if (Object.hasOwnProperty.call(obj, key)) {
-                if(key === 'last_value' || key === 'last_change') {
+                if(!isNaN(obj[key])) {
                   obj[key] = unifyNumber(obj[key], 2)
-                }else if(key === 'last_update') {
-                  const datatime = new Date(obj['last_update']);
-                  const Y = datatime.getUTCFullYear() + '-';
-                  const M = (datatime.getUTCMonth() + 1).toString().padStart(2, '0') + '-';
-                  const D = datatime.getUTCDate().toString().padStart(2, '0');
-                  obj['last_update'] = Y+M+D
+                }else if(key === 'Date') {
+                  obj['Date'] = typeof obj['Date'] === 'string' ? obj['Date'].slice(0, 10) : '-'
+                }else if(key === 'Symbol') {
+                  obj['url'] = obj[key]
                 }
               }
             }

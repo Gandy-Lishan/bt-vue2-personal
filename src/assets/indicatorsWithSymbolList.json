@@ -96010,5 +96010,243 @@
         "market_symbol": "PHYS",
         "type": "reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Hyperliquid",
+        "url": "crp_HYPE32196",
+        "market_symbol": "crp_HYPE32196",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hyperliquid Trend Score",
+        "url": "crp_HYPE32196_trend",
+        "market_symbol": "crp_HYPE32196",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hyperliquid RelTrend Score",
+        "url": "crp_HYPE32196_reltrend",
+        "market_symbol": "crp_HYPE32196",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Number of S&P 500 Sectors Above 200-Day MA",
+        "url": "sp500_sector_breadth_200ma_count",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SH Optix",
+        "url": "etf_sh",
+        "market_symbol": "SH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SDS Optix",
+        "url": "etf_sds",
+        "market_symbol": "SDS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QID Optix",
+        "url": "etf_qid",
+        "market_symbol": "QID",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPXU Optix",
+        "url": "etf_spxu",
+        "market_symbol": "SPXU",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SQQQ Optix",
+        "url": "etf_sqqq",
+        "market_symbol": "SQQQ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SSO Optix",
+        "url": "etf_sso",
+        "market_symbol": "SSO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "QLD Optix",
+        "url": "etf_qld",
+        "market_symbol": "QLD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "UPRO Optix",
+        "url": "etf_upro",
+        "market_symbol": "UPRO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TQQQ Optix",
+        "url": "etf_tqqq",
+        "market_symbol": "TQQQ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PSQ Optix",
+        "url": "etf_psq",
+        "market_symbol": "PSQ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Short S&P500 Trend Score",
+        "url": "SH_trend",
+        "market_symbol": "SH",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Short S&P500 RelTrend Score",
+        "url": "SH_reltrend",
+        "market_symbol": "SH",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Short QQQ Trend Score",
+        "url": "PSQ_trend",
+        "market_symbol": "PSQ",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Short QQQ RelTrend Score",
+        "url": "PSQ_reltrend",
+        "market_symbol": "PSQ",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraShort S&P500 Trend Score",
+        "url": "SDS_trend",
+        "market_symbol": "SDS",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraShort S&P500 RelTrend Score",
+        "url": "SDS_reltrend",
+        "market_symbol": "SDS",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraShort QQQ Trend Score",
+        "url": "QID_trend",
+        "market_symbol": "QID",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraShort QQQ RelTrend Score",
+        "url": "QID_reltrend",
+        "market_symbol": "QID",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraPro Short S&P500 Trend Score",
+        "url": "SPXU_trend",
+        "market_symbol": "SPXU",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraPro Short S&P500 RelTrend Score",
+        "url": "SPXU_reltrend",
+        "market_symbol": "SPXU",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraPro Short QQQ Trend Score",
+        "url": "SQQQ_trend",
+        "market_symbol": "SQQQ",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraPro Short QQQ RelTrend Score",
+        "url": "SQQQ_reltrend",
+        "market_symbol": "SQQQ",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Ultra S&P500 Trend Score",
+        "url": "SSO_trend",
+        "market_symbol": "SSO",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Ultra S&P500 RelTrend Score",
+        "url": "SSO_reltrend",
+        "market_symbol": "SSO",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Ultra QQQ Trend Score",
+        "url": "QLD_trend",
+        "market_symbol": "QLD",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Ultra QQQ RelTrend Score",
+        "url": "QLD_reltrend",
+        "market_symbol": "QLD",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraPro S&P500 Trend Score",
+        "url": "UPRO_trend",
+        "market_symbol": "UPRO",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraPro S&P500 RelTrend Score",
+        "url": "UPRO_reltrend",
+        "market_symbol": "UPRO",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraPro QQQ Trend Score",
+        "url": "TQQQ_trend",
+        "market_symbol": "TQQQ",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares UltraPro QQQ RelTrend Score",
+        "url": "TQQQ_reltrend",
+        "market_symbol": "TQQQ",
+        "type": "reltrend",
+        "updated": "Daily"
     }
 ]

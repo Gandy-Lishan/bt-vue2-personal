@@ -419,17 +419,22 @@ export default {
           'ConstituentConditionsColumns',
           [
             {
-              key: 'chart_name',
-              label: 'Name',
-              value: 'chart_name',
+              key: 'Symbol',
+              label: 'Symbol',
+              value: 'Symbol',
               minWidth: '120px'
             },
             {
-              key: 'last_update',
+              key: 'Close',
+              label: 'Close',
+              value: 'Close'
+            },
+            {
+              key: 'Date',
               label: 'Date',
-              value: 'last_update',
+              value: 'Date',
               minWidth: '90px'
-            }
+            },
           ]
         ],
         ['macroeconomicColumns', 
@@ -1788,7 +1793,22 @@ export default {
       if(this.type === 'research') {console.log('columns', columnsMap.get(`${this.type}Columns`)); return columnsMap.get(`${this.type}Columns`)}
       if(this.type === 'related' && !this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns')}
       if(this.type === 'related' && this.sourceType.includes('trend_reltrend')) {return columnsMap.get('stockColumns').filter(l => l.value !== 'sentiment')}
-      if(this.type === 'constituent_conditions') return columnsMap.get(`${'ConstituentConditions'}Columns`)
+      if(this.type === 'constituent_conditions') {
+        if(this.filterData && Array.isArray(this.filterData) && this.filterData.length > 0) {
+          const _columnKeys = Object.keys(this.filterData[0])
+          const columnKeys = [
+            ..._columnKeys.filter(item => item === "Symbol"),   // Symbol 最前
+            ..._columnKeys.filter(item => item !== "Symbol" && item !== "Date"), // 其他保持原顺序
+            ..._columnKeys.filter(item => item === "Date")      // Date 最后
+          ].filter(key => key !== 'url')
+          columnsMap.set('ConstituentConditionsColumns', columnKeys.map(ele => ({
+            key: ele,
+            label: ele,
+            value: ele
+          })))
+        }
+        return columnsMap.get(`${'ConstituentConditions'}Columns`)
+      }
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
       if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg']
       if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']

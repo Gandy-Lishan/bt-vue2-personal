@@ -341,7 +341,7 @@ export default {
           path: '/market/predict'
         },
         {
-          label: 'Tools',
+          label: 'Extra Tools',
           keyPath: '15',
           path: '/tools',
           subMenu: [
@@ -685,7 +685,7 @@ export default {
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
 
-      if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend Score', 'My Stuff'].includes(label)) {
+      if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend Score', 'My Stuff', 'Extra Tools'].includes(label)) {
         return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies')
       }
       if(label === 'BacktestEdge') {
@@ -701,7 +701,6 @@ export default {
         return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
       }
       if(label === 'Reports' || label === 'Dashboard') return accessAllPage || cannotAccessScanner || cannotAccessReport|| canOnlyAccessReport || canOnlyAccessReportStategyScanner
-      if(label === 'Tools') return email === 'hao@sentimentrader.com'
       // if(label === 'Reports') {
       //   const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
       //   return allowedReportEmails.includes(email)

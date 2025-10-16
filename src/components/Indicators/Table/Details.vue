@@ -7,6 +7,14 @@
     <ul class="indicator-info">
       <li :key="index" v-for="(item, index) in indicatorInfo">{{item}}</li>
     </ul>
+    <div v-if="showNotice" class="notice-box">
+      <el-divider></el-divider>
+      <p><strong>Notice:</strong></p>
+      <p>Due to the ongoing U.S. government shutdown, our Commodity Futures Trading Commission (CFTC) data feed is temporarily unavailable.</p>
+      <p>This affects certain charts, indicators, and datasets derived from the CFTC's weekly reports. Once the government resumes operations, we will promptly synchronize and update all affected data.</p>
+      <p>Thank you for your understanding and continued support.</p>
+      — <em>The SentimenTrader Team</em>
+    </div>
     <div class="centent">
           <div class="headerSelect">
             <h4  @click="selectedTitle = 'Detail'" :class="{ 'selected': selectedTitle === 'Detail' }">Indicator Detail</h4>
@@ -94,7 +102,7 @@
             </Construction>
             <Research v-show="selectedTitle === 'Research'" ref="Research" :blog_results="blog_results"></Research>
             <Related v-show="selectedTitle === 'Related' && isShowRelated" ref="Related" :related="related" :type="type"></Related>
-            <!-- <ConstituentConditions v-show="selectedTitle === 'ConstituentConditions' && isShowConstituentConditions" ref="ConstituentConditions" :constituentConditions="constituentConditions" :type="type"></ConstituentConditions> -->
+            <ConstituentConditions v-show="selectedTitle === 'ConstituentConditions' && isShowConstituentConditions" ref="ConstituentConditions" :constituentConditions="constituentConditions" :type="type"></ConstituentConditions>
           </div>
         </div>
   </div>
@@ -106,6 +114,7 @@ import Construction from "./Construction";
 import Related from "./Related";
 import ConstituentConditions from "./ConstituentConditions";
 import { getIndicatorsRowData } from '@/service/service'
+import { isJson } from '@/utils';
 
 export default {
   props: {
@@ -133,7 +142,20 @@ export default {
       Between_Annualized: '',
       return_segments: [],
       isShowInfoTable: false,
-      type: ''
+      type: '',
+      indicator_keys: [
+        "cot_all", "cot_hedgers", "cot_speculators", "cot_spx", "cot_spx_mini", "cot_spx_combo",
+        "cot_ndx", "cot_ndx_mini", "cot_ndx_combo", "cot_djia", "cot_djia_mini", "cot_djia_combo",
+        "cot_rut", "cot_nikkei", "cot_vix", "cot_bonds_eurodollar", "cot_bonds_two", "cot_bonds_five",
+        "cot_bonds_ten", "cot_bonds_thirty", "cot_crb", "cot_aussie", "cot_pound", "cot_canada",
+        "cot_euro", "cot_peso", "cot_franc", "cot_dollar", "cot_yen", "cot_crude", "cot_natural",
+        "cot_unleaded", "cot_copper", "cot_gold", "cot_palladium", "cot_platinum", "cot_silver",
+        "cot_corn", "cot_oats", "cot_soybeans", "cot_wheat", "cot_cocoa", "cot_coffee", "cot_cotton",
+        "cot_oj", "cot_sugar", "cot_cattle", "cot_hogs", "cot_energy", "cot_metals", "cot_ag",
+        "cot_speculators_small", "etf_two", "etf_five", "etf_ten", "etf_thirty", "etf_eurodollar",
+        "cot_bonds_ultraten", "cot_bonds_ultrathirty", "cot_all_combo", "cot_sofr-3m", "cot_btc"
+      ],
+      showNotice: false
     }
   },
   watch: {
@@ -172,7 +194,7 @@ export default {
           console.log('originalData', originalData)
           this.blog_results = originalData.blog_results
           this.related = originalData.related
-          this.constituentConditions = originalData.constituent_conditions || null
+          this.constituentConditions = isJson(originalData.constituent_conditions) ? JSON.parse(originalData.constituent_conditions) : (originalData.constituent_conditions || null)
           this.type  = originalData.type
           this.title = originalData.chart_name
 				  this.convertedHTML = convertToHTML(originalData.description)
@@ -220,6 +242,7 @@ export default {
               }
             }
           }
+          this.showNotice = this.indicator_keys.includes(newValue.url)
           this.indicatorInfo = indicatorInfo
         } catch (error) {
           console.log('error', error)
@@ -325,6 +348,16 @@ export default {
   list-style-type: disc;
   li {
     margin: 0 15px 0 15px;
+  }
+}
+.notice-box {
+  padding: 0 15px 0px 15px;
+  font-weight: 400;
+  /deep/ .el-divider--horizontal {
+    margin: 20px 0 15px 0;
+  }
+  p {
+    margin: 0 0 10px;
   }
 }
 .detail-title {
