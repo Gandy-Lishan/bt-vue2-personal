@@ -1050,8 +1050,9 @@ if (!CIQ.Studies) {
 			// 创建一个 Map 以便快速通过 DT 查找 Close 值
 			// 1. O(M) 复杂度, M 是 _data 的长度
 			const ohlcvDataMap = new Map();
-			let tickerPairdata = CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker]
+			let tickerPairdata = CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker] || []
 			// 一般来说会在计算函数之前获取数据，这里是做了一层保险
+			// (比如API报错或者restoreChartLayout,后者不会调用getMetaData也就不会初始化ohlcv数据)
 			if(tickerPairdata.length == 0) {
 				tickerPairdata = await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata',sd.parameters.ticker)
 			}
@@ -1953,8 +1954,9 @@ if (!CIQ.Studies) {
 					quotes = sd.chart.scrubbed
 				}
 				const ohlcvDataMap = new Map();
-				let tickerPairdata = CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker]
+				let tickerPairdata = CIQ.store.getters.getTickerOhlcvPairdata[sd.parameters.ticker] || []
 				// 一般来说会在计算函数之前获取数据，这里是做了一层保险
+				// (比如API报错或者restoreChartLayout,后者不会调用getMetaData也就不会初始化ohlcv数据)
 				if(tickerPairdata.length == 0) {
 					tickerPairdata = await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata',sd.parameters.ticker)
 				}
