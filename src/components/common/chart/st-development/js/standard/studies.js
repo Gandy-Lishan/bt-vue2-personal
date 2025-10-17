@@ -3176,7 +3176,8 @@ CIQ.Studies.calculateVolume = function (stx, sd) {
 	sd.outputMap = {};
 	// 默认是Volume, Symbol Volume的话field用自定义计算函数返回的新Field
 	if(sd.type == 'Symbol Volume') {
-		sd.outputMap["Result " + sd.name] = "";
+		sd.outputMap["Result _OHLCV " + sd.name] = "";
+		// sd.outputMap["Result " + sd.name] = "";
 	}
 	else sd.outputMap.Volume = "";
 
@@ -3358,7 +3359,8 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
 
 	// 默认是Volume, Symbol Volume的话field用自定义计算函数返回的新Field
 	if(sd.type == 'Symbol Volume') {
-		sd.volumeField = "Result " + sd.name
+		sd.volumeField = "Result _OHLCV " + sd.name
+		// sd.volumeField = "Result " + sd.name
 	}
 	
 	var seriesParam = [
@@ -3399,8 +3401,8 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
 	// 不执行，而采用了drawHistogram的默认着色函数，后者无法兼容其他ticker的ohlcv
 	if(sd.type == 'Symbol Volume') {
 		seriesParam0.color_function = function (quote) {
-			var close = quote["Close " + sd.name],
-				preClose = quote["PreClose " + sd.name];
+			var close = quote["Close _OHLCV " + sd.name],
+				preClose = quote["PreClose _OHLCV " + sd.name];
 			//if((!O && O!==0) || (!C && C!==0) || O===C) return stx.defaultColor;
 			return {
 				fill_color:
