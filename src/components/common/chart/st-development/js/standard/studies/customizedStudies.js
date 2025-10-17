@@ -330,7 +330,7 @@ if (!CIQ.Studies) {
 		/** myIndicator 区分shift前后的指标 */
 		if(window.location.pathname.includes('/myindicator')) {
 			const symbolLabel = getCoresSymbolDual(sd.parameters.criteria.endsWith(2))
-        	let display = `(${symbolLabel})${sd.ticker || ''} Symbol Close Rate Of Change(${period}-Bar)`
+        	let display = `(${symbolLabel}) Symbol Close Rate Of Change(${period}-Bar)`
 			const miShift = CIQ.store.getters.getMiFormShift
 			// 左侧ma
 			if(!sd.parameters.criteria.endsWith('2')) {
