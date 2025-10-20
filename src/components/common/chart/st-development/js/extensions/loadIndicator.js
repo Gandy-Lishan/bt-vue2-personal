@@ -773,7 +773,8 @@ import { formatStandardTime } from '@/utils'
                                 });
                             }
                             if(CIQ.findSymbolIndicator(indicatorName, null)) {
-                                const symbolLabel = indicatorName == 'Symbol Volume' ? '' : `(${getCoresSymbolDual(maLayoutItem.criteria.endsWith('2'))})`
+                                // const symbolLabel = indicatorName == 'Symbol Volume' ? '' : `(${getCoresSymbolDual(maLayoutItem.criteria.endsWith('2'))})`
+                                const symbolLabel = ''
                                 studiesToLoad.push({
                                     type: indicatorName,
                                     inputs: { display: `${symbolLabel}${maLayoutItem.ticker} ${indicatorName}` }, // Using placeholder for symbolLabel

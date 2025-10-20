@@ -1994,7 +1994,13 @@ if (!CIQ.Studies) {
 					symbolOhlcvLayout = activatedMALayoutList.find(
 						(item) => item.criteria == sd.parameters.criteria && item.index == sd.parameters.index
 					)
-					CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+					// 这里做判断的原因是，默认加载时需要异步获取数据并执行计算函数，但是编辑比如切换颜色时异步失效，需特殊处理
+					let tickerPairdata = CIQ.store.getters.getTickerOhlcvPairdata[symbolOhlcvLayout.ticker] || []
+					if(tickerPairdata.length == 0) {
+						await CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+					}else {
+						CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+					}
 					CIQ.Studies.calculateSymbolROCLike(stx, sd)
 				}else CIQ.Studies.calculateSentiROCLike(stx, sd)	
 			}, 
@@ -2084,6 +2090,7 @@ if (!CIQ.Studies) {
 			// 	CIQ.Studies.calculateVolume(stx, sd)
 			// },
 			calculateFN: function (stx, sd) {
+				// 这里和roc加载判断不同，不需要添加await，因为calculateVolume无需等待TickerOHLCV（未知原因）
 				CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,sd.type,sd.parameters.ticker)
 				CIQ.Studies.calculateVolume(stx, sd)
 			},

@@ -432,7 +432,8 @@ export default {
           [17, { name:'N-Day Low', abbr: 'NL' }],
         ])
 
-        const symbolLabel = field == 'Volume' ? '' : `(${getCoresSymbolDual(this.criteria.endsWith('2'))})`
+        // const symbolLabel = field == 'Volume' ? '' : `(${getCoresSymbolDual(this.criteria.endsWith('2'))})`
+        const symbolLabel = ''
         let display
         if([12,13].includes(this.sym.newCondition)){
           display = `${symbolLabel}${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`

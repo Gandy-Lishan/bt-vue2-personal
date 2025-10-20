@@ -820,7 +820,7 @@ export const CommonMethodsMixin = {
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			const symbolLabel = getCoresSymbolDual(criteria.endsWith('2'))
 			let symbolLabelDisplay = ''
-			if (!(analysis == 'Sentiment' || analysis == 'User' || field == 'Volume')) {
+			if (!(analysis == 'Sentiment' || analysis == 'User' || analysis == 'Symbol')) {
 				symbolLabelDisplay = `(${symbolLabel})`
 			}
 			const maType = signals.ma_type == 'S' ? ' SMA' : ' EMA'
