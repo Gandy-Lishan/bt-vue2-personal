@@ -129,4 +129,18 @@ export default {
       width: 1170px;
   }
 }
+@media (max-width: 991px) {
+  .cpm-container {
+    .strategy-header {
+      display: block;
+      text-align: center;
+      padding: 0px;
+      .tableHeader, .headerSelect {
+        display: block;
+        text-align: center;
+        padding: 0px;
+      }
+    }
+  }
+}
 </style>

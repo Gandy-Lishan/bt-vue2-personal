@@ -3,7 +3,7 @@
 	<div class="indicator-box">
 		<el-form :model="si" ref="siForm" :rules="rules" label-position="left" size="small">
       <el-row :gutter="20">
-        <el-col :span="12">
+        <el-col :span="12" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
           <div class="labelWithSelectBox indicatorTypeBox">
             <el-form-item prop="indicatorRadio">
                 <template slot="label">
@@ -35,7 +35,7 @@
             </el-form-item>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
           <div class="labelWithSelectBox indicatorTypeBox" v-show="indicatorRadio === 'Sentiment Indicator'">
             <el-form-item prop="sentimentIndicator">
                 <template slot="label">
@@ -1865,5 +1865,15 @@ export default {
   margin-left: 146px;
   font-size: 12px;
   color: #333333;
+}
+@media (max-width: 768px) {
+  .labelWithSelectBox {
+    /deep/ .el-form-item__label {
+      width: auto;
+    }
+    .selectBox {
+      display: block;
+    }
+  }
 }
 </style>

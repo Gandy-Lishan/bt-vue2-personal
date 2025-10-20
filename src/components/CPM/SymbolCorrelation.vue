@@ -2,7 +2,7 @@
   <div class="symbol-correlation">
     <el-form :model="data" size="small" status-icon :rules="rules" ref="Form" class="symbol-correlation-form" label-position="top">
       <el-row :gutter="24">
-        <el-col :span="8">
+        <el-col :span="8"  :xs="24"  :sm="12" :md="8" :lg="8" :xl="8">
           <el-form-item label="1. Designated Ticker" prop="benchmark">
             <SearchAutocomplete
               ref="autocomplete"
@@ -14,7 +14,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="12" :md="8" :lg="8" :xl="8">
             <!-- <el-form-item label="2. Date Range" prop="dateRange">
             <el-date-picker
               v-model="dateRange"
@@ -44,7 +44,7 @@
           </el-form-item>
         <el-row :gutter="20">
           <div :class="{hidePicker: cpm_period !== 'custom', 'picker-container': true}" v-if="cpm_period === 'custom'">
-            <el-col :span="12">
+            <el-col :span="12" :xs="24"  :sm="12" :md="12" :lg="12" :xl="12">
           <el-form-item prop="start_date" label="" class="dateSelect">
             <el-date-picker
               v-model="data.start_date"
@@ -56,7 +56,7 @@
             </el-date-picker>
           </el-form-item>
          </el-col>
-         <el-col :span="12">
+         <el-col :span="12" :xs="24"  :sm="12" :md="12" :lg="12" :xl="12">
           <el-form-item prop="end_date" label="" class="dateSelect">
               <el-date-picker
                 v-model="data.end_date"
@@ -72,7 +72,7 @@
           <div v-else style="height: 50px;"></div>
         </el-row>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="12" :md="8" :lg="8" :xl="8">
           <el-form-item prop="cpm_period" label="3. Time Frame" class="dateRange">
             <el-select
               v-model="data.roll_window"
@@ -88,7 +88,7 @@
           </el-form-item>
           <el-row :gutter="20">
           <div v-if="data.roll_window === 'custom'">
-            <el-col :span="24">
+            <el-col :span="24" :xs="24"  :sm="24" :md="24" :lg="24" :xl="24">
               <el-form-item label="" prop="barsNumber">
                 <el-input v-model="data.barsNumber">
                   <template v-slot:append>
@@ -103,7 +103,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="24">
-        <el-col :span="24">
+        <el-col :span="24" :xs="24"  :sm="24" :md="24" :lg="24" :xl="24">
           <el-form-item label="4. Comparison Ticker" prop="comparison_ticker">
             <div class="ticker-select">
               <SearchAutocomplete
@@ -130,14 +130,14 @@
         </el-col>
       </el-row>
       <el-row :gutter="24" type="flex" justify="center">
-        <el-col :span="8"></el-col>
-        <el-col :span="8">
+        <el-col :span="8"  :xs="24"  :sm="24" :md="8" :lg="8" :xl="8"></el-col>
+        <el-col :span="8" :xs="24"  :sm="8" :md="8" :lg="182" :xl="8">
           <el-button type="warning" @click="resetForm('Form')" size="small">Clear Form</el-button>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="8" :md="8" :lg="8" :xl="8">
           <el-button type="primary" @click="submitForm('Form')" size="small" :loading="btnLoading">View Correlation</el-button>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="8" :md="8" :lg="8" :xl="8">
         </el-col>
       </el-row>
       <el-form-item>

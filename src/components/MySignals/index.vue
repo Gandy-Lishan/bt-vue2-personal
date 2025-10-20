@@ -385,5 +385,16 @@ h2.title {
 .tutorial {
   position: absolute;
   right: 30px;
-} 
+}
+@media (max-width: 1200px) {
+  .tutorial {
+    position: static;
+  }
+  /deep/ .el-collapse-item__header {
+    height: auto;
+  }
+  .title {
+    flex-wrap: wrap;
+  }
+}
 </style>

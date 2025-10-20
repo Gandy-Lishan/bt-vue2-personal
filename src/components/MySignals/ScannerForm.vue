@@ -8,7 +8,7 @@
       size="small"
       :rules="rules">
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item
           prop="name"
           >
@@ -20,7 +20,7 @@
           <el-input v-model="data.name" placeholder="Enter a name"></el-input>
         </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item
           prop="symbol"
           >
@@ -52,7 +52,7 @@
           </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item prop="timefame">
             <template slot="label">
             <label>
@@ -92,10 +92,10 @@
     </div>
     <br>
     <el-row :gutter="10" type="flex" class="row-bg" justify="center">
-        <el-col :span="6">
+        <el-col :span="6" :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
           <el-button type="warning" size="small" @click="resetForm">Reset Form</el-button>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
           <el-button type="primary" size="small" @click="submitForm" v-show="percentage == 0">Save Signal</el-button>
           <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
@@ -773,6 +773,11 @@ try {
   }
   /deep/ .el-progress {
     height: 100%;
+  }
+}
+@media (max-width: 1200px) {
+  .signal-container {
+    padding: 0;
   }
 }
 </style>

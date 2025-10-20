@@ -2,7 +2,7 @@
   <div class="symbol-correlation">
     <el-form :model="data" size="small" status-icon :rules="rules" ref="Form" class="symbol-correlation-form" label-position="top">
       <el-row :gutter="24">
-        <el-col :span="7">
+        <el-col :span="7" :xs="24"  :sm="7" :md="7" :lg="7" :xl="7">
           <el-form-item label="Symbol(1):" prop="referenceSymbol">
             <SearchAutocomplete
               ref="autocomplete"
@@ -14,10 +14,10 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="10"  :xs="24"  :sm="10" :md="10" :lg="10" :xl="10">
           <el-form-item label="Date Range for Symbol(1):" class="dateSelect">
             <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :span="12"  :xs="24"  :sm="12" :md="12" :lg="12" :xl="12">
             <el-form-item prop="referenceStartDate" label="" class="dateSelect">
               <el-date-picker
                 v-model="data.referenceStartDate"
@@ -29,7 +29,7 @@
               </el-date-picker>
             </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" :xs="24"  :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item prop="referenceEndDate" label="" class="dateSelect">
                   <el-date-picker
                     v-model="data.referenceEndDate"
@@ -44,7 +44,7 @@
             </el-row>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="7" :xs="24"  :sm="7" :md="7" :lg="7" :xl="7">
           <el-form-item label="Number of Bars(1):" prop="referenceBarsNum">
             <el-input v-model="data.referenceBarsNum" :disabled="false" @change="changeReferenceNumberOfBars">
               <template v-slot:append>
@@ -55,7 +55,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="24">
-        <el-col :span="7">
+        <el-col :span="7" :xs="24"  :sm="7" :md="7" :lg="7" :xl="7">
           <el-form-item label="Symbol(2):" prop="comparisonSymbol">
             <SearchAutocomplete
               ref="autocomplete"
@@ -67,10 +67,10 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="10" :xs="24"  :sm="10" :md="10" :lg="10" :xl="10">
           <el-form-item label="Date Range for Symbol(2):" class="dateSelect">
             <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :span="12" :xs="24"  :sm="12" :md="12" :lg="12" :xl="12">
             <el-form-item prop="comparisonStartDate" label="" class="dateSelect">
               <el-date-picker
                 v-model="data.comparisonStartDate"
@@ -82,7 +82,7 @@
               </el-date-picker>
             </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" :xs="24"  :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item prop="comparisonEndDate" label="" class="dateSelect">
                   <el-date-picker
                     v-model="data.comparisonEndDate"
@@ -97,7 +97,7 @@
             </el-row>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="7" :xs="24"  :sm="7" :md="7" :lg="7" :xl="7">
           <el-form-item label="Number of Bars(2):" prop="comparisonBarsNum">
             <el-input v-model="data.comparisonBarsNum" :disabled="false" @change="changeComparisonNumberOfBars">
               <template v-slot:append>
@@ -108,14 +108,14 @@
         </el-col>
       </el-row>
       <el-row :gutter="24" type="flex" justify="center">
-        <el-col :span="8"></el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="8" :md="8" :lg="8" :xl="8"></el-col>
+        <el-col :span="8" :xs="24"  :sm="8" :md="8" :lg="8" :xl="8">
           <el-button type="warning" @click="resetForm('Form')" size="small">Reset Form</el-button>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="8" :md="8" :lg="8" :xl="8">
           <el-button type="primary" @click="submitForm('Form')" size="small" :loading="btnLoading">View Correlation</el-button>
         </el-col>
-        <el-col :span="8"></el-col>
+        <el-col :span="8" :xs="24"  :sm="8" :md="8" :lg="8" :xl="8"></el-col>
       </el-row>
       <el-form-item>
       </el-form-item>
