@@ -96248,5 +96248,33 @@
         "market_symbol": "TQQQ",
         "type": "reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "TCTM Long-Term Trend Model",
+        "url": "tctm_long_term_trend_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CQQQ Optix",
+        "url": "etf_cqqq",
+        "market_symbol": "CQQQ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco China Technology ETF (CQQQ) RelTrend Score",
+        "url": "CQQQ_reltrend",
+        "market_symbol": "CQQQ",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco China Technology ETF (CQQQ) Trend Score",
+        "url": "CQQQ_trend",
+        "market_symbol": "CQQQ",
+        "type": "trend",
+        "updated": "Daily"
     }
 ]
