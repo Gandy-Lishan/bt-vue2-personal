@@ -820,7 +820,7 @@ export const CommonMethodsMixin = {
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			const symbolLabel = getCoresSymbolDual(criteria.endsWith('2'))
 			let symbolLabelDisplay = ''
-			if (!(analysis == 'Sentiment' || analysis == 'User')) {
+			if (!(analysis == 'Sentiment' || analysis == 'User' || field == 'Volume')) {
 				symbolLabelDisplay = `(${symbolLabel})`
 			}
 			const maType = signals.ma_type == 'S' ? ' SMA' : ' EMA'
@@ -828,11 +828,17 @@ export const CommonMethodsMixin = {
                   ? this.rocDisplayName(indicator_url) + maType + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
 			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Bar)`
+
+			// 直接通过从activatedMALayout获取对应criteria和index的symbolTicker信息
+			const symbolTicker = CIQ.store.state.chart.activatedMALayout.find(
+				item=>item.url == name && item.criteria == criteria && item.index == panelIndex
+				)?.ticker
+
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `${symbolLabelDisplay}${name} ${condition}`,
+					display: `${symbolLabelDisplay}${symbolTicker} ${name} ${condition}`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -851,7 +857,9 @@ export const CommonMethodsMixin = {
 		rocDisplayName(field) {
 			let display
 			let senti = CIQ.findSentiIndicator(null,field)
-			if(CIQ.isOwnIndicator(field)){
+			if(CIQ.findSymbolIndicator(null, field)){
+				display = CIQ.findSymbolIndicator(null, field)?.label
+			}else if(CIQ.isOwnIndicator(field)){
 				display = field.split(/CREATE/)[0]
 			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
