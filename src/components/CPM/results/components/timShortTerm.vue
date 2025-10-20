@@ -935,4 +935,9 @@ p {
 	width: 893px;
 	margin: 0 auto;
 }
+@media (max-width: 1200px) {
+	.CPM-header, .CPM-ZScore, .CPM-TIM-Table {
+		width: 100%;
+	}
+}
 </style>

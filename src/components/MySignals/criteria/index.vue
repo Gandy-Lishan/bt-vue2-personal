@@ -4,7 +4,7 @@
 					<!-- <p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p> -->
 					<div class="label-container" style="margin-bottom: 18px;">
 						<el-row :gutter="10">
-							<el-col :span="8">
+							<el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
 								<div class="title-label-container">
 								<span style="margin-right: 5px; font-weight: bold;">4. </span>
 									<el-select
@@ -1554,5 +1554,33 @@ export default {
   opacity: 0;
 		display: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+@media (max-width: 768px) {
+  .signal-option-box, .signal-container {
+    display: block;
+  }
+  .criteria-title, .scoreNote{
+    margin-bottom: 18px;
+  }
+  .signal-container /deep/ .el-select .el-input__inner {
+		width: 100%;
+	}
+  /deep/ .el-select {
+	width: 100%;
+  }
+  /deep/ .el-input-number--mini {
+	width: 100%;
+  }
+  .delay-bar-box {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	/deep/ label.el-checkbox {
+		width: auto;
+	}
+	/deep/ .el-input-number--mini {
+		width: auto;
+ 	}
+  }
 }
 </style>

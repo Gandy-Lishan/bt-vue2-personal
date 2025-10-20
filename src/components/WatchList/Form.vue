@@ -8,7 +8,7 @@
       @submit.native.prevent
       :rules="rules">
       <el-row :gutter="20">
-        <el-col :span="12">
+        <el-col :span="12" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
           <el-form-item label="1. Name" prop="name" label-width="70px" label-position="top">
             <el-input v-model="data.name" clearable></el-input>
           </el-form-item>
@@ -103,13 +103,13 @@
       <br>
       <br>
       <el-row :gutter="20" type="flex" justify="center">
-        <el-col :span="4">
+        <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
           <el-button type="warning" size="small" @click="previewList" :loading="previewLoading">View List</el-button>
         </el-col>
         <!-- <el-col :span="4">
           <el-button type="danger" size="small">Optix HeatMap</el-button>
         </el-col> -->
-        <el-col :span="4">
+        <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
           <el-button type="primary" size="small"  @click="submitForm" :loading="btnLoading">Save Watch List</el-button>
         </el-col>
       </el-row>

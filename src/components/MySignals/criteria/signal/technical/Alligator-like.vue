@@ -435,4 +435,15 @@ delay_bars: [String, Number],
 .secondCondition.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
 	margin-bottom: 0;
 }
+@media (max-width: 768px) {
+  .ids-container {
+    flex-wrap: wrap;
+  }
+  .condition-container {
+    display: block;
+  }
+  /deep/ .el-select {
+    margin: 0;
+  }
+}
 </style>

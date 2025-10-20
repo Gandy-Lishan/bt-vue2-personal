@@ -56,6 +56,7 @@ export default {
 	margin-left: auto;
 	background-color: #ffffff;
 	font-family: "Open Sans",sans-serif;
+  width: 1170px;
 	.seasonality-top{
 		color: #000000;
 		p{
@@ -74,19 +75,16 @@ export default {
 .el-tabs {
 	padding: 0
 }
-@media (min-width: 768px) {
+@media (max-width: 1200px) {
   .seasonality-container {
-      width: 750px;
-  }
-}
-@media (min-width: 992px) {
-  .seasonality-container {
-      width: 970px;
-  }
-}
-@media (min-width: 1200px) {
-  .seasonality-container {
-      width: 1170px;
+    padding: 50px 0px 0px 0px;
+    width: 100%;
+    /deep/ .el-tabs__item.is-top{
+      width: 100%;
+    }
+    /deep/ .el-tabs__nav-scroll {
+      overflow-x: auto;
+    }
   }
 }
 </style>

@@ -16,7 +16,7 @@
         </button>
       </div>
     </div>
-   <div id="HM" style="min-width: 750px; height: 800px; margin: 0 auto"></div>
+   <div id="HM" style="overflow-x: auto"></div>
    <div class="chart-container" v-show="buttonName !== 'Trend Score' && buttonName !== 'RelTrend Score'">
         <svg width="100%" height="100" viewBox="0 0 320 100">
             <!-- 定义6个独立的渐变 -->
@@ -256,5 +256,16 @@ export default {
 .col-md-12 {
 	font-weight: 400;
 	font-size: 16px;
+}
+#HM {
+  min-width: 750px; 
+  height: 800px; 
+  margin: 0 auto;
+}
+@media (max-width: 1200px) {
+  #HM {
+    width: 100%;
+    overflow-x: auto;
+  }
 }
 </style>

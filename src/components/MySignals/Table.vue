@@ -4,7 +4,7 @@
       <el-input placeholder="Search" v-model="searchItem" @keyup.enter.native="handleQuery" clearable @clear="handleQuery" @input="handleQuery" size="small">
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
-     <div>
+     <div class="sortDateBtn">
         <el-tooltip class="item" effect="dark" placement="bottom-start">
           <span slot="content" v-html="textContent">
           </span>
@@ -549,5 +549,20 @@ export default {
 }
 .el-table /deep/ tr.el-table__row.highlighted{
   background-color: yellow !important;
+}
+@media (max-width: 1200px) {
+  .el-input-group {
+    width: 100%;
+  }
+  .search-box{
+    flex-wrap: wrap;
+  }
+  .sortDateBtn {
+    width: 100%;
+    margin-top: 10px;
+  }
+  /deep/ .el-button--small, .el-button--small.is-round {
+    width: 100%;
+  }
 }
 </style>

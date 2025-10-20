@@ -48,7 +48,7 @@ input[type="time"] {
 	border: #ddd solid 1px;
 	padding: 0 5px 0 10px;
 }
-@media (max-width: 1200px) {
+/* @media (max-width: 1200px) {
 	input:not([type]), 
 	input[type="text"], 
 	input[type="number"],
@@ -56,4 +56,4 @@ input[type="time"] {
 	input[type="time"] {
 		border: unset
 	}
-}
+} */

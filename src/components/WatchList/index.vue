@@ -530,4 +530,10 @@ export default {
   margin-left: 10px;
 	color: #333333;
 }
+@media (max-width: 1200px) {
+  .CPMResults-container {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}
 </style>
