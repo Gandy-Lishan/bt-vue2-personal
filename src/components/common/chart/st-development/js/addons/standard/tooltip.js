@@ -663,7 +663,6 @@ if (!CIQ.Marker) {
              }
              for (var f = 0; f < fields.length; f++) {
                  var obj = fields[f];
-                 
                  var name = obj.member;
                  var displayName = obj.display;
                  var isRecordDate = name == "DT";
@@ -796,12 +795,15 @@ if (!CIQ.Marker) {
                             // tooltip显示上不限制0.005的decimal places限制
                             //  if(dsField>-0.005 && dsField<0){dsField = -0.01}
                             //  else if(dsField>0 && dsField<0.005){dsField = 0.01}
-                             fieldValue = this.formatYAxisPrice(
+                            // 特殊处理Symbol Volume，它的format为了和Volume一致而不依赖yAxis的配置
+                            if(name.includes('Symbol Volume')) fieldValue = dsField;
+                            else fieldValue = this.formatYAxisPrice(
                                  dsField,
                                  panel,
                                  labelDecimalPlaces,
                                  yAxis
                              );
+                           
                              //console.log(dsField + ' with ' + fieldValue)
                              
                          }
