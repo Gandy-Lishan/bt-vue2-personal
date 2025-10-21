@@ -10,14 +10,7 @@
 			></RecentUpdate>
 			<FloatBtns></FloatBtns>
 			<div class="content-wrapper">
-				<!-- <router-view v-slot="{ Component }"> -->
-					<!-- <keep-alive> -->
-						<!-- <component :is="Component" /> -->
-					<!-- </keep-alive> -->
-    <!-- </router-view> -->
-		 <!-- <keep-alive> -->
 			<router-view></router-view>
-		 <!-- </keep-alive> -->
 			</div>
 				<Footer></Footer>
 			</div>
