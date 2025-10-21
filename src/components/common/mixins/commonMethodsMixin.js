@@ -820,7 +820,7 @@ export const CommonMethodsMixin = {
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			const symbolLabel = getCoresSymbolDual(criteria.endsWith('2'))
 			let symbolLabelDisplay = ''
-			if (!(analysis == 'Sentiment' || analysis == 'User')) {
+			if (!(analysis == 'Sentiment' || analysis == 'User' || analysis == 'Symbol')) {
 				symbolLabelDisplay = `(${symbolLabel})`
 			}
 			const maType = signals.ma_type == 'S' ? ' SMA' : ' EMA'
@@ -828,11 +828,17 @@ export const CommonMethodsMixin = {
                   ? this.rocDisplayName(indicator_url) + maType + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
 			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Bar)`
+
+			// 直接通过从activatedMALayout获取对应criteria和index的symbolTicker信息
+			const symbolTicker = CIQ.store.state.chart.activatedMALayout.find(
+				item=>item.url == name && item.criteria == criteria && item.index == panelIndex
+				)?.ticker
+
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `${symbolLabelDisplay}${name} ${condition}`,
+					display: `${symbolLabelDisplay}${symbolTicker} ${name} ${condition}`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -851,7 +857,9 @@ export const CommonMethodsMixin = {
 		rocDisplayName(field) {
 			let display
 			let senti = CIQ.findSentiIndicator(null,field)
-			if(CIQ.isOwnIndicator(field)){
+			if(CIQ.findSymbolIndicator(null, field)){
+				display = CIQ.findSymbolIndicator(null, field)?.label
+			}else if(CIQ.isOwnIndicator(field)){
 				display = field.split(/CREATE/)[0]
 			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
@@ -1297,23 +1305,59 @@ export const CommonMethodsMixin = {
 				});
 			}
 
-			/** 兼容旧版SymbolOHLCV的回测配置 */
-			// 把symbol ohlcv指标从activatedTechLayout迁移至activatedMALayout
-			const indexToMove = data.activatedTechLayout.findIndex(item => CIQ.findSymbolIndicator(item.url))
-			if (indexToMove !== -1) {
-				const [removedObject] = data.activatedTechLayout.splice(indexToMove, 1);
-				const newObject = { //预留给其他ma类型的tech, 目前就一个ma
-					url: removedObject.url,
-					ticker: symbol, 
-					criteria: removedObject.criteria,
-					index: removedObject.index
+			/**
+			 * 			兼容旧版SymbolOHLCV的回测配置
+			 * 			把symbol ohlcv指标从formIndicators迁移至activatedMALayout
+			 *			activatedMALayout: [
+			 *				{
+			 *					"url": "Symbol High",
+			 *					"ticker": "SPX",
+			 *					"criteria": "entry",
+			 *					"index": 0
+			 *				},
+			 *				{
+			 *					"url": "Symbol Low",
+			 *					"ticker": "SPY",
+			 *					"criteria": "entry2",
+			 *					"index": 0
+			 *				}
+			 *			]
+			 *			formIndicators: {
+			 *				"entry": ["Symbol High"],
+			 *				"exit": [""],
+			 *				"entry2": ["Symbol Low"],
+			 *				"exit2": [""]
+			 *			}
+			 * 根据 formIndicators 生成 activatedMALayout 数组
+			 */
+			const migrateSymbolOhlcvIntoActivatedMALayout = function(formIndicators, symbol1, symbol2) {
+				const activatedMALayout = [];
+			
+				// 1. 遍历 formIndicators 对象的每个键值对
+				//    (例如: criteria = "entry", urls = ["Symbol High", "Another Entry"])
+				for (const [criteria, urls] of Object.entries(formIndicators)) {
+				
+					// 2. 遍历该 criteria 对应的数组 (urls)
+					//    (例如: url = "Symbol High", index = 0)
+					urls.forEach((url, index) => {
+						if (url && url.trim() !== "" && CIQ.findSymbolIndicator(url)) {
+							const ticker = criteria.endsWith('2')?symbol2:symbol1
+							activatedMALayout.push({
+								url: url,
+								ticker: ticker,
+								criteria: criteria,
+								index: index // 这里是 url 在数组中的下标
+							});
+						}
+					});
 				}
-				data.activatedMALayout.push(newObject);
-
-				// Symbol OHLCV Indicator这种类MA指标也从旧版savedTechSD移除
-				data.savedTechSD = data.savedTechSD.filter(item => !CIQ.findSymbolIndicator(item.type) )
-				console.log("Magrate Old Version of Symbol OHLCV Indicator");
+			
+				return activatedMALayout;
 			}
+			data.activatedMALayout = data.activatedMALayout.concat(migrateSymbolOhlcvIntoActivatedMALayout(data.formIndicators, row.symbol, row.symbol2))
+			data.savedTechSD = data.savedTechSD.filter(item => !CIQ.findSymbolIndicator(item.type) )
+			console.log("Magrate Old Version of Symbol OHLCV Indicator");
+			
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
 			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 

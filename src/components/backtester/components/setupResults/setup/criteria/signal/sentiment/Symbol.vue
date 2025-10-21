@@ -432,16 +432,17 @@ export default {
           [17, { name:'N-Day Low', abbr: 'NL' }],
         ])
 
-        const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
+        // const symbolLabel = field == 'Volume' ? '' : `(${getCoresSymbolDual(this.criteria.endsWith('2'))})`
+        const symbolLabel = ''
         let display
         if([12,13].includes(this.sym.newCondition)){
-          display = `(${symbolLabel})${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
+          display = `${symbolLabel}${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
         }else if(this.sym.newCondition == 14){
-          display = `Consecutive Number of Days with (${symbolLabel})${this.symbolTicker} ${symbolCond.label} Above ${this.sym.conditionPeriod}`
+          display = `Consecutive Number of Days with ${symbolLabel}${this.symbolTicker} ${symbolCond.label} Above ${this.sym.conditionPeriod}`
         }else if(this.sym.newCondition == 15){
-          display = `Consecutive Number of Days with (${symbolLabel})${this.symbolTicker} ${symbolCond.label} Below ${this.sym.conditionPeriod}`
+          display = `Consecutive Number of Days with ${symbolLabel}${this.symbolTicker} ${symbolCond.label} Below ${this.sym.conditionPeriod}`
         }else{
-          display = `(${symbolLabel})${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
+          display = `${symbolLabel}${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: display,
