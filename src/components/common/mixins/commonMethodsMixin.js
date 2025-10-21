@@ -1354,9 +1354,15 @@ export const CommonMethodsMixin = {
 			
 				return activatedMALayout;
 			}
-			data.activatedMALayout = data.activatedMALayout.concat(migrateSymbolOhlcvIntoActivatedMALayout(data.formIndicators, row.symbol, row.symbol2))
-			data.savedTechSD = data.savedTechSD.filter(item => !CIQ.findSymbolIndicator(item.type) )
-			console.log("Magrate Old Version of Symbol OHLCV Indicator");
+			// 如果formIndicators有Symbol Ohlcv而activatedMALayout没有，则开始迁入
+			if(
+				Object.values(data.formIndicators).some(urls => CIQ.findSymbolIndicator(urls)) && 
+				!data.activatedMALayout.find(item=>CIQ.findSymbolIndicator(item.url))
+			) {
+				data.activatedMALayout = data.activatedMALayout.concat(migrateSymbolOhlcvIntoActivatedMALayout(data.formIndicators, row.symbol, row.symbol2))
+				data.savedTechSD = data.savedTechSD.filter(item => !CIQ.findSymbolIndicator(item.type) )
+				console.log("Magrate Old Version of Symbol OHLCV Indicator");
+			}
 			
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
 			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
