@@ -18,7 +18,7 @@
 							disabled
 						></el-input>
 					</el-form-item>
-					</el-col>
+				</el-col>
 				<el-col :span="6" :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
 					<el-form-item label="Starting Capital:" prop="startingCapital">
 						<el-input v-model="backtestEditData.capital" disabled></el-input>
@@ -46,7 +46,7 @@
 						</el-input>
 					</el-form-item>
 				</el-col>
-				<el-col :span="6" :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
+				<el-col :span="6" :xs="12" :sm="12" :md="12" :lg="6" :xl="6">	
 					<el-form-item label="Benchmark:" prop="benchmark">
 						<el-input disabled v-model="backtestEditData.benchmark"> </el-input>
 					</el-form-item>
@@ -56,7 +56,7 @@
 						<el-input disabled v-model="backtestEditData.frequency"></el-input>
 					</el-form-item>
 				</el-col>
-				<el-col :span="6" :xs="12" :sm="12" :md="12" :lg="6" :xl="6">
+				<el-col :span="6" :xs="12" :sm="12" :md="12" :lg="6" :xl="6">	
 					<el-form-item label="Trade Price:" prop="trade_price">
 						<el-input disabled v-model="tradePrice"></el-input>
 					</el-form-item>	

@@ -382,4 +382,12 @@ export default {
     display: none;
   }
 }
+@media (max-width: 1200px) {
+  .strategy-header {
+	display: flex;
+    h4 {
+      font-size: 12px;
+    }
+  }
+}
 </style>

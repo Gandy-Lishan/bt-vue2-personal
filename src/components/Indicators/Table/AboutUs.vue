@@ -173,5 +173,9 @@ export default {
       }
     }
 }
-
+@media (max-width: 1200px) {
+.page-footer .container .row {
+  display: block;
+}
+}
 </style>

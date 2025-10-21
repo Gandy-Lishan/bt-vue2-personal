@@ -788,4 +788,10 @@ export default {
   margin: 0 auto;
   padding-right: 10px;
 }
+@media (max-width: 1200px) {
+  .performance_tabs {
+    width: auto;
+    margin: 0 auto;
+  }
+}
 </style>

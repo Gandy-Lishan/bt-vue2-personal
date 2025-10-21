@@ -24,7 +24,6 @@
 		<div class="searchBox">
 			<el-input
 				class="search"
-				style="width: 30vw"
 				size="mini"
 				v-model="searchItem"
 				placeholder="Search for the name of the backtest"
@@ -1046,6 +1045,7 @@ export default {
   float: left;
   .search {
 		margin: 20px 28px 10px 10px;
+		width: 30vw;
 	}
 }
 .showDate {
@@ -1161,6 +1161,11 @@ export default {
 }
 .shareForm {
 	/deep/ .el-form-item__label {
+		width: 100%;
+	}
+}
+@media (max-width: 1200px) {
+	  .searchBox .search {
 		width: 100%;
 	}
 }

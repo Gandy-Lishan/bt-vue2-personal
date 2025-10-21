@@ -582,4 +582,10 @@ export default {
 	width: 1001px;
 	margin: 0 auto;
 }
+@media (max-width: 1200px) {
+	.editWithCustomBtn{
+		position: static;
+		margin-bottom: 10px;
+	}
+}
 </style>

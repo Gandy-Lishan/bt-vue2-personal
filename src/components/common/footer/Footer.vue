@@ -59,7 +59,7 @@ export default {
 	watch: {
     '$route'(to, _) {
 			if(to.path.includes('/doc/guide') || to.path.includes('/indicators') || to.path.includes('/trend_score') || to.path.includes('/MR') || to.path.includes('/dashboard') || to.path.includes('/sector_trend_score') || to.path.includes('/watchlist') || to.path.includes('/market') || to.path.includes('/contact')) {this.isVisible = false; return}
-			if (to.path.includes('/backtester') || to.path.includes('/myindicator') || to.path.includes('/scannerai') || to.path.includes('/doc/home') || to.path.includes('/cpm') || to.path.includes('/strategy') || to.path.includes('/portfolio') || to.path.includes('/my_signals') || to.path.includes('/my_screen')) {
+			if (to.path.includes('/backtester') || to.path.includes('/myindicator') || to.path.includes('/scannerai') || to.path.includes('/doc/home') || to.path.includes('/cpm') || to.path.includes('/strategy') || to.path.includes('/portfolio') || to.path.includes('/my_signals') || to.path.includes('/my_screen') || to.path.includes('/seasonality')) {
         this.isFixedAtBottom = false
       }else {
 				this.isFixedAtBottom = true

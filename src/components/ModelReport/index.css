@@ -159,3 +159,6 @@ a.btn.grey-cascade.active, a.btn.grey-cascade:active, a.gray-cascade.btn:focus, 
 	padding: 0;
 	border-radius: 4px;
 }
+.article ul, .article ol {
+	list-style: disc;
+}

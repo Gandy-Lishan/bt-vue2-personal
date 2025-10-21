@@ -8,7 +8,7 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="6">
+    <el-col :span="6" :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
       <el-form-item
         label="1. Correlation Pattern Match Name"
         prop="name"
@@ -16,7 +16,7 @@
         <el-input v-model="data.name" placeholder="Enter cpm name"></el-input>
       </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
       <el-form-item prop="symbol">
         <template slot="label">
           <label>
@@ -37,7 +37,7 @@
           />
       </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
       <el-form-item prop="ma_condition" label="3. Condition">
       <template slot="label">
         <label>
@@ -69,7 +69,7 @@
           </el-select>
         </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
       <el-form-item
         label="4. Period"
         prop="ma"
@@ -92,7 +92,7 @@
   </el-row>
   <el-row :gutter="10">
     <div v-if="pattern === 'customize_pattern'">
-    <el-col :span="6">
+    <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
       <el-form-item prop="pattern">
       <template slot="label">
         <label>
@@ -113,7 +113,7 @@
           </el-select>
       </el-form-item>
     </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
         <el-form-item
           label="Pattern Start Date"
           prop="start_date"
@@ -139,7 +139,7 @@
           </el-date-picker>
         </el-form-item>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
         <el-form-item
           label="Pattern End Date"
           prop="end_date"
@@ -165,7 +165,7 @@
           </el-date-picker>
         </el-form-item>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
         <el-form-item
           label="Number of Bars"
           prop="bars_num"
@@ -179,7 +179,7 @@
       </el-col>
     </div>
     <div v-if="pattern === 'system_pattern'">
-    <el-col :span="6">
+    <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
       <el-form-item prop="pattern">
       <template slot="label">
         <label>
@@ -200,7 +200,7 @@
           </el-select>
       </el-form-item>
     </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
         <el-form-item prop="system_pattern">
           <template slot="label">
             <label>
@@ -232,7 +232,7 @@
           </el-select>
         </el-form-item>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="4" :xs="24"  :sm="12" :md="4" :lg="4" :xl="4">
       <el-form-item prop="timeframe" label="6. Timeframe">
         <el-select
             v-model="data.timeframe"
@@ -250,7 +250,7 @@
           </el-select>
       </el-form-item>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="4" :xs="24"  :sm="12" :md="4" :lg="4" :xl="4">
         <el-form-item
           label="7. Correlation Percentage"
           prop="corr_per"
@@ -275,7 +275,7 @@
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="4" :xs="24"  :sm="12" :md="4" :lg="4" :xl="4">
         <el-form-item class="CPM-btn" label=" ">
           <el-button type="warning" @click="previewForm" size="small" :loading="previewBtnLoading" :disabled="previewBtnLoading || btnLoading">Preview Pattern</el-button>
         </el-form-item>
@@ -292,7 +292,7 @@
     :rules="rules"
 	>
     <el-row :gutter="10" v-if="pattern === 'customize_pattern'">
-      <el-col :span="6">
+      <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
       <el-form-item prop="timeframe" label="6. Timeframe">
         <el-select
             v-model="data.timeframe"
@@ -310,7 +310,7 @@
           </el-select>
       </el-form-item>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
         <el-form-item
           label="7. Correlation Percentage"
           prop="corr_per"
@@ -335,7 +335,7 @@
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="4" :xs="24"  :sm="12" :md="4" :lg="4" :xl="4">
         <el-form-item class="CPM-btn" label=" ">
           <el-button type="warning" @click="previewForm" size="small" :loading="previewBtnLoading" :disabled="previewBtnLoading || btnLoading">Preview Pattern</el-button>
         </el-form-item>
@@ -350,7 +350,7 @@
     :rules="rules"
 	>
   <el-row :gutter="10">
-    <el-col :span="6">
+    <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
     <el-form-item prop="direction" label="8. Direction">
       <el-select
           v-model="data.direction"
@@ -366,7 +366,7 @@
         </el-select>
     </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="6" :xs="24"  :sm="12" :md="6" :lg="6" :xl="6">
       <el-form-item
         label="9. Time In Market"
         prop="tim"
@@ -393,9 +393,9 @@
           </template></el-input>
       </el-form-item>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="12" :xs="24"  :sm="24" :md="12" :lg="12" :xl="12">
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="12" :md="8" :lg="8" :xl="8">
           <el-form-item prop="backtestHistory" label="10. Lookback Period">
               <template slot="label">
                 <label>
@@ -426,7 +426,7 @@
               </div>
             </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="12" :md="8" :lg="8" :xl="8">
           <el-form-item
             label="13. Custom Duration"
             prop="year"
@@ -440,7 +440,7 @@
               </template></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24"  :sm="12" :md="8" :lg="8" :xl="8">
           <el-button v-show="percentage == 0" size="small" class="CPM-btn" type="primary" :loading="btnLoading" @click="submitForm" :disabled="previewBtnLoading || btnLoading">Backtest Pattern</el-button>
           <div class="processTipsBox" v-show="percentage != 0">
             <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
@@ -450,7 +450,7 @@
     </el-col>
   </el-row>
   <el-row :gutter="10">
-    <el-col :span="24">
+    <el-col :span="24" :xs="24"  :sm="24" :md="12" :lg="24" :xl="24">
       <el-form-item>
       <div class="processTips" v-if="percentage != 0"><span v-html="processTips"></span></div>
       </el-form-item>

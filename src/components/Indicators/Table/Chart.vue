@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" style="width: 100%; height: 800px; background-color: #fff;"></div>
+  <div :id="id" style="height: 800px; background-color: #fff;"></div>
  </template>
  
  <script>
@@ -632,10 +632,6 @@
  </script>
  
  <style lang="less" scoped>
- .highcharts-container {
-  width: 100% !important;
-  height: 100% !important;
- }
  .test {
   color: #000000;
  }

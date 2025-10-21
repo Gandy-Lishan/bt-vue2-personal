@@ -386,4 +386,9 @@ export default {
 button.el-button.viewDetailsBtn.el-button--text {
   margin-right: 8px;
 }
+@media (max-width: 1200px) {
+  .el-input-group{
+    width: 100%;
+  }
+}
 </style>

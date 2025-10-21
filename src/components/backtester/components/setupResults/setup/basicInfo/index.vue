@@ -686,19 +686,17 @@
                     </div>
                   </div>
                 </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="24">
-                  <div class="risk-control-container border-set">
+              </el-row>     
+              <div class="risk-control-container border-set">
                   <!-- <div class="risk-control-container border-set" v-if="bd.strategy === 'Single'"> -->
                     <div class="riskItem">
                       <el-row :gutter="20">
-                        <el-col :span="24" :xs="24" :sm="12" :md="12" :lg="24" :xl="24">
-                          <el-checkbox
-                            v-model="isRiskControl"
-                            border
-                            @change="selectRiskControl"
-                            >Risk Control at Exit
+                      <el-col :span="24" :xs="24" :sm="12" :md="12" :lg="24" :xl="24">
+                        <el-checkbox
+                          v-model="isRiskControl"
+                          border
+                          @change="selectRiskControl"
+                          >Risk Control at Exit
 
                           <el-tooltip effect="dark" placement="top">
                             <span slot="content">
@@ -715,7 +713,7 @@
                             </span>
                             <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
                         ></el-checkbox>
-                        </el-col>
+                      </el-col>
                       </el-row>
                     </div>
                     <el-row :gutter="20">
@@ -795,9 +793,7 @@
                       </el-col>                      
                     </el-row>
                   </div>
-                </el-col>
-              </el-row>
-						</div>
+              </div>
 				</div>
 			</el-form>
 		</div>
@@ -1965,6 +1961,17 @@ export default {
 	display: flex;
 	justify-content: flex-start;
   margin-bottom: 10px;
+}
+@media (max-width: 768px) {
+  .risk-control-container, .riskItem  {
+	  display: block;
+  }
+  .riskItem {
+    margin: 0 0 18px 0;
+  }
+  .el-checkbox.is-bordered {
+    width: 100%;
+  }
 }
 
 .el-checkbox-group {

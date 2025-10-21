@@ -8,7 +8,7 @@
       size="small"
       :rules="rules">
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item
           prop="name"
           >
@@ -20,7 +20,7 @@
           <el-input v-model="data.name" placeholder="Enter a name"></el-input>
         </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item
           prop="category"
           >
@@ -44,7 +44,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item prop="timefame">
             <template slot="label">
             <label>
@@ -69,7 +69,7 @@
       </el-row>
       <div class="signals-div">
       <el-row :gutter="10">
-        <el-col :span="8">
+        <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item>
             <!-- <template slot="label">
             <label>
@@ -104,7 +104,7 @@
       </el-row>
       <div v-if="data.relation == 0 && criteria_option === 'ScreenCriteria'">
         <el-row :gutter="8">
-          <el-col :span="8">
+          <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item prop="signal" label-width="0">
               <el-select
                   v-model="data.signal"
@@ -126,7 +126,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
             <el-form-item prop="condition" label-width="0">
               <el-select
                   v-model="data.condition"
@@ -143,7 +143,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item prop="value" label-width="0">
                 <el-autocomplete
                   class="inline-input"
@@ -175,9 +175,9 @@
       </div>
       <div v-else-if="(data.score !== 0) && criteria_option === 'ScreenCriteria'">
         <el-row :gutter="10" type="flex" justify="center" align="middle">
-          <el-col :span="20">
+          <el-col :span="20"  :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
             <el-row :gutter="10">
-          <el-col :span="10">
+          <el-col :span="10"  :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
             <el-form-item prop="signal" label-width="0">
               <el-select
                   v-model="data.signal"
@@ -199,7 +199,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
             <el-form-item prop="condition" label-width="0">
               <el-select
                   v-model="data.condition"
@@ -216,7 +216,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="10" :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
             <el-form-item prop="value" label-width="0">
               <el-autocomplete
                   class="inline-input"
@@ -229,7 +229,7 @@
           </el-col>
         </el-row>
          <el-row :gutter="10">
-          <el-col :span="10">
+          <el-col :span="10" :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
             <el-form-item prop="signal" label-width="0">
               <el-select
                   v-model="data.signal2"
@@ -251,7 +251,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
             <el-form-item prop="condition" label-width="0">
               <el-select
                   v-model="data.condition2"
@@ -268,7 +268,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="10" :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
             <el-form-item prop="value2" label-width="0">
               <el-autocomplete
                   class="inline-input"
@@ -281,7 +281,7 @@
           </el-col>
         </el-row>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
             <el-form-item prop="timefame" label-width="0">
           <el-select
               v-model="data.relation"
@@ -302,7 +302,7 @@
       </div>
       <div v-else-if="criteria_option === 'CommonPattern'">
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item prop="system_pattern">
               <el-select v-model="system_pattern" placeholder="— Select Pattern —">
                 <el-option
@@ -345,10 +345,10 @@
     </div> -->
     <br>
     <el-row :gutter="10" type="flex" class="row-bg" justify="center">
-        <el-col :span="6">
+        <el-col :span="6" :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
           <el-button type="warning" size="small" @click="resetForm">Reset Form</el-button>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
           <el-button type="primary" size="small" @click="submitForm" v-show="percentage == 0">Save Screen</el-button>
           <div class="processTipsBox" v-show="percentage != 0">
           <el-progress :text-inside="true" :stroke-width="15" :percentage="percentage" :color="customColorMethod"></el-progress>
@@ -1362,5 +1362,10 @@ try {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+@media (max-width: 1200px) {
+.signal-container {
+  padding: 0px;
+}
 }
 </style>

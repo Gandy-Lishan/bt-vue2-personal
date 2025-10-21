@@ -631,4 +631,19 @@ export default {
     text-align: left
   }
 }
+@media (max-width: 1200px) {
+  .el-input-group {
+    width: 100%;
+  }
+  .search-box{
+    flex-wrap: wrap;
+  }
+  .sortDateBtn {
+    width: 100%;
+    margin-top: 10px;
+  }
+  /deep/ .el-button--small, .el-button--small.is-round {
+    width: 100%;
+  }
+}
 </style>

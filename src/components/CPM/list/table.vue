@@ -482,4 +482,15 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+@media (max-width: 992px) {
+.search-box, .tutorial-box {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  .el-input-group{
+    width: 100%;
+    margin-top: 10px;
+  }
+}
 </style>

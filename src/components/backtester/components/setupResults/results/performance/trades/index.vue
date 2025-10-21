@@ -231,7 +231,6 @@ export default {
 			handler(newValue, _){
                 const mergedData = [];
                 const _newValue = JSON.parse(JSON.stringify(newValue))
-                debugger
                 const showNewCol = Array.isArray(newValue) && newValue.length >= 0 && Object.keys(newValue[0]).length >= 0 && newValue[0].hasOwnProperty('MaxGain')
                 if(showNewCol) this.showNewCol = true
                 for (let i = 0; i < newValue.length; i += 2) {

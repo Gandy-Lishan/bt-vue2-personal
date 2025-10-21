@@ -254,12 +254,8 @@
 				>
 								<el-empty image-size="80" description="No Data"></el-empty>
 				</div>
-				<div class="benchmarkReturnImg">
-								<el-image v-if="summaryData[0]?.ReturnsFileURL" style="width: 1000px; height: 600px; margin: 20px 0px 20px 0px;" :src="summaryData[0]?.ReturnsFileURL" :fit="'contain'" lazy></el-image>
-				</div>
-				<div class="benchmarkReturnImg">
-								<el-image v-if="summaryData[0]?.DDFileURL" style="width: 1000px; height: 600px; margin: 40px 0px 20px 0px;" :src="summaryData[0]?.DDFileURL" :fit="'contain'" lazy></el-image>
-				</div>
+			<el-image class="benchmarkReturnImg" v-if="summaryData[0]?.ReturnsFileURL" :src="summaryData[0]?.ReturnsFileURL" :fit="'contain'" lazy></el-image>
+			<el-image class="benchmarkReturnImg" v-if="summaryData[0]?.DDFileURL" :src="summaryData[0]?.DDFileURL" :fit="'contain'" lazy></el-image>
 </div>
 	</div>
 </template>
@@ -331,5 +327,16 @@ export default {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+}
+.benchmarkReturnImg {
+	width: 1000px;
+	height: 600px; 
+	margin: 20px 0px 20px 0px;
+}
+@media (max-width: 1200px) {
+.benchmarkReturnImg {
+    width: auto;
+    height: auto;
+}
 }
 </style>

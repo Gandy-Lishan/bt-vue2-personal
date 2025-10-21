@@ -99,7 +99,6 @@ import { formatStandardTime } from '@/utils'
             ...CIQ.store.state.chart.indicators.formIndicators.entry2,
             ...CIQ.store.state.chart.indicators.formIndicators.exit2
         ]
-
         // remove redundant elements and empty string
         for(var i=0;i<indicatorsList.length;i++){
             if(indicatorsList[i]=='' || indicatorsList[i]==undefined){
@@ -122,20 +121,20 @@ import { formatStandardTime } from '@/utils'
          var savedTechSD = []
          if(type == 'updateIndicators' || type == 'addBuiltTech'){
             /** 这个加载indicatorlist时保存savedTechSD的逻辑是错误又多余的，只有在runbt时运行saveIndicatorLayoutData才会保存其值，rerun也只是直接读取其值再运行 */
-            // for(var i in stx.layout.studies){
-            //     /** 跳过非参与回测的indicator */
-            //     //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
-                
-            //     /** 跳过MA指标,MA只靠MALayout维护 */
-            //     if(stx.layout.studies[i].type == 'ma') continue
-            //     savedTechSD.push({
-            //         type: stx.layout.studies[i].type,
-            //         inputs: stx.layout.studies[i].inputs,
-            //         outputs: stx.layout.studies[i].outputs,
-            //         parameters: stx.layout.studies[i].parameters,
-            //         panel: stx.layout.studies[i].panel
-            //     })
-            // }
+            for(var i in stx.layout.studies){
+                /** 跳过非参与回测的indicator */
+                //if(CIQ.store.state.chart.indicators.extraIndicators.includes(stx.layout.studies[i].type)) continue
+                /** 跳过MA指标,MA只靠MALayout维护 */
+                // if(stx.layout.studies[i].type == 'ma') continue
+                if(CIQ.store.getters.getMaLikeTech.includes(stx.layout.studies[i].type)) continue
+                savedTechSD.push({
+                    type: stx.layout.studies[i].type,
+                    inputs: stx.layout.studies[i].inputs,
+                    outputs: stx.layout.studies[i].outputs,
+                    parameters: stx.layout.studies[i].parameters,
+                    panel: stx.layout.studies[i].panel
+                })
+            }
          }else{
             /** 如果type为loadFromBakctest或者outputSignalsResult的话,
              * vuex有techSD则存入savedTechSD */
@@ -678,8 +677,8 @@ import { formatStandardTime } from '@/utils'
 }
 
 // 实现批处理的metadata, 并优化结构, 把addStudyToChart提取出
-  CIQ.getIndicatorMatedata = function(indicatorList, stx) {
-    if (!stx) return Promise.resolve(); // If no stx, nothing to do.
+  CIQ.getIndicatorMatedata = async function(indicatorList, stx) {
+    if (!stx) return; // If no stx, nothing to do.
 
     // Clear existing studies from the chart
     //console.log('*************Clear existing studies from the chart',stx.layout.studies,CIQ.store.state.chart.activatedMA)
@@ -698,7 +697,11 @@ import { formatStandardTime } from '@/utils'
     // --- Helper Function: Add a study to the chart and handle related logic ---
     // This function encapsulates the logic for adding a study,
     // updating extreme values, and attaching MAs.
-    const addStudyToChart = (studyType, inputs, outputs, parameters, panel, indicatorKey, extremeInfo = null) => {
+    const addStudyToChart = async (studyType, inputs, outputs, parameters, panel, indicatorKey, extremeInfo = null) => {
+        // TODO symbol ohlcv特殊处理，在addStudy之前先获取异步数据源, 因为在计算函数内获取数据无法异步处理
+        if(CIQ.findSymbolIndicator(studyType)) {  
+            await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata', parameters.ticker)
+        }
         const sd = CIQ.Studies.addStudy(stx, studyType, inputs, outputs, parameters, panel);
         // Update extreme values if provided
         if (extremeInfo && sd) {
@@ -743,7 +746,7 @@ import { formatStandardTime } from '@/utils'
         }
     };
     
-    return new Promise(async resolve => {
+
         // --- Phase 1: Categorize and Prepare Studies ---
         for (const indicatorName of indicatorList) {
             let indicatorObj = CIQ.findBuiltinTechIndicator(null, indicatorName) || CIQ.findSymbolIndicator(indicatorName, null);
@@ -751,64 +754,77 @@ import { formatStandardTime } from '@/utils'
             if (indicatorObj) {
                 // It's a technical indicator (including MA-like)
                 const techSymbolName = indicatorObj.value ? indicatorObj.value : indicatorObj.label;
-
                 if (CIQ.store.getters.getMaLikeTech.includes(indicatorName)) {
                     // Handle MA-like technical indicators
                     for (const maLayoutItem of CIQ.store.state.chart.activatedMALayout) {
                         if (maLayoutItem.url === indicatorName) {
-                            const criteria = maLayoutItem.criteria;
-                            // const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
-                            const inputs = indicatorName === 'ma' ?
-                                { Type: maLayoutItem.type, Field: maLayoutItem.field, Period: maLayoutItem.period } : {};
-                            const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, maLayoutItem.index);
-                            const outputs = indicatorName === 'ma' ? { MA: ma_color } : null;
+                            if(indicatorName == 'ma') {
+                                const criteria = maLayoutItem.criteria;
+                                const inputs = { Type: maLayoutItem.type, Field: maLayoutItem.field, Period: maLayoutItem.period };
+                                const ma_color = CIQ.store.getters.getColorByCriteriaAndIndex(criteria, maLayoutItem.index);
+                                const outputs = { MA: ma_color };
 
-                            studiesToLoad.push({
-                                type: indicatorName,
-                                inputs,
-                                outputs,
-                                parameters: { criteria: criteria, index: maLayoutItem.index },
-                                indicatorKey: indicatorName // Use indicatorName as the key for MA processing later
-                            });
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs,
+                                    outputs,
+                                    parameters: { criteria: criteria, index: maLayoutItem.index },
+                                    indicatorKey: indicatorName // Use indicatorName as the key for MA processing later
+                                });
+                            }
+                            if(CIQ.findSymbolIndicator(indicatorName, null)) {
+                                // const symbolLabel = indicatorName == 'Symbol Volume' ? '' : `(${getCoresSymbolDual(maLayoutItem.criteria.endsWith('2'))})`
+                                const symbolLabel = ''
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs: { display: `${symbolLabel}${maLayoutItem.ticker} ${indicatorName}` }, // Using placeholder for symbolLabel
+                                    outputs: null,
+                                    parameters: {  criteria: maLayoutItem.criteria, index: maLayoutItem.index, ticker: maLayoutItem.ticker },
+                                    indicatorKey: indicatorName
+                                });
+                            }
                         }
                     }
                 } else {
                     // Handle other technical indicators
-                    const savedTechSDs = CIQ.store.state.chart.savedTechSD.filter(sd => sd.type === indicatorName);
-                    if (savedTechSDs.length > 0) {
-                        for (const savedSD of savedTechSDs) {
-                            const isComparison = savedSD.parameters.isComparison;
-                            const symbolLabel = getCoresSymbolDual(isComparison);
-                            savedSD.inputs.display = `(${symbolLabel})${techSymbolName}`; // Using placeholder for symbolLabel
-                            studiesToLoad.push({
-                                type: indicatorName,
-                                inputs: savedSD.inputs,
-                                outputs: savedSD.outputs,
-                                parameters: savedSD.parameters,
-                                panel: savedSD.panel,
-                                indicatorKey: indicatorName
-                            });
+                    // If not found in savedTechSD, use activatedTechLayout
+                    const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorName);
+                    const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType
+                    for (let item of activatedTechLayouts) {
+                        if (item.criteria && item.criteria.endsWith("2")) {
+                            item.symbolType = 'symbol2';
+                        } else {
+                            item.symbolType = 'symbol1';
                         }
-                    } else {
-                        // If not found in savedTechSD, use activatedTechLayout
-                        const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorName);
-                        const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType
-                        for (let item of activatedTechLayouts) {
-                            if (item.criteria && item.criteria.endsWith("2")) {
-                                item.symbolType = 'symbol2';
-                            } else {
-                                item.symbolType = 'symbol1';
-                            }
 
-                            if (!processedSymbols.has(item.symbolType)) {
-                                processedSymbols.add(item.symbolType);
+                        if (!processedSymbols.has(item.symbolType)) {
+                            processedSymbols.add(item.symbolType);
+
+                            // TODO, 把第一个判断，即saveTechSD加转移到这里
+                            const isComparison = item.symbolType == 'symbol2'
+                            const savedTechSD = CIQ.store.state.chart.savedTechSD.find(
+                                sd => sd.type === indicatorName && sd.parameters.isComparison === isComparison
+                            );
+                            if (savedTechSD) {
+                                const symbolLabel = getCoresSymbolDual(isComparison);
+                                savedTechSD.inputs.display = `(${symbolLabel})${techSymbolName}`; // Using placeholder for symbolLabel
+                                studiesToLoad.push({
+                                    type: indicatorName,
+                                    inputs: savedTechSD.inputs,
+                                    outputs: savedTechSD.outputs,
+                                    parameters: savedTechSD.parameters,
+                                    panel: savedTechSD.panel,
+                                    indicatorKey: indicatorName
+                                });
+                            }
+                            else {
                                 const criteria = item.criteria;
                                 const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
                                 studiesToLoad.push({
                                     type: indicatorName,
                                     inputs: { display: `(${symbolLabel})${techSymbolName}` }, // Using placeholder for symbolLabel
                                     outputs: null,
-                                    parameters: { isComparison: item.symbolType === 'symbol2' },
+                                    parameters: { isComparison: isComparison },
                                     indicatorKey: indicatorName
                                 });
                             }
@@ -869,7 +885,55 @@ import { formatStandardTime } from '@/utils'
                 } catch (err) {
                     console.error(`Error fetching metadata for own indicator ${indicatorName}:`, err);
                 }
-            } else {
+            } 
+            // else if (CIQ.isSymbolOHLCVIndicator(indicatorName)) {
+            //     // It's a user-defined or "own" indicator, requires individual API call
+            //     const indicatorTicker = indicatorName.split(/OHLCV/)[0];
+            //     const indicatorOHLCV = indicatorName.split(/OHLCV/)[1];
+            //     debugger
+            //     // Handle other technical indicators
+            //     const savedTechSDs = CIQ.store.state.chart.savedTechSD.filter(sd => sd.type === indicatorOHLCV);
+            //     if (savedTechSDs.length > 0) {
+            //         for (const savedSD of savedTechSDs) {
+            //             const isComparison = savedSD.parameters.isComparison;
+            //             const symbolLabel = getCoresSymbolDual(isComparison);
+            //             savedSD.inputs.display = `(${symbolLabel})${indicatorTicker} ${indicatorOHLCV}`; // Using placeholder for symbolLabel
+            //             studiesToLoad.push({
+            //                 type: indicatorOHLCV,
+            //                 inputs: savedSD.inputs,
+            //                 outputs: savedSD.outputs,
+            //                 parameters: savedSD.parameters,
+            //                 panel: savedSD.panel,
+            //                 indicatorKey: indicatorOHLCV
+            //             });
+            //         }
+            //     } else {
+            //         // If not found in savedTechSD, use activatedTechLayout
+            //         const activatedTechLayouts = CIQ.store.state.chart.activatedTechLayout.filter(item => item.url === indicatorOHLCV);
+            //         const processedSymbols = new Set(); // To prevent duplicate studies for the same symbolType
+            //         for (let item of activatedTechLayouts) {
+            //             if (item.criteria && item.criteria.endsWith("2")) {
+            //                 item.symbolType = 'symbol2';
+            //             } else {
+            //                 item.symbolType = 'symbol1';
+            //             }
+
+            //             if (!processedSymbols.has(item.symbolType)) {
+            //                 processedSymbols.add(item.symbolType);
+            //                 const criteria = item.criteria;
+            //                 const symbolLabel = getCoresSymbolDual(criteria && criteria.endsWith('2'));
+            //                 // studiesToLoad.push({
+            //                 //     type: indicatorOHLCV,
+            //                 //     inputs: { display: `(${symbolLabel})${indicatorTicker} ${indicatorOHLCV}` }, // Using placeholder for symbolLabel
+            //                 //     outputs: null,
+            //                 //     parameters: { isComparison: item.symbolType === 'symbol2', ticker: indicatorTicker },
+            //                 //     indicatorKey: indicatorOHLCV
+            //                 // });
+            //             }
+            //         }
+            //     }
+            // } 
+            else {
                 // It's a sentiment indicator
                 sentiUrlList.push(indicatorName);
             }
@@ -938,11 +1002,9 @@ import { formatStandardTime } from '@/utils'
 
         // --- Phase 3: Add all prepared studies to the chart ---
         for (const study of studiesToLoad) {
-            addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
+            await addStudyToChart(study.type, study.inputs, study.outputs, study.parameters, study.panel, study.indicatorKey, study.extremeInfo);
         }
 
-        resolve();
-    });
 };
  }
  export {__st_js_loadIndicator_}

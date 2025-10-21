@@ -9,14 +9,18 @@ import {
     getSymbollistForecast,
 	getFavorite,updateFavorite,
 	obtainIndicatorsList,
-	obtainBTV1IndicatorsList
+	obtainBTV1IndicatorsList,
+	getPairData
 } from '@/service/service.js'
 import {Toast, capitalizeFirstLetter, isJson, unifyNumber } from '@/utils'
+import { formatStandardTime } from '@/utils'
 import { uniqueObjectArray } from '@/utils/formValidate'
 import stocksData from '@/assets/stocks_list.json';
 import indexsData from '@/assets/indexes_list.json';
 // import indicatorsData from '@/assets/indicatorsList.json';
 import indicatorsData from '@/assets/indicatorsWithSymbolList.json';
+import {config} from "@/components/common/chart/st-development/examples/feeds/STDataFeedAccessUrl"
+
 
 const toggleOverlaySymbol = function(displayStyle) {
 	var filters = document.querySelectorAll("cq-lookup-filters");
@@ -66,6 +70,12 @@ const state = {
 	builtinList: [], //chartiq 包含完整techList
 	maLikeTech: [
 		'ma',
+		'Symbol Open',
+		'Symbol High',
+		'Symbol Low',
+		'Symbol Close',
+		'Symbol Volume',
+		'Symbol Ratio',
 		// 'Awesome',
 		// 'cci'
 	],
@@ -129,6 +139,8 @@ const state = {
 
 	// drawing states
 	drawingObjList: [],
+
+	tickerOhlcvPairdata: {},	//用来暂存symbol ohlcv的ticker data
 }
 
 const mutations = {
@@ -362,7 +374,11 @@ const mutations = {
 	},
 	SET_JUMP_TO_BT_SYMBOL(state, index) {
 		state.JumpToBTSymbol = index
-	}
+	},
+	SET_TICKER_OHLCV_PAIRDATA(state, { ticker, data }) {
+		if(!ticker) return
+		state.tickerOhlcvPairdata[ticker] = data
+	},
 }
 
 const actions = {
@@ -834,7 +850,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 																if(['Short to Intermediate', 'Intermediate to Long', 'Intermediate', 'Medium-Term'].includes(obj[key])){obj[key] = 'Medium'}
 																else if(['Short', 'Short-Term'].includes(obj[key])){obj[key] = 'Short'}
 																else if(['Long', 'Long-Term'].includes(obj[key])){obj[key] = 'Long'}
-														}else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'macro_indicator_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
+														}else if((key === 'groups' || key === 'sub_type') && ['stock_complete_list', 'macro_indicator_list', 'etf_complete_list', 'bond_complete_list', 'etf_breadth', 'etf_flow', 'monthly_fund_flows', 'shares_outstanding', 'bond_seasonality', 'index_seasonality','commod_seasonality', 'etf_seasonality', 'most_popular', 'commodity_complete_list', 'commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(url)) {
 										if(url === 'commodity_complete_list' && key === 'sub_type' && obj['url'].startsWith('vol_')) {
 											obj[key] = 'Volatility'
 										}else if(url === 'etf_complete_list' && obj['sub_type'] === 'etf_bond' && obj['url'].startsWith('etf_') && (obj['underlying_name'] && obj['underlying_name'].endsWith('Treasury'))) {
@@ -977,8 +993,8 @@ get_indicator_page_btv1_list({ commit, state }) {
 
 									if(
 											((key === 'last_value' || key === 'last_change') && (url === 'stock_complete_list' || url === 'most_popular' || url === 'macro_indicator_list') && obj['last_change_type'] === 'percent')
-											|| (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
-											|| (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality'].includes(url))
+											|| (key === 'win_rate' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'index_seasonality'].includes(url))
+											|| (key === 'avg_return' && ['bond_seasonality', 'commod_seasonality', 'etf_seasonality', 'index_seasonality'].includes(url))
 											|| (key === 'avg_net_return' && url === 'etf_seasonality'
 											|| (key === 'AvgReturn' && url === 'commod_sentiment_seasonality')
 											)
@@ -1013,8 +1029,66 @@ get_indicator_page_btv1_list({ commit, state }) {
 				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: [] });
 			}
 		}
+},
+	get_ticker_ohlcv_pairdata({ commit }, ticker) {
+		return new Promise(async (resolve,reject) => {
+			const result = state.tickerOhlcvPairdata[ticker]
+			if(!result){
+				try{
+					var start = config.timestampToTime(CIQ.initialDate.start)
+					var end = config.timestampToTime(CIQ.initialDate.end)
+					const res = await getPairData( start, end, CIQ.store.state.form.pairDataFreq, ticker)
+					let _data = formatData(res.data)
+					console.log('获取到指定Ticker的OHLCV数据并缓存至本地...')
+					commit('SET_TICKER_OHLCV_PAIRDATA', { ticker, data: _data })
+					resolve(_data)
+					
+				}catch(err){
+					reject(err)
+				}
+			}else{
+				console.log('读取缓存Ticker的OHLCV数据...')
+				resolve(result)
+			}
+		})
+	},
 }
-}
+
+const formatData = function(data) {
+    if(data == null){
+        data = []
+    }
+    
+    var newQuotes = [];
+    if('High' in data[0]){
+        for (var i = 0; i < data.length; i++) {
+            newQuotes[i] = {};
+            
+            newQuotes[i].DT = formatStandardTime(data[i].DT)   
+            newQuotes[i].Open = data[i].Open;
+            newQuotes[i].High = data[i].High;
+            newQuotes[i].Low = data[i].Low;
+            newQuotes[i].Close = data[i].Close;
+            newQuotes[i].Volume = data[i].Volume;  
+        } 
+    }else{
+        for (var i = 0; i < data.length; i++) {
+            newQuotes[i] = {};
+
+            newQuotes[i].DT = formatStandardTime(data[i].DT)
+            newQuotes[i].Open = data[i].Close;
+            newQuotes[i].High = data[i].Close;
+            newQuotes[i].Low = data[i].Close;
+            newQuotes[i].Close = data[i].Close;
+            
+            if(data[i].Volume){
+                newQuotes[i].Volume = data[i].Volume
+            }
+        }
+    }
+    return newQuotes
+ }
+
 export default {
 	namespaced: true,
 	state,

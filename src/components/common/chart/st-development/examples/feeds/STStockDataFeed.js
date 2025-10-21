@@ -728,7 +728,6 @@ quoteFeedSimulator.formatChartData = async function(response){
         }
 
     }catch(err){console.log('error',err)}
-
     if(CIQ.objIndicator && typeof CIQ.objIndicator !== 'string'){
         /********************lishan modify start*************************/
         for (const j in CIQ.objIndicator) {

@@ -3174,7 +3174,15 @@ CIQ.Studies.calculateVolume = function (stx, sd) {
 		}
 	}
 	sd.outputMap = {};
-	sd.outputMap.Volume = "";
+	// 默认是Volume, Symbol Volume的话field用自定义计算函数返回的新Field
+	if(sd.type == 'Symbol Volume') {
+		sd.outputMap["Result _OHLCV " + sd.name] = "";
+		// sd.outputMap["Result " + sd.name] = "";
+	}
+	else sd.outputMap.Volume = "";
+
+	// 强制刷新一次
+	stx.draw();
 };
 
 /**
@@ -3349,6 +3357,12 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
 	stx.setStyle(style + "_up", "color", colorUp);
 	stx.setStyle(style + "_down", "color", colorDown);
 
+	// 默认是Volume, Symbol Volume的话field用自定义计算函数返回的新Field
+	if(sd.type == 'Symbol Volume') {
+		sd.volumeField = "Result _OHLCV " + sd.name
+		// sd.volumeField = "Result " + sd.name
+	}
+	
 	var seriesParam = [
 		{
 			field: sd.volumeField || "Volume",
@@ -3383,7 +3397,23 @@ CIQ.Studies.createVolumeChart = function (stx, sd, quotes) {
 	CIQ.extend(params, sd.study.parameters);
 	CIQ.extend(params, sd.parameters);
 
-	if (stx.colorByCandleDirection && !sd.colorFunction) {
+	// 必须独立出来实现自定义Symbol Volume的着色函数(比较前后两天收盘价)，因为默认colorFunction
+	// 不执行，而采用了drawHistogram的默认着色函数，后者无法兼容其他ticker的ohlcv
+	if(sd.type == 'Symbol Volume') {
+		seriesParam0.color_function = function (quote) {
+			var close = quote["Close _OHLCV " + sd.name],
+				preClose = quote["PreClose _OHLCV " + sd.name];
+			//if((!O && O!==0) || (!C && C!==0) || O===C) return stx.defaultColor;
+			return {
+				fill_color:
+					preClose > close ? seriesParam0.fill_color_down : seriesParam0.fill_color_up,
+				border_color:
+					preClose > close ? seriesParam0.border_color_down : seriesParam0.border_color_up,
+				opacity: preClose > close ? seriesParam0.opacity_down : seriesParam0.opacity_up
+			};
+		};
+	}
+	else if (stx.colorByCandleDirection && !sd.colorFunction) {
 		seriesParam0.color_function = function (quote) {
 			var O = quote.Open,
 				C = quote.Close;

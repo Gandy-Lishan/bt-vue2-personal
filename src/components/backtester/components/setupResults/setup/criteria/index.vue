@@ -3,87 +3,81 @@
 	<div class="criteria-box">
 		<div class="signal-option-box">
 			<div class="entry-title-box">
-				<p class="criteria-title">{{config['criteriaTitle']}}{{title}}</p>
+				<p class="criteria-title">{{config['criteriaTitle']}}{{title}}
 				<el-tooltip  effect="dark" placement="top" style="word-wrap: break-word;display: inline">
 					<span slot="content" v-html="config['criteriaTitleTP']"></span>
 					<i class="fa fa-question-circle right color" aria-hidden="true"></i>
 				</el-tooltip>
+				</p>
 			</div>
 			<div class="signal-container">
-				<span v-if="relation == 2" class="scoreNote">
-					<!-- <div class="excludeBox">
-						<i v-if="isCriteriaScoreChecked" class="el-icon-refresh" @click="handleCriteriaScoreChecked" style="margin-right: 5px"></i>
-						<el-checkbox v-model="isCriteriaScoreChecked" @change="handleCriteriaScoreChecked"
-							>Criteria Score
-							<el-tooltip effect="dark" placement="top">
-								<span slot="content" v-html="config['criteriaScore']">
+				<template v-if="relation === 2">
+					<div class="score-container">
+						<button class="criteria-score" @click="handleCriteriaScoreChecked">
+							<svg
+								class="sidebar_button_icon"
+								width="12"
+								height="12"
+								viewBox="0 0 12 12"
+								fill="currentColor"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M2.65079 2.59434C3.35727 1.87621 4.22963 1.43305 5.14214 1.26312L4.91451 0C3.75791 0.215381 2.65102 0.77807 1.75752 1.68632C-0.585841 4.06838 -0.585841 7.93048 1.75752 10.3125L0.679249 11.4086H3.72907V8.30844L2.65079 9.40452C0.80077 7.52394 0.80077 4.47492 2.65079 2.59434ZM11.3208 0.591377H8.27093V3.69156L9.34921 2.59548C11.1992 4.47606 11.1992 7.52508 9.3492 9.40566C8.64273 10.1238 7.77037 10.567 6.85785 10.7369L7.08549 12C8.24209 11.7846 9.34898 11.2219 10.2425 10.3137C12.5858 7.93161 12.5858 4.06952 10.2425 1.68746L11.3208 0.591377Z"
+								/>
+							</svg>
+							<span>Show Criteria Score on Chart</span>
+						</button>
+						<div class="scoreNote">
+							<span>Score: </span>
+							<el-tooltip effect="dark" placement="top" style="display: inline; margin-right: 10px">
+								<span slot="content" v-html="config['scoreTP']"></span>
+								<i class="fa fa-question-circle right color" aria-hidden="true"></i>
+							</el-tooltip>
+							<el-input-number
+								v-model="score"
+								:step="1"
+								step-strictly
+								v-if="relation === 2"
+								:min="1"
+								:max="editableTabs.length"
+								size="mini"
+							></el-input-number>
+						</div>
+					</div>
+				</template>
+				<template v-if="relation === 3">
+					<div class="scoreNote timeLimitBox">
+						<div class="excludeBox">
+							<el-checkbox v-model="isUsePeriodLimit" @change="changePeriodLimit"
+								>Use Time Period Limit
+								<el-tooltip effect="dark" placement="top">
+									<span slot="content" v-html="config['timeLimitTP']">
+									</span>
+									<i class="fa fa-question-circle right" aria-hidden="true"></i>
+								</el-tooltip>
+							</el-checkbox>
+						</div>
+						<div class="period-box" v-if="isUsePeriodLimit">
+							<span>Period: </span>
+							<el-tooltip effect="dark" placement="top" style="display: inline; margin-right: 5px;">
+								<span slot="content" v-html="config['periodTP']">
 								</span>
 								<i class="fa fa-question-circle right" aria-hidden="true"></i>
 							</el-tooltip>
-						</el-checkbox>
-					</div> -->
-					<button class="criteria-score" @click="handleCriteriaScoreChecked">
-						<svg
-							class="sidebar_button_icon"
-							width="12"
-							height="12"
-							viewBox="0 0 12 12"
-							fill="currentColor"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								fill-rule="evenodd"
-								clip-rule="evenodd"
-								d="M2.65079 2.59434C3.35727 1.87621 4.22963 1.43305 5.14214 1.26312L4.91451 0C3.75791 0.215381 2.65102 0.77807 1.75752 1.68632C-0.585841 4.06838 -0.585841 7.93048 1.75752 10.3125L0.679249 11.4086H3.72907V8.30844L2.65079 9.40452C0.80077 7.52394 0.80077 4.47492 2.65079 2.59434ZM11.3208 0.591377H8.27093V3.69156L9.34921 2.59548C11.1992 4.47606 11.1992 7.52508 9.3492 9.40566C8.64273 10.1238 7.77037 10.567 6.85785 10.7369L7.08549 12C8.24209 11.7846 9.34898 11.2219 10.2425 10.3137C12.5858 7.93161 12.5858 4.06952 10.2425 1.68746L11.3208 0.591377Z"
-							/>
-						</svg>
-						<span>Show Criteria Score on Chart</span>
-					</button>
-				</span>
-				<span class="scoreNote" v-if="relation === 2">
-					<span>Score: </span>
-					<el-tooltip effect="dark" placement="top" style="display: inline">
-						<span slot="content" v-html="config['scoreTP']"></span>
-						<i class="fa fa-question-circle right color" aria-hidden="true"></i>
-					</el-tooltip>
-				</span>
-				<el-input-number
-					v-model="score"
-					:step="1"
-					step-strictly
-					v-if="relation === 2"
-					:min="1"
-					:max="editableTabs.length"
-					size="mini"
-				></el-input-number>
-				<span class="scoreNote timeLimitBox" v-if="relation === 3">
-					<div class="excludeBox">
-						<el-checkbox v-model="isUsePeriodLimit" @change="changePeriodLimit"
-							>Use Time Period Limit
-							<el-tooltip effect="dark" placement="top">
-								<span slot="content" v-html="config['timeLimitTP']">
-								</span>
-								<i class="fa fa-question-circle right" aria-hidden="true"></i>
-							</el-tooltip>
-						</el-checkbox>
+							<el-input-number
+								v-model="signals_in_market"
+								:step="1"
+								step-strictly
+								v-if="relation === 3"
+								:min="1"
+								size="mini"
+							></el-input-number>
+						</div>
 					</div>
-					<div class="period-box" v-if="isUsePeriodLimit">
-						<span>Period: </span>
-						<el-tooltip effect="dark" placement="top" style="display: inline; margin-right: 5px;">
-							<span slot="content" v-html="config['periodTP']">
-							</span>
-							<i class="fa fa-question-circle right" aria-hidden="true"></i>
-						</el-tooltip>
-						<el-input-number
-							v-model="signals_in_market"
-							:step="1"
-							step-strictly
-							v-if="relation === 3"
-							:min="1"
-							size="mini"
-						></el-input-number>
-					</div>
-				</span>
+				</template>
 				<el-select
 					v-model="relation"
 					placeholder="Please select signal"
@@ -132,6 +126,7 @@
 							@getFreqArray="getFreqArray"
 							@userDefinedDates="userDefinedDates"
 						></indicator>
+						<!-- @getIndicatorTicker="getIndicatorTicker" -->
 						<senti
 							v-bind="$attrs"
 							:tabLength="indicatorRadioArr.length"
@@ -1075,7 +1070,6 @@ export default {
 					description = JSON.parse(vm.$store.state.form.backtestInfo.description)
    }
 			description = description.filter(item => !item.commentDes.includes('User Defined Dates'))
-			debugger
 			let sameSignalArr = searchKeys(description)
 			if(this.relation == 3) sameSignalArr = []
 			if(sameSignalArr.length >= 1) {
@@ -1143,7 +1137,6 @@ export default {
 },
 		async saveData() {
 			// Save the selected indicator to vuex
-			debugger
 			let indiChecked
 			if (this.relation == 0) {
 				// Save risk description
@@ -1160,7 +1153,6 @@ export default {
 			}
 			for (let i = 0; i < this.indicatorRadioArr.length; i++) {
 				const indi = this.$refs.indiChild[i].saveIndicator(i)
-				debugger
 				if(this.indicatorRadioArr[i] === 'user' && this.userDefinedDatesArr[i] === 'User Defined') {
 					const arr = this.getDatesCommentDes(i)
 					arr.forEach(item => {
@@ -1179,7 +1171,6 @@ export default {
 					// 	ma_type: 'S'
 					// }
 				}
-				debugger
 				indiChecked = await indi
 				if(!indiChecked) return 
 			}
@@ -1255,7 +1246,6 @@ export default {
 					this.indicatorValArr[j] = data[criteria].signals[j].indicator
 					this.indicatorRadio = 'technical'
 					this.indicatorRadioArr.splice(j, 1, 'technical')
-					
 					this.techIndiObj[j] = CIQ.findBuiltinTechIndicator(data[criteria].signals[j].indicator,null)?.class
 				}
 			}
@@ -1314,7 +1304,6 @@ export default {
 		},
 		async userUploadFileContent(data) {
 			let _this = this
-			debugger
 			const indiRefs = _this.$refs.indiChild.length
 			for (let index = 0; index < indiRefs; index++) {
 				if(_this.indicatorRadioArr[index] === 'user' && !_this.indicatorUrlArr[index].includes('UserDefinedDates') && (_this.indicatorUrlArr[index].includes('HASH') || !_this.indicatorUrlArr[index])) {
@@ -1330,7 +1319,6 @@ export default {
 		},
 		async userFileSelect(data) {
 			let _this = this
-			debugger
 			console.log('emit 出发了几次')
 			if(data.val.criteria === this.criteriaNum) return
 			const indiRefs = _this.$refs.indiChild.length
@@ -1415,11 +1403,13 @@ export default {
 	justify-content: center;
 	align-items: center;
 }
-.scoreNote {
+.scoreNote, .button.criteria-score {
 	font-size: 14px;
 	font-weight: 600;
-	margin-right: 5px;
 	color: #000000;
+}
+.button.criteria-score {
+    margin-right: 5px;
 }
 /deep/.el-tabs__nav .el-tabs__item:nth-child(1) span {
 	display: none;
@@ -1451,13 +1441,11 @@ export default {
 	width: 146px;
 }
 .timeLimitBox{
-	position: relative;
+	display: flex;
+	align-items: center;
 }
-.period-box{
-	position: absolute;
-	top: 100%;
-	left: 0;
-	z-index: 10;
+.excludeBox {
+    flex: none;
 }
 .el-select-dropdown__item {
 	padding: 0 5px;
@@ -1504,4 +1492,37 @@ button.criteria-score {
         //box-shadow: 0 6px 20px #f59e0b;
       }
   }
+
+  .score-container {
+	display: flex;
+	align-items: center;
+  }
+@media (max-width: 768px) {
+  .signal-option-box, .signal-container {
+    display: block;
+  }
+  .criteria-title, .scoreNote{
+    margin-bottom: 18px;
+  }
+//   button.criteria-score {
+// 	width: 100%;
+//   }
+  /deep/ .el-select {
+	width: 100%;
+  }
+  /deep/ .el-input-number--mini {
+	width: 100%;
+  }
+  .delay-bar-box {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	/deep/ label.el-checkbox {
+		width: auto;
+	}
+	/deep/ .el-input-number--mini {
+		width: auto;
+ 	}
+  }
+}
 </style>

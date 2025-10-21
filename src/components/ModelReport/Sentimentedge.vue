@@ -229,7 +229,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 .analysis_solutions_yellow {
  background-color: #fbc01f;
 }
@@ -298,7 +298,18 @@ export default {
    width: 1170px;
  }
 }
-
+@media (max-width: 1200px) {
+ p {
+  overflow-x: auto;
+ }
+ .analysis_solutions_yellow {
+  overflow-x: auto;
+ }
+ .strategy-header {
+  overflow-x: auto;
+  display: block;
+ }
+}
 @media (min-width: 992px) {
   .col-md-12 {
     width: 100%;

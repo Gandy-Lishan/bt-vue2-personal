@@ -1961,4 +1961,14 @@ export default {
   font-size: 12px;
   color: #333333;
 }
+@media (max-width: 768px) {
+  .labelWithSelectBox {
+    /deep/ .el-form-item__label {
+      width: auto;
+    }
+    .selectBox {
+      display: block;
+    }
+  }
+}
 </style>

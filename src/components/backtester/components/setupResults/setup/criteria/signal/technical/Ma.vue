@@ -409,7 +409,11 @@ export default {
 					//CIQ.store.commit('chart/getMAPeriod', val)
 
 					// 如果是MA，则记录它的信息和位置，entryIndicator里面遇到ma时会访问store里的此记录并还原显示
-      				CIQ.setMALayout(sd.type,sd.inputs.Period,this.tech.ids == 'SMA' ? 'simple' : 'exponential',sd.inputs.Field,this.criteria,this.panelIndex)
+      				CIQ.setMALayout(sd.type,this.criteria,this.panelIndex,{
+						period: sd.inputs.Period,
+						type: this.tech.ids == 'SMA' ? 'simple' : 'exponential',
+						field: sd.inputs.Field
+					})
 					CIQ.loadChart(CIQ.store.state.chart.trades, CIQ.addMarker)
 				}
 			}			
@@ -804,5 +808,16 @@ export default {
 }
 .ISL-text:hover {
 	color: #909399;
+}
+@media (max-width: 768px) {
+  .ids-container {
+    flex-wrap: wrap;
+  }
+  .condition-container {
+    display: block;
+  }
+  /deep/ .el-select {
+    margin: 0;
+  }
 }
 </style>

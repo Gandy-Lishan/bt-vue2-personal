@@ -233,4 +233,9 @@ displayData(data) {
 width: 900px;
 margin: 0 auto;
 }
+@media (max-width: 1200px) {
+	.page-content-wrapper {
+		width: auto;
+	}
+}
 </style>

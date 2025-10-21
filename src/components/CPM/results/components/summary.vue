@@ -1,7 +1,7 @@
 <template>
   <div class="CPM-summary-container">
     <el-row :gutter="20">
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
           <el-statistic
             title="Symbol"
           >
@@ -10,7 +10,7 @@
           </template>
         </el-statistic>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <el-statistic
           title="Lookback Period"
         >
@@ -21,7 +21,7 @@
         </template>
         </el-statistic>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <el-statistic
           title="Observation Period"
         >
@@ -30,7 +30,7 @@
         </template>
         </el-statistic>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <el-statistic
           title="direction"
         >
@@ -42,7 +42,7 @@
     </el-row>
     <br>
     <el-row :gutter="20">
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <div>
           <!-- <el-statistic
             title="index filter"
@@ -54,7 +54,7 @@
         </div>
       </el-col>
       <div v-if="summary.hasOwnProperty('system_pattern')">
-        <el-col :span="6">
+        <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
           <el-statistic
             title="Common Pattern"
           >
@@ -65,7 +65,7 @@
         </el-col>
       </div>
       <div v-else>
-        <el-col :span="6">
+        <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
           <el-statistic
             title="Pattern Start Date"
           >
@@ -74,7 +74,7 @@
           </template>
           </el-statistic>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
           <el-statistic
             title="Pattern End Date"
           >
@@ -84,7 +84,7 @@
           </el-statistic>
         </el-col>
       </div>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <el-statistic
           title="Correlation Percentage"
         >
@@ -97,7 +97,7 @@
     </el-row>
     <br>
     <el-row :gutter="20">
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <div>
           <!-- <el-statistic
             title="index filter swap"
@@ -108,7 +108,7 @@
         </el-statistic> -->
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <div>
           <!-- <el-statistic
            title="indicator level"
@@ -119,7 +119,7 @@
           </el-statistic> -->
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <!-- <el-statistic
           title="market environment"
         >
@@ -131,7 +131,7 @@
     </el-row>
     <br>
     <el-row :gutter="20">
-      <el-col :span="6">
+      <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
         <div>
           <!-- <el-statistic
             title="index ma slope"

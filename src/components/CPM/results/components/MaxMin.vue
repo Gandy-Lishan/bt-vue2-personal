@@ -558,4 +558,10 @@ export default {
 .MaxMinTable {
 	width: 1001px;
 }
+@media (max-width: 768px) {
+	.editWithCustomBtn{
+		position: static;
+		margin-bottom: 10px;
+	}
+}
 </style>

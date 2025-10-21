@@ -183,7 +183,7 @@ MarkersSample.prototype.showmMarker = function () {
 			//if(!quote) console.log('error marker position', quote,xPosition,standardDate,high,CIQ.stxx.chart.dataSet.length - 1)
 			
 			// 绘制Marker
-			if(activeLabels.includes("triangle_buy") && (mDataSet[data].Type || mDataSet[data].TradeStatus) == "BUY"){
+			if(activeLabels.includes("triangle_buy") && (mDataSet[data].Type == "BUY" || mDataSet[data].TradeStatus == "BUY")){
 				new CIQ.Marker({
 					stx: stx,
 					label: "triangle_buy",
@@ -242,7 +242,7 @@ MarkersSample.prototype.showmMarker = function () {
 						}
 					}
 				}	
-			}else if(activeLabels.includes("triangle_sell") && (mDataSet[data].Type || mDataSet[data].TradeStatus) == "SELL"){
+			}else if(activeLabels.includes("triangle_sell") && (mDataSet[data].Type == "SELL" || mDataSet[data].TradeStatus == "SELL")){
 				new CIQ.Marker({
 					stx: stx,
 					label: "triangle_sell",

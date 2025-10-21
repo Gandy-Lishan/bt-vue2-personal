@@ -79,6 +79,7 @@ export default {
         TrendSector: 'sector_trend_score',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
+        IndexSeasonality: 'index_seasonality',
         CommoditySeasonality: 'commod_seasonality',
         ETFSeasonality: 'etf_seasonality',
         ETFSector: 'etf_complete_list',

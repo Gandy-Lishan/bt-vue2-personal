@@ -403,4 +403,15 @@ export default {
   width: 135px;
   text-align: left;
 }
+@media (max-width: 768px) {
+  .ids-container {
+    flex-wrap: wrap;
+  }
+  .condition-container {
+    display: block;
+  }
+  /deep/ .el-select {
+    margin: 0;
+  }
+}
 </style>

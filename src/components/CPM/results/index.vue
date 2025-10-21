@@ -609,4 +609,21 @@ export default {
 // .delete-btn:hover {
 //   background-color: rgb(251, 192, 92);
 // }
+@media (max-width: 1200px) {
+  .CPMResults-container {
+    display: block;
+    /deep/ .el-collapse-item__wrap {
+      overflow-x: auto;
+    }
+    /deep/ .el-collapse-item__header {
+      height: 100%;
+    }
+    .downLoadCsvBtn {
+      position: static;
+    }
+    .title {
+      flex-wrap: wrap;    
+    }
+  }
+}
 </style>

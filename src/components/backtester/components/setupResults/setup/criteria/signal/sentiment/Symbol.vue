@@ -71,6 +71,7 @@ export default {
     criteria: String,
     symUrl: String,
     symVal: String,
+    // symTicker: String,
     panelIndex: Number,
     isRiskControl: Boolean,
     relation: [String, Number],
@@ -178,6 +179,9 @@ export default {
     updateSettingROC() {
 			return this.$store.state.chart.studySettingROC
 		},
+    symbolTicker() {
+      return this.$store.state.chart.activatedMALayout.find(i=>i.criteria==this.criteria && i.index==this.panelIndex && i.url==this.symVal)?.ticker
+    }
   },
   watch: {
     beforeCalculateNewConditions: {
@@ -212,6 +216,7 @@ export default {
           if (
             CIQ.stxx.layout.studies[studyInstanceName].inputs.Field == fieldName &&
             CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA' &&
+            !CIQ.findSymbolIndicator(CIQ.stxx.layout.studies[studyInstanceName].type) &&  // 防止symbol indicaotr在加载后被误删
             CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria == this.criteria &&
             CIQ.stxx.layout.studies[studyInstanceName].parameters.index == this.panelIndex
           ) {
@@ -290,7 +295,8 @@ export default {
           desObj.criteria = this.criteria
           desObj.description = {
             'commentDes': commentDes,
-            'rocCond': rocCond
+            'rocCond': rocCond,
+            // 'ticker': this.symTicker,
           }
           desObj.index = index
 
@@ -353,13 +359,13 @@ export default {
         const _conditionPeriod = this.sym.conditionPeriod
         let _description1
         if([12,13].includes(this.sym.newCondition)){
-          _description1 =`${symVal} ${_newCondition} ${_condition} ${_value}`
+          _description1 =`${this.symbolTicker} ${symVal} ${_newCondition} ${_condition} ${_value}`
         }else if(this.sym.newCondition == 14){
-          _description1 = `Consecutive Number of Days with ${symVal} Above ${_conditionPeriod} ${_condition} ${_value}`
+          _description1 = `${this.symbolTicker} Consecutive Number of Days with ${symVal} Above ${_conditionPeriod} ${_condition} ${_value}`
         }else if(this.sym.newCondition == 15){
-          _description1 = `Consecutive Number of Days with ${symVal} Below ${_conditionPeriod} ${_condition} ${_value}`
+          _description1 = `${this.symbolTicker} Consecutive Number of Days with ${symVal} Below ${_conditionPeriod} ${_condition} ${_value}`
         }else{
-          _description1 = `${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
+          _description1 = `${this.symbolTicker} ${symVal} ${_newCondition}${_conditionPeriod} ${_condition} ${_value}`
         }
         this.description = _description1
       }
@@ -368,14 +374,16 @@ export default {
       if (this.relation != 1) {
         desObj.description = {
           'commentDes': this.description,
-          'rocCond': rocCond
+          'rocCond': rocCond,
+          // 'ticker': this.symTicker,
         }
         desObj.index = index + 1
       }
       if (this.relation == 1) {
         desObj.description = {
           'commentDes': commentDes + this.description,
-          'rocCond': rocCond
+          'rocCond': rocCond,
+          // 'ticker': this.symTicker,
         }
         desObj.index = 0
       }
@@ -424,16 +432,17 @@ export default {
           [17, { name:'N-Day Low', abbr: 'NL' }],
         ])
 
-        const symbolLabel = getCoresSymbolDual(this.criteria.endsWith('2'))
+        // const symbolLabel = field == 'Volume' ? '' : `(${getCoresSymbolDual(this.criteria.endsWith('2'))})`
+        const symbolLabel = ''
         let display
         if([12,13].includes(this.sym.newCondition)){
-          display = `(${symbolLabel})${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
+          display = `${symbolLabel}${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}`
         }else if(this.sym.newCondition == 14){
-          display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Above ${this.sym.conditionPeriod}`
+          display = `Consecutive Number of Days with ${symbolLabel}${this.symbolTicker} ${symbolCond.label} Above ${this.sym.conditionPeriod}`
         }else if(this.sym.newCondition == 15){
-          display = `Consecutive Number of Days with (${symbolLabel})${symbolCond.label} Below ${this.sym.conditionPeriod}`
+          display = `Consecutive Number of Days with ${symbolLabel}${this.symbolTicker} ${symbolCond.label} Below ${this.sym.conditionPeriod}`
         }else{
-          display = `(${symbolLabel})${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
+          display = `${symbolLabel}${this.symbolTicker} ${symbolCond.label} ${conditionMap.get(this.sym.newCondition).name}(${this.sym.conditionPeriod}-Bar)`
         }
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
           display: display,
@@ -483,6 +492,7 @@ export default {
       }
     },
     setEditData(newVal) {
+      debugger
       if (JSON.stringify(newVal) != '{}') {
         let obj = newVal[this.criteria].signals[this.panelIndex]
         // test在samebar(relation 2/3)的情况下
@@ -535,5 +545,16 @@ export default {
 .indicator-alignment /deep/ label.el-form-item__label {
   width: 135px;
   text-align: left;
+}
+@media (max-width: 768px) {
+  .ids-container {
+    flex-wrap: wrap;
+  }
+  .condition-container {
+    display: block;
+  }
+  /deep/ .el-select {
+    margin: 0;
+  }
 }
 </style>

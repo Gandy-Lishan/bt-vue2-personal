@@ -402,4 +402,9 @@ table tbody tr.even, table tbody tr.even {
 .trend-score-des {
   margin: 20px 0px 10px 0px;
 }
+ @media (max-width: 1200px) {
+.centent {
+  display: block;
+}
+}
 </style>

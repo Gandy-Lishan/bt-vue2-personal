@@ -306,4 +306,15 @@ delay_bars: [String, Number],
 .indicator-alignment /deep/ label.el-radio {
   width: 135px;
 }
+@media (max-width: 768px) {
+  .ids-container {
+    flex-wrap: wrap;
+  }
+  .condition-container {
+    display: block;
+  }
+  /deep/ .el-select {
+    margin: 0;
+  }
+}
 </style>

@@ -1214,6 +1214,46 @@ export default {
             }
             ]
         ],
+        ['IndexSeasonalityColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '120px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Groups',
+              value: 'sub_type',
+              capFirstLetter: true
+            },
+            {
+              key: 'win_rate',
+              label: 'Win<br/>Rate',
+              value: 'win_rate',
+              addPercentSign: true
+            },
+            {
+              key: 'avg_return',
+              label: 'Avg<br/>Return',
+              value: 'avg_return',
+              addPercentSign: true
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
         ['ETFSeasonalityColumns', 
           [
             {
@@ -1811,7 +1851,7 @@ export default {
       }
       let simplifiedColumnsKeys = ['chart_name', 'last_value', 'last_change', 'last_update']
       if(isStockTrend) simplifiedColumnsKeys = ['market_symbol', 'chart_name', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg']
-      if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
+      if(this.checkedType === 'BondSeasonality' || this.checkedType === 'CommoditySeasonality' || this.checkedType === 'IndexSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
@@ -2365,6 +2405,8 @@ export default {
             requireUrl = 'etf_seasonality'
           }else if(type === 'bond_seasonality') {
             requireUrl = 'bond_seasonality'
+          }else if(type === 'index_seasonality') {
+            requireUrl = 'index_seasonality'
           }else if(groups === 'commod') {
             requireUrl = 'commodity_complete_list'
           }else if(groups === 'bonds'){
@@ -2720,6 +2762,11 @@ export default {
           type: 'BondSeasonality'
         },
         {
+          label: 'Index Market Seasonality',
+          value: 'index_seasonality',
+          type: 'IndexSeasonality'
+        },
+        {
           label: 'ETF Seasonality',
           value: 'etf_seasonality',
           type: 'ETFSeasonality'
@@ -2790,7 +2837,7 @@ export default {
       */
       let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Sub Type', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change']
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
-      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
+      if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality' || type === 'index_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
       let keysMap = new Map([
         ['chart_name', 'Name'],
         ['sub_type', 'Group'],
@@ -2805,7 +2852,7 @@ export default {
       if(type === 'etf_breadth' || type === 'country_breadth' || type === 'crypto_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
       if(type === 'etf_breadth') {keysMap.delete('sub_type')}
       if(type === 'country_breadth' || type === 'crypto_breadth') {keysMap.delete('underlying_name'), keysMap.set('sub_type', 'Sub Type')}
-      if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
+      if(type === 'bond_seasonality' || type === 'commod_seasonality' || type === 'etf_seasonality' || type === 'index_seasonality'){keysMap.set('win_rate', 'Win Rate');keysMap.set('avg_return', 'Avg Return')}
       if(type === 'commod_seasonality' || type === 'etf_seasonality') {keysMap.set('chart_name', 'Symbol');keysMap.set('underlying_name', 'Name')}
       if(type === 'etf_seasonality') {keysMap.set('avg_net_return', 'Avg Net Return'); keysMap.delete('sub_type');keysMap.set('groups', 'Group');}
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'crypt_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list') {keysMap.set('url', 'Symbol'); keysMap.set('z_score', 'Z-Score')}
@@ -3162,6 +3209,7 @@ export default {
         OtherAssetsETFScore: 'etf_other',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
+        IndexSeasonality: 'index_seasonality',
         CommoditySeasonality: 'commod_seasonality',
         ETFSeasonality: 'etf_seasonality',
         ETFSector: 'etf_complete_list',
@@ -3529,5 +3577,11 @@ export default {
 }
 /deep/ .el-select__input {
   margin-left: 2px;
+}
+@media (max-width: 1200px) {
+.header-span-grid {
+ display: flex;
+ flex-wrap: wrap; 
+}
 }
 </style>

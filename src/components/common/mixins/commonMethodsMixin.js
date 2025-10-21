@@ -796,12 +796,14 @@ export const CommonMethodsMixin = {
 					CIQ.stxx.layout.studies[studyInstanceName].inputs.Field ==
 						fieldName &&
 					CIQ.stxx.layout.studies[studyInstanceName].type != 'ST MA'
-				// 判断 condition
+				// 判断 是否存在重复的new condition指标
 				const fc =
 					CIQ.stxx.layout.studies[studyInstanceName].parameters.criteria ==
 						criteria &&
 					CIQ.stxx.layout.studies[studyInstanceName].parameters.index ==
-						panelIndex
+						panelIndex &&
+					// symbol ohlcv指标使用index和criteria, 需要添加判断防止被误删
+					!CIQ.findSymbolIndicator(CIQ.stxx.layout.studies[studyInstanceName].type, null)
 				if ((f1 || f2) && fc) {
 					CIQ.Studies.removeStudy(
 						CIQ.stxx,
@@ -818,7 +820,7 @@ export const CommonMethodsMixin = {
 			  (indicator_url_with_ma ? indicator_url_with_ma : indicator_url)
 			const symbolLabel = getCoresSymbolDual(criteria.endsWith('2'))
 			let symbolLabelDisplay = ''
-			if (!(analysis == 'Sentiment' || analysis == 'User')) {
+			if (!(analysis == 'Sentiment' || analysis == 'User' || analysis == 'Symbol')) {
 				symbolLabelDisplay = `(${symbolLabel})`
 			}
 			const maType = signals.ma_type == 'S' ? ' SMA' : ' EMA'
@@ -826,11 +828,17 @@ export const CommonMethodsMixin = {
                   ? this.rocDisplayName(indicator_url) + maType + stmaPeriod
                   : this.rocDisplayName(fieldName || indicator_url)
 			const condition = `${conditionMap.get(newCondition).name}(${conditionPeriod}-Bar)`
+
+			// 直接通过从activatedMALayout获取对应criteria和index的symbolTicker信息
+			const symbolTicker = CIQ.store.state.chart.activatedMALayout.find(
+				item=>item.url == name && item.criteria == criteria && item.index == panelIndex
+				)?.ticker
+
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
 				'ST ROCLike',
 				{
-					display: `${symbolLabelDisplay}${name} ${condition}`,
+					display: `${symbolLabelDisplay}${symbolTicker} ${name} ${condition}`,
 					Field: field,
 					condition: conditionMap.get(newCondition).abbr,
 					period: conditionPeriod
@@ -849,7 +857,9 @@ export const CommonMethodsMixin = {
 		rocDisplayName(field) {
 			let display
 			let senti = CIQ.findSentiIndicator(null,field)
-			if(CIQ.isOwnIndicator(field)){
+			if(CIQ.findSymbolIndicator(null, field)){
+				display = CIQ.findSymbolIndicator(null, field)?.label
+			}else if(CIQ.isOwnIndicator(field)){
 				display = field.split(/CREATE/)[0]
 			}else if(CIQ.isUserIndicator(field)){
 				display = field.split(/HASH/)[0]
@@ -875,8 +885,16 @@ export const CommonMethodsMixin = {
 
 				if(currentObject.type != 'ST ROCLike') continue
 
+				let ticker = ''
 				const symbolThatBelong = currentObject.parameters.criteria.endsWith('2') ? 'comparison' : 'main' ///dual symbol情况下相同条件不同symbol可以同时显示多个
-				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition + '|' + symbolThatBelong;
+				if(CIQ.findSymbolIndicator(null, currentObject.inputs.Field)) {
+					var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+					const symbolOhlcvLayout = activatedMALayoutList.find(
+						(item) => item.criteria == currentObject.parameters.criteria && item.index == currentObject.parameters.index
+					)
+					ticker = symbolOhlcvLayout?.ticker
+				}
+				const keyCombination = (ticker?`${ticker}|`:'') + currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition + '|' + symbolThatBelong;
 
 				// 检查辅助对象中是否已经存在相同的 name 和 index 组合
 				if (seen[keyCombination]) {
@@ -1221,7 +1239,7 @@ export const CommonMethodsMixin = {
 		},
 		reloadData(data, freq, row) {
 			if (isJson(data)) data = JSON.parse(data)
-			let {strategy, symbol2} = row
+			let {strategy, symbol2, symbol} = row
 			let frequency = ''
 			const commitIndicators = (criteria, list) => {
 				this.$store.commit('chart/getCriteriaIndicatorsList', { criteria, list });
@@ -1294,6 +1312,66 @@ export const CommonMethodsMixin = {
 					if(!item.url) item.url = 'ma'
 				});
 			}
+
+			/**
+			 * 			兼容旧版SymbolOHLCV的回测配置
+			 * 			把symbol ohlcv指标从formIndicators迁移至activatedMALayout
+			 *			activatedMALayout: [
+			 *				{
+			 *					"url": "Symbol High",
+			 *					"ticker": "SPX",
+			 *					"criteria": "entry",
+			 *					"index": 0
+			 *				},
+			 *				{
+			 *					"url": "Symbol Low",
+			 *					"ticker": "SPY",
+			 *					"criteria": "entry2",
+			 *					"index": 0
+			 *				}
+			 *			]
+			 *			formIndicators: {
+			 *				"entry": ["Symbol High"],
+			 *				"exit": [""],
+			 *				"entry2": ["Symbol Low"],
+			 *				"exit2": [""]
+			 *			}
+			 * 根据 formIndicators 生成 activatedMALayout 数组
+			 */
+			const migrateSymbolOhlcvIntoActivatedMALayout = function(formIndicators, symbol1, symbol2) {
+				const activatedMALayout = [];
+			
+				// 1. 遍历 formIndicators 对象的每个键值对
+				//    (例如: criteria = "entry", urls = ["Symbol High", "Another Entry"])
+				for (const [criteria, urls] of Object.entries(formIndicators)) {
+				
+					// 2. 遍历该 criteria 对应的数组 (urls)
+					//    (例如: url = "Symbol High", index = 0)
+					urls.forEach((url, index) => {
+						if (url && url.trim() !== "" && CIQ.findSymbolIndicator(url)) {
+							const ticker = criteria.endsWith('2')?symbol2:symbol1
+							activatedMALayout.push({
+								url: url,
+								ticker: ticker,
+								criteria: criteria,
+								index: index // 这里是 url 在数组中的下标
+							});
+						}
+					});
+				}
+			
+				return activatedMALayout;
+			}
+			// 如果formIndicators有Symbol Ohlcv而activatedMALayout没有，则开始迁入
+			if(
+				Object.values(data.formIndicators).some(urls => CIQ.findSymbolIndicator(urls)) && 
+				!data.activatedMALayout.find(item=>CIQ.findSymbolIndicator(item.url))
+			) {
+				data.activatedMALayout = data.activatedMALayout.concat(migrateSymbolOhlcvIntoActivatedMALayout(data.formIndicators, row.symbol, row.symbol2))
+				data.savedTechSD = data.savedTechSD.filter(item => !CIQ.findSymbolIndicator(item.type) )
+				console.log("Magrate Old Version of Symbol OHLCV Indicator");
+			}
+			
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
 			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
 
