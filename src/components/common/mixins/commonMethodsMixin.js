@@ -885,8 +885,16 @@ export const CommonMethodsMixin = {
 
 				if(currentObject.type != 'ST ROCLike') continue
 
+				let ticker = ''
 				const symbolThatBelong = currentObject.parameters.criteria.endsWith('2') ? 'comparison' : 'main' ///dual symbol情况下相同条件不同symbol可以同时显示多个
-				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition + '|' + symbolThatBelong;
+				if(CIQ.findSymbolIndicator(null, currentObject.inputs.Field)) {
+					var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+					const symbolOhlcvLayout = activatedMALayoutList.find(
+						(item) => item.criteria == currentObject.parameters.criteria && item.index == currentObject.parameters.index
+					)
+					ticker = symbolOhlcvLayout?.ticker
+				}
+				const keyCombination = (ticker?`${ticker}|`:'') + currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition + '|' + symbolThatBelong;
 
 				// 检查辅助对象中是否已经存在相同的 name 和 index 组合
 				if (seen[keyCombination]) {
