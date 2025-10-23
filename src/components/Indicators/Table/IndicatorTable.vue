@@ -391,7 +391,10 @@ export default {
       indicatorsListData: 'getIndicatorsPageListData'
     }),
     isOverview() {
-      return ['CCSOverview', 'ETFSectorOverview', 'ETFCountryOverview', 'GlobalBreadthOverview'].includes(this.checkedType)
+      return ['CCSOverview', 'ETFSectorOverview', 'ETFCountryOverview'].includes(this.checkedType)
+    },
+    showChart() {
+      return this.enlargedTable !== null && (this.displayRow && this.displayRow.type && !this.displayRow?.type.includes('seasonality') && this.checkedType !== 'TrendSector')
     }
   },
   mounted() {

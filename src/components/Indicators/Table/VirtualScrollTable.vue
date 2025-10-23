@@ -2442,6 +2442,7 @@ export default {
     async overviewUpdateChart(row, value) {
       // 如果是在全屏状态下, 应该先退出全屏
       row.url = row[`${value}_url`]
+      row.clickSource = 'line'  
       if(this.isTrendScoreFullScreen) {this.enterOrExitFullScreenTrendScorePage(this.label);this.isTrendScoreFullScreen = false}
       debugger
       if(this.showRelated || this.showConstituentConditions) {
