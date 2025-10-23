@@ -832,7 +832,7 @@ export const CommonMethodsMixin = {
 			// 直接通过从activatedMALayout获取对应criteria和index的symbolTicker信息
 			const symbolTicker = CIQ.store.state.chart.activatedMALayout.find(
 				item=>item.url == name && item.criteria == criteria && item.index == panelIndex
-				)?.ticker
+				)?.ticker || ''
 
 			CIQ.Studies.addStudy(
 				CIQ.stxx,
