@@ -996,6 +996,12 @@
     "inception": "1992/12/31"
   },
   {
+    "symbol": "PSQ",
+    "name": "ProShares Short QQQ (PSQ)",
+    "category": "ETF",
+    "inception": "2006/06/21"
+  },
+  {
     "symbol": "PUTW",
     "name": "Strategy Fund (PUTW)",
     "category": "ETF",
@@ -1006,6 +1012,18 @@
     "name": "Qatar (QAT)",
     "category": "ETF",
     "inception": "2014/5/1"
+  },
+  {
+    "symbol": "QID",
+    "name": "ProShares UltraShort QQQ (QID)",
+    "category": "ETF",
+    "inception": "2006/07/13"
+  },
+  {
+    "symbol": "QLD",
+    "name": "ProShares Ultra QQQ (QLD)",
+    "category": "ETF",
+    "inception": "2006/06/21"
   },
   {
     "symbol": "QQQ",
@@ -1128,10 +1146,22 @@
     "inception": "2001/10/09"
   },
   {
+    "symbol": "SDS",
+    "name": "ProShares UltraShort S&P500 (SDS)",
+    "category": "ETF",
+    "inception": "2006/07/13"
+  },
+  {
     "symbol": "SENSEX",
     "name": "SENSEX Index",
     "category": "Index",
     "inception": "1979/4/3"
+  },
+  {
+    "symbol": "SH",
+    "name": "ProShares Short S&P500 (SH)",
+    "category": "ETF",
+    "inception": "2006/06/21"
   },
   {
     "symbol": "SHY",
@@ -1200,16 +1230,34 @@
     "inception": "1990/1/2"
   },
   {
+    "symbol": "SPXU",
+    "name": "ProShares UltraPro Short S&P500 (SPXU)",
+    "category": "ETF",
+    "inception": "2009/06/25"
+  },
+  {
     "symbol": "SPY",
     "name": "S&P 500 ETF (SPY)",
     "category": "ETF",
     "inception": "1993/1/29"
   },
   {
+    "symbol": "SQQQ",
+    "name": "ProShares UltraPro Short QQQ (SQQQ)",
+    "category": "ETF",
+    "inception": "2010/02/11"
+  },
+  {
     "symbol": "SRV",
     "name": "NXG Cushing Midstream Energy Fund (SRV)",
     "category": "ETF",
     "inception": "2007/8/24"
+  },
+  {
+    "symbol": "SSO",
+    "name": "ProShares Ultra S&P500 (SSO)",
+    "category": "ETF",
+    "inception": "2006/06/21"
   },
   {
     "symbol": "STI",
@@ -1278,6 +1326,12 @@
     "inception": "1949/05/16"
   },
   {
+    "symbol": "TQQQ",
+    "name": "ProShares UltraPro QQQ (TQQQ)",
+    "category": "ETF",
+    "inception": "2010/02/11"
+  },
+  {
     "symbol": "TRAN",
     "name": "Dow Jones Transportation Index (TRAN)",
     "category": "Index",
@@ -1306,6 +1360,12 @@
     "name": "Natural Gas (UNG)",
     "category": "ETF",
     "inception": "2007/4/18"
+  },
+  {
+    "symbol": "UPRO",
+    "name": "ProShares UltraPro S&P500 (UPRO)",
+    "category": "ETF",
+    "inception": "2009/06/25"
   },
   {
     "symbol": "USGG10YR",
@@ -2388,6 +2448,12 @@
     "inception": "2011/11/15"
   },
   {
+    "symbol": "CQQQ",
+    "name": "Invesco China Technology ETF (CQQQ)",
+    "category": "ETF",
+    "inception": "2009/12/08"
+  },
+  {
     "symbol": "JPY",
     "name": "Japanese Yen",
     "category": "Forex",
@@ -2400,76 +2466,10 @@
     "inception": "2010/01/08"
   },
   {
-    "symbol": "PSQ",
-    "name": "ProShares Short QQQ (PSQ)",
-    "category": "ETF",
-    "inception": "2006/06/21"
-  },
-  {
-    "symbol": "QID",
-    "name": "ProShares UltraShort QQQ (QID)",
-    "category": "ETF",
-    "inception": "2006/07/13"
-  },
-  {
-    "symbol": "QLD",
-    "name": "ProShares Ultra QQQ (QLD)",
-    "category": "ETF",
-    "inception": "2006/06/21"
-  },
-  {
-    "symbol": "SDS",
-    "name": "ProShares UltraShort S&P500 (SDS)",
-    "category": "ETF",
-    "inception": "2006/07/13"
-  },
-  {
-    "symbol": "SH",
-    "name": "ProShares Short S&P500 (SH)",
-    "category": "ETF",
-    "inception": "2006/06/21"
-  },
-  {
-    "symbol": "SPXU",
-    "name": "ProShares UltraPro Short S&P500 (SPXU)",
-    "category": "ETF",
-    "inception": "2009/06/25"
-  },
-  {
-    "symbol": "SQQQ",
-    "name": "ProShares UltraPro Short QQQ (SQQQ)",
-    "category": "ETF",
-    "inception": "2010/02/11"
-  },
-  {
-    "symbol": "SSO",
-    "name": "ProShares Ultra S&P500 (SSO)",
-    "category": "ETF",
-    "inception": "2006/06/21"
-  },
-  {
-    "symbol": "TQQQ",
-    "name": "ProShares UltraPro QQQ (TQQQ)",
-    "category": "ETF",
-    "inception": "2010/02/11"
-  },
-  {
-    "symbol": "UPRO",
-    "name": "ProShares UltraPro S&P500 (UPRO)",
-    "category": "ETF",
-    "inception": "2009/06/25"
-  },
-  {
     "symbol": "XETUSD",
     "name": "Ethereum",
     "category": "Crypto",
     "inception": "2018/02/08"
-  },
-  {
-    "symbol": "bitcoin",
-    "name": "Bitcoin",
-    "category": "Crypto",
-    "inception": "2010/7/19"
   },
   {
     "symbol": "crp_BTC",

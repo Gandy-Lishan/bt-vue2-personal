@@ -885,8 +885,16 @@ export const CommonMethodsMixin = {
 
 				if(currentObject.type != 'ST ROCLike') continue
 
+				let ticker = ''
 				const symbolThatBelong = currentObject.parameters.criteria.endsWith('2') ? 'comparison' : 'main' ///dual symbol情况下相同条件不同symbol可以同时显示多个
-				const keyCombination = currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition + '|' + symbolThatBelong;
+				if(CIQ.findSymbolIndicator(null, currentObject.inputs.Field)) {
+					var activatedMALayoutList = CIQ.store.state.chart.activatedMALayout?CIQ.store.state.chart.activatedMALayout:[]
+					const symbolOhlcvLayout = activatedMALayoutList.find(
+						(item) => item.criteria == currentObject.parameters.criteria && item.index == currentObject.parameters.index
+					)
+					ticker = symbolOhlcvLayout?.ticker
+				}
+				const keyCombination = (ticker?`${ticker}|`:'') + currentObject.inputs.Field + '|' + currentObject.inputs.period + '|' + currentObject.inputs.condition + '|' + symbolThatBelong;
 
 				// 检查辅助对象中是否已经存在相同的 name 和 index 组合
 				if (seen[keyCombination]) {
@@ -1354,9 +1362,15 @@ export const CommonMethodsMixin = {
 			
 				return activatedMALayout;
 			}
-			data.activatedMALayout = data.activatedMALayout.concat(migrateSymbolOhlcvIntoActivatedMALayout(data.formIndicators, row.symbol, row.symbol2))
-			data.savedTechSD = data.savedTechSD.filter(item => !CIQ.findSymbolIndicator(item.type) )
-			console.log("Magrate Old Version of Symbol OHLCV Indicator");
+			// 如果formIndicators有Symbol Ohlcv而activatedMALayout没有，则开始迁入
+			if(
+				Object.values(data.formIndicators).some(urls => CIQ.findSymbolIndicator(urls)) && 
+				!data.activatedMALayout.find(item=>CIQ.findSymbolIndicator(item.url))
+			) {
+				data.activatedMALayout = data.activatedMALayout.concat(migrateSymbolOhlcvIntoActivatedMALayout(data.formIndicators, row.symbol, row.symbol2))
+				data.savedTechSD = data.savedTechSD.filter(item => !CIQ.findSymbolIndicator(item.type) )
+				console.log("Magrate Old Version of Symbol OHLCV Indicator");
+			}
 			
 			this.$store.commit('chart/getMALayout', data.activatedMALayout)
 			this.$store.commit('chart/getTechLayout', data.activatedTechLayout)
