@@ -232,7 +232,7 @@
             <template slot-scope="scope">
               <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SP1500Score' && l.type !== 'GlobalBreadthOverview') || (l.value === 'market_symbol' && l.type === 'SP1500Score')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
               <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
-              <!-- <a v-else-if="l.link" :href="`/indicators?indicator=${scope.row[`${l.value}_url`]}`" target="_blank">{{ scope.row[l.value] }}</a> -->
+              <el-button v-else-if="l.link" type="text" @click="overviewUpdateChart(scope.row, l.value)">{{ scope.row[l.value] }}</el-button>
               <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 90px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
 					  </template>
@@ -2439,6 +2439,23 @@ export default {
       this.$emit("showDetails", row, true, this.checkedType)
       // this.$emit("showDetails", {}, true, this.checkedType)
     },
+    async overviewUpdateChart(row, value) {
+      // 如果是在全屏状态下, 应该先退出全屏
+      row.url = row[`${value}_url`]
+      if(this.isTrendScoreFullScreen) {this.enterOrExitFullScreenTrendScorePage(this.label);this.isTrendScoreFullScreen = false}
+      debugger
+      if(this.showRelated || this.showConstituentConditions) {
+        await this.clickRelated(row)
+        return
+      }
+      if(!this.enlarged) {
+        this.enlarged = true
+        this.toggleEnlarge(this.label);
+        this.checkedOption( this.enlarged ? this.checkedType : null)
+      }
+      this.$emit("updateChart", row)
+      this.$emit("showDetails", row, true, this.checkedType)
+    },
     onLoad() {
       this.showImg = true
     },
@@ -2527,8 +2544,10 @@ export default {
             requireUrl = 'crypto_breadth'
           }else if(groups === 'macroeconomic') {
             requireUrl = 'macro_indicator_list'
-          }else if(typeof chart_url === 'string' && chart_url.startsWith('cot_')) {
+          }else if(sub_type === 'cot') {
             requireUrl = 'cot_max_min'
+          }else if(type === 'country_opt') {
+            requireUrl = 'country_breadth_overview'
           }
           if(!requireUrl) return
           await this.fetchIndicatorsPageList(requireUrl)

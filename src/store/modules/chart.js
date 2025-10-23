@@ -858,6 +858,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 				acc[item.chart_name][item.country] = item.last_value;
 				acc[item.chart_name][`${item.country}_url`] = item.url;
 				acc[item.chart_name]['url'] = item.type_url
+				acc[item.chart_name]['type'] = 'Indicator'
 			
 				return acc;
 			}, {})
@@ -869,6 +870,11 @@ get_indicator_page_btv1_list({ commit, state }) {
 			_results = _results.map(item => {
 				item.url = item.chart_id
 				item.chart_name = item.title
+				return item
+			})
+		}else if(url === 'cot_max_min') {
+			_results = _results.map(item => {
+				item.type = 'Indicator'
 				return item
 			})
 		}

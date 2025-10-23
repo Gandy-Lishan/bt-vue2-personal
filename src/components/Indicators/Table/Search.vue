@@ -186,6 +186,8 @@ export default {
           requireUrl = 'country_breadth'
         }else if(sub_type === 'crp_breadth') {
           requireUrl = 'crypto_breadth'
+        }else if(sub_type === 'cot'){
+          requireUrl = 'cot_max_min'
         }else if(groups === 'trend_reltrend') {
           const str = sub_type
           const match = str.match(/(.*?)_trend_reltrend/)
@@ -203,6 +205,8 @@ export default {
           requireUrl = 'etf_seasonality'
         }else if(type === 'bond_seasonality') {
           requireUrl = 'bond_seasonality'
+        }else if(type === 'country_opt') {
+          requireUrl = 'country_breadth_overview'
         }
         // else if(type === 'index_seasonality') {
         //   requireUrl = 'index_seasonality'
@@ -222,13 +226,16 @@ export default {
         }
         // if(!requireUrl) return
         let _sourceList = null
-        if(requireUrl) {
+        if(requireUrl && requireUrl !== 'country_breadth_overview') {
           await this.fetchIndicatorsPageList(requireUrl)
           const _list = isJson(this.indicatorsListData[requireUrl]) ? JSON.parse(this.indicatorsListData[requireUrl]) : []
           _sourceList = _list.map(item => {
               if(item.url.toLowerCase() === searchUrl.toLowerCase()) return item
           }).filter(item => item !== undefined).shift()
           console.log('_sourceList', _sourceList)
+        }else if(requireUrl === 'country_breadth_overview') {
+          res.source_list = 'country_breadth_overview'
+          _sourceList = res
         }
         if(!_sourceList || (((_sourceList !== null && typeof _sourceList === 'object' && !Array.isArray(_sourceList)) && Object.keys(_sourceList).length === 0))) {
           // 尝试看在不在 most_popular
@@ -253,6 +260,7 @@ export default {
             return
         }
         }
+        if(sub_type === 'cot' || type === 'country_opt') _sourceList.type = 'Indicator'
         await this.$emit('enLargeTable', _sourceList.source_list, _sourceList)
       /* 如果匹配不到, 使用下面的规则请求个别表单
       ndx_100_complete_list: type: stock_nasdaq

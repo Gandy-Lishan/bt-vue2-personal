@@ -118,7 +118,7 @@
             maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
           }
           let titleColor = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
-          if(sub_type.includes('trend_reltrend')) {
+          if(sub_type && typeof sub_type === 'string' && sub_type.includes('trend_reltrend')) {
             if(serie?.name.includes('Relative')) {titleColor = 'rgb(142, 35, 35)'}
             else if(!serie?.name.includes('Relative') && serie?.name.includes('Trend')) {titleColor = '#2f7ed8'}
           }
