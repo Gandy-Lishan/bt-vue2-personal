@@ -1489,7 +1489,7 @@ export default {
               key: 'chart_name',
               label: 'Name',
               value: 'chart_name',
-              minWidth: '250px'
+              minWidth: '220px'
             },
             {
               key: 'symbol',
@@ -1498,28 +1498,28 @@ export default {
             },
             {
               key: 'last_value',
-              label: 'Last Value',
+              label: 'Last<br/>Value',
               value: 'last_value'
             },
             {
               key: 'last_update',
-              label: 'Last Update',
+              label: 'Last<br/>Update',
               value: 'last_update',
               minWidth: '90px'
             },
             {
               key: 'three_year_max',
-              label: '3-Year Max',
+              label: '3-Year<br/>Max',
               value: 'three_year_max'
             },
             {
               key: 'three_year_min',
-              label: '3-Year Min',
+              label: '3-Year<br/>Min',
               value: 'three_year_min'
             },
             {
               key: 'three_year_min',
-              label: '3-Year Min',
+              label: '3-Year<br/>Min',
               value: 'three_year_min'
             },
             {
