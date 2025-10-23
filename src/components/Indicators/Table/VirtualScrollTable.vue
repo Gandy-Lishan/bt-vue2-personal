@@ -1603,7 +1603,7 @@ export default {
           [
             {
               key: 'chart_name',
-              label: '',
+              label: 'Name',
               value: 'chart_name',
               minWidth: '150px',
               type: 'GlobalBreadthOverview'
@@ -1955,7 +1955,7 @@ export default {
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
-      if(this.type === 'GlobalBreadthOverview') simplifiedColumnsKeys = ['chart_name']
+      if(this.type === 'GlobalBreadthOverview') simplifiedColumnsKeys = ['chart_name', 'All Countries', 'Developed Markets', 'Emerging Markets']
       if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key)).map(item=>{
         if(item.key === 'chart_name' && !isStockTrend) item.minWidth = '200px'
         return item
