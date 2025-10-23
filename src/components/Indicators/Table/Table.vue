@@ -88,9 +88,9 @@ export default {
         ETFShares: 'shares_outstanding',
         popular: 'most_popular',
         commodity: 'commodity_complete_list',
+        CHMinMax: 'cot_max_min',
         cssScreen: 'commod_sentiment_seasonality',
         cstScreen: 'commod_optix_trend',
-        CHMinMax: 'cot_max_min',
         CRP: 'crypt_complete_list',
         TSCRP: 'crp',
         RTSCRP: 'crp&rel_trend=1',
@@ -98,7 +98,11 @@ export default {
         GlobalIndexBreadth: 'country_breadth',
         CryptoCurrencyBreadth: 'crypto_breadth',
         SectorTrendRelTrend: 'sector_trend_reltrend',
-        macroeconomic: 'macro_indicator_list'
+        macroeconomic: 'macro_indicator_list',
+        GlobalBreadthOverview: 'country_breadth_overview',
+        CCSOverview: 'commod_spotlight',
+        ETFSectorOverview: 'sector_spotlight',
+        ETFCountryOverview: 'country_spotlight'
       },
       firstRow: {},
       blog_results_length: 0,

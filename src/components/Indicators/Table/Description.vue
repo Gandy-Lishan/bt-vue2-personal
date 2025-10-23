@@ -202,7 +202,21 @@
               and then select the columns you wish to sort by.</p>
           </div>
         </div>
-        <div class="col-md-3 thumbnail" v-show="!((enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList'].includes(checkedType)))">
+        <div class="des" v-else-if="enlarged === 'Overview' && checkedType === 'GlobalBreadthOverview'">
+          <p>This summary page presents an overview of our 35 global breadth indicators, derived from 45 worldwide indexes and categorized by all countries, developed markets, emerging markets, and regions. These global breadth indicators provide investors with a comprehensive view of market participation across different geographies, enabling them to identify which global areas display relative strength or weakness. By analyzing these indicators, investors can gain insights into regional leadership trends, detect shifts in market momentum, and make more informed decisions regarding global asset allocation.</p>
+          <p>The color-coded cells are hyperlinks that direct users to a chart, allowing them to analyze historical trends and test concepts using our backtest engine.</p>
+          <p>You can explore more details on these regional indicators by viewing the <a href="https://users.sentimentrader.com/users/country_breadth/">Global Index Breadth</a></p>
+        </div>
+        <div class="des" v-else-if="enlarged === 'Overview' && (checkedType === 'CCSOverview')">
+          <p>This page displays thumbnail charts for Currency & Commodity Optimism Index 5-Day Moving Averages. The chart titles are hyperlinks...click to be taken to the main chart page.Note: If page is blank, give it a second to load</p>
+        </div>
+        <div class="des" v-else-if="enlarged === 'Overview' && (checkedType === 'ETFSectorOverview')">
+          <p>This page displays thumbnail charts for Sector ETF Optimism Index 10-Day Moving Averages. The chart titles are hyperlinks...click to be taken to the main chart page.Note: If page is blank, give it a second to load</p>
+        </div>
+        <div class="des" v-else-if="enlarged === 'Overview' && (checkedType === 'ETFCountryOverview')">
+          <p>This page displays thumbnail charts for Country ETF Optimism Index 10-Day Moving Averages. The chart titles are hyperlinks...click to be taken to the main chart page.Note: If page is blank, give it a second to load</p>
+        </div>
+        <div class="col-md-3 thumbnail" v-show="!(((enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto')) && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList'].includes(checkedType))) && enlarged !== 'Overview'">
         <div style="text-align: center; font-size: 18px; font-weight: 300">
           <span>Optimism/Pessimism Legend</span>
         </div>
