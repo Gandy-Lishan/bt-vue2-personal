@@ -107,12 +107,12 @@
 				<template slot="header">
 							<span v-html="l.labelHtml"></span>
 							<template v-if="currTabPage === 'OptionScanner'">
-									<el-tooltip effect="dark" placement="top" style="display: inline">
+								<el-tooltip effect="dark" placement="top" style="display: inline">
 										<span slot="content" v-html="textContent['Symbol']"></span>
-									<i class="fa fa-question-circle right" aria-hidden="true"></i>
+										<i class="fa fa-question-circle right" aria-hidden="true"></i>
 								</el-tooltip>
 							</template>
-					</template>
+				</template>
 					<template slot-scope="scope">
 						<span v-if="currTabPage === 'OptionScanner'">
 							{{ scope.row[l.value] }}

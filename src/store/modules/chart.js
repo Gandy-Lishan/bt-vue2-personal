@@ -829,6 +829,10 @@ get_indicator_page_btv1_list({ commit, state }) {
 					'etf_foreign', 'etf_foreign&rel_trend=1',
 					'etf_other', 'etf_other&rel_trend=1'
 				].some(subUrl => url === subUrl)) requestUrl = `trend_reltrend?index=${url}`
+				if([
+					'commod_spotlight', 'sector_spotlight', 'country_spotlight'
+				].some(subUrl => url === subUrl)) requestUrl = `spot_light_overview/?spot_light_type=${url}`
+				if(requestUrl === 'country_breadth_overview') requestUrl = 'country_breadth_overview/'
 				let response = await obtainIndicatorsList(requestUrl);
 				let _results = response.data || []
 				if(url.includes('sector_trend_reltrend')) {
@@ -843,6 +847,31 @@ get_indicator_page_btv1_list({ commit, state }) {
         if(!state.indicatorPageBtv1List.length) await dispatch('get_indicator_page_btv1_list')
         if(!state.favoriteIndicatorList.length) await dispatch('get_favorite')
         console.log('commod_sentiment_seasonality', _results)
+		if(requestUrl === 'country_breadth_overview/') {
+			const result_tmp = _results.reduce((acc, item) => {
+				// Initialize the chart_name entry if it doesn't exist in the accumulator
+				if (!acc[item.chart_name]) {
+					acc[item.chart_name] = { chart_name: item.chart_name };
+				}
+			
+				// Add the country value and URL, appending the URL with "_url"
+				acc[item.chart_name][item.country] = item.last_value;
+				acc[item.chart_name][`${item.country}_url`] = item.url;
+				acc[item.chart_name]['url'] = item.type_url
+			
+				return acc;
+			}, {})
+			_results = Object.values(result_tmp)
+			console.log('lishan _results', _results)
+		}else if([
+			'commod_spotlight', 'sector_spotlight', 'country_spotlight'
+		].some(subUrl => url === subUrl)) {
+			_results = _results.map(item => {
+				item.url = item.chart_id
+				item.chart_name = item.title
+				return item
+			})
+		}
 								_results = _results.map(obj => {
 										for (const key in obj) {
 												if (Object.hasOwnProperty.call(obj, key)) {
@@ -969,6 +998,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 										const M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1) + '-'
 										const D = (date.getDate()< 10 ? '0'+date.getDate():date.getDate())
 										obj['last_update'] = Y+M+D
+										if(obj['net_position']) obj['net_position'] = unifyNumber(obj['net_position'], 2)
 									}
 									if(key === 'chart_url' && (url === 'commod_sentiment_seasonality' || url === 'commod_optix_trend' || url === 'cot_max_min')) obj['url'] = obj[key]
 									const isInBtv1List = state.indicatorPageBtv1List.find(item => (item.url === obj['url']))

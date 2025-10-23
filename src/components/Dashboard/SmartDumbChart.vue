@@ -39,6 +39,7 @@ import ExportData from 'highcharts/modules/export-data';
 import { getSmartDumbSentiment, getPairDataDashboard } from '@/service/service'
 import moment from 'moment';
 import { LocalStorageUtil, isJson, isObject } from '@/utils'
+const debounce = require('lodash/debounce')
 
 Exporting(Highcharts);
 ExportData(Highcharts);
@@ -70,6 +71,17 @@ export default {
       console.log('lishanthis.dashBoardData.data', this.dashBoardData)
       return this.dashBoardData.data
     }
+  },
+   mounted() {
+    // Add the resize event listener with debounce
+    window.addEventListener(
+      "resize",
+      debounce(this.handleResize, 200) // 200ms debounce delay
+    );
+  },
+  beforeDestroy() {
+    // Clean up the event listener when the component is destroyed
+    window.removeEventListener("resize", this.handleResize);
   },
   watch: {
     dashBoardData(data) {
@@ -155,6 +167,13 @@ export default {
     LocalStorageUtil.set('jumpBacktestData', jumpBacktestData)
     window.open('/backtester/sr/setup', '_blank');
    },
+   handleResize() {
+      // Ensure the chart is only redrawn once every 200ms (adjust the time as necessary)
+      this.$nextTick(() => {
+        this.$refs.chartContainer// This will resize the chart to fit its container
+        console.log('this.$refs.chartContainer', this.$refs.chartContainer)
+      });
+  },
     setupChart() {
       Highcharts.chart(this.$refs.chartContainer, {
         chart: {
@@ -364,6 +383,9 @@ export default {
     display: block;
     float: none;
     margin: 10px 0px 0px 0px;
+  }
+  .highcharts-chart-container {
+    min-width: auto;
   }
 }
 </style>

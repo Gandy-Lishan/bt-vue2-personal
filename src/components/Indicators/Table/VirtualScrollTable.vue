@@ -24,7 +24,7 @@
     <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated && !showConstituentConditions) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}
-          <i v-show="(checkedType  == item.value) && isShowFilter" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
+          <i v-show="(checkedType  == item.value) && isShowFilter && !isOverview" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
         </span>
       </template>
     </div>
@@ -160,7 +160,7 @@
     </el-row>
   </div>
   <virtual-scroll
-      v-if="checkedType !== 'TrendSector'"
+      v-if="checkedType !== 'TrendSector' && checkedType !== 'CCSOverview' && checkedType !== 'ETFSectorOverview' && checkedType !== 'ETFCountryOverview'"
       :ref="refName"
       :data="filterData"
       :item-size="itemSize"
@@ -202,7 +202,7 @@
               </template>
             </div>
           </template> -->
-          <el-table-column align="center" width="35px" v-if="!showRelated && !showConstituentConditions">
+          <el-table-column align="center" width="35px" v-if="!showRelated && !showConstituentConditions && type !== 'GlobalBreadthOverview'">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorite indicators" :loading="scope.row.loading"></el-button>
@@ -219,15 +219,20 @@
               :min-width="l.minWidth"
               :max-width="l.maxWidth"
               :width="l.width"
-              sortable="custom"
+              :sortable="l.type !== 'GlobalBreadthOverview' ? 'custom' : false"
               :align="['chart_name', 'market_symbol'].includes(l.value) ? 'left' : 'center'"
             >
             <template #header>
-              <span v-html="`${l.label}${(cssMonthLabel && l.value == 'AvgReturn') ? ` ${cssMonthLabel}` : ''}`"></span>
+								<span v-html="`${l.label}${(cssMonthLabel && l.value == 'AvgReturn') ? ` ${cssMonthLabel}` : ''}`"></span>
+                <el-tooltip v-if="l.labelTooltips" effect="dark" placement="top" style="display: inline">
+                    <span slot="content" v-html="`${l.labelTooltips}`"></span>
+										<i class="fa fa-question-circle right" aria-hidden="true"></i>
+								</el-tooltip>
             </template>
             <template slot-scope="scope">
-              <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SP1500Score') || (l.value === 'market_symbol' && l.type === 'SP1500Score')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
+              <el-button class="chart-name-btn" type="text" v-if="(l.value === 'chart_name' && l.type !== 'SP1500Score' && l.type !== 'GlobalBreadthOverview') || (l.value === 'market_symbol' && l.type === 'SP1500Score')" size="mini" @click="updateChart(scope.row)">{{ scope.row[l.value] }}</el-button>
               <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
+              <!-- <a v-else-if="l.link" :href="`/indicators?indicator=${scope.row[`${l.value}_url`]}`" target="_blank">{{ scope.row[l.value] }}</a> -->
               <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 90px;"/>
               <span v-else>{{ scope.row[l.value] }}</span>
 					  </template>
@@ -245,10 +250,11 @@
         <img style="height: 300px; width: 100%;" :src="hoveredImage" v-if="showImg" :alt="hoveredChartName"  @load="onLoad" @error="onError"/>
       </div>
   </virtual-scroll>
+  <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged" @trendScoreTableDate="trendScoreTableDate"></TrendScoreTable>
+  <OverViewChart v-if="(checkedType === 'CCSOverview' || checkedType === 'ETFSectorOverview' || checkedType === 'ETFCountryOverview')" :enlarged="enlarged" :filterData="filterData"></OverViewChart>
   <div :class="{'dataTables_info': true, 'dataTables__trendscore_info': isStockTrend, 'trend-score-range-rank': condition === 'rangeRank'}" v-if="(enlarged && pageLength && (checkedType !== 'TrendSector'))">
     {{`Showing 1 to ${pageLength} of ${pageLength} entries`}}
   </div>
-  <TrendScoreTable v-if="checkedType === 'TrendSector'" :enlarged="enlarged" @trendScoreTableDate="trendScoreTableDate"></TrendScoreTable>
 </div>
 </template>
 
@@ -256,6 +262,7 @@
 import VirtualScroll from 'el-table-virtual-scroll'
 import ElTableInfiniteScroll from 'el-table-infinite-scroll'
 import TrendScoreTable from "./TrendScoreTable";
+import OverViewChart from "./OverViewChart";
 import { mapGetters, mapActions } from 'vuex'
 import { isJson } from '@/utils'
 import { getIndicatorsRowData, postUserWatchlist, deleteUserWatchlist } from "@/service/service";
@@ -285,7 +292,8 @@ export default {
   },
   components: {
     VirtualScroll,
-    TrendScoreTable
+    TrendScoreTable,
+    OverViewChart
   },
   inject: ['toggleEnlarge', 'removeIndicatorsFavorites', 'checkedOption', 'enLargeTableFromIndex', 'enterOrExitFullScreenTrendScorePage'],
   data() {
@@ -1509,6 +1517,21 @@ export default {
               label: '3-Year Min',
               value: 'three_year_min'
             },
+            {
+              key: 'three_year_min',
+              label: '3-Year Min',
+              value: 'three_year_min'
+            },
+            {
+              key: 'net_position',
+              label: 'Positioning<br/>Z-Score',
+              labelTooltips: `This score shows how extreme the current net position is relative to its 3-year history.<br/>
+              It is calculated as: (Current Position - 3-Year Average) / 3-Year Standard Deviation.For example,<br/>
+              a score of +1.0 means the current position is one standard deviation more bullish than the 3-year average,<br/>
+              while a score of -1.0 means it is one standard deviation more bearish.<br/>
+              Scores above +2 or below -2 are considered highly extreme.`,
+              value: 'net_position'
+            },
           ]
         ],
         ['researchColumns', 
@@ -1573,6 +1596,83 @@ export default {
               label: 'Sentiment',
               value: 'sentiment',
               minWidth: '100px'
+            }
+            ]
+        ],
+        ['GlobalBreadthOverviewColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: '',
+              value: 'chart_name',
+              minWidth: '150px',
+              type: 'GlobalBreadthOverview'
+            },
+            {
+              key: 'All Countries',
+              label: 'All<br/>Countries',
+              value: 'All Countries',
+              link: true
+            },
+            {
+              key: 'Developed Markets',
+              label: 'Developed<br/>Markets',
+              value: 'Developed Markets',
+              link: true
+            },
+            {
+              key: 'Emerging Markets',
+              label: 'Emerging<br/>Markets',
+              value: 'Emerging Markets',
+              link: true
+            },
+            {
+              key: 'Asia Pacific',
+              label: 'Asia<br/>Pacific',
+              value: 'Asia Pacific',
+              link: true
+            },
+            {
+              key: 'Europe',
+              label: 'Europe',
+              value: 'Europe',
+              link: true
+            },
+            {
+              key: 'South America',
+              label: 'South<br/>America',
+              value: 'South America',
+              link: true
+            }
+            ]
+        ],
+        ['CCSOverviewColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '150px'
+            }
+            ]
+        ],
+        ['ETFSectorOverviewColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '150px'
+            }
+            ]
+        ],
+        ['ETFCountryOverviewColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '150px'
             }
             ]
         ],
@@ -1855,6 +1955,7 @@ export default {
       if(this.checkedType === 'ETFSeasonality') simplifiedColumnsKeys = ['chart_name', 'win_rate', 'avg_return', 'last_update']
       if(this.checkedType === 'cssScreen' || this.checkedType === 'cstScreen') simplifiedColumnsKeys = ['chart_name', 'name', 'last_value', 'last_update']
       if(this.checkedType === 'CHMinMax') simplifiedColumnsKeys = ['chart_name', 'symbol', 'last_value', 'last_update']
+      if(this.type === 'GlobalBreadthOverview') simplifiedColumnsKeys = ['chart_name']
       if(!this.enlarged) return columns.filter(item => simplifiedColumnsKeys.includes(item.key)).map(item=>{
         if(item.key === 'chart_name' && !isStockTrend) item.minWidth = '200px'
         return item
@@ -2033,7 +2134,10 @@ export default {
       return ['TSCRP', 'RTSCRP'].includes(this.checkedType)
     },
     isShowFilter() {
-      return this.enlarged && (!this.showReport && !this.showRelated && !this.showConstituentConditions && (this.checkedType !== 'TrendSector'))
+      return this.enlarged && (!this.showReport && !this.showRelated && !this.showConstituentConditions && (this.checkedType !== 'TrendSector') && !['CCSOverview', 'ETFSectorOverview', 'ETFCountryOverview'].includes(this.checkedType))
+    },
+    isOverview() {
+      return ['CCSOverview', 'ETFSectorOverview', 'ETFCountryOverview'].includes(this.checkedType)
     }
   },
   watch: {
@@ -2385,7 +2489,7 @@ export default {
               return
             }
           }
-          const {type, groups, sub_type} = res
+          const {type, groups, sub_type, chart_url} = res
           let requireUrl = ''
           if(type === 'stock_nasdaq') {
             requireUrl = 'ndx_100_complete_list'
@@ -2423,6 +2527,8 @@ export default {
             requireUrl = 'crypto_breadth'
           }else if(groups === 'macroeconomic') {
             requireUrl = 'macro_indicator_list'
+          }else if(typeof chart_url === 'string' && chart_url.startsWith('cot_')) {
+            requireUrl = 'cot_max_min'
           }
           if(!requireUrl) return
           await this.fetchIndicatorsPageList(requireUrl)
@@ -2548,7 +2654,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend', 'trend_count_8_or_more', 'trend_count_less_8', 'trend_count_2_or_less', 'reltrend_count_8_or_more', 'reltrend_count_less_8', 'reltrend_count_2_or_less', 'rsr_rank10', 'rsr_rank21', 'rsr_rank42', 'rsr_rank63', 'rsr_rank84', 'rsr_rank126'].indexOf(colName) !== -1) {
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend', 'trend_count_8_or_more', 'trend_count_less_8', 'trend_count_2_or_less', 'reltrend_count_8_or_more', 'reltrend_count_less_8', 'reltrend_count_2_or_less', 'rsr_rank10', 'rsr_rank21', 'rsr_rank42', 'rsr_rank63', 'rsr_rank84', 'rsr_rank126', 'All Countries', 'Developed Markets', 'Emerging Markets', 'Asia Pacific', 'Europe', 'South America'].indexOf(colName) !== -1) {
           if (sortingOrder == 'ascending') {
               this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
@@ -2717,6 +2823,11 @@ export default {
           type: 'commodity'
         },
         {
+          label: 'Commodity Hedgers - 3-year Min/Max',
+          value: 'cot_max_min',
+          type: 'CHMinMax'
+        },
+        {
           label: 'Most Active ETF Sentiment',
           value: 'etf_complete_list',
           type: 'ETFSector'
@@ -2806,7 +2917,13 @@ export default {
           value: 'macro_indicator_list',
           type: 'macroeconomic'
         },
+        {
+          label: 'Global Breadth Overview',
+          value: 'country_breadth_overview',
+          type: 'GlobalBreadthOverview'
+        },
       ]
+      debugger
       const type = checks.find(item => item.type === this.checkedType)?.value
       if(!type) return
       let data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
@@ -2835,7 +2952,7 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
-      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Sub Type', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change']
+      let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Sub Type', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 'Net Position']
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
       if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality' || type === 'index_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
       let keysMap = new Map([
@@ -2861,7 +2978,7 @@ export default {
       if(type === 'commod_sentiment_seasonality' || type === 'commod_optix_trend') {keysMap.set('chart_name', 'Optix');keysMap.set('name', 'Name');keysMap.set('last_value', 'Optix Value');}
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
       if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
-      if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');}
+      if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');keysMap.set('net_position', 'Net Position');}
       if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list') {
         // Name 放在 Symbol 前面
         if(type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list') keysMap.delete('sub_type');
@@ -3039,7 +3156,18 @@ export default {
       if(['etf_domestic', 'etf_foreign', 'etf_other'].includes(type)) keysMap.delete('sector_name')
       keysSort = Array.from(keysMap.values())
       }
-
+      if(type === 'country_breadth_overview') {
+        keysSort = ['Name', 'All Countries', 'Developed Markets', 'Emerging Markets', 'Asia Pacific', 'Europe', 'South America']
+        keysMap = new Map([
+        ['chart_name', 'Name'],
+        ['All Countries', 'All Countries'],
+        ['Developed Markets', 'Developed Markets'],
+        ['Emerging Markets', 'Emerging Markets'],
+        ['Asia Pacific', 'Asia Pacific'],
+        ['Europe', 'Europe'],
+        ['South America', 'South America']
+      ])
+      }
 			const processedData = data.map(item => {
         const obj = {}
         const itemKeys = Array.from(Object.keys(item))
@@ -3061,7 +3189,7 @@ export default {
       debugger
       const category = checks.find(item => item.value === type)
       if(!['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.label
-      if(['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.name
+      if(['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.name || category.label
       const _keySort = Array.from(Object.keys(sortedArray[0]))
       let csvContent = sortedArray.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
       csvContent = `${_keySort.join(',')}\n${csvContent}`;
