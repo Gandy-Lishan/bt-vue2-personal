@@ -442,6 +442,12 @@ try {
 							}
 						}
 					}
+          if((item.analysis === 'Sentiment' || item.analysis === 'User') && !item.hasOwnProperty('extreme_optimism')) {
+						item['extreme_optimism'] = ''
+					}
+					if((item.analysis === 'Sentiment' || item.analysis === 'User') && !item.hasOwnProperty('extreme_pessimism')) {
+						item['extreme_pessimism'] = ''
+					}
 				})
 			}
 			const findSignal = (item, index) => {
@@ -593,6 +599,7 @@ try {
 			};
 
 			const processSignals = (signals) => {
+        debugger
         if(typeof signals === 'string') {
           signals = signals.replace(/^"+|"+$/g, '')
           signals = signals.replace(/'/g, '"')
