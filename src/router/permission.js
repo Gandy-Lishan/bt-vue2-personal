@@ -179,13 +179,13 @@ export function setRouterPermission(router) {
 
 				
 				// 全部权限 everything
-				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium'))) {
+				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) {
 					next()
 				}
-				// 全部权限 Scanner 除外: essential, research
-				else if(access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) {
-					if(to.path.includes('/scannerai')) next('/dashboard')
-				}
+				// // 全部权限 Scanner 除外: essential, research
+				// else if(access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) {
+				// 	if(to.path.includes('/scannerai')) next('/dashboard')
+				// }
 				// 全部权限 除了 Reports 页面: datalite
 				else if(access_level.some(str => str.includes('datalite'))) {
 					if(to.path.includes('/MR')) next('/dashboard')
