@@ -254,7 +254,7 @@ export default {
       debugger
 				this.loading = true
         if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
-        let res = await getMySignalsList(`/dev/mysignal_app/get_mysignal_records${tab === 'Sample' ? '?sample=1' : ''}`)
+        let res = await getMySignalsList(`/dev/mysignal_app/get_mysignal_records${tab === 'Sample' ? '?sample=2' : ''}`)
         let {data: results, status} = res
         console.log('results', res)
         const parseJsonOrString = (value) => {
@@ -550,7 +550,7 @@ export default {
 .el-table /deep/ tr.el-table__row.highlighted{
   background-color: yellow !important;
 }
-@media (max-width: 1200px) {
+@media (max-width: 992px) {
   .el-input-group {
     width: 100%;
   }
