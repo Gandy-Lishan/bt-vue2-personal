@@ -442,6 +442,12 @@ try {
 							}
 						}
 					}
+          if((item.analysis === 'Sentiment' || item.analysis === 'User') && !item.hasOwnProperty('extreme_optimism')) {
+						item['extreme_optimism'] = ''
+					}
+					if((item.analysis === 'Sentiment' || item.analysis === 'User') && !item.hasOwnProperty('extreme_pessimism')) {
+						item['extreme_pessimism'] = ''
+					}
 				})
 			}
 			const findSignal = (item, index) => {
@@ -593,6 +599,12 @@ try {
 			};
 
 			const processSignals = (signals) => {
+        debugger
+        if(typeof signals === 'string') {
+          signals = signals.replace(/^"+|"+$/g, '')
+          signals = signals.replace(/'/g, '"')
+          signals = isJson(signals) ? JSON.parse(signals) : signals
+        }
 				return Array.isArray(signals) ? [...signals
 					.filter(item => typeof item.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(item.code))
 					.map(value => signalCode.decode(value.code)), ...signals.filter(item => (!('code' in item) && (typeof item === 'object')))] : []
