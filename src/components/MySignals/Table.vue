@@ -188,7 +188,21 @@ export default {
       btnLoading: false,
       pageSize: 10,
       total: 0,
-      tableCol: [
+      tableData: [],
+      isShowLastSignalDate: false,
+      textContent: `Click this button to sort the list in ascending or descending order based on the signals' creation date. <br/>This helps you quickly find the most recently or earliest created signals'. Click again to toggle the sorting direction.`
+    }
+  },
+  computed: {
+		// Filtered and paginated data to be displayed in the table
+		paginatedData() {
+			const startIndex = (this.currentPage - 1) * this.pageSize;
+			const endIndex = startIndex + this.pageSize;
+			// 当checkbox未勾选时，返回原始数据
+			return this.filterData?.slice(startIndex, endIndex);
+		},
+    tableCol() {
+      const _tableCol =  [
         {
           label: 'Name',
           value: 'name',
@@ -218,20 +232,17 @@ export default {
           key: 'last_signal_date',
           width: '190px'
         }
-      ],
-      tableData: [],
-      isShowLastSignalDate: false,
-      textContent: `Click this button to sort the list in ascending or descending order based on the signals' creation date. <br/>This helps you quickly find the most recently or earliest created signals'. Click again to toggle the sorting direction.`
+      ]
+      if(this.currentPageTab === 'Sample') return [
+        ..._tableCol,
+        {
+          label: 'Category',
+          value: 'category',
+          key: 'category'
+        }
+      ]
+      return _tableCol
     }
-  },
-  computed: {
-		// Filtered and paginated data to be displayed in the table
-		paginatedData() {
-			const startIndex = (this.currentPage - 1) * this.pageSize;
-			const endIndex = startIndex + this.pageSize;
-			// 当checkbox未勾选时，返回原始数据
-			return this.filterData?.slice(startIndex, endIndex);
-		},
 	},
   watch: {
     tableData: {
@@ -283,6 +294,14 @@ export default {
             item.rerunLoading = false
             item.last_signal_date = item.lastdate === '2099-12-31' ? '' : item.lastdate
             item.description = parseJsonOrString(item.description)
+            if(tab === 'Sample'){
+              if(typeof item.signal_info === 'string') {
+                item.signal_info = item.signal_info.replace(/^"+|"+$/g, '')
+                item.signal_info = item.signal_info.replace(/'/g, '"')
+                item.signal_info = isJson(item.signal_info) ? JSON.parse(item.signal_info) : item.signal_info
+              }
+              item.category = item.signal_info.category
+            }
 						return item
 					})
 					this.tableData = results
@@ -361,7 +380,7 @@ export default {
         });
       }
 			// 字符串类型排序
-			if(['name','symbol','timeframe'].indexOf(colName) !== -1){
+			if(['name','symbol','timeframe', 'category'].indexOf(colName) !== -1){
 				if(sortingOrder == 'descending'){
 					this.filterData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
 				}else if(sortingOrder == 'ascending'){
