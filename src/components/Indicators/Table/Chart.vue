@@ -34,7 +34,7 @@
     async renderChart() {
       if(!this.row.url) return;
       const _this = this
-      const {url, pess, opt, chart_name, market_symbol, type, sub_type} = this.row
+      let {url, pess, opt, chart_name, market_symbol, type, sub_type} = this.row
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -118,7 +118,7 @@
             maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
           }
           let titleColor = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
-          if(sub_type.includes('trend_reltrend')) {
+          if(sub_type && typeof sub_type === 'string' && sub_type.includes('trend_reltrend')) {
             if(serie?.name.includes('Relative')) {titleColor = 'rgb(142, 35, 35)'}
             else if(!serie?.name.includes('Relative') && serie?.name.includes('Trend')) {titleColor = '#2f7ed8'}
           }
@@ -473,6 +473,7 @@
       let zoonsData = [];
       console.log('this.row', this.row)
       let originalData
+      if(this.row.source_list === 'country_breadth_overview' && !this.row.clickSource) url = 'breadth_all_country_above_10ma'
       try {
         const res = await axios.get(`https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/get_data?index=${url || 'etf_spy'}`);
         originalData = res.data

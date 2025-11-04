@@ -12,31 +12,27 @@ import "highcharts/modules/exporting";
 
 export default {
  props: {
-  chart: Object
+  chart: Object,
+  enlarged: Boolean
  },
  data() {
    return {
    };
  },
- mounted() {
-  this.renderChart(this.chart);
- },
+watch: {
+  chart: {
+    handler(chart){
+      if(chart.data && Array.isArray(chart.data)) {
+        this.renderChart(this.chart);
+      }
+    },
+    deep: true
+  },
+  enlarged() {
+    this.renderChart(this.chart)
+  }
+},
  methods: {
-   loadChart() {
-     const urls = [
-       { key: "country_ewa", url: "/users/country_spotlight.json" },
-       { key: "po_pound", url: "/users/commod_spotlight.json" },
-       { key: "etf_xlb", url: "/users/sector_spotlight.json" },
-       { key: "model_score_int", url: "/users/dashboard_spotlight.json" }
-     ];
-
-     for (const { key, url } of urls) {
-       if (typeof window[key] !== "undefined") {
-         this.fetchChartData(url);
-         break; // 只加载第一个找到的图表
-       }
-     }
-   },
    renderChart(chart) {
      const chartData = chart.data.map((value) => [new Date(value[0]).getTime(), value[1]]);
 

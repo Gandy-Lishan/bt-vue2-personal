@@ -17,12 +17,12 @@
          :style="{ 
               'display': (enlargedTable === item.label || enlargedTable === null) && !isShowDetails ? 'block' : 'none' 
           }"
-          :class="{'indicators-table': true, 'TrendSector': enlargedTable === item.label && checkedType === 'TrendSector'}"
+          :class="{'indicators-table': true, 'TrendSector': ((enlargedTable === item.label && checkedType === 'TrendSector') || (enlargedTable === item.label && isOverview))}"
          ></Table>
       </template>
       <!-- 点击之后详情页放在这里 -->
       <Details class="details-container" v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :id="'indiChart'"  v-if="enlargedTable !== null && displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector'" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
+      <Chart :id="'indiChart'"  v-if="enlargedTable !== null && (displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector')" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
       <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px' }"></SeasonalityChart>
       <AboutUs></AboutUs>
     </div>
@@ -189,6 +189,12 @@ export default {
               value: 'commodity',
               type: 'commodity',
               url: 'commodity_complete_list'
+            },
+            {
+              label: 'Commodity Hedgers - 3-year Min/Max',
+              value: 'CHMinMax',
+              type: 'CHMinMax',
+              url: 'cot_max_min'
             }
           ]
         },
@@ -252,6 +258,39 @@ export default {
             // },
           ]
         },
+        {
+          label: 'Overview',
+          type: 'GlobalBreadthOverview',
+          refName: 'overviewVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'Global Breadth Overview',
+              value: 'GlobalBreadthOverview',
+              type: 'overview',
+              url: 'country_breadth_overview'
+            },
+            {
+              label: 'Currency & Commodity Sentiment Overview',
+              value: 'CCSOverview',
+              type: 'overview',
+              url: 'commod_spotlight'
+            },
+            {
+              label: 'ETF Sector Overview',
+              value: 'ETFSectorOverview',
+              type: 'overview',
+              url: 'sector_spotlight'
+            },
+            {
+              label: 'ETF Country Overview',
+              value: 'ETFCountryOverview',
+              type: 'overview',
+              url: 'country_spotlight'
+            }
+          ]
+        }
         // {
         //   label: 'Absolute and Relative Trend Scores',
         //   type: 'SP500Score',
@@ -350,7 +389,13 @@ export default {
   computed: {
     ...mapGetters({
       indicatorsListData: 'getIndicatorsPageListData'
-    })
+    }),
+    isOverview() {
+      return ['CCSOverview', 'ETFSectorOverview', 'ETFCountryOverview'].includes(this.checkedType)
+    },
+    showChart() {
+      return this.enlargedTable !== null && (this.displayRow && this.displayRow.type && !this.displayRow?.type.includes('seasonality') && this.checkedType !== 'TrendSector')
+    }
   },
   mounted() {
     if(this.$route.fullPath.includes('?enlarge=stock')) {
