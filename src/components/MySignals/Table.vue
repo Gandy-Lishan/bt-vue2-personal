@@ -39,6 +39,16 @@
 			style="width: 100%; height: 100%; margin: 0 auto;"
       :row-class-name="tableRowClassName"
 		>
+    <el-table-column type="expand" v-if="currentPageTab === 'Sample'">
+				<template slot-scope="scope">
+					<div class="expandArea">
+					<div class="urlBox">
+						<span>Analyst Report URL: </span>
+						<el-link :underline="false" :href="scope.row.report_url" target="_blank" type="primary">{{scope.row.report_url}}</el-link>
+					</div>
+					</div>
+				</template>
+		</el-table-column>
 			<template v-for="(l) in tableCol">
         <el-table-column
           v-if="l.key === 'description'"
@@ -301,6 +311,7 @@ export default {
                 item.signal_info = isJson(item.signal_info) ? JSON.parse(item.signal_info) : item.signal_info
               }
               item.category = item.signal_info.category
+              item.report_url = item.signal_info.report_url
             }
 						return item
 					})
@@ -582,6 +593,13 @@ export default {
   }
   /deep/ .el-button--small, .el-button--small.is-round {
     width: 100%;
+  }
+}
+.urlBox {
+  span:first-child {
+    font-weight: 600;
+    color: #000000;
+    margin-right: 5px;
   }
 }
 </style>
