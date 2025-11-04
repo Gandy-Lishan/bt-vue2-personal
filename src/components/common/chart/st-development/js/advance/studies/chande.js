@@ -147,6 +147,8 @@ if (!CIQ.Studies) {
 		sd.cmo.inputs = { Field: field };
 		sd.cmo.startFrom = sd.startFrom;
 		sd.cmo.outputs = { _CMO: null };
+			// dual symbol new features
+			sd.cmo.parameters = sd.parameters
 		CIQ.Studies.calculateChandeMomentum(stx, sd.cmo);
 
 		var offset = parseInt(sd.inputs.Offset, 10);
