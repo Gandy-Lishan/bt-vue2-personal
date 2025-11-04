@@ -110,6 +110,7 @@ export default {
     else if(this.serviceType.toLowerCase() === 'quantedge' || this.serviceType.toLowerCase() === 'kaeppelscorner') return 'archives/quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'archives/modeledge';
     else if(this.serviceType.toLowerCase() === 'tradingedge') return 'archives/tradingedge';
+    else if(this.serviceType.toLowerCase() === 'impactedge') return 'archives/impactedge';
     else return this.serviceType.toLowerCase();
    },
    start_date() {

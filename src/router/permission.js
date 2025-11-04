@@ -45,12 +45,12 @@ export function setRouterPermission(router) {
 			// hao@sentimentrader
 			// const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 			// reports 权限
-			const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdQrcuNNKjaFjCDJpptbkKEBBGDtuUiNycG03w9h1VkezpvTm0BdvYrnHrJbQm8XdjDG75olOAHnLoIzuBhH95QQh9lQK52awOyIAnQ55MrzxDroVR6gZhkF/lWfNUwC2dgagWW04VYkeLys1phd3Yifupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6DFMSvHKMNTeEVXtvptbBy2eqB1l3OX5WjCbfJJFtkotn4LL1LUML6evLgl6Tdr+zBBGDtuUiNycG03w9h1Vke5Pi4P3OVvyNrt7/sdPUBdPk9hdfGaP97xE2my/HuAne"
+			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdQrcuNNKjaFjCDJpptbkKEBBGDtuUiNycG03w9h1VkezpvTm0BdvYrnHrJbQm8XdjDG75olOAHnLoIzuBhH95QQh9lQK52awOyIAnQ55MrzxDroVR6gZhkF/lWfNUwC2dgagWW04VYkeLys1phd3Yifupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6DFMSvHKMNTeEVXtvptbBy2eqB1l3OX5WjCbfJJFtkotn4LL1LUML6evLgl6Tdr+zBBGDtuUiNycG03w9h1Vke5Pi4P3OVvyNrt7/sdPUBdPk9hdfGaP97xE2my/HuAne"
 			// daniel@sentimentrader.com
 
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdEMzpmhxCv6gNShtTcDmbal9HogiBIRYhxP9M5JqBxhvRAoCi9fuRYJjeTsdb0VjwkMB27XTL0g1I3dW7w5v9XL6qlKrueeGC0Uli9jUq0AK3hz2XcFQbELMaMVR3TpMWSl4OV46kBaEQ2+X15NdZRq9pBUXsik/FD8n+xznUaxs3rtxKFbWFMbK9jCJEzgPrUiEHWHKBM5MlWrFsdG08U4TE+l7hXmVyAsAMMv03AduZoAdot4ilWWHEdg3Fzj4Bpeb4MJv9j3/w8hSd47J4Pfupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6hncazwRWKGcmprbtmXVye7J9mNxarng0OJsRRSvDEF8/H719MKJbl9GknLd5DZxGl9HogiBIRYhxP9M5JqBxhrAZERQfwQ5uPEnPN5jrE78M0Y+6xdHCfexMWtmR0Z1r"
 			// research
-			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcsTz91zkuJk2wfg+q3b0AuZ7TqnVlZ+oRDVTXkC+xxcsndEt+m/nzXAA8wNg3qTixCWpQ5tFO+6vuXw29HD/Qjzeu3EoVtYUxsr2MIkTOA+oqCY89P1tKPStOoO0WuQaE3Msh+dNj6oYSTtFVBGzd6/uegvnDWsSxgT3pR04E//OLae8yOOSIc3bX/wOiJzdzU8riAwdq/dT6a7f8kBOph88bzKrmyR1UMnOgNtFA4a1zvnwvimjpeck1akEQaQSjs1fz/4bJtcNzuQ/IHj2LqLfjxa0yPLkhGi8nFeTgyvDu+g9g3YvCp0bQ71M8XgpcNR8g0dUCnZHWKblzhsgNIfIBslxbjFuahhKYKkdyl9vRlLb9S5/DNd/B83Mbl2BybgPEiNj5i+CagFTuPwOJs"
+			const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqcsTz91zkuJk2wfg+q3b0AuZ7TqnVlZ+oRDVTXkC+xxcsndEt+m/nzXAA8wNg3qTixCWpQ5tFO+6vuXw29HD/Qjzeu3EoVtYUxsr2MIkTOA+oqCY89P1tKPStOoO0WuQaE3Msh+dNj6oYSTtFVBGzd6/uegvnDWsSxgT3pR04E//OLae8yOOSIc3bX/wOiJzdzU8riAwdq/dT6a7f8kBOph88bzKrmyR1UMnOgNtFA4a1zvnwvimjpeck1akEQaQSjs1fz/4bJtcNzuQ/IHj2LqLfjxa0yPLkhGi8nFeTgyvDu+g9g3YvCp0bQ71M8XgpcNR8g0dUCnZHWKblzhsgNIfIBslxbjFuahhKYKkdyl9vRlLb9S5/DNd/B83Mbl2BybgPEiNj5i+CagFTuPwOJs"
 			// corelite
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqejoZeS+pZ9xdhKrkTjTWcCFVxWebii4op4cCMiPBV73opZm7ogud2q1OLV96pFi+1K1E2kEHEDRSO73gIBBLzLgUs9px+NQUAhS6QuXGi61iXjPsyCUB+eZRfZ9cmee9jUARkAMoG/B1S8I3Htjb/vX/2j0sHgJbeplV2WSfrwAFMYBj9lCXHXCZ4oXH8hbfJIw0wqaRKd8xXx7SQHKFrhctGlPBiU/NVN+tuzK4g32K5DZib9pJY25o6aMK7uSOwU3Zr6IIsg5Nw1LD/s7dUxArFIVekxyQUKd9epvqDwXyLiaGJI7G1mhM0aKXbwRRDFlyVRtvqJMD9BXf0Or/hETAe6m96mFxmT3ccFQLrxOQ=="
 			// datalite
@@ -179,27 +179,27 @@ export function setRouterPermission(router) {
 
 				
 				// 全部权限 everything
-				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) {
+				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium'))) {
 					next()
 				}
 				// // 全部权限 Scanner 除外: essential, research
-				// else if(access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) {
-				// 	if(to.path.includes('/scannerai')) next('/dashboard')
-				// }
+				else if(access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) {
+					if(to.path.includes('/scannerai')) next('/dashboard')
+				}
 				// 全部权限 除了 Reports 页面: datalite
 				else if(access_level.some(str => str.includes('datalite'))) {
 					if(to.path.includes('/MR')) next('/dashboard')
 				}
 				// 只能访问 Reports 页面: reports
 				else if(access_level.some(str => str.includes('reports')))  {
-					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/blog', '/dashboard', '/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
+					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/impactedge', '/blog', '/dashboard', '/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
 					if((to.path.includes('/MR') || to.path.includes('/backtester') || to.path.includes('/doc') || to.path.includes('/contact') || to.path.includes('/dashboard')) && requiredPrefixes.some(prefix => to.path.includes(prefix))){next()}
 					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
 					else next('/MR/sentimentedge')
 				}
 				// 只能访问部分页面(report（仅限三类）,strategies, scanner): corelite
 				else if(access_level.some(str => str.includes('corelite'))) {
-					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/blog', '/dashboard','/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
+					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/impactedge', '/blog', '/dashboard','/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
 					if((to.path.includes('/MR') || to.path.includes('/backtester') || to.path.includes('/doc') || to.path.includes('/contact')  || to.path.includes('/dashboard')) && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
 					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
 					else next('/MR/sentimentedge') 

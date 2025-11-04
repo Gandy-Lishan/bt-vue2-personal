@@ -183,6 +183,11 @@ export default {
               path: '/MR/tradingedge'
             },
             {
+              label: 'Market Impact Analysis',
+              keyPath: '10-10',
+              path: '/MR/impactedge'
+            },
+            {
               label: 'My Favorites',
               keyPath: '10-5',
               path: '/MR/favorites'
@@ -518,6 +523,11 @@ export default {
             path: '/MR/tradingedge'
           },
           {
+              label: 'Market Impact Analysis',
+              keyPath: '10-10',
+              path: '/MR/impactedge'
+          },
+          {
               label: 'My Favorites',
               keyPath: '10-5',
               path: '/MR/favorites'
@@ -679,8 +689,8 @@ export default {
       const email = getCookieData()?.username
       const access_level = getCookieData()?.access_level
       const {label} = item
-      const accessAllPage = access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))
-      // const cannotAccessScanner = access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))
+      const accessAllPage = access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium'))
+      const cannotAccessScanner = access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))
       const cannotAccessReport = access_level.some(str => str.includes('datalite'))
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))

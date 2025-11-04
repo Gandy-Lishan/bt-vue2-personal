@@ -98,6 +98,19 @@
                      class="mcnImage"
                    />
                  </div>
+                 <div
+                   v-else-if="serviceType === 'impactedge'"
+                   class="analysis_solutions_yellow"
+                 >
+                   <img
+                     align="center"
+                     alt=""
+                     src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/105ad29f-7bb8-9913-00b3-42c276f94272.png"
+                     width="564"
+                     style="max-width:880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
+                     class="mcnImage"
+                   />
+                 </div>
 
                  <div v-if="messages.length" class="alert alert-success">
                    <strong v-for="message in messages" :key="message">{{ message }}</strong>

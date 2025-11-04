@@ -53,6 +53,16 @@
                    class="mcnImage"
                  />
                </div>
+               <div class="analysis_solutions_yellow" v-if="serviceType === 'impactedge'">
+                 <img
+                   align="center"
+                   alt=""
+                   src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/105ad29f-7bb8-9913-00b3-42c276f94272.png"
+                   width="564"
+                   style="max-width: 880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
+                   class="mcnImage"
+                 />
+               </div>
                 <a :href="`/MR/${requestedType}/${latestPost.url}`" v-if="serviceType !== 'Blog'">
                  <h2><strong v-html="latestPost.title"></strong></h2>
                 </a>
@@ -126,6 +136,7 @@ export default {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
     else if(this.serviceType.toLowerCase() === 'quantedge' || this.serviceType.toLowerCase() === 'kaeppelscorner') return 'quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
+    else if(this.serviceType.toLowerCase() === 'impactedge') return 'impactedge';
     else return this.serviceType.toLowerCase();
   }
  },
@@ -141,8 +152,9 @@ export default {
     '/MR/kaeppelscorner',
     '/MR/modeledge',
     '/MR/tradingedge',
+    '/MR/impactedge',
     '/MR/blog'
-  ], to.path) && ['sentimentedge', 'quantedge', 'kaeppelscorner', 'modeledge', 'tradingedge','blog'].includes(to.params.serviceType)) {
+  ], to.path) && ['sentimentedge', 'quantedge', 'kaeppelscorner', 'modeledge', 'tradingedge','impactedge','blog'].includes(to.params.serviceType)) {
     next(async _this => {
       let serviceType = to.params.serviceType
       const reportUrl = to.params.reportUrl
@@ -159,6 +171,9 @@ export default {
       }else if(serviceType === 'tradingedge') {
         _this.title = 'TradingEdge'
         _this.serviceType = 'TradingEdge'
+      }else if(serviceType === 'impactedge') {
+        _this.title = 'Market Impact Analysis'
+        _this.serviceType = 'impactedge'
       }
       else if(serviceType === 'blog' && reportUrl) {
       }
