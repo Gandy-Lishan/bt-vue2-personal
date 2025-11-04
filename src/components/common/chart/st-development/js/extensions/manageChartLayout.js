@@ -23,7 +23,7 @@ let __st_js_manage_chart_layout_ = (_exports) => {
         let comparison = JSON.stringify(CIQ.store.getters.getComparisonSymbol) || ''
 
         // symbol ohlcv的roc计算函数需要用到Layout
-        let activatedMALayout = JSON.stringify(CIQ.store.state.chart.activatedMALayout) || ''
+        let activatedMALayout = JSON.stringify(CIQ.store.state.chart.activatedMALayout) || '[]'
 
         let obj = {id:uid,name,layout,layoutFreq,chartType,pref,themes,customizedLayouts,comparison, activatedMALayout}
         return obj
@@ -51,7 +51,7 @@ let __st_js_manage_chart_layout_ = (_exports) => {
             CIQ.addCover()
             CIQ.store.commit('form/getFrequency', layout.layoutFreq)
             CIQ.store.dispatch('chart/set_chart_type', layout.chartType)
-            CIQ.store.commit('chart/getMALayout', JSON.parse(layout.activatedMALayout))
+            CIQ.store.commit('chart/getMALayout', JSON.parse(layout.activatedMALayout || '[]'))
             CIQ.isRestoreLayout = true          
             CIQ.stxx.importLayout(JSON.parse(layout.layout), {
                 ...importOptions, // This includes any other options you might have
