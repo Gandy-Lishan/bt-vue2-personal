@@ -38,6 +38,7 @@
       size="small"
 			style="width: 100%; height: 100%; margin: 0 auto;"
       :row-class-name="tableRowClassName"
+      :default-expand-all="true"
 		>
     <el-table-column type="expand" v-if="currentPageTab === 'Sample'">
 				<template slot-scope="scope">
