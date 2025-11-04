@@ -104,12 +104,12 @@ hr {
 	font-weight: 400;
 	line-height: 1.428;
 	text-align: center;
-	white-space: nowrap;
+	white-space: break-spaces;
 	cursor: pointer;
 	user-select: none;
 	border: 1px solid transparent;
 	border-radius: 4px;
-	padding: 7px 14px;
+	padding: 5px 0px;
 }
 .btn:hover, .btn:focus {
 	text-decoration: none;

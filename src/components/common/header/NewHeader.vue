@@ -183,6 +183,11 @@ export default {
               path: '/MR/tradingedge'
             },
             {
+              label: 'Market Impact Analysis',
+              keyPath: '10-10',
+              path: '/MR/impactedge'
+            },
+            {
               label: 'My Favorites',
               keyPath: '10-5',
               path: '/MR/favorites'
@@ -516,6 +521,11 @@ export default {
             label: 'TradingEdge',
             keyPath: '10-4',
             path: '/MR/tradingedge'
+          },
+          {
+              label: 'Market Impact Analysis',
+              keyPath: '10-10',
+              path: '/MR/impactedge'
           },
           {
               label: 'My Favorites',

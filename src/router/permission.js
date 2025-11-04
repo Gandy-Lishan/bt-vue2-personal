@@ -192,14 +192,14 @@ export function setRouterPermission(router) {
 				}
 				// 只能访问 Reports 页面: reports
 				else if(access_level.some(str => str.includes('reports')))  {
-					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/blog', '/dashboard', '/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
+					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/impactedge', '/blog', '/dashboard', '/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
 					if((to.path.includes('/MR') || to.path.includes('/backtester') || to.path.includes('/doc') || to.path.includes('/contact') || to.path.includes('/dashboard')) && requiredPrefixes.some(prefix => to.path.includes(prefix))){next()}
 					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
 					else next('/MR/sentimentedge')
 				}
 				// 只能访问部分页面(report（仅限三类）,strategies, scanner): corelite
 				else if(access_level.some(str => str.includes('corelite'))) {
-					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/blog', '/dashboard','/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
+					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/impactedge', '/blog', '/dashboard','/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact']
 					if((to.path.includes('/MR') || to.path.includes('/backtester') || to.path.includes('/doc') || to.path.includes('/contact')  || to.path.includes('/dashboard')) && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
 					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
 					else next('/MR/sentimentedge') 

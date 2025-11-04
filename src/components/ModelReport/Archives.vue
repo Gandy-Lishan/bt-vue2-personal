@@ -98,7 +98,19 @@
                       class="mcnImage"
                     />
                   </div>
-
+                  <div
+                    v-else-if="serviceType === 'impactedge'"
+                    class="analysis_solutions_yellow"
+                  >
+                    <img
+                      align="center"
+                      alt=""
+                      src="https://mcusercontent.com/c1ba721d50cd9f9c0070e927f/images/105ad29f-7bb8-9913-00b3-42c276f94272.png"
+                      width="564"
+                      style="max-width:880px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
+                      class="mcnImage"
+                    />
+                  </div>
                   <div v-if="messages.length" class="alert alert-success">
                     <strong v-for="message in messages" :key="message">{{ message }}</strong>
                   </div>
@@ -202,11 +214,12 @@ export default {
     else if(this.serviceType.toLowerCase() === 'quantedge' || this.serviceType.toLowerCase() === 'kaeppelscorner') return 'quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
     else if(this.serviceType.toLowerCase() === 'tradingedge') return 'tradingedge';
+    else if(this.serviceType.toLowerCase() === 'impactedge') return 'impactedge';
     else return this.serviceType.toLowerCase();
    }
  },
   beforeRouteEnter(to, from, next) {
-  if (to.path.includes('/MR/archives') && ['sentimentedge', 'quantedge', 'kaeppelscorner', 'modeledge','tradingedge'].includes(to.params.serviceType)) {
+  if (to.path.includes('/MR/archives') && ['sentimentedge', 'quantedge', 'kaeppelscorner', 'modeledge','tradingedge', 'impactedge'].includes(to.params.serviceType)) {
     next(async _this => {
       const serviceType = to.params.serviceType
       const start_date = to.query.start_date
@@ -224,6 +237,9 @@ export default {
       }else if(serviceType === 'tradingedge') {
         _this.title = `TradingEdge Archives${page ?  ` - Page ${page}`: ''}`
         _this.serviceType = 'tradingedge'
+      }else if(serviceType === 'impactedge') {
+        _this.title = `Market Impact Analysis Archives${page ?  ` - Page ${page}`: ''}`
+        _this.serviceType = 'impactedge'
       }
       debugger
       if(start_date) _this.start_date = start_date
