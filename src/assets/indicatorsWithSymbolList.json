@@ -96276,5 +96276,19 @@
         "market_symbol": "CQQQ",
         "type": "trend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "JK Economic Barometer",
+        "url": "jk_economic_barometer",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "FINRA Investor Margin Debt Relative to GDP",
+        "url": "finra_debt_relative_gdp",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
