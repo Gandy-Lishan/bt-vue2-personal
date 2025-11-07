@@ -12,7 +12,7 @@
 			effect="dark"
 			content="Migrate from backtest engine v1 to backtest engine v2"
 			placement="bottom-start"
-								>
+		>
 		<el-button
 			v-if="currentPage == 'Favorites'"
 			@click="runBTV1Backtest"
@@ -890,7 +890,9 @@ export default {
 		async addBacktestSignal(row) {
 			// 生成名字并检查有没有重名
 			const signalCode = new SignalCode()
-			const {strategy, frequency, name, symbol, symbol2} = row
+			const {strategy, frequency, name, symbol, symbol2, indicator_layout} = row
+			const _indicator_layout = JSON.parse(indicator_layout)
+			const formIndicators = _indicator_layout.formIndicators
 			const saveSignalsTimes = strategy !== 'Dual' ? 2 : 4
 			const conditions = []
 			const reasons = []
@@ -926,15 +928,25 @@ export default {
 						const _signalItem = signals[index];
 							try {
 								if(typeof _signalItem.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(_signalItem.code)) {
+									debugger
 										const decode = signalCode.decode(_signalItem.code)
 										if(decode.analysis === 'User') {
+											debugger
 											const {data} = await searchIndicator(decode.indicator)
 											const element = data.results.find(ele => ele.name === decode.indicator)
+											const analysisElement = data.analyse_result.find(ele => ele.name === decode.indicator)
 											if(element) {
 												decode.indicator = element.url
-											_signals.push({code: signalCode.encode(decode)})
-											}else {
-												reasons.push('User-defined/User-uploaded indicators is not supported')
+												_signals.push({code: signalCode.encode(decode)})
+											}else if(analysisElement){
+												decode.indicator = analysisElement.url
+												_signals.push({code: signalCode.encode(decode)})
+											}else if(formIndicators[criteriaName][index].includes('HASH')){
+												reasons.push('User-uploaded indicators is not supported')
+												_signals = []
+												break
+											}else{
+												reasons.push('This indicator is not supported')
 												_signals = []
 												break
 											}

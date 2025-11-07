@@ -150,6 +150,7 @@ export default {
           'modeledge',
           'quantedge',
           'tradingedge',
+          'impactedge',
           'blog'
         ];
 

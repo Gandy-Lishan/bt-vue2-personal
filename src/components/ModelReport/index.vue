@@ -161,6 +161,7 @@ export default {
       { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
       { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
       { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
+      // { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
       { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' },
       { value: 'archived_studies', label: 'Archived Studies', link: '/MR/archived_studies' },
       { value: 'archived_reports', label: 'Daily Report', link: '' }, // link 由函数生成
@@ -192,13 +193,30 @@ export default {
     const access_level = getCookieData()?.access_level
 		const coreliteUser = access_level.some(item => item.includes('corelite'))
 		const reportsUser = access_level.some(item => item.includes('reports'))
+    const email = getCookieData()?.username
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
 		if(coreliteUser || reportsUser) {
       this.navItems = [
         { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },
         { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
         { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
         { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
+        // { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
         { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' }
+      ]
+    }
+    if(allowedUserList.includes(email)) {
+      this.navItems = [
+      { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },
+      { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
+      { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
+      { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
+      { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
+      { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' },
+      { value: 'archived_studies', label: 'Archived Studies', link: '/MR/archived_studies' },
+      { value: 'archived_reports', label: 'Daily Report', link: '' }, // link 由函数生成
+      { value: 'active_studies', label: 'Active Studies', link: '/MR/active_studies' },
+      { value: 'minutes', label: 'Intraday Minutes', link: '/MR/minutes' }
       ]
     }
     window.addEventListener('scroll', this.handleScroll);
@@ -216,11 +234,13 @@ export default {
     '/MR/kaeppelscorner',
     '/MR/modeledge',
     '/MR/tradingedge',
+    '/MR/impactedge',
     '/MR/archives/sentimentedge',
     '/MR/archives/quantedge',
     '/MR/archives/kaeppelscorner',
     '/MR/archives/modeledge',
     '/MR/archives/tradingedge',
+    '/MR/archives/impactedge',
     '/MR/blog',
     '/MR/archived_reports',
     '/MR/active_studies',
@@ -234,6 +254,7 @@ export default {
       if(isPathSubstring(['/MR/quantedge', '/MR/archives/quantedge'], to.path) || isPathSubstring(['/MR/kaeppelscorner', '/MR/archives/kaeppelscorner'], to.path)) _this.selectedTitle = 'quantedge'
       if(isPathSubstring(['/MR/modeledge', '/MR/archives/modeledge'], to.path)) _this.selectedTitle = 'modeledge'
       if(isPathSubstring(['/MR/tradingedge', '/MR/archives/tradingedge'], to.path)) _this.selectedTitle = 'tradingedge'
+      if(isPathSubstring(['/MR/impactedge', '/MR/archives/impactedge'], to.path)) _this.selectedTitle = 'impactedge'
       if(isPathSubstring(['/MR/blog', '/MR/archived_reports', 'old_archived_reports'], to.path)) {
         _this.selectedTitle = 'archived_reports'
       }
@@ -332,6 +353,7 @@ export default {
     margin: 0 5px;
     padding: 10px 0;
     cursor: pointer;
+    text-align: center;
     font-weight: bold;
     font-size: 18px;
     &:hover{

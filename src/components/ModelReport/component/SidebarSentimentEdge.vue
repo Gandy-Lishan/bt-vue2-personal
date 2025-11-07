@@ -39,6 +39,7 @@ export default {
     if(this.serviceType.toLowerCase() === 'sentimentedge') return 'sentimentedge';
     else if(this.serviceType.toLowerCase() === 'quantedge' || this.serviceType.toLowerCase() === 'kaeppelscorner') return 'quantedge';
     else if(this.serviceType.toLowerCase() === 'modeledge') return 'modeledge';
+    else if(this.serviceType.toLowerCase() === 'impactedge') return 'impactedge';
     else return this.serviceType.toLowerCase();
    }
  },

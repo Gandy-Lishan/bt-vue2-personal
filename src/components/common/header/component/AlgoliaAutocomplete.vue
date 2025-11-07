@@ -125,7 +125,7 @@
                         return html`<div>📝 Blog Posts</div>`;
                     },
                     item({ item, html }) {
-                        const validCategories = ["quantedge", "kaeppelscorner", "SentimentEdge", "ModelEdge", "TradingEdge"];
+                        const validCategories = ["quantedge", "kaeppelscorner", "SentimentEdge", "ModelEdge", "TradingEdge", "impactedge"];
                         let href = "";
 
                         if (validCategories.includes(item.category)) {
