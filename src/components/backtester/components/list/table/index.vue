@@ -12,7 +12,7 @@
 			effect="dark"
 			content="Migrate from backtest engine v1 to backtest engine v2"
 			placement="bottom-start"
-								>
+		>
 		<el-button
 			v-if="currentPage == 'Favorites'"
 			@click="runBTV1Backtest"
@@ -926,6 +926,7 @@ export default {
 						const _signalItem = signals[index];
 							try {
 								if(typeof _signalItem.code === 'string' && !['SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/0/999999', 'SI:Smart Money Confidence;IDS:EO0.7/EP0.3;SC:SV/3/999999'].includes(_signalItem.code)) {
+									debugger
 										const decode = signalCode.decode(_signalItem.code)
 										if(decode.analysis === 'User') {
 											const {data} = await searchIndicator(decode.indicator)
