@@ -109,7 +109,6 @@ hr {
 	user-select: none;
 	border: 1px solid transparent;
 	border-radius: 4px;
-	padding: 5px 0px;
 }
 .btn:hover, .btn:focus {
 	text-decoration: none;
@@ -125,6 +124,9 @@ hr {
 a.btn.grey-cascade.active, a.btn.grey-cascade:active, a.gray-cascade.btn:focus, a.gray-cascade.btn:hover {
 	color: #fff;
 	background-color: #829596;
+}
+button.btn.btn-block.analysis_solutions_yellow {
+	padding: 5px 0px;
 }
 .margin-bottom-30 {
 	margin-bottom: 30px;
