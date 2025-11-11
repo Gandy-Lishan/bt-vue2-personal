@@ -188,16 +188,6 @@ export default {
               path: '/MR/favorites'
             },
             {
-              label: 'Archived Studies',
-              keyPath: '10-6',
-              path: '/MR/archived_studies'
-            },
-            {
-              label: 'Daily Report',
-              keyPath: '10-7',
-              path: '/MR/archived_reports/2025'
-            },
-            {
               label: 'Active Studies',
               keyPath: '10-8',
               path: '/MR/active_studies'
@@ -206,7 +196,17 @@ export default {
               label: 'Intraday Minutes',
               keyPath: '10-9',
               path: '/MR/minutes'
-            }
+            },
+            {
+              label: 'Daily Report',
+              keyPath: '10-7',
+              path: '/MR/archived_reports/2025'
+            },
+            {
+              label: 'Archived Studies',
+              keyPath: '10-6',
+              path: '/MR/archived_studies'
+            },
           ]
         },
         {
@@ -527,16 +527,6 @@ export default {
             path: '/MR/favorites'
           },
           {
-            label: 'Archived Studies',
-            keyPath: '10-6',
-            path: '/MR/archived_studies'
-          },
-          {
-            label: 'Daily Report',
-            keyPath: '10-7',
-            path: '/MR/archived_reports/2025'
-          },
-          {
             label: 'Active Studies',
             keyPath: '10-8',
             path: '/MR/active_studies'
@@ -545,7 +535,17 @@ export default {
             label: 'Intraday Minutes',
             keyPath: '10-9',
             path: '/MR/minutes'
-          }
+          },
+          {
+            label: 'Daily Report',
+            keyPath: '10-7',
+            path: '/MR/archived_reports/2025'
+          },
+          {
+            label: 'Archived Studies',
+            keyPath: '10-6',
+            path: '/MR/archived_studies'
+          },
       ]
       }
     }
