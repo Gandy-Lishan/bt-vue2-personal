@@ -168,6 +168,11 @@ export default {
               path: '/MR/tradingedge'
             },
             {
+              label: 'Market Impact Analysis',
+              keyPath: '10-10',
+              path: '/MR/impactedge'
+            },
+            {
               label: 'My Favorites',
               keyPath: '10-5',
               path: '/MR/favorites'
@@ -483,63 +488,6 @@ export default {
     }
     // 权限验证的时候, report 子项要去掉: reports, corelite
     const canOnlyAccessPartOfReport = access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
-    if(allowedUserList.includes(email)) {
-      const reportIndex = this.navs.findIndex(ele => ele.label === 'Reports')
-      if(reportIndex !== -1) {
-        this.navs[reportIndex].subMenu =  [
-          {
-            label: 'SentimentEdge',
-            keyPath: '10-1',
-            path: '/MR/sentimentedge'
-          },
-          {
-            label: 'ModelEdge',
-            keyPath: '10-2',
-            path: '/MR/modeledge'
-          },
-          {
-            label: 'Kaeppel\'s Corner',
-            keyPath: '10-3',
-            path: '/MR/quantedge'
-          },
-          {
-            label: 'TradingEdge',
-            keyPath: '10-4',
-            path: '/MR/tradingedge'
-          },
-          {
-            label: 'Market Impact Analysis',
-            keyPath: '10-10',
-            path: '/MR/impactedge'
-          },
-          {
-            label: 'My Favorites',
-            keyPath: '10-5',
-            path: '/MR/favorites'
-          },
-          {
-            label: 'Active Studies',
-            keyPath: '10-8',
-            path: '/MR/active_studies'
-          },
-          {
-            label: 'Intraday Minutes',
-            keyPath: '10-9',
-            path: '/MR/minutes'
-          },
-          {
-            label: 'Daily Report',
-            keyPath: '10-7',
-            path: '/MR/archived_reports/2025'
-          },
-          {
-            label: 'Archived Studies',
-            keyPath: '10-6',
-            path: '/MR/archived_studies'
-          },
-      ]
-      }
-    }
     if(canOnlyAccessPartOfReport) {
       const reportIndex = this.navs.findIndex(ele => ele.label === 'Reports')
       const backtestIndex = this.navs.findIndex(ele => ele.label.includes('Backtest'))
