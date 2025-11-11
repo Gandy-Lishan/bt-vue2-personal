@@ -57,6 +57,20 @@ export function getStocksList() {
 			})
 	})
 }
+export function checkEmail(email) {
+	const url = '/api/checkEmail'
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true, params: { email } })
+			.then(res => {
+				res.data = res.data
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 
 export function getStrategiesJSON() {
 	const url = '/api/strategiesJSON'

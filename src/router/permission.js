@@ -1,7 +1,7 @@
 import Cookies from 'vue-cookies'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { getCurDate } from '@/service/ai'
-import { getIndicatorsRowData } from "@/service/service";
+import { getIndicatorsRowData, checkEmail } from "@/service/service";
 import { getQueryVariable, LocalStorageUtil, getTokenRole, printConsole } from '@/utils'
 import store from '../store'
 import { uniqWith, isEqual } from "lodash"
@@ -43,7 +43,7 @@ export function setRouterPermission(router) {
 		printConsole(process.env.NODE_ENV)
 		if(process.env.NODE_ENV == 'development'){
 			// hao@sentimentrader 
-			const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
+			// const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 			// reports 权限
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdQrcuNNKjaFjCDJpptbkKEBBGDtuUiNycG03w9h1VkezpvTm0BdvYrnHrJbQm8XdjDG75olOAHnLoIzuBhH95QQh9lQK52awOyIAnQ55MrzxDroVR6gZhkF/lWfNUwC2dgagWW04VYkeLys1phd3Yifupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6DFMSvHKMNTeEVXtvptbBy2eqB1l3OX5WjCbfJJFtkotn4LL1LUML6evLgl6Tdr+zBBGDtuUiNycG03w9h1Vke5Pi4P3OVvyNrt7/sdPUBdPk9hdfGaP97xE2my/HuAne"
 			// daniel@sentimentrader.com
@@ -55,6 +55,8 @@ export function setRouterPermission(router) {
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqejoZeS+pZ9xdhKrkTjTWcCFVxWebii4op4cCMiPBV73opZm7ogud2q1OLV96pFi+1K1E2kEHEDRSO73gIBBLzLgUs9px+NQUAhS6QuXGi61iXjPsyCUB+eZRfZ9cmee9jUARkAMoG/B1S8I3Htjb/vX/2j0sHgJbeplV2WSfrwAFMYBj9lCXHXCZ4oXH8hbfJIw0wqaRKd8xXx7SQHKFrhctGlPBiU/NVN+tuzK4g32K5DZib9pJY25o6aMK7uSOwU3Zr6IIsg5Nw1LD/s7dUxArFIVekxyQUKd9epvqDwXyLiaGJI7G1mhM0aKXbwRRDFlyVRtvqJMD9BXf0Or/hETAe6m96mFxmT3ccFQLrxOQ=="
 			// datalite
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqf7esOK24j4IZaV+aGkCMK1HDsNiXUfX5Pu5upJJST8oTpvTm0BdvYrnHrJbQm8XdjYFZgwUNoEBiuKsKAIH4rEW6nBv511krdR+eHgpUiRNjeE2og+1mrxGst89AW01Bj56Uo1kJPBGfw7MWFmpCeFkNoXjLNOzTbmMirhca1m7nEOyuDTUqoUp59w2G6c1gdLdLRI8tjYxKcH8tV8WFx1krMbQVbAzv4tegUYI5fOLTv/vcyCJxxnapa38ygsA7g="
+			// 升级用户测试 Cookie
+			const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqftFrxgNvPe5MKGrwSy+Q7Akd+v1bIan11vea4514TpTNL/G4NPb1IMiVXLJpiCFkx2cwijetNY1ZHo369U7VMFJHdRaNKlr/0Bpd9qG/WGj5MzMQHQx6VmX5Mc2wYaqT1NluBl390YGjaVxxniW70Wz0rKHE3ipI4vjlp1BuikxVn+LHihQE1ZVDOebDnKLjupnUMYgH6aQ8IDsEdLXTVfsB4JUXrGmxqwHXZoeJVb1AhWdcSZ9WjoKfLIXhSy39eHsnDOBiw/wURe7psont+kB1PYRyspynUsFytMj9iSTXzxBvFwh86axNQ/+GaqWt5An4e8btZ4G37Og+7XfawLmf1QKvLZYMKZlPyPRbwJ6cF5UoCaZWq8dfmfraR5QCa4W1uyiirj9prZPjC6c0MYbnE9qbfh2NuqiGPTVBlitw=="
 			Cookies.set(
 				'sentimen_session',
 				_userCookies
@@ -163,7 +165,13 @@ export function setRouterPermission(router) {
 					store.dispatch('states/set_scannerai_flag', false)
 				}
 			/* 权限跳转控制 */
-   const access_level = getCookieData()?.access_level
+		let exists = LocalStorageUtil.get('upgradeUserLevel')
+		if(!exists) {
+			let {data:{exists:_exists}} = await checkEmail(getCookieData()?.username)
+			exists = _exists
+			LocalStorageUtil.set('upgradeUserLevel', exists)
+		}
+   		const access_level = getCookieData()?.access_level
 			if(Array.isArray(access_level)) {
 				// notifications 路由根据权限的跳转控制， 单独判断的逻辑，和下方的代码无关
 				if(to.path.includes('/notifications')) {
@@ -179,11 +187,12 @@ export function setRouterPermission(router) {
 
 				
 				// 全部权限 everything
-				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium'))) {
+				const essentialLevel = (access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) 
+				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || (essentialLevel && exists)) {
 					next()
 				}
 				// // 全部权限 Scanner 除外: essential, research
-				else if(access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) {
+				else if(essentialLevel && !exists) {
 					if(to.path.includes('/scannerai')) next('/dashboard')
 				}
 				// 全部权限 除了 Reports 页面: datalite
