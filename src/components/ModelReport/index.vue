@@ -194,7 +194,7 @@ export default {
 		const coreliteUser = access_level.some(item => item.includes('corelite'))
 		const reportsUser = access_level.some(item => item.includes('reports'))
     const email = getCookieData()?.username
-		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'kian@sentimentrader.com']
 		if(coreliteUser || reportsUser) {
       this.navItems = [
         { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },

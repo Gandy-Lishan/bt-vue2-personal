@@ -489,7 +489,7 @@ export default {
   created() {
     const access_level = getCookieData()?.access_level
     const email = getCookieData()?.username
-		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'kian@sentimentrader.com']
     // 权限验证的时候, report 子项要去掉: reports, corelite
     const canOnlyAccessPartOfReport = access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
     if(allowedUserList.includes(email)) {
