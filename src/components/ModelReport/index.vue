@@ -161,7 +161,7 @@ export default {
       { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
       { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
       { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
-      // { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
+      { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
       { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' },
       { value: 'active_studies', label: 'Active Studies', link: '/MR/active_studies' },
       { value: 'minutes', label: 'Intraday Minutes', link: '/MR/minutes' },
@@ -201,22 +201,8 @@ export default {
         { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
         { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
         { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
-        // { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
+        { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
         { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' }
-      ]
-    }
-    if(allowedUserList.includes(email)) {
-      this.navItems = [
-      { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },
-      { value: 'modeledge', label: 'ModelEdge', link: '/MR/modeledge' },
-      { value: 'quantedge', label: "Kaeppel's Corner", link: '/MR/quantedge' },
-      { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
-      { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
-      { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' },
-      { value: 'active_studies', label: 'Active Studies', link: '/MR/active_studies' },
-      { value: 'minutes', label: 'Intraday Minutes', link: '/MR/minutes' },
-      { value: 'archived_reports', label: 'Daily Report', link: '' }, // link 由函数生成
-      { value: 'archived_studies', label: 'Archived Studies', link: '/MR/archived_studies' },
       ]
     }
     window.addEventListener('scroll', this.handleScroll);
