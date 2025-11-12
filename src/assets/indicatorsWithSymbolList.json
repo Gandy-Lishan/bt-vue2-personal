@@ -96290,5 +96290,12 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "TCTM Risk Warning Model",
+        "url": "tctm_risk_warning_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
