@@ -126,6 +126,8 @@
 
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import autocomplete from "./component/AlgoliaAutocomplete.vue";
+import { checkEmail } from "@/service/service";
+import { LocalStorageUtil } from '@/utils'
 
 export default {
   name: 'NewHeader',
@@ -135,23 +137,6 @@ export default {
   data() {
     return {
       navs: [
-        {
-          label: 'Tutorial Videos',
-          keyPath: '2',
-          path: 'https://www.youtube.com/playlist?list=PL_pqMRWeHIxPgRS4tQryQ-efk2cNFf0hb'
-        },
-        {
-          label: 'Help',
-          keyPath: '1',
-          path: '/doc',
-          subMenu: [
-            {
-              label: 'Tutorial Document',
-              keyPath: '1-1',
-              path: '/doc'
-            }
-          ]
-        },
         {
           label: 'Dashboard',
           keyPath: '14',
@@ -193,16 +178,6 @@ export default {
               path: '/MR/favorites'
             },
             {
-              label: 'Archived Studies',
-              keyPath: '10-6',
-              path: '/MR/archived_studies'
-            },
-            {
-              label: 'Daily Report',
-              keyPath: '10-7',
-              path: '/MR/archived_reports/2025'
-            },
-            {
               label: 'Active Studies',
               keyPath: '10-8',
               path: '/MR/active_studies'
@@ -211,7 +186,17 @@ export default {
               label: 'Intraday Minutes',
               keyPath: '10-9',
               path: '/MR/minutes'
-            }
+            },
+            {
+              label: 'Daily Report',
+              keyPath: '10-7',
+              path: '/MR/archived_reports/2025'
+            },
+            {
+              label: 'Archived Studies',
+              keyPath: '10-6',
+              path: '/MR/archived_studies'
+            },
           ]
         },
         {
@@ -491,10 +476,16 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     const access_level = getCookieData()?.access_level
     const email = getCookieData()?.username
-		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com']
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'kian@sentimentrader.com']
+    let exists = LocalStorageUtil.get('upgradeUserLevel')
+    if(!exists) {
+      let {data:{exists:_exists}} = await checkEmail(getCookieData()?.username)
+      exists = _exists
+      LocalStorageUtil.set('upgradeUserLevel', exists)
+    }
     // 权限验证的时候, report 子项要去掉: reports, corelite
     const canOnlyAccessPartOfReport = access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
     if(canOnlyAccessPartOfReport) {
@@ -689,8 +680,10 @@ export default {
       const email = getCookieData()?.username
       const access_level = getCookieData()?.access_level
       const {label} = item
-      const accessAllPage = access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium'))
-      const cannotAccessScanner = access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))
+			const essentialLevel = (access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research')))
+      const exists = LocalStorageUtil.get('upgradeUserLevel')
+      const accessAllPage = access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || (essentialLevel && exists)
+      const cannotAccessScanner = essentialLevel && !exists
       const cannotAccessReport = access_level.some(str => str.includes('datalite'))
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))

@@ -163,10 +163,10 @@ export default {
       { value: 'tradingedge', label: 'TradingEdge', link: '/MR/tradingedge' },
       { value: 'impactedge', label: 'Market Impact Analysis', link: '/MR/impactedge' },
       { value: 'favorites', label: 'My Favorites', link: '/MR/favorites' },
-      { value: 'archived_studies', label: 'Archived Studies', link: '/MR/archived_studies' },
-      { value: 'archived_reports', label: 'Daily Report', link: '' }, // link 由函数生成
       { value: 'active_studies', label: 'Active Studies', link: '/MR/active_studies' },
-      { value: 'minutes', label: 'Intraday Minutes', link: '/MR/minutes' }
+      { value: 'minutes', label: 'Intraday Minutes', link: '/MR/minutes' },
+      { value: 'archived_reports', label: 'Daily Report', link: '' }, // link 由函数生成
+      { value: 'archived_studies', label: 'Archived Studies', link: '/MR/archived_studies' },
     ]
   }
  },
@@ -193,6 +193,8 @@ export default {
     const access_level = getCookieData()?.access_level
 		const coreliteUser = access_level.some(item => item.includes('corelite'))
 		const reportsUser = access_level.some(item => item.includes('reports'))
+    const email = getCookieData()?.username
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'kian@sentimentrader.com']
 		if(coreliteUser || reportsUser) {
       this.navItems = [
         { value: 'sentimentedge', label: 'SentimentEdge', link: '/MR/sentimentedge' },

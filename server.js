@@ -6,6 +6,7 @@ const proxy = require("http-proxy-middleware").createProxyMiddleware;
 var serveStatic = require('serve-static')
 var history = require('connect-history-api-fallback');
 const Papa = require('papaparse');
+const csv = require('csv-parser');
 // // algolia search
 // const algoliasearch = require('algoliasearch')
 // const searchClient = algoliasearch(
@@ -15,6 +16,7 @@ const Papa = require('papaparse');
 
 
 var dataPath = './src/assets/'
+let cachedEmails = null; 
 // const proxy = require("express-http-proxy")
 
 function get_env(name,value){
@@ -73,6 +75,40 @@ app.get('/api/indexsList', (req, res) => {
         //res.end( data );
     });
 });
+const loadEmails = () => {
+    return new Promise((resolve, reject) => {
+      const results = [];
+      fs.createReadStream(dataPath+'customer_upgrade_list.csv')
+        .pipe(csv())
+        .on('data', (row) => {
+          if (row.email) {
+            results.push(row.email.trim().toLowerCase());
+          }
+        })
+        .on('end', () => resolve(results))
+        .on('error', reject);
+    });
+  }
+
+  app.get('/api/checkEmail', async (req, res) => {
+    const email = req.query.email?.trim().toLowerCase();
+    if (!email) {
+      return res.status(400).json({ error: 'Missing email parameter' });
+    }
+    try {
+      // 首次加载或缓存为空时，重新读取
+      if (!cachedEmails) {
+        cachedEmails = await loadEmails();
+      }
+  
+      const exists = cachedEmails.includes(email);
+      res.json({ exists });
+    } catch (error) {
+      console.error('Error checking email:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });  
+  
 
 
 // 寻找静态文件夹

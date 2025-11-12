@@ -278,7 +278,8 @@ import {
   csvFileRead,
   getPairData,
   csvFilePagingRead,
-  getAllMyIndicatorsList
+  getAllMyIndicatorsList,
+  searchIndicator
 } from '@/service/service'
 import Papa from 'papaparse'
 import axios from 'axios'
@@ -872,12 +873,11 @@ export default {
 
           const handleUser = async (indicator) => {
             debugger
-            let options = []
-            if(this.createdIndicatorOptions.length !== 0) options = this.createdIndicatorOptions
-            if(this.createdIndicatorOptions.length === 0) options = await getAllMyIndicatorsList()
+						const {data} = await searchIndicator(null, null, null, null, null, indicator)
+            let options = [...data.results, ...data.analyse_result]
             const ele = options.find(item => item.url === indicator)
-            this.si[`${signal.analysis.toLowerCase()}Indicator`] = ele.name || '';
-            this.$emit('getIndicatorVal', {value: ele.name || '', index: this.panelIndex})
+            this.si[`${signal.analysis.toLowerCase()}Indicator`] = ele?.name || indicator || '';
+            this.$emit('getIndicatorVal', {value: ele?.name || indicator || '', index: this.panelIndex})
             console.log('this.createdIndicatorOptions', options)
             this.$emit('getIndicatorUrl', { index, url: indicator });
             this.userIndicatorUrl = indicator

@@ -57,6 +57,20 @@ export function getStocksList() {
 			})
 	})
 }
+export function checkEmail(email) {
+	const url = '/api/checkEmail'
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true, params: { email } })
+			.then(res => {
+				res.data = res.data
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 
 export function getStrategiesJSON() {
 	const url = '/api/strategiesJSON'
@@ -822,7 +836,8 @@ export function searchIndicator(
 	calculate,
 	combine_type,
 	timeframe,
-	page
+	page,
+	indicator_url
 ) {
 	let url = '/dev/my_indicator/get_records/?ordering=-create_date'
 	if (name) url += `&name=${name}`
@@ -837,6 +852,9 @@ export function searchIndicator(
 	}
 	if (page) {
 		url += `&page=${page}`
+	}
+	if (indicator_url) {
+		url += `&url=${indicator_url}`
 	}
 	return new Promise((resolve, reject) => {
 		axios
