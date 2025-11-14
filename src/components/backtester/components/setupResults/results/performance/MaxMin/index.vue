@@ -496,11 +496,14 @@ export default {
             );
 
 						//console.log('最大值 最小值', maxItem, minItem)
-
-            const maxReturn = maxItem < entryPrice ? 0 : calculateReturn(maxItem, entryPrice);
-            const minReturn = minItem > entryPrice ? 0 : calculateReturn(minItem, entryPrice);
-
-            let [finalMaxReturn, finalMinReturn] = direction === 'Short' ? [-minReturn, -maxReturn] : [maxReturn, minReturn]
+            const maxReturn = ( maxItem !== undefined && maxItem !== null && maxItem < entryPrice) ? 0 : calculateReturn(maxItem, entryPrice);
+            const minReturn = (minItem !== undefined && minItem !== null && minItem > entryPrice) ? 0 : calculateReturn(minItem, entryPrice);
+			let finalMaxReturn = maxReturn
+			let finalMinReturn = minReturn
+			if(direction === 'Short' && minReturn && maxReturn) {
+				finalMaxReturn = -minReturn
+				finalMinReturn = -maxReturn
+			}
 
 						returnResults.push({
 							[`${item.timeframe}`]:item.timeframe,
