@@ -200,7 +200,7 @@ exportData() {
 
       // 填充数据，确保列数对齐
       for (let i = 0; i < this.defaultTableLabels.length; i++) {
-        row[this.defaultTableLabels[i]] = (values[i] !== undefined && values[i] !== null && values[i] !== NaN  && values[i] !== 'NaN') ? this.displayData(values[i]) : "-";
+        row[this.defaultTableLabels[i]] = (values[i] !== undefined && values[i] !== null && values[i] !== NaN  && values[i] !== 'NaN' && values[i] !== 'null' && values[i] !== 'null%') ? this.displayData(values[i]) : "-";
       }
 
       sheetData.push(row);

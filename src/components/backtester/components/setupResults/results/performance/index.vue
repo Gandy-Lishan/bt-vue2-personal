@@ -675,9 +675,8 @@ export default {
         sheetNames = [...sheetNames, 'Major Sectors(Median % Return)', 'Major Sectors(Consistency)']
         consistency = JSON.parse(JSON.stringify(consistency)).map(obj => {
           for (const key in obj) {
-            
             if (Object.hasOwnProperty.call(obj, key) && key !== 'Consistency') {
-              obj[key] = `${obj[key]}%`
+              obj[key] = (obj[key] && obj[key] !== 'null') ? `${obj[key]}%` : ''
             }
           }
           return obj
