@@ -159,7 +159,7 @@ export default {
                   [handleKey]: key
                 }
                 data[key][handleKey].forEach((value, index) => {
-                    obj[this.defaultTableLabels[index]] = value;
+                    obj[this.defaultTableLabels[index]] = (value !== undefined && value !== null && value !== NaN  && value !== 'NaN' && value !== 'null' && value !== 'null%') ? this.displayData(value) : ''
                 });
 
                 _data.push(obj);
