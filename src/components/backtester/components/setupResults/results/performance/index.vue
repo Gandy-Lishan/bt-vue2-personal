@@ -35,7 +35,7 @@
 			>
         <TIM
           ref="timChild"
-          :tradesData="tradesData"
+          :tradesData="tradesDataWithLastSignal"
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
           :rowFrequency="rowFrequency"
@@ -48,7 +48,7 @@
 			>
         <MaxMin
           ref="maxMinChild"
-          :tradesData="tradesData"
+          :tradesData="tradesDataWithLastSignal"
           :tradePrice="tradePrice"
           :editBacktestID="editBacktestID"
           :rowFrequency="rowFrequency"
@@ -78,6 +78,7 @@ import IndexesInfo from "./IndexesInfo"
 import OtherAssets from "./OtherAssets"
 import { getSymbolInfo } from '@/utils/globalFunc'
 const XLSX = require('xlsx');
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   name: 'Performance',
@@ -97,6 +98,7 @@ export default {
       activePerTag: 'first',
       tableData: [],
       tradesData: [], 
+      tradesDataWithLastSignal: [],
       tradePrice: 'Close',
       editBacktestID: null,
       rowFrequency: 'Daily',
@@ -124,6 +126,7 @@ export default {
       let vm = this
       let initalData = {}
       let data = {}
+      const Direction = row.direction
       if (row.analystID) {
         vm.$store.state.form.favoriteBacktestRowData.id = row.analystID
         row.id = row.analystID
@@ -293,8 +296,16 @@ export default {
                 } catch (error) {
                   console.log(error)
                 }
-                vm.tradesData = initalData['Trades']
-                console.log('tradesData', vm.tradesData)
+                const tradesData = cloneDeep(initalData['Trades'])
+                vm.tradesData = cloneDeep(initalData['Trades'])
+                if(this.showLastSignalMarker1) {
+                  tradesData.push({
+                    Symbol: initalData['Symbol'],
+                    Date: this.showLastSignalMarker1,
+                    TradeStatus: Direction === 'Long' ? 'Buy' : 'Sell',
+                  })
+                }
+                vm.tradesDataWithLastSignal = tradesData
                 this.$store.commit('chart/getTradesData', vm.tradesData)
                 
                 // TIM 数据准备

@@ -168,7 +168,6 @@ data() {
         }
 
         cell.innerHTML = (values[i] !== undefined && values[i] !== null && values[i] !== NaN && values[i] !== 'NaN' && values[i] !== 'null' && values[i] !== 'null%') ? this.displayData(values[i]) : '-';
-        console.log('cell.innerHTML',values[i])
         row.appendChild(cell);
       }
 
