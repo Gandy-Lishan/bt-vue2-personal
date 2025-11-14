@@ -687,7 +687,7 @@ export default {
       const cannotAccessReport = access_level.some(str => str.includes('datalite'))
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
-
+debugger
       if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend Score', 'My Stuff', 'Extra Tools'].includes(label)) {
         return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies')
       }
@@ -703,7 +703,7 @@ export default {
       if(label === 'Portfolio') {
         return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
       }
-      if(label === 'Reports' || label === 'Dashboard') return accessAllPage || cannotAccessScanner || cannotAccessReport|| canOnlyAccessReport || canOnlyAccessReportStategyScanner
+      if(label === 'Reports' || label === 'Dashboard') return accessAllPage || cannotAccessScanner || !cannotAccessReport|| canOnlyAccessReport || canOnlyAccessReportStategyScanner
       // if(label === 'Reports') {
       //   const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
       //   return allowedReportEmails.includes(email)
