@@ -72,8 +72,10 @@ export function generateConfig(criteriaWithNumber) {
     If the backtest condition needs to have two conditions occur within
     3 bars, set two conditions below and choose period 3.<br />
     etc.<br />`,
-		DOBTP: `Check this option to delay the specified number of bars to
-    enter when the ${criteria} criteria is met.<br />`
+		DOBTP: `Check this option to delay the execution of the ${criteria} order.<br/>
+    When the ${capFirstL} Criteria are met on Bar N,<br/>
+    the BacktestEdge will wait for X bars and perform the actual ${criteria} on Bar N+X.
+    `
 	}
 	return config
 }
