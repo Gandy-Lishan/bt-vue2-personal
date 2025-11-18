@@ -126,14 +126,15 @@
                     label="SHARPE RATIO"
                     show-overflow-tooltip
                     align="center"
+                    width="180"
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.SharpeRatio >= 0">{{
-                            displayData(scope.row.SharpeRatio) + '%'
+                            displayData(scope.row.SharpeRatio)
                         }}</span>
                         <span v-else-if="isNaN(scope.row.SharpeRatio)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            displayData(scope.row.SharpeRatio) + '%'
+                            displayData(scope.row.SharpeRatio)
                         }}</span>
                     </template>
                 </el-table-column>
@@ -142,14 +143,15 @@
                     label="SORTINO RATIO"
                     show-overflow-tooltip
                     align="center"
+                    width="180"
                 >
                     <template slot-scope="scope">
                         <span v-if="scope.row.sortino_ratio >= 0">{{
-                            displayData(scope.row.sortino_ratio) + '%'
+                            displayData(scope.row.sortino_ratio)
                         }}</span>
                         <span v-else-if="isNaN(scope.row.sortino_ratio)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            displayData(scope.row.sortino_ratio) + '%'
+                            displayData(scope.row.sortino_ratio)
                         }}</span>
                     </template>
                 </el-table-column>

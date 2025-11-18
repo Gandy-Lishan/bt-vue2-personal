@@ -30,7 +30,7 @@
 			<template v-for="(item, index) in consistency">
 				<tr :key="index">
 					<template v-for="(val, key, i) in item">
-						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ !isNaN(val) ? `${val}%` : '' }}</td>
+						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ (val && !isNaN(val)) ? `${val}%` : '' }}</td>
 						<td class="tg-0lax" :key="i" v-else>{{ val }}</td>
 					</template>
 				</tr>
