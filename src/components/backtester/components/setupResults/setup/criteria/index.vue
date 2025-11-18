@@ -1306,7 +1306,7 @@ export default {
 			let _this = this
 			const indiRefs = _this.$refs.indiChild.length
 			for (let index = 0; index < indiRefs; index++) {
-				if(_this.indicatorRadioArr[index] === 'user' && !_this.indicatorUrlArr[index].includes('UserDefinedDates') && (_this.indicatorUrlArr[index].includes('HASH') || !_this.indicatorUrlArr[index])) {
+				if(_this.indicatorRadioArr[index] === 'user' && (data.index == index) && !_this.indicatorUrlArr[index].includes('UserDefinedDates') && (_this.indicatorUrlArr[index].includes('HASH') || !_this.indicatorUrlArr[index])) {
 				await _this.$refs.indiChild[index].changeIndicatorChecked("Users' Own Indicator")
 				await _this.$refs.indiChild[index].handleUsersOwnIndicatorSelect(data.val.data)
 				await _this.$refs.indiChild[index].autoFillUserIndicator(data.val.data)
