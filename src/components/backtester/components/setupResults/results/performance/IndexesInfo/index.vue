@@ -211,11 +211,11 @@ export default {
 			if(!Array.isArray(positive) || !Array.isArray(negative) || value === undefined)  return ''
 			let gColors = ['g100', 'g200', 'g300', 'g400', 'g500']
 			for (let index = 0; index < positive.length; index++) {
-				if(positive[index].indexOf(value) !== -1) return gColors[index]
+				if(positive[index].indexOf(Number(value)) !== -1) return gColors[index]
 			}
 			let rColors = ['r100', 'r200', 'r300', 'r400', 'r500']
 			for (let index = 0; index < negative.length; index++) {
-				if(negative[index].indexOf(value) !== -1) return rColors[index]
+				if(negative[index].indexOf(Number(value)) !== -1) return rColors[index]
 			}
 			return ''
 		},
@@ -224,11 +224,11 @@ export default {
 			if(!Array.isArray(positive) || !Array.isArray(negative) || value === undefined)  return ''
 			let gColors = ['g100', 'g200', 'g300', 'g400', 'g500']
 			for (let index = 0; index < positive.length; index++) {
-				if(positive[index].indexOf(value) !== -1) return gColors[index]
+				if(positive[index].indexOf(Number(value)) !== -1) return gColors[index]
 			}
 			let rColors = ['r100', 'r200', 'r300', 'r400', 'r500']
 			for (let index = 0; index < negative.length; index++) {
-				if(negative[index].indexOf(value) !== -1) return rColors[index]
+				if(negative[index].indexOf(Number(value)) !== -1) return rColors[index]
 			}
 			return ''
 		},
