@@ -703,7 +703,7 @@ export default {
       if(label === 'Portfolio') {
         return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
       }
-      if(label === 'Reports' || label === 'Dashboard') return accessAllPage || cannotAccessScanner || cannotAccessReport|| canOnlyAccessReport || canOnlyAccessReportStategyScanner
+      if(label === 'Reports' || label === 'Dashboard') return accessAllPage || cannotAccessScanner || !cannotAccessReport|| canOnlyAccessReport || canOnlyAccessReportStategyScanner
       // if(label === 'Reports') {
       //   const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
       //   return allowedReportEmails.includes(email)
