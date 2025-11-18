@@ -204,6 +204,7 @@ export default {
               data.timeInMarket = initalData['Time in Market']
               data.totalReturn = initalData['Total Return (%)']
               data.tzScore = initalData['Z-score']
+              data.sharpeRatio = initalData['Sharpe Ratio']
               data.standardDeviation = initalData['Standard Deviation']
               data.s3_status_response = initalData['s3_status_response']
               data.cagr = initalData['CAGR']
@@ -494,6 +495,8 @@ export default {
           ? 0
           : `${item.buyHoldGain}%`
         obj['WIN RATE %'] = isNaN(item.winRate) ? 0 : `${item.winRate}%`
+        obj['SHARPE RATIO'] = isNaN(item.sharpeRatio) ? 0 : `${item.sharpeRatio}%`
+        obj['SORTINO RATIO'] = isNaN(item.sortinoRatio) ? 0 : `${item.sortinoRatio}%`
         obj['AVERAGE WIN %'] = isNaN(item.averageWin)
           ? 0
           : `${item.averageWin}%`
