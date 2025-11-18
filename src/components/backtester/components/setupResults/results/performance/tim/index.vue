@@ -1478,8 +1478,8 @@ export default {
 			const res = period_dict.map((val, i) => 
 				{
 					const Positive = isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100) + '%'
-					let AvgMaxLoss = !median_list[i] && median_list[i] != 0 ? NaN : max_loss_list[i].toFixed(1)
-					let AvgMaxGain = !median_list[i] && median_list[i] != 0 ? NaN : max_gain_list[i].toFixed(1)
+					let AvgMaxLoss = !median_list[i] && median_list[i] != 0 ? '' : max_loss_list[i].toFixed(1)
+					let AvgMaxGain = !median_list[i] && median_list[i] != 0 ? '' : max_gain_list[i].toFixed(1)
 					// 如果为字符串类型，先转换为数字；注意要排除 NaN 的情况
 					if (direction === 'Short' && !isNaN(AvgMaxLoss)) {
 						AvgMaxLoss = -parseFloat(AvgMaxLoss);
@@ -1490,7 +1490,7 @@ export default {
 					return {
 						Period: val['timeframe'],
 					'Mean': temp_mean_list[i],
-					Median: median_list[i],
+					Median: isNaN(median_list[i]) ? '' : median_list[i],
 					'% Positive': Positive,
 					'Avg Max Loss': AvgMaxLoss,
 					'Avg Max Gain': AvgMaxGain,
