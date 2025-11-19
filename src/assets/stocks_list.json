@@ -7734,12 +7734,6 @@
     "inception": "2020/10/23"
   },
   {
-    "stock": "FI",
-    "name": "Fiserv Inc",
-    "category": "Stock",
-    "inception": "1986/9/25"
-  },
-  {
     "stock": "FIBK",
     "name": "First Interstate BancSystem In",
     "category": "Stock",
@@ -22749,7 +22743,7 @@
     "stock": "FISV",
     "name": "Fiserv Inc",
     "category": "Stock",
-    "inception": "1991/07/02"
+    "inception": "1986/09/25"
   },
   {
     "stock": "FWONK",
