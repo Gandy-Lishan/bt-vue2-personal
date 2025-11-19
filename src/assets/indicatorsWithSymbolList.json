@@ -18641,13 +18641,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Fiserv Inc",
-        "url": "FI",
-        "market_symbol": "FI",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Kenvue Inc",
         "url": "KVUE",
         "market_symbol": "KVUE",
@@ -39329,20 +39322,6 @@
         "chart_name": "Blackstone Inc RelTrend Score",
         "url": "BX_reltrend",
         "market_symbol": "BX",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Fiserv Inc Trend Score",
-        "url": "FI_trend",
-        "market_symbol": "FI",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Fiserv Inc RelTrend Score",
-        "url": "FI_reltrend",
-        "market_symbol": "FI",
         "type": "reltrend",
         "updated": "Daily"
     },
