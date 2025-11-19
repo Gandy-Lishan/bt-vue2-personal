@@ -121,20 +121,37 @@
                 :data="tableData"
                 class="summary-table"
             >
-                <el-table-column
-                    prop="winRate"
-                    label="WIN RATE %"
+            <el-table-column
+                    prop="SharpeRatio"
+                    label="SHARPE RATIO"
                     show-overflow-tooltip
-                    width="180"
                     align="center"
+                    width="180"
                 >
                     <template slot-scope="scope">
-                        <span v-if="scope.row.winRate >= 0">{{
-                            displayData(scope.row.winRate) + '%'
+                        <span v-if="scope.row.SharpeRatio >= 0">{{
+                            displayData(scope.row.SharpeRatio)
                         }}</span>
-                        <span v-else-if="isNaN(scope.row.winRate)">0.0</span>
+                        <span v-else-if="isNaN(scope.row.SharpeRatio)">0.0</span>
                         <span v-else style="color: #dd3a13">{{
-                            displayData(scope.row.winRate) + '%'
+                            displayData(scope.row.SharpeRatio)
+                        }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="sortino_ratio"
+                    label="SORTINO RATIO"
+                    show-overflow-tooltip
+                    align="center"
+                    width="180"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.sortino_ratio >= 0">{{
+                            displayData(scope.row.sortino_ratio)
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.sortino_ratio)">0.0</span>
+                        <span v-else style="color: #dd3a13">{{
+                            displayData(scope.row.sortino_ratio)
                         }}</span>
                     </template>
                 </el-table-column>
@@ -192,6 +209,23 @@
                 :data="tableData"
                class="summary-table"
             >
+            <el-table-column
+                    prop="winRate"
+                    label="WIN RATE %"
+                    show-overflow-tooltip
+                    width="180"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.winRate >= 0">{{
+                            displayData(scope.row.winRate) + '%'
+                        }}</span>
+                        <span v-else-if="isNaN(scope.row.winRate)">0.0</span>
+                        <span v-else style="color: #dd3a13">{{
+                            displayData(scope.row.winRate) + '%'
+                        }}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="totalTrades"
                     label="TOTAL TRADES"

@@ -12,7 +12,7 @@
 			<template v-for="(item, index) in medianReturn">
 				<tr :key="index">
 					<template v-for="(val, key, i) in item">
-						<td class="tg-0lax" :key="i" :class="`${getColor(val)}`" v-if="key !== 'Median % Return'">{{ !isNaN(val) ? displayData(val) : '' }}</td>
+						<td class="tg-0lax" :key="i" :class="`${getColor(val)}`" v-if="key !== 'Median % Return'">{{ !isNaN(val) ? displayData(val, 'Median') : '' }}</td>
 						<td class="tg-0lax" :key="i" v-else>{{ val }}</td>
 					</template>
 				</tr>
@@ -30,7 +30,7 @@
 			<template v-for="(item, index) in consistency">
 				<tr :key="index">
 					<template v-for="(val, key, i) in item">
-						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ !isNaN(val) ? `${val}%` : '' }}</td>
+						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ (val && !isNaN(val)) ? `${val}%` : '' }}</td>
 						<td class="tg-0lax" :key="i" v-else>{{ val }}</td>
 					</template>
 				</tr>
@@ -159,7 +159,7 @@ export default {
                   [handleKey]: key
                 }
                 data[key][handleKey].forEach((value, index) => {
-                    obj[this.defaultTableLabels[index]] = (value !== undefined && value !== null && value !== NaN  && value !== 'NaN' && value !== 'null' && value !== 'null%') ? this.displayData(value) : ''
+                    obj[this.defaultTableLabels[index]] = (value !== undefined && value !== null && value !== NaN  && value !== 'NaN' && value !== 'null' && value !== 'null%') ? this.displayData(value, 'Consistency') : ''
                 });
 
                 _data.push(obj);
@@ -211,11 +211,11 @@ export default {
 			if(!Array.isArray(positive) || !Array.isArray(negative) || value === undefined)  return ''
 			let gColors = ['g100', 'g200', 'g300', 'g400', 'g500']
 			for (let index = 0; index < positive.length; index++) {
-				if(positive[index].indexOf(value) !== -1) return gColors[index]
+				if(positive[index].indexOf(Number(value)) !== -1) return gColors[index]
 			}
 			let rColors = ['r100', 'r200', 'r300', 'r400', 'r500']
 			for (let index = 0; index < negative.length; index++) {
-				if(negative[index].indexOf(value) !== -1) return rColors[index]
+				if(negative[index].indexOf(Number(value)) !== -1) return rColors[index]
 			}
 			return ''
 		},
@@ -224,11 +224,11 @@ export default {
 			if(!Array.isArray(positive) || !Array.isArray(negative) || value === undefined)  return ''
 			let gColors = ['g100', 'g200', 'g300', 'g400', 'g500']
 			for (let index = 0; index < positive.length; index++) {
-				if(positive[index].indexOf(value) !== -1) return gColors[index]
+				if(positive[index].indexOf(Number(value)) !== -1) return gColors[index]
 			}
 			let rColors = ['r100', 'r200', 'r300', 'r400', 'r500']
 			for (let index = 0; index < negative.length; index++) {
-				if(negative[index].indexOf(value) !== -1) return rColors[index]
+				if(negative[index].indexOf(Number(value)) !== -1) return rColors[index]
 			}
 			return ''
 		},
@@ -252,12 +252,16 @@ export default {
 				_consistency: this.consistency
 			}
 		},
-		displayData(data) {
+		displayData(data, type) {
 			const numberRegex = /^-?\d+(\.\d+)?$/
 			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 			if (numberRegex.test(data)) {
-				return parseFloat(data).toFixed(1)
+				if(type === 'Median') {
+					return parseFloat(data).toFixed(1)
+				}else {
+					return parseFloat(data)
+				}
 			} else if (dateRegex.test(data)) {
 				return data
 			} else if(typeof data == 'string'){
