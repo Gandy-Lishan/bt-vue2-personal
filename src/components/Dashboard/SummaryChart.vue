@@ -15,14 +15,10 @@ export default {
   chart: Object,
   enlarged: Boolean
  },
- data() {
-   return {
-   };
- },
 watch: {
   chart: {
     handler(chart){
-      if(chart.data && Array.isArray(chart.data)) {
+      if(chart && chart.data && Array.isArray(chart.data)) {
         this.renderChart(this.chart);
       }
     },
@@ -32,8 +28,12 @@ watch: {
     this.renderChart(this.chart)
   }
 },
+mounted() {
+  this.renderChart(this.chart);
+},
  methods: {
-   renderChart(chart) {
+  renderChart(chart) {
+    if(!chart || !chart.data || !Array.isArray(chart.data)) return
      const chartData = chart.data.map((value) => [new Date(value[0]).getTime(), value[1]]);
 
      const chartOptions = {
