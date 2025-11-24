@@ -2165,7 +2165,7 @@ export default {
             return itemDate > latestDate ? item : latest;
           })?.last_update
           this.trendUpdateDate = ` (${trendUpdateDate || this.filterData[0]?.last_update})`
-        }
+        }else this.trendUpdateDate = ''
       },
       immediate: true,
       depp: true

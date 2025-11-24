@@ -269,9 +269,19 @@ export default {
       this.dropdownList = this.symbolList
       await this.fetchSPXDT();
       this.data.referenceEndDate = this.SPXAllDT[this.SPXAllDT.length - 1].Date
-      this.setPeriod()
+      const item252 = this.SPXAllDT.length >= 252 ? this.SPXAllDT[this.SPXAllDT.length - 252] : null;
+      if(item252) {
+        this.data.referenceStartDate = item252.Date
+        this.data.comparisonEndDate = item252.Date
+        const item504 = this.SPXAllDT.length >= 504 ? this.SPXAllDT[this.SPXAllDT.length - 504] : null;
+        if(item504) {
+          this.data.comparisonStartDate = item504.Date
+        }
+      }else {
+        this.setPeriod()
       this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
       this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
+      }
       // this.data.referenceBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.referenceStartDate, this.data.referenceEndDate)
       // this.data.comparisonBarsNum = this.measureBarDistance(this.SPXAllDT, this.data.comparisonStartDate, this.data.comparisonEndDate)
     },
@@ -594,47 +604,44 @@ export default {
     changeComparisonNumberOfBars(val) {
       debugger
       // if(val>=5 && val<=252 && this.data.comparisonEndDate) this.data.comparisonStartDate = this.getStartDateByNumberOfBars(this.SPXAllDT,this.data.comparisonEndDate,Number(val))
-      if(val>=5 && val<=252 && this.data.comparisonStartDate) this.data.comparisonEndDate = this.getEndDateByNumberOfBars(this.SPXAllDT,this.data.comparisonStartDate,Number(val))
+      if(val>=5 && val<=252 && this.data.comparisonEndDate) this.data.comparisonStartDate = this.getStartDateByNumberOfBars(this.SPXAllDT,this.data.comparisonEndDate,Number(val))
       if(this.data.referenceBarsNum != val) {
         this.data.referenceBarsNum = val
-        if(val>=5 && val<=252 && this.data.referenceStartDate) this.data.referenceEndDate = this.getEndDateByNumberOfBars(this.SPXAllDT,this.data.referenceStartDate,Number(val))
+        if(val>=5 && val<=252 && this.data.referenceEndDate) this.data.referenceStartDate = this.getStartDateByNumberOfBars(this.SPXAllDT,this.data.referenceEndDate,Number(val))
       }
     },
     changeReferenceNumberOfBars(val) {
       debugger
       // if(val>=5 && val<=252 && this.data.referenceEndDate) this.data.referenceStartDate = this.getStartDateByNumberOfBars(this.SPXAllDT,this.data.referenceEndDate,Number(val))
-      if(val>=5 && val<=252 && this.data.referenceStartDate) this.data.referenceEndDate = this.getEndDateByNumberOfBars(this.SPXAllDT,this.data.referenceStartDate,Number(val))
+      if(val>=5 && val<=252 && this.data.referenceEndDate) this.data.referenceStartDate = this.getStartDateByNumberOfBars(this.SPXAllDT,this.data.referenceEndDate,Number(val))
       if(this.data.comparisonBarsNum != val) {
         this.data.comparisonBarsNum = val
-        if(val>=5 && val<=252 && this.data.comparisonStartDate) this.data.comparisonEndDate = this.getEndDateByNumberOfBars(this.SPXAllDT,this.data.comparisonStartDate,Number(val))
+        if(val>=5 && val<=252 && this.data.comparisonEndDate) this.data.comparisonStartDate = this.getStartDateByNumberOfBars(this.SPXAllDT,this.data.comparisonEndDate,Number(val))
       }
     },
-    getEndDateByNumberOfBars(quotes,d2,barDistance) {
-      debugger
-      // 找到小于等于目标日期的最接近的日期索引
+    getStartDateByNumberOfBars(quotes, d2, barDistance) {
       const targetDate = new Date(d2);
       let startDateIndex = -1;
-      
-      // 从前往后查找，找到第一个大于等于目标日期的索引
-      for (let i = 0; i < quotes.length; i++) {
+
+      // 从后往前找 <= d2 的最近日期
+      for (let i = quotes.length - 1; i >= 0; i--) {
         const quoteDate = new Date(quotes[i].Date);
-        if (quoteDate >= targetDate) {
+        if (quoteDate <= targetDate) {
           startDateIndex = i;
           break;
         }
       }
-      
-      // 如果找不到合适的日期，返回 undefined
+
+      // 找不到符合的
       if (startDateIndex === -1) return;
-      
-      // 计算开始日期索引
-      const endDateIndex = startDateIndex + barDistance;
-      
-      // 如果开始索引小于0，返回 undefined
-      if (endDateIndex >= quotes.length) return quotes[quotes.length - 1].Date;
-      
-      const endDate = quotes[endDateIndex].Date;
-      return endDate;
+
+      // 往「前」推 barDistance 个
+      const endDateIndex = startDateIndex - barDistance;
+
+      // 越界=返回最早日期
+      if (endDateIndex < 0) return quotes[0].Date;
+
+      return quotes[endDateIndex].Date;
     },
     changeDateSort() {
       const {referenceStartDate, referenceEndDate, comparisonStartDate, comparisonEndDate} = this.data

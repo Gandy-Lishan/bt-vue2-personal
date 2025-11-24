@@ -479,7 +479,7 @@ export default {
   async created() {
     const access_level = getCookieData()?.access_level
     const email = getCookieData()?.username
-		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'kian@sentimentrader.com']
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'kian@sentimentrader.com', 'reports@sentimentrader.com']
     let exists = LocalStorageUtil.get('upgradeUserLevel')
     if(!exists) {
       let {data:{exists:_exists}} = await checkEmail(getCookieData()?.username)
