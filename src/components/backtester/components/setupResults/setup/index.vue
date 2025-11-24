@@ -166,7 +166,7 @@ export default {
 							console.log('cachedData', cachedData)
 							if (Object.keys(dataToUse).length !== 0) {
 								dataToUse = isJson(dataToUse) ? JSON.parse(dataToUse) : dataToUse
-								// dataToUse.old_uuid = dataToUse.id
+								dataToUse.old_uuid = dataToUse.id
 								await _this.displaySetUpForm(dataToUse)
 							}
 						}
