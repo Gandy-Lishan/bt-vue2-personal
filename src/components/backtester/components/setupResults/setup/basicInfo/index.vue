@@ -1697,6 +1697,7 @@ export default {
           return false }
       // 首次创建, 或者点击按钮跳转过来
       const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && (_this.getterBacktestInfo.user_tag == 'client' || _this.getterBacktestInfo.user_tag == 'user') // true false
+      const isAnalyst = (_this.bd.analystID || (_this.getterBacktestInfo.hasOwnProperty('user_tag') && (_this.getterBacktestInfo.user_tag == 'analyst' || _this.getterBacktestInfo.user_tag == 'analyst') ))// true false
       const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client', 'user'].includes(_this.bd.user_tag) // false true
       if(!isAdmin && (_this.bd.analystID && _this.bd.id)) {
         // 没有分析师权限
@@ -1720,6 +1721,15 @@ export default {
         _this.bd.user_tag = 'client'
         // return false
       }
+      // 分析师回测也走新建 不能改 因为报告中可能被用到
+      if(isAnalyst && isAdmin) {
+        delete _this.bd.analystID
+        delete _this.bd.id
+        delete _this.bd.old_uuid
+        const _popMsg = `${(_this.bd.user_tag && _this.bd.user_tag === 'client') ? 'private' : 'public'}`
+        _this.popUpMsgBox(`We kept your old analyst backtest and created a new one. It will be ${_popMsg}.`);
+      }
+
       /* backtest name 校验 */
       debugger
       nameLookupRes = await getBacktestName(_this.bd.name)
