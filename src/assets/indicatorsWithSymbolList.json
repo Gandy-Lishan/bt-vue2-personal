@@ -96276,5 +96276,12 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "TCTM Washout Model",
+        "url": "tctm_washout_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
