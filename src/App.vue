@@ -117,7 +117,7 @@ export default {
 			}
 		}
 		const email = getCookieData()?.username;
-		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jaclyn.wu@monicfinancial.com', 'eve@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'shhenryw@gmail.com', 'kian@sentimentrader.com'];
+		const allowedUserList = ['jay@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com', 'hao@sentimentrader.com', 'jaclyn.wu@monicfinancial.com', 'eve@sentimentrader.com', 'jinjing@elixiroftechnology.com', 'shhenryw@gmail.com', 'kian@sentimentrader.com', 'reports@sentimentrader.com'];
 		const userID = Cookies.get('devbt2Userid');
 		let role = 'client';
 		let isAdmin = false;
