@@ -437,7 +437,7 @@
 										@confirm="deleteBacktest(scope.row.id)"
 									>
 										<el-button
-											v-if="currentPage == 'History' && scope.row.favorites == false"
+											v-if="(currentPage == 'History' || (currentPage === 'Analyst' && openUserFunction)) && scope.row.favorites == false"
 											type="danger"
 											icon="el-icon-delete"
 											circle
@@ -455,7 +455,7 @@
 										@confirm="deleteBacktest(scope.row.id)"
 									>
 										<el-button
-											v-if="currentPage == 'History' && scope.row.favorites == true"
+											v-if="(currentPage == 'History' || (currentPage === 'Analyst' && openUserFunction)) && scope.row.favorites == true"
 											type="danger"
 											icon="el-icon-delete"
 											circle
