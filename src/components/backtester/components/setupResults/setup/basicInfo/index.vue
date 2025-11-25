@@ -806,6 +806,8 @@ import { getSymbolInfo } from '@/utils/globalFunc'
 import { validateCapitalRule, validateCommissionRule, validateSlippageRule, validateURLRule, createTPSLValidate, createPositiveIntegerValidate } from '@/utils/formValidate'
 import { mapGetters } from "vuex"
 import { getIndicatorsRowData } from "@/service/service";
+import Cookies from 'vue-cookies'
+import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 import {
   getBacktestName
@@ -1699,6 +1701,7 @@ export default {
       const isClient = _this.getterBacktestInfo.hasOwnProperty('user_tag') && (_this.getterBacktestInfo.user_tag == 'client' || _this.getterBacktestInfo.user_tag == 'user') // true false
       const isAnalyst = (_this.bd.analystID || (_this.getterBacktestInfo.hasOwnProperty('user_tag') && (_this.getterBacktestInfo.user_tag == 'analyst' || _this.getterBacktestInfo.user_tag == 'analyst') ))// true false
       const isAdmin = _this.is_admin && ['analyst', 'system'].includes(_this.userRole) && ['analyst', 'system', 'client', 'user'].includes(_this.bd.user_tag) // false true
+      const account_code = getCookieData()?.account_code
       if(!isAdmin && (_this.bd.analystID && _this.bd.id)) {
         // 没有分析师权限
         delete _this.bd.analystID
@@ -1714,22 +1717,52 @@ export default {
           return false
         }
       }
-      if(!isClient && !isAdmin) {
-        // _this.popUpMsgBox('Permission denied');
-        // 帮改权限
-        _this.$store.commit('form/SET_BACKTEST_INFO_PROPS', {key: 'user_tag', value: 'client'})
-        _this.bd.user_tag = 'client'
-        // return false
-      }
-      // 分析师回测也走新建 不能改 因为报告中可能被用到
-      if(isAnalyst && isAdmin) {
-        delete _this.bd.analystID
-        delete _this.bd.id
-        delete _this.bd.old_uuid
-        const _popMsg = `${(_this.bd.user_tag && _this.bd.user_tag === 'client') ? 'private' : 'public'}`
-        _this.popUpMsgBox(`We kept your old analyst backtest and created a new one. It will be ${_popMsg}.`);
-      }
+      // 如果你编辑的回测不是你创建的那么就走新建
+      if(_this.getterBacktestInfo.user && _this.backtestUser && (_this.getterBacktestInfo.user !== _this.backtestUser && _this.getterBacktestInfo.user !== account_code)) {
+          delete _this.bd.analystID
+          delete _this.bd.id
+          delete _this.bd.old_uuid
+          _this.bd.user = _this.backtestUser
+          // 如果你是管理者那么不改变 user_tag
+          if(!isAdmin) {
+            _this.bd.user_tag = 'client'
+            _this.$store.commit('form/SET_BACKTEST_INFO_PROPS', {key: 'user_tag', value: 'client'})
+          }
+          _this.$store.commit('form/DELETE_BACKTEST_INFO_PROPS', {key: 'old_uuid'})
+      }else if(_this.getterBacktestInfo.user && _this.backtestUser &&((_this.getterBacktestInfo.user === _this.backtestUser) || (_this.getterBacktestInfo.user === account_code))) {
+        const isSymstem = Cookies.get('devbt2Userid') && Cookies.get('devbt2Userid') === 'system'
+        if(!isSymstem) {
+          // 编辑的是自己的回测并且不是分析师回测就不删除旧的 id
+          if(isAnalyst) {
+            delete _this.bd.analystID
+            delete _this.bd.id
+            delete _this.bd.old_uuid
+            _this.$store.commit('form/DELETE_BACKTEST_INFO_PROPS', {key: 'old_uuid'})
+          }
+          // 如果你是管理者那么不改变 user_tag
+          if(!isAdmin) {
+            _this.bd.user_tag = 'client'
+            _this.$store.commit('form/SET_BACKTEST_INFO_PROPS', {key: 'user_tag', value: 'client'})
+          }
 
+        }
+      }else if(!_this.getterBacktestInfo.user && _this.backtestUser){
+          delete _this.bd.analystID
+          delete _this.bd.id
+          delete _this.bd.old_uuid
+          _this.bd.user = _this.backtestUser
+          if(!isAdmin) {
+            _this.bd.user_tag = 'client'
+            _this.$store.commit('form/SET_BACKTEST_INFO_PROPS', {key: 'user_tag', value: 'client'})
+          }
+          _this.$store.commit('form/DELETE_BACKTEST_INFO_PROPS', {key: 'old_uuid'})
+      }else if(!_this.backtestUser) {
+        _this.popUpMsgBox('You are not authorized to modify this backtest')
+        return false
+      }else {
+        _this.popUpMsgBox('Unknown error')
+        return false
+      }
       /* backtest name 校验 */
       debugger
       nameLookupRes = await getBacktestName(_this.bd.name)
@@ -1750,7 +1783,8 @@ export default {
       (nameValid && !_this.getterBacktestInfo.hasOwnProperty('old_uuid')) || (nameValid && _this.getterBacktestInfo.hasOwnProperty('old_uuid') && !_this.getterBacktestInfo.old_uuid)
       if(!nameValidPass) {
         _this.popUpMsgBox('The backtest name already exists');
-        return false}
+        return false
+      }
       return setUpValid && nameValidPass
     },
     setDesciption() {

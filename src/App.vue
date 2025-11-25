@@ -75,8 +75,6 @@ export default {
 				console.log('权限响应', res)
 
 				const backtest_user = res.data.userid
-				_this.$store.commit('user/SETUSERROLE', { 'backtest_user': backtest_user });
-				localStorage.setItem('backtest_user', backtest_user);
 
 				this.getNotificationCount()
 			} catch (error) {
@@ -131,6 +129,7 @@ export default {
 		}
 		this.$store.commit('user/SETUSERROLE', { 'is_admin': isAdmin, 'role': role, 'userID': email || userID });
 		this.$store.commit('form/setBd', { 'user_tag': role});
+		// localStorage.setItem('backtest_user', email || userID);
 		localStorage.setItem('role', role);
 		localStorage.setItem('is_admin', isAdmin);
 

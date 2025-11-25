@@ -43,7 +43,7 @@ export function setRouterPermission(router) {
 		printConsole(process.env.NODE_ENV)
 		if(process.env.NODE_ENV == 'development'){
 			// hao@sentimentrader 
-			// const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
+			const _userCookies = 'IJLN7EhBuOXvsdvgYt7rLyYvp4GSk2hXdln69TOIHHgCIpzJIACssjQOW7bWH20fpw0OiGw0poJIV2Nzvk3FatVlMwKuU6zTMuorJTgFps1U8Hf6ux9GVpeoQR1iivqwN2hd9ZIY8qo4NiJD0KNh11JZNTcxiPKBDRcdvrCIKT6n6fP4p8m0vZCRGExnFzlNyGOMAg6L0P8uxwaORgH6lTcesVlyOUjwVPoejA8q5vu9+2Ua1ZC0EPtbgoyLBrCWduhPJnynwcIMq74y1JTK49iuJXZZ1xi0lq9R6vfCbfwQ6yKaPTUk5SLPIURdC+tXAgClauHMEAJ19C5IihySD7gIQ6luZFfq6GdHssy0ebkiQoEoX8ymUzMdH4a8jX583j6RaCOWJ+L9xfq8bbQ7vFSysWWZ6nzD3EbCdqKT7Kfvx5pSii2XwuP42aqx/k1nf26ufCqzOnUj4olrtCt/Tg=='
 			// reports 权限
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqdQrcuNNKjaFjCDJpptbkKEBBGDtuUiNycG03w9h1VkezpvTm0BdvYrnHrJbQm8XdjDG75olOAHnLoIzuBhH95QQh9lQK52awOyIAnQ55MrzxDroVR6gZhkF/lWfNUwC2dgagWW04VYkeLys1phd3Yifupks/kTkN2c/UcDmQ+BEBM0gMLIGnK3J1Knds5RDdxnZyi/ID3qWNxnNGYKTZf6DFMSvHKMNTeEVXtvptbBy2eqB1l3OX5WjCbfJJFtkotn4LL1LUML6evLgl6Tdr+zBBGDtuUiNycG03w9h1Vke5Pi4P3OVvyNrt7/sdPUBdPk9hdfGaP97xE2my/HuAne"
 			// daniel@sentimentrader.com
@@ -56,7 +56,9 @@ export function setRouterPermission(router) {
 			// datalite
 			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqf7esOK24j4IZaV+aGkCMK1HDsNiXUfX5Pu5upJJST8oTpvTm0BdvYrnHrJbQm8XdjYFZgwUNoEBiuKsKAIH4rEW6nBv511krdR+eHgpUiRNjeE2og+1mrxGst89AW01Bj56Uo1kJPBGfw7MWFmpCeFkNoXjLNOzTbmMirhca1m7nEOyuDTUqoUp59w2G6c1gdLdLRI8tjYxKcH8tV8WFx1krMbQVbAzv4tegUYI5fOLTv/vcyCJxxnapa38ygsA7g="
 			// 升级用户测试 Cookie
-			const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqftFrxgNvPe5MKGrwSy+Q7Akd+v1bIan11vea4514TpTNL/G4NPb1IMiVXLJpiCFkx2cwijetNY1ZHo369U7VMFJHdRaNKlr/0Bpd9qG/WGj5MzMQHQx6VmX5Mc2wYaqT1NluBl390YGjaVxxniW70Wz0rKHE3ipI4vjlp1BuikxVn+LHihQE1ZVDOebDnKLjupnUMYgH6aQ8IDsEdLXTVfsB4JUXrGmxqwHXZoeJVb1AhWdcSZ9WjoKfLIXhSy39eHsnDOBiw/wURe7psont+kB1PYRyspynUsFytMj9iSTXzxBvFwh86axNQ/+GaqWt5An4e8btZ4G37Og+7XfawLmf1QKvLZYMKZlPyPRbwJ6cF5UoCaZWq8dfmfraR5QCa4W1uyiirj9prZPjC6c0MYbnE9qbfh2NuqiGPTVBlitw=="
+			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqftFrxgNvPe5MKGrwSy+Q7Akd+v1bIan11vea4514TpTNL/G4NPb1IMiVXLJpiCFkx2cwijetNY1ZHo369U7VMFJHdRaNKlr/0Bpd9qG/WGj5MzMQHQx6VmX5Mc2wYaqT1NluBl390YGjaVxxniW70Wz0rKHE3ipI4vjlp1BuikxVn+LHihQE1ZVDOebDnKLjupnUMYgH6aQ8IDsEdLXTVfsB4JUXrGmxqwHXZoeJVb1AhWdcSZ9WjoKfLIXhSy39eHsnDOBiw/wURe7psont+kB1PYRyspynUsFytMj9iSTXzxBvFwh86axNQ/+GaqWt5An4e8btZ4G37Og+7XfawLmf1QKvLZYMKZlPyPRbwJ6cF5UoCaZWq8dfmfraR5QCa4W1uyiirj9prZPjC6c0MYbnE9qbfh2NuqiGPTVBlitw=="
+			// reports@sentimentrader.com
+			// const _userCookies = "IJLN7EhBuOXvsdvgYt7rL0ygDYmDBQ7rF4xRIKaLAqfYLkUTqEMCP3JQNz9J/0TyS1OfVbempGenglU0CD4a43YY/lyx22k9DsFJcUtQ/CP/4itycZyZR/JN2ajs0+6js+j+jVXQjROvW8ATJ6AhA+Z+jnvIrUGa3SRoaUnEgSywHglResabGrAddmh4lVvUzeu3EoVtYUxsr2MIkTOA+nyHeH0VqSI+OxZSAsaBO0bPSsocTeKkji+OWnUG6KTFqTtNkVpbh6UEuSi/WHBuX6hbwgCCO0faenp5heT+juHCQIsGTO8IQnR8XMQdg9e4yq2f6P53C/iGUUy9eaf5JRu1gM2v/h5IlLAFX21/hAZ3opbMqNIR4YAmFXzga+si8cOs3ffOFswaK6Tphj5nTr8y4B3DKBmvn8XFA4S4XAOQoiOkI+lIro3ZsmC6Hok1krMbQVbAzv4tegUYI5fOLTv/vcyCJxxnapa38ygsA7g="
 			Cookies.set(
 				'sentimen_session',
 				_userCookies
@@ -172,6 +174,10 @@ export function setRouterPermission(router) {
 			LocalStorageUtil.set('upgradeUserLevel', exists)
 		}
    		const access_level = getCookieData()?.access_level
+		const email = getCookieData()?.username
+		const devbt2Userid = Cookies.get('devbt2Userid')
+		localStorage.setItem('backtest_user', email || devbt2Userid);
+		store.commit('user/SETUSERROLE', { 'backtest_user': email || devbt2Userid});
 			if(Array.isArray(access_level)) {
 				// notifications 路由根据权限的跳转控制， 单独判断的逻辑，和下方的代码无关
 				if(to.path.includes('/notifications')) {

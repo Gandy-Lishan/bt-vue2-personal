@@ -44,9 +44,6 @@ export const CommonMethodsMixin = {
 			} else {
 				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
 			}
-			if(currentPage === 'Analyst') {
-				data.analystID = data.id
-			}
 			data.commission = (data.commission * 100).toFixed(2)
 			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data) 
 			this.$store.commit('form/CACHED_SCOPED_ROW_IMMUTABLE', data)
@@ -70,9 +67,6 @@ export const CommonMethodsMixin = {
 				data.user_tag = 'client'
 			} else {
 				if (data.hasOwnProperty('old_uuid')) delete data.old_uuid
-			}
-			if(currentPage === 'Analyst') {
-				data.analystID = data.id
 			}
 			data.commission = (data.commission * 100).toFixed(2)
 			this.$store.commit('form/RESULT_DATA_FOR_SETUP_DISPLAY', data)
