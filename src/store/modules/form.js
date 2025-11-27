@@ -609,6 +609,9 @@ const mutations = {
 	},
 	SET_BACKTEST_INFO_PROPS(state, {key, value}) {
 		state.backtestInfo[key] = value
+	},
+	DELETE_BACKTEST_INFO_PROPS(state, {key}) {
+		delete state.backtestInfo[key]
 	}
 }
 
