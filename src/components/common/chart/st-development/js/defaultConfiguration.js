@@ -366,10 +366,6 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Fractal Chaos Bands"
 						},
 						{
-							"name": "ATR Bands",
-							"url": "ATR Bands"
-						},
-						{
 							"name": "Darvas Box",
 							"url": "Darvas"
 						},
@@ -792,7 +788,11 @@ import {CIQ} from "chartiq/js/chartiq.js";
 						{
 							"name": "STARC Bands",
 							"url": "STARC Bands"
-						}
+						},
+						{
+							"name": "ATR Bands",
+							"url": "ATR Bands"
+						},
 					]
 				},
 				{
