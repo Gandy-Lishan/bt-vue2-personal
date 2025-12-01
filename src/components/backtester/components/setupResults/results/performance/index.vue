@@ -309,7 +309,6 @@ export default {
                   })
                 }
                 vm.tradesDataWithLastSignal = tradesData
-
                 this.removeLastSell(tradesDataForTradeTable, initalData)
                 vm.tradesDataWithRemovedLastSell = tradesDataForTradeTable
                 this.$store.commit('chart/getTradesData', vm.tradesData)
