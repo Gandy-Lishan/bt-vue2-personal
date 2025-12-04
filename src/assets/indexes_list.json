@@ -2482,5 +2482,35 @@
     "name": "Ethereum",
     "category": "Crypto",
     "inception": "2017/11/09"
+  },
+  {
+    "symbol": "SOXS",
+    "name": "Direxion Daily Semiconductor Bear 3X Shares (SOXS)",
+    "category": "ETF",
+    "inception": "2010/03/11"
+  },
+  {
+    "symbol": "USD",
+    "name": "ProShares Ultra Semiconductors (USD)",
+    "category": "ETF",
+    "inception": "2007/02/01"
+  },
+  {
+    "symbol": "UVXY",
+    "name": "ProShares Ultra VIX Short-Term Futures ETF (UVXY)",
+    "category": "ETF",
+    "inception": "2011/10/04"
+  },
+  {
+    "symbol": "VXX",
+    "name": "iPath Series B S&P 500 VIX Short-Term Futures ETN (VXX)",
+    "category": "ETF",
+    "inception": "2009/01/30"
+  },
+  {
+    "symbol": "SOXL",
+    "name": "Direxion Daily Semiconductor Bull 3X Shares (SOXL)",
+    "category": "ETF",
+    "inception": "2010/03/11"
   }
 ]

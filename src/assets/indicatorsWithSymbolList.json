@@ -96283,5 +96283,257 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Adamas Trust Inc",
+        "url": "ADAM",
+        "market_symbol": "ADAM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Beacon Financial Corp",
+        "url": "BBT",
+        "market_symbol": "BBT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Paramount Skydance Corp",
+        "url": "PSKY",
+        "market_symbol": "PSKY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Qnity Electronics Inc",
+        "url": "Q",
+        "market_symbol": "Q",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solstice Advanced Materials In",
+        "url": "SOLS",
+        "market_symbol": "SOLS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adamas Trust Inc Trend Score",
+        "url": "ADAM_trend",
+        "market_symbol": "ADAM",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Adamas Trust Inc RelTrend Score",
+        "url": "ADAM_reltrend",
+        "market_symbol": "ADAM",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Beacon Financial Corp Trend Score",
+        "url": "BBT_trend",
+        "market_symbol": "BBT",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Beacon Financial Corp RelTrend Score",
+        "url": "BBT_reltrend",
+        "market_symbol": "BBT",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CSW Industrials Inc Trend Score",
+        "url": "CSW_trend",
+        "market_symbol": "CSW",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CSW Industrials Inc RelTrend Score",
+        "url": "CSW_reltrend",
+        "market_symbol": "CSW",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marzetti Company/The Trend Score",
+        "url": "MZTI_trend",
+        "market_symbol": "MZTI",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Marzetti Company/The RelTrend Score",
+        "url": "MZTI_reltrend",
+        "market_symbol": "MZTI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Paramount Skydance Corp Trend Score",
+        "url": "PSKY_trend",
+        "market_symbol": "PSKY",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Paramount Skydance Corp RelTrend Score",
+        "url": "PSKY_reltrend",
+        "market_symbol": "PSKY",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Qnity Electronics Inc Trend Score",
+        "url": "Q_trend",
+        "market_symbol": "Q",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Qnity Electronics Inc RelTrend Score",
+        "url": "Q_reltrend",
+        "market_symbol": "Q",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ralliant Corp Trend Score",
+        "url": "RAL_trend",
+        "market_symbol": "RAL",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ralliant Corp RelTrend Score",
+        "url": "RAL_reltrend",
+        "market_symbol": "RAL",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solstice Advanced Materials In Trend Score",
+        "url": "SOLS_trend",
+        "market_symbol": "SOLS",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solstice Advanced Materials In RelTrend Score",
+        "url": "SOLS_reltrend",
+        "market_symbol": "SOLS",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "USD Optix",
+        "url": "etf_USD",
+        "market_symbol": "USD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXL Optix",
+        "url": "etf_SOXL",
+        "market_symbol": "SOXL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXS Optix",
+        "url": "etf_SOXS",
+        "market_symbol": "SOXS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VXX Optix",
+        "url": "etf_VXX",
+        "market_symbol": "VXX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "UVXY Optix",
+        "url": "etf_UVXY",
+        "market_symbol": "UVXY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Ultra Semiconductors Trend Score",
+        "url": "USD_trend",
+        "market_symbol": "USD",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Ultra Semiconductors RelTrend Score",
+        "url": "USD_reltrend",
+        "market_symbol": "USD",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Direxion Daily Semiconductor Bull 3X Shares Trend Score",
+        "url": "SOXL_trend",
+        "market_symbol": "SOXL",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Direxion Daily Semiconductor Bull 3X Shares RelTrend Score",
+        "url": "SOXL_reltrend",
+        "market_symbol": "SOXL",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Direxion Daily Semiconductor Bear 3X Shares Trend Score",
+        "url": "SOXS_trend",
+        "market_symbol": "SOXS",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Direxion Daily Semiconductor Bear 3X Shares RelTrend Score",
+        "url": "SOXS_reltrend",
+        "market_symbol": "SOXS",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iPath Series B S&P 500 VIX Short-Term Futures ETN Trend Score",
+        "url": "VXX_trend",
+        "market_symbol": "VXX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iPath Series B S&P 500 VIX Short-Term Futures ETN RelTrend Score",
+        "url": "VXX_reltrend",
+        "market_symbol": "VXX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Ultra VIX Short-Term Futures ETF Trend Score",
+        "url": "UVXY_trend",
+        "market_symbol": "UVXY",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ProShares Ultra VIX Short-Term Futures ETF RelTrend Score",
+        "url": "UVXY_reltrend",
+        "market_symbol": "UVXY",
+        "type": "reltrend",
+        "updated": "Daily"
     }
 ]
