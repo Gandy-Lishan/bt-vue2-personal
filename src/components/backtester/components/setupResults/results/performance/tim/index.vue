@@ -1435,23 +1435,23 @@ export default {
 				)
 				if (direction == 'Short') {
 					max_loss_list.push(
-						this.calculate_median(
+						this.calculate_mean(
 							used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
 						)
 					)
 					max_gain_list.push(
-						this.calculate_median(
+						this.calculate_mean(
 							used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
 						)
 					)
 				} else {
 					max_loss_list.push(
-						this.calculate_median(
+						this.calculate_mean(
 							used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
 						)
 					)
 					max_gain_list.push(
-						this.calculate_median(
+						this.calculate_mean(
 							used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
 						)
 					)
