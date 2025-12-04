@@ -1364,7 +1364,8 @@ export const CommonMethodsMixin = {
 			}
 			// 如果formIndicators有Symbol Ohlcv而activatedMALayout没有，则开始迁入
 			if(
-				Object.values(data.formIndicators).some(urls => CIQ.findSymbolIndicator(urls)) && 
+				// Object.values(data.formIndicators).some(urls => CIQ.findSymbolIndicator(urls)) && 
+				Object.values(data.formIndicators).some(urls => urls.some(indicator => CIQ.findSymbolIndicator(indicator))) && 
 				!data.activatedMALayout.find(item=>CIQ.findSymbolIndicator(item.url))
 			) {
 				data.activatedMALayout = data.activatedMALayout.concat(migrateSymbolOhlcvIntoActivatedMALayout(data.formIndicators, row.symbol, row.symbol2))

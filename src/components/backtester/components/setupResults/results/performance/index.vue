@@ -25,7 +25,7 @@
       </el-tab-pane>
 			<el-tab-pane label="Trades" name="second">
         <Trades 
-          :tradesData="tradesData"
+          :tradesData="tradesDataWithRemovedLastSell"
           :strategy="strategy"
         ></Trades>
 			</el-tab-pane>
@@ -99,6 +99,7 @@ export default {
       tableData: [],
       tradesData: [], 
       tradesDataWithLastSignal: [],
+      tradesDataWithRemovedLastSell: [],
       tradePrice: 'Close',
       editBacktestID: null,
       rowFrequency: 'Daily',
@@ -298,6 +299,7 @@ export default {
                   console.log(error)
                 }
                 const tradesData = cloneDeep(initalData['Trades'])
+                const tradesDataForTradeTable = cloneDeep(initalData['Trades'])
                 vm.tradesData = cloneDeep(initalData['Trades'])
                 if(this.showLastSignalMarker1) {
                   tradesData.push({
@@ -307,6 +309,8 @@ export default {
                   })
                 }
                 vm.tradesDataWithLastSignal = tradesData
+                this.removeLastSell(tradesDataForTradeTable, initalData)
+                vm.tradesDataWithRemovedLastSell = tradesDataForTradeTable
                 this.$store.commit('chart/getTradesData', vm.tradesData)
                 
                 // TIM 数据准备
@@ -334,16 +338,88 @@ export default {
       }
       setTimeout(() => {
         if (initalData.markerSet) {
-          this.loadMarker(initalData.markerSet)
+          this.loadMarker(initalData)
         }
         if (callback) {
           callback()
         }
       }, 0)
     },
+    matchExitReasonsSimplified(initalData) {
+      const exitReasons = initalData['Exit Reason']
+      const markerSet = initalData['markerSet']
+    // 计数器：用于跟踪下一个可用的 Exit Reason 索引
+    let exitIndex = 0;
 
-    loadMarker(markerSet) {
-      try {
+    const updatedMarkerSet = markerSet.map(marker => {
+        // 1. 处理进场 (BUY)
+        if (marker.Type === 'BUY') {
+            return {
+                ...marker,
+                // 进场一律写死为 'default'
+                ExitReason: 'meet Entry Criteria'
+            };
+        }
+
+        // 2. 处理退场 (SELL)
+        if (marker.Type === 'SELL') {
+            let matchedReason = 'No Match Available'; // 默认无匹配项
+
+            // 检查当前索引是否在 exitReasons 数组范围内
+            if (exitIndex < exitReasons.length) {
+                // 顺序匹配：取出当前索引对应的 Exit Reason
+                matchedReason = exitReasons[exitIndex];
+                
+                // 消耗掉这个 Exit Reason，移动到下一个索引
+                exitIndex++;
+            }
+            
+            return {
+                ...marker,
+                ExitReason: matchedReason
+            };
+        }
+
+        // 3. 处理其他类型 (直接返回原始标记)
+        return marker;
+    });
+
+    return updatedMarkerSet;
+},
+
+removeLastSell(tradesData, initalData) {
+    /**
+     *  最后一个SELL不显示的条件：(不同Symbol情况下也只判断最后一个SELL)
+    是Last Signal
+    且BT End Date == Last Exit Date
+    且Exit Reason为Time Is Up
+    Last Signal条件：
+    Symbol Last Signal == BT End Date 
+    **/
+    let showLastSignalMarker1 = initalData['Symbol Last Signal'] && (initalData['Symbol Last Signal'] == initalData['BT End Date'])
+    let showLastSignalMarker2 = initalData['Symbol2 Last Signal'] && (initalData['Symbol2 Last Signal'] == initalData['BT End Date'])
+    const lastSellIndex = initalData['markerSet'].findLastIndex(i=>i.Type == 'SELL')
+    const cond1 = initalData['markerSet'][lastSellIndex]['SymbolNum'] == 1 ? showLastSignalMarker1 : showLastSignalMarker2
+    const cond2 = initalData['markerSet'][lastSellIndex]['DT'] == initalData['BT End Date']
+    const cond3 = initalData['Exit Reason'][initalData['Exit Reason'].length-1] == 'Time Is Up'
+    if(cond1 && cond2 && cond3) {
+      let removedSell = initalData['markerSet'].splice(lastSellIndex, 1)
+      console.log('removedSell', removedSell)
+
+      tradesData[lastSellIndex] = {
+        ...tradesData[lastSellIndex],
+        'Date': '',
+        'TradePrice': NaN,
+      }
+      debugger
+    }
+},
+
+    loadMarker(initalData) {
+      try {       
+        // match Exit Reason
+        const markerSet = this.matchExitReasonsSimplified(initalData)  
+
         //load markers for initial quotefeed
         let list = this.filterMarkerDate(
           new Date(CIQ.initialDate.start),
