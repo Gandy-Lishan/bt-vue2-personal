@@ -249,7 +249,7 @@ export default {
                         'EntryPrice': !isNaN(entryData.TradePrice) ? Number(entryData.TradePrice).toFixed(2) : '',
                         'EntryIndicator': entryData.Indicator || '',
                         'ExitDate': formatExitDate,
-                        'ExitAction': exitData.TradeStatus.toUpperCase(),
+                        'ExitAction': formatExitDate ? exitData.TradeStatus.toUpperCase() : '',
                         'ExitPrice': !isNaN(exitData.TradePrice) ? Number(exitData.TradePrice).toFixed(2) : '',
                         'MaxGain': this.displayData(exitData.MaxGain),
                         'MaxLoss': this.displayData(exitData.MaxLoss),

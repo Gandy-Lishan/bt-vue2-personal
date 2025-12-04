@@ -285,30 +285,33 @@ export default {
 						CIQ.createOneTimePatternMarker(this.other.date,"MACDHistGap")						
 						break;
 					case 'PriceBreakout' :
+            CIQ.setMALayout('Symbol Close', 'entry', 0, {ticker: this.symbol})
 						CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
 							display: '% of Previous Range',
 							Field: 'Close',
 							condition: 'OPR',
 							period: 21
-						},null,{showSupLine:0})
+						},null,{criteria: 'entry',index: 0,showSupLine:0})
 						CIQ.createOneTimePatternMarker(this.other.date,"PriceBreakout")
 						break;
 					case 'HighPoints' :
+            CIQ.setMALayout('Symbol High', 'entry', 0, {ticker: this.symbol})
 						CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
 							display: '% of Previous Range',
 							Field: 'High',
 							condition: 'OPR',
 							period: 13
-						},null,{showSupLine:100})
+						},null,{criteria: 'entry',index: 0,showSupLine:100})
 						CIQ.createOneTimePatternMarker(this.other.date,"HighPoints")
 						break;
 					case 'LowPoints' :
+            CIQ.setMALayout('Symbol Low', 'entry', 0, {ticker: this.symbol})
 						CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
 							display: '% of Previous Range',
 							Field: 'Low',
 							condition: 'OPR',
 							period: 13
-						},null,{showSupLine:0})
+						},null,{criteria: 'entry',index: 0,showSupLine:0})
 						CIQ.createOneTimePatternMarker(this.other.date,"LowPoints")
 						break;
 					case 'RSI' :

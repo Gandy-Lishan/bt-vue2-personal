@@ -195,7 +195,7 @@ MarkersSample.prototype.showmMarker = function () {
 						headline: mDataSet[data].Type || mDataSet[data].TradeStatus,
 						category: 'buy',
 						story:
-							 'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['Indicator'][0],
+							 'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['ExitReason'],
 						displayCategory: false,
 						displayStem: true,	
 						invert: true,
@@ -253,7 +253,7 @@ MarkersSample.prototype.showmMarker = function () {
 						headline: mDataSet[data].Type || mDataSet[data].TradeStatus,
 						category: 'sell',
 						story:
-							'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['Indicator'][0],
+							'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['ExitReason'],
 						displayCategory: false,
 						displayStem: true,	
 						
@@ -370,7 +370,7 @@ MarkersSample.prototype.showmMarker = function () {
 					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
 					category: 'buy-2',
 					story:
-						 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
+						 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['ExitReason'],
 					displayCategory: false,
 					displayStem: true,	
 					invert: true,
@@ -435,7 +435,7 @@ MarkersSample.prototype.showmMarker = function () {
 					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
 					category: 'sell-2',
 					story:
-						'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['Indicator'][0],
+						'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['ExitReason'],
 					displayCategory: false,
 					displayStem: true,	
 					

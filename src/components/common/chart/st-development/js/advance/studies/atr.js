@@ -194,17 +194,21 @@ if (!CIQ.Studies) {
 			calculateFN: CIQ.Studies.calculateStudyATR,
 			outputs: { ATR: "auto" }
 		},
-		/** 无需处理dual symbol */
 		"ATR Bands": {
 			name: "ATR Bands",
 			overlay: true,
 			seriesFN: CIQ.Studies.displayChannel,
 			calculateFN: CIQ.Studies.calculateATRBands,
 			inputs: { Period: 5, Field: "field", Shift: 3, "Channel Fill": true },
+			// outputs: {
+			// 	"ATR Bands Top": "auto",
+			// 	"ATR Bands Bottom": "auto",
+			// 	"ATR Bands Channel": "auto"
+			// },
 			outputs: {
 				"ATR Bands Top": "auto",
-				"ATR Bands Bottom": "auto",
-				"ATR Bands Channel": "auto"
+				"ATR Bands Median": "auto",
+				"ATR Bands Bottom": "auto"
 			},
 			attributes: {
 				Shift: { min: 0.1, step: 0.1 }
