@@ -2506,5 +2506,11 @@
     "name": "iPath Series B S&P 500 VIX Short-Term Futures ETN (VXX)",
     "category": "ETF",
     "inception": "2009/01/30"
+  },
+  {
+    "symbol": "SOXL",
+    "name": "Direxion Daily Semiconductor Bull 3X Shares (SOXL)",
+    "category": "ETF",
+    "inception": "2010/03/11"
   }
 ]
