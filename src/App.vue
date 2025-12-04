@@ -260,9 +260,10 @@ a:hover{
 }
 
 #app {
-		overflow-x: hidden;
-		overflow-y: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
   font-family: "Open Sans",sans-serif;
+  user-select: text;
 }
 
 #nprogress .bar {
