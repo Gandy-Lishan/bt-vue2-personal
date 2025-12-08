@@ -197,8 +197,7 @@ computed: {
 	mounted() {},
 	methods: {
 		async getBacktestInfo(date) {
-			let BacktestInfoContent = await getBacktestInfo(date)
-
+			let BacktestInfoContent = await getBacktestInfo(date) 
 			this.other = BacktestInfoContent
 
 			this.isAsyncDown = true
