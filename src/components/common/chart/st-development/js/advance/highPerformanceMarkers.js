@@ -510,6 +510,7 @@ if (!CIQ.Marker) {
 		ctx.strokeStyle = color;
 		ctx.lineWidth = 1;
 		ctx.beginPath();
+		ctx.setLineDash([]);
 		// Calculate triangle vertices
 		const height = (Math.sqrt(3) / 2) * size; // Height of an equilateral triangle formula
 		const halfSide = size / 2;
@@ -565,10 +566,11 @@ if (!CIQ.Marker) {
 		
 		// 设置描边颜色，移除 fillStyle
 		ctx.strokeStyle = color; // 使用 color 作为空心三角形的描边颜色
-		ctx.lineWidth = 1;
+		ctx.lineWidth = 2;
 	
 		// --- 1. 绘制基本（空心）三角形 ---
 		ctx.beginPath();
+		ctx.setLineDash([]);
 		// 计算三角形顶点
 		const height = (Math.sqrt(3) / 2) * size; // 等边三角形的高度
 		const halfSide = size / 2;
