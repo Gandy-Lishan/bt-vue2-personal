@@ -1137,12 +1137,12 @@ export default {
       if(entryTradeDateArr){
           entryTradeDateArr.forEach((item,index)=>{
             let entryReason = this.other['_Signal']
-      
             markerSet.push({
                 DT: item,
                 Price: entryTradePriceArr[index],
                 Type: entryMarkerType,  
                 Indicator: [entryReason],  
+                reason: 'meet Entry Criteria',
             })
           })
       }
@@ -1157,7 +1157,8 @@ export default {
                 DT: item,
                 Price: exitTradePriceArr[index],
                 Type: exitMarkerType,    
-                Indicator: [exitReasonArr[index]]
+                Indicator: [exitReasonArr[index]], 
+                reason: exitReasonArr[index],
             })
           })
       }

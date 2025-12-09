@@ -107,7 +107,8 @@ export default {
       OtherAssets: {},
       initalData: {},
       showLastSignalMarker1: '',
-      showLastSignalMarker2: ''
+      showLastSignalMarker2: '',
+      direction: '',
     }
   },
   // async created() {
@@ -127,7 +128,7 @@ export default {
       let vm = this
       let initalData = {}
       let data = {}
-      const Direction = row.direction
+      this.direction = row.direction
       if (row.analystID) {
         vm.$store.state.form.favoriteBacktestRowData.id = row.analystID
         row.id = row.analystID
@@ -305,7 +306,7 @@ export default {
                   tradesData.push({
                     Symbol: initalData['Symbol'],
                     Date: this.showLastSignalMarker1,
-                    TradeStatus: Direction === 'Long' ? 'Buy' : 'Sell',
+                    TradeStatus: this.direction === 'Long' ? 'Buy' : 'Sell',
                   })
                 }
                 vm.tradesDataWithLastSignal = tradesData
@@ -346,43 +347,25 @@ export default {
       }, 0)
     },
     matchExitReasonsSimplified(initalData) {
-      const exitReasons = initalData['Exit Reason']
+      const ExitReason = initalData['Exit Reason']
       const markerSet = initalData['markerSet']
-    // 计数器：用于跟踪下一个可用的 Exit Reason 索引
-    let exitIndex = 0;
+      let reasonListCount = 0
+      const updatedMarkerSet = markerSet.map((marker, index) => {
+        let reason = 'meet Entry Criteria' //默认设置为进场原因
+        // 根据SELL／BUY和Direction判断是否是退場
+        if(
+          (this.direction == 'Short' && marker['Type'] == 'BUY') ||
+          (this.direction == 'Long' && marker['Type'] == 'SELL')
+        ){
+          reason = ExitReason[reasonListCount]
+          reasonListCount++
+        } 
 
-    const updatedMarkerSet = markerSet.map(marker => {
-        // 1. 处理进场 (BUY)
-        if (marker.Type === 'BUY') {
-            return {
-                ...marker,
-                // 进场一律写死为 'default'
-                ExitReason: 'meet Entry Criteria'
-            };
-        }
-
-        // 2. 处理退场 (SELL)
-        if (marker.Type === 'SELL') {
-            let matchedReason = 'No Match Available'; // 默认无匹配项
-
-            // 检查当前索引是否在 exitReasons 数组范围内
-            if (exitIndex < exitReasons.length) {
-                // 顺序匹配：取出当前索引对应的 Exit Reason
-                matchedReason = exitReasons[exitIndex];
-                
-                // 消耗掉这个 Exit Reason，移动到下一个索引
-                exitIndex++;
-            }
-            
-            return {
-                ...marker,
-                ExitReason: matchedReason
-            };
-        }
-
-        // 3. 处理其他类型 (直接返回原始标记)
-        return marker;
-    });
+        return {
+            ...marker,
+            reason
+        };
+      });
 
     return updatedMarkerSet;
 },
@@ -396,22 +379,30 @@ removeLastSell(tradesData, initalData) {
     Last Signal条件：
     Symbol Last Signal == BT End Date 
     **/
-    let showLastSignalMarker1 = initalData['Symbol Last Signal'] && (initalData['Symbol Last Signal'] == initalData['BT End Date'])
-    let showLastSignalMarker2 = initalData['Symbol2 Last Signal'] && (initalData['Symbol2 Last Signal'] == initalData['BT End Date'])
-    const lastSellIndex = initalData['markerSet'].findLastIndex(i=>i.Type == 'SELL')
-    const cond1 = initalData['markerSet'][lastSellIndex]['SymbolNum'] == 1 ? showLastSignalMarker1 : showLastSignalMarker2
-    const cond2 = initalData['markerSet'][lastSellIndex]['DT'] == initalData['BT End Date']
-    const cond3 = initalData['Exit Reason'][initalData['Exit Reason'].length-1] == 'Time Is Up'
-    if(cond1 && cond2 && cond3) {
-      let removedSell = initalData['markerSet'].splice(lastSellIndex, 1)
-      console.log('removedSell', removedSell)
+    // let showLastSignalMarker1 = initalData['Symbol Last Signal'] && (initalData['Symbol Last Signal'] == initalData['BT End Date'])
+    // let showLastSignalMarker2 = initalData['Symbol2 Last Signal'] && (initalData['Symbol2 Last Signal'] == initalData['BT End Date'])
+    // const lastSellIndex = initalData['markerSet'].findLastIndex(i=>i.Type == 'SELL')
+    // const cond1 = initalData['markerSet'][lastSellIndex]['SymbolNum'] == 1 ? showLastSignalMarker1 : showLastSignalMarker2
+    // const cond2 = initalData['markerSet'][lastSellIndex]['DT'] == initalData['BT End Date']
+    // const cond3 = initalData['Exit Reason'][initalData['Exit Reason'].length-1] == 'Time Is Up'
+    // if(cond1 && cond2 && cond3) {
+    //   let removedSell = initalData['markerSet'].splice(lastSellIndex, 1)
+    //   console.log('removedSell', removedSell)
 
-      tradesData[lastSellIndex] = {
-        ...tradesData[lastSellIndex],
+    //   tradesData[lastSellIndex] = {
+    //     ...tradesData[lastSellIndex],
+    //     'Date': '',
+    //     'TradePrice': NaN,
+    //   }
+    // }
+
+    const cond3 = initalData['Exit Reason'][initalData['Exit Reason'].length-1] == 'Time Is Up'
+    if(cond3) {
+      tradesData[tradesData.length-1] = {
+        ...tradesData[tradesData.length-1],
         'Date': '',
         'TradePrice': NaN,
       }
-      debugger
     }
 },
 
