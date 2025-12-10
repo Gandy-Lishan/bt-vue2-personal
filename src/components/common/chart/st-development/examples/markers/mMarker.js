@@ -111,7 +111,6 @@ MarkersSample.prototype.showmMarker = function () {
 	const comparisonSymbol = CIQ.store.getters.getComparisonSymbol
 	for (var data in mDataSet) {
 			//var color = mDataSet[data].Type === 'BUY' ? 0 : 1
-			
 			// 为了兼容dot的数据源
 			const standardDate = formatStandardTime(mDataSet[data].DT || mDataSet[data].Date)
 			var quote =null
@@ -183,6 +182,8 @@ MarkersSample.prototype.showmMarker = function () {
 			//if(!quote) console.log('error marker position', quote,xPosition,standardDate,high,CIQ.stxx.chart.dataSet.length - 1)
 			
 			// 绘制Marker
+			// const nodeType = (data == lastExitIndex && mDataSet[data]['ExitReason'] == 'Time Is Up') ? 'triangle-hollow' : 'triangle'
+			const nodeType = (data == mDataSet.length-1 && mDataSet[data]['reason'] == 'Time Is Up') ? 'triangle-hollow' : 'triangle'
 			if(activeLabels.includes("triangle_buy") && (mDataSet[data].Type == "BUY" || mDataSet[data].TradeStatus == "BUY")){
 				new CIQ.Marker({
 					stx: stx,
@@ -191,11 +192,11 @@ MarkersSample.prototype.showmMarker = function () {
 					yPositioner: "below_candle",
 					x: standardDate,
 					node: new CIQ.Marker.stPerformance({
-						type: "triangle",
+						type: nodeType,
 						headline: mDataSet[data].Type || mDataSet[data].TradeStatus,
 						category: 'buy',
 						story:
-							 'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['ExitReason'],
+							 'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['reason'],
 						displayCategory: false,
 						displayStem: true,	
 						invert: true,
@@ -249,11 +250,11 @@ MarkersSample.prototype.showmMarker = function () {
 					xPositioner: "date",
 					x: standardDate,
 					node: new CIQ.Marker.stPerformance({
-						type: "triangle",
+						type: nodeType,
 						headline: mDataSet[data].Type || mDataSet[data].TradeStatus,
 						category: 'sell',
 						story:
-							'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['ExitReason'],
+							'trade entered on ' +  (mDataSet[data].DT || mDataSet[data].Date) + '\nat ' + (mDataSet[data].Price || mDataSet[data].TradePrice) + '\ndue to ' + mDataSet[data]['reason'],
 						displayCategory: false,
 						displayStem: true,	
 						
@@ -354,6 +355,7 @@ MarkersSample.prototype.showmMarker = function () {
 		
 		// 绘制Marker
 		//const yAxisBuySell = quote[comparisonSymbol.url]?.Close
+		const nodeType = (data == mDataSet2.length-1 && mDataSet2[data]['ExitReason'] == 'Time Is Up') ? 'triangle-hollow' : 'triangle'
 		if(activeLabels.includes("triangle_buy_2") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "BUY"){
 			new CIQ.Marker({
 				stx: stx,
@@ -366,11 +368,11 @@ MarkersSample.prototype.showmMarker = function () {
             	plotField: comparisonSymbol.url,		// <<<<== custom field
 				x: standardDate,
 				node: new CIQ.Marker.stPerformance({
-					type: "triangle",
+					type: nodeType,
 					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
 					category: 'buy-2',
 					story:
-						 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['ExitReason'],
+						 'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['reason'],
 					displayCategory: false,
 					displayStem: true,	
 					invert: true,
@@ -431,11 +433,11 @@ MarkersSample.prototype.showmMarker = function () {
 				plotField: comparisonSymbol.url,		// <<<<== custom field
 				x: standardDate,
 				node: new CIQ.Marker.stPerformance({
-					type: "triangle",
+					type: nodeType,
 					headline: mDataSet2[data].Type || mDataSet2[data].TradeStatus,
 					category: 'sell-2',
 					story:
-						'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['ExitReason'],
+						'trade entered on ' +  (mDataSet2[data].DT || mDataSet2[data].Date) + '\nat ' + (mDataSet2[data].Price || mDataSet2[data].TradePrice) + '\ndue to ' + mDataSet2[data]['reason'],
 					displayCategory: false,
 					displayStem: true,	
 					

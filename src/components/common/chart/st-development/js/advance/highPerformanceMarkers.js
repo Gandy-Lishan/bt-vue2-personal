@@ -510,6 +510,7 @@ if (!CIQ.Marker) {
 		ctx.strokeStyle = color;
 		ctx.lineWidth = 1;
 		ctx.beginPath();
+		ctx.setLineDash([]);
 		// Calculate triangle vertices
 		const height = (Math.sqrt(3) / 2) * size; // Height of an equilateral triangle formula
 		const halfSide = size / 2;
@@ -550,6 +551,76 @@ if (!CIQ.Marker) {
 
 			ctx.closePath();
 			ctx.stroke();
+		}
+	};
+
+	CIQ.Marker.stPerformance.drawHollowTriangleMarker = function (marker, style, params) {
+		var stx = marker.params.stx,
+			chart = stx.chart,
+			ctx = chart.context;
+		var x = params.x,
+			y = params.y,
+			size = params.size * 4,
+			category = params.category;
+		var color = params.color ? params.color : style.backgroundColor;
+		
+		// 设置描边颜色，移除 fillStyle
+		ctx.strokeStyle = color; // 使用 color 作为空心三角形的描边颜色
+		ctx.lineWidth = 2;
+	
+		// --- 1. 绘制基本（空心）三角形 ---
+		ctx.beginPath();
+		ctx.setLineDash([]);
+		// 计算三角形顶点
+		const height = (Math.sqrt(3) / 2) * size; // 等边三角形的高度
+		const halfSide = size / 2;
+	
+		if(category == 'buy' || category == 'buy-2'){
+			// 向上（买入）三角形
+			ctx.moveTo(x, y - height / 3); // 以 (x, y) 为中心点
+			ctx.lineTo(x - halfSide, y + (2 * height) / 3);
+			ctx.lineTo(x + halfSide, y + (2 * height) / 3);
+		} else {
+			// 向下（卖出）三角形
+			ctx.moveTo(x, y + height / 3); // 以 (x, y) 为中心点
+			ctx.lineTo(x - halfSide, y - (2 * height) / 3);
+			ctx.lineTo(x + halfSide, y - (2 * height) / 3); 
+		}
+		
+		ctx.closePath();
+		// 关键改变：移除 ctx.fill(); 
+		ctx.stroke(); // 仅描边，使之为空心
+	
+		// --- 2. 高亮或激活状态绘制（外框）---
+		if (marker.highlight || marker.active) {
+			// Highlight or active state
+			
+			// 增加尺寸
+			size = size * 1.5; 
+			
+			// 重新计算高亮尺寸的几何参数
+			const height = (Math.sqrt(3) / 2) * size;
+			const halfSide = size / 2;
+	
+			ctx.beginPath(); // 开始新的路径，避免与上一个三角形路径混合
+	
+			if(category == 'buy' || category == 'buy-2'){
+				// 向上（买入）三角形 - 注意这里的坐标计算略有不同，可能是为了偏移外框
+				y = y + 1.6;
+				ctx.moveTo(x, y - height / 2);
+				ctx.lineTo(x - halfSide, y + height / 2);
+				ctx.lineTo(x + halfSide, y + height / 2);
+			} else {
+				// 向下（卖出）三角形
+				y = y - 1.6;
+				ctx.moveTo(x, y + height / 2);
+				ctx.lineTo(x - halfSide, y - height / 2);
+				ctx.lineTo(x + halfSide, y - height / 2);
+			}
+	
+			ctx.closePath();
+			// 再次描边，绘制高亮时的外层空心三角形
+			ctx.stroke(); 
 		}
 	};
 
@@ -865,6 +936,14 @@ if (!CIQ.Marker) {
 			});
 		} else if (type === "triangle") {
 			CIQ.Marker.stPerformance.drawTriangleMarker(marker, markerStyle, {
+				x: x,
+				y: y,
+				size: halfSide,
+				category: nParams.category,
+				color: color
+			});
+		} else if (type === "triangle-hollow") {
+			CIQ.Marker.stPerformance.drawHollowTriangleMarker(marker, markerStyle, {
 				x: x,
 				y: y,
 				size: halfSide,
