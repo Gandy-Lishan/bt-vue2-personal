@@ -799,7 +799,6 @@ export default {
 							}
 						}
 						item.entry_description = parseJsonOrString(item.entry_description);
-						item.exit_description = parseJsonOrString(item.exit_description);
 						item.shared_date = timestampToTime(item.create_date)
 						if(item.strategy === 'Dual' && item.entry2_description && item.exit2_description) {
 							item.entry2_description = parseJsonOrString(item.entry2_description)
@@ -906,9 +905,11 @@ export default {
 					const criteria_description = isJson(row[`${criteriaName}_description`]) ? JSON.parse(row[`${criteriaName}_description`]) : row[`${criteriaName}_description`]
 					const _description = criteria_description.map((item, i) => {
 						if(i === 0) return item.commentDes
-							.replace(/(E|X):.*?[;]\s*/, '') // 去掉 E: Long: Single Condition;
-							.replace(/Single Condition\s*/, '') // 去掉 Single Condition
-							.trim(); // 去掉首尾多余空格
+							// 删除开头的 E: <token>[:;] 或 X: <token>[:;]，只吃掉第一段标识（token 中不能含 ':' 或 ';'）
+							.replace(/^(?:[EX]):\s*[^:;]+[:;]\s*/i, '')
+							// 删除任何剩余的 "Single Condition"
+							.replace(/\bSingle Condition\b\s*/gi, '')
+							.trim();
 						else return item.commentDes
 					})
 					const rocCond = criteria_description.map(item => item.rocCond)
