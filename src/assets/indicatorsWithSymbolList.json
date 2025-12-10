@@ -96538,7 +96538,7 @@
     },
     {
         "chart_name": "TCTM Composite Recession Model",
-        "url": "composite_recession_model",
+        "url": "tctm_composite_recession_model",
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
