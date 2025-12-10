@@ -96535,5 +96535,12 @@
         "market_symbol": "UVXY",
         "type": "reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "TCTM Composite Recession Model",
+        "url": "composite_recession_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
