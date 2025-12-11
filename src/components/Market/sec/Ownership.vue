@@ -18,7 +18,7 @@
         />
       </section> -->
       <div class="tables-grid">
-        <section class="card" v-for="panel in ownershipPanels" :key="panel.title">
+        <section class="card" v-for="panel in ownershipPanels" :key="panel.title" v-if="!hasZero(panel.data)">
           <div class="card__subtitle">{{ panel.title }}</div>
           <base-table-simple
             :data="panel.data"
@@ -447,6 +447,10 @@ export default {
 				}
 			}
     },
+    hasZero(data) {
+      if (!Array.isArray(data)) return false;
+      return data.some(row => ["0.00%", "0.00"].includes(row.value));
+    }
   }
 }
 </script>
