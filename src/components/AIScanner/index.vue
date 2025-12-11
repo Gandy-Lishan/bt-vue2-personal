@@ -24,22 +24,22 @@ export default {
 }
 @media (min-width: 768px) {
   .aiscanner-container {
-      width: 750px;
+      width: 850px;
   }
 }
 @media (min-width: 992px) {
   .aiscanner-container {
-      width: 970px;
+      width: 1070px;
   }
 }
 @media (min-width: 1200px) {
   .aiscanner-container {
-      width: 1170px;
+      width: 1270px;
   }
 }
 @media (min-width: 1921px) {
   .aiscanner-container {
-      width: 1664px;
+      width: 1764px;
   }
 }
 /deep/ .el-table th.el-table__cell>.cell {

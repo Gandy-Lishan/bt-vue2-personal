@@ -752,6 +752,8 @@ export default {
 			item['StdDev'] = this.displayData(item['StdDev'])
 			item['SharpeRatio'] = this.displayData(item['SharpeRatio'])
 			item['Optix'] = this.displayData(item['Optix'])
+			// Change % 格式化
+			item['PctChange'] = this.displayData(item['PctChange'])
 		})
 		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
@@ -949,6 +951,11 @@ getMatchScore(target, keyword) {
 			x['ExpectedReturn'] = Number(x['ExpectedReturn']).toFixed(1)
 			// 给一些定值默认值
 			//x['Timing To Entry'] = 'Open'
+
+			// 格式化 Change %
+			if (x['PctChange'] !== undefined && x['PctChange'] !== null) {
+				x['PctChange'] = Number(x['PctChange']).toFixed(2)
+			}
 		})
 		let AIPickObj = {}
 
@@ -958,6 +965,7 @@ getMatchScore(target, keyword) {
 			{label:'Date',value:'Date',labelHtml: 'Date'},
 			{label:'Symbol',value:'Symbol',labelHtml: 'Symbol'},
 			{label:'Close',value:'Close',labelHtml: 'Close'},
+			{label:'Change %',value:'PctChange',labelHtml: 'Change %'},
 			{label:'Trend',value:'Market',labelHtml: 'Market'},
 			{label:'Trend Score',value:'TrendScore',labelHtml: 'Trend<br/>Score'},
 			{label:'Direction',value:'Direction',labelHtml: 'Direction', width: '80px'},
