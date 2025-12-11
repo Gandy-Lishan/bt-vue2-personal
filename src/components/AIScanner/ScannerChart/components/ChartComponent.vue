@@ -1143,6 +1143,7 @@ export default {
                 Type: entryMarkerType,  
                 Indicator: [entryReason],  
                 reason: 'meet Entry Criteria',
+                isEndDate: false,
             })
           })
       }
@@ -1159,9 +1160,11 @@ export default {
                 Type: exitMarkerType,    
                 Indicator: [exitReasonArr[index]], 
                 reason: exitReasonArr[index],
+                isEndDate: index == exitTradeDateArr.length-1,  //實際上scannerai最後一個退場在當天的話不繪製marker，所以可以不管
             })
           })
       }
+      debugger
 			markerSet = markerSet.sort((a,b)=>new Date(a['DT'])-new Date(b['DT']))
 			
 			// 如果推荐日和最后一个退场日重叠，则隐藏退场日marker(一般情况都是重叠的)
