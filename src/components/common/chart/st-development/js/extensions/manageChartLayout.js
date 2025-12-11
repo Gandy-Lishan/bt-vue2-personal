@@ -52,8 +52,10 @@ let __st_js_manage_chart_layout_ = (_exports) => {
             CIQ.store.commit('form/getFrequency', layout.layoutFreq)
             CIQ.store.dispatch('chart/set_chart_type', layout.chartType)
             CIQ.store.commit('chart/getMALayout', JSON.parse(layout.activatedMALayout || '[]'))
-            CIQ.isRestoreLayout = true          
-            CIQ.stxx.importLayout(JSON.parse(layout.layout), {
+            CIQ.isRestoreLayout = true   
+            let parsedLayout = JSON.parse(layout.layout)
+            parsedLayout.symbols[0].symbolObject.endDate = new Date().toISOString()
+            CIQ.stxx.importLayout(parsedLayout, {
                 ...importOptions, // This includes any other options you might have
                 cb: async () => {
                     restorePreferences(layout.pref)
