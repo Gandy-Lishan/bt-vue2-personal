@@ -183,7 +183,7 @@ MarkersSample.prototype.showmMarker = function () {
 			
 			// 绘制Marker
 			// const nodeType = (data == lastExitIndex && mDataSet[data]['ExitReason'] == 'Time Is Up') ? 'triangle-hollow' : 'triangle'
-			const nodeType = (data == mDataSet.length-1 && mDataSet[data]['reason'] == 'Time Is Up') ? 'triangle-hollow' : 'triangle'
+			const nodeType = (data == mDataSet.length-1 && mDataSet[data]['reason'] == 'Time Is Up' && mDataSet[data]['isEndDate']) ? 'triangle-hollow' : 'triangle'
 			if(activeLabels.includes("triangle_buy") && (mDataSet[data].Type == "BUY" || mDataSet[data].TradeStatus == "BUY")){
 				new CIQ.Marker({
 					stx: stx,
@@ -355,7 +355,7 @@ MarkersSample.prototype.showmMarker = function () {
 		
 		// 绘制Marker
 		//const yAxisBuySell = quote[comparisonSymbol.url]?.Close
-		const nodeType = (data == mDataSet2.length-1 && mDataSet2[data]['ExitReason'] == 'Time Is Up') ? 'triangle-hollow' : 'triangle'
+		const nodeType = (data == mDataSet2.length-1 && mDataSet2[data]['ExitReason'] == 'Time Is Up' && mDataSet2[data]['isEndDate']) ? 'triangle-hollow' : 'triangle'
 		if(activeLabels.includes("triangle_buy_2") && (mDataSet2[data].Type || mDataSet2[data].TradeStatus) == "BUY"){
 			new CIQ.Marker({
 				stx: stx,

@@ -349,6 +349,7 @@ export default {
     matchExitReasonsSimplified(initalData) {
       const ExitReason = initalData['Exit Reason']
       const markerSet = initalData['markerSet']
+      const EndDate = initalData['BT End Date']
       let reasonListCount = 0
       const updatedMarkerSet = markerSet.map((marker, index) => {
         let reason = 'meet Entry Criteria' //默认设置为进场原因
@@ -363,7 +364,8 @@ export default {
 
         return {
             ...marker,
-            reason
+            reason,
+            isEndDate: marker['DT'] == EndDate,
         };
       });
 
@@ -396,9 +398,10 @@ removeLastSell(tradesData, initalData) {
     //   }
     // }
 
-    const cond3 = initalData['Exit Reason'][initalData['Exit Reason'].length-1] == 'Time Is Up'
-    if(cond3) {
-      tradesData[tradesData.length-1] = {
+    const cond1 = tradesData[tradesData.length-1]['Date'] == initalData['BT End Date']  // the last date in trade is enddate
+    const cond2 = initalData['Exit Reason'][initalData['Exit Reason'].length-1] == 'Time Is Up' // reason is Time Is Up
+    if(cond1 && cond2) {
+      tradesData[tradesData.length-1] = { // cond3 , if is last date and meet cond1 and cond2
         ...tradesData[tradesData.length-1],
         'Date': '',
         'TradePrice': NaN,
