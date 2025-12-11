@@ -799,6 +799,7 @@ export default {
 							}
 						}
 						item.entry_description = parseJsonOrString(item.entry_description);
+						item.exit_description = parseJsonOrString(item.exit_description);
 						item.shared_date = timestampToTime(item.create_date)
 						if(item.strategy === 'Dual' && item.entry2_description && item.exit2_description) {
 							item.entry2_description = parseJsonOrString(item.entry2_description)
