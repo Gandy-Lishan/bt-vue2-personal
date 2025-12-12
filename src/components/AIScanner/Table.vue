@@ -217,6 +217,7 @@
 						[
 							'Stop Loss(%)',
 							'Win Rate(%)',
+							'Change (%)',
 							'Best Time In Market(Bars)',
 							'Time In Market(Bars)',
 							'Profit Target(%)',
@@ -460,7 +461,7 @@ export default {
 				}
 			}
 			// 数字类型排序
-			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close', 'TrendScore'].indexOf(colName) !== -1){
+			if(['WinRate', 'ExpectedReturn', 'Z_Score', 'Close', 'TrendScore', 'PctChange'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
 					this.data.content.sort((a,b) => {
 						return b[colName] - a[colName]
@@ -581,6 +582,7 @@ export default {
 					'Optix': item.Optix
 				}
 				if (item['SharpeRatio'] !== null) ele['SHARPE RATIO'] = item.SharpeRatio
+				if (item['PctChange'] !== null) ele['Change (%)'] = item.PctChange
 				return ele
 			})
 			const ws = XLSX.utils.json_to_sheet(processedData);
