@@ -8,6 +8,7 @@
           v-for="(item, index) in companyDetails"
           :key="index"
           class="stats-item"
+          v-if="item.value !== '-'"
         >
           <span class="stats-label">
             {{ item.label }}
@@ -32,6 +33,7 @@
           v-for="(item, index) in tradingStats"
           :key="index"
           class="stats-item"
+          v-if="item.value !== '-'"
         >
           <span class="stats-label">{{ item.label }}</span>
           <span class="stats-value" :class="{ 'negative': item.isNegative }">

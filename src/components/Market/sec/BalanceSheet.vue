@@ -204,7 +204,7 @@
         </section>
       </div>
       <div class="grid-col-4">
-        <section class="card">
+        <section class="card" v-if="!hasZero(balanceSheetData['liquidityMetrics'].data)">
           <div class="card__subtitle">{{ balanceSheetData['liquidityMetrics'].title }}</div>
           <base-table-simple
             :data="balanceSheetData['liquidityMetrics'].data"
@@ -212,7 +212,7 @@
             :isLoading="isLoading"
           />
         </section>
-        <section class="card">
+        <section class="card" v-if="!hasZero(balanceSheetData['assetManagement'].data)">
           <div class="card__subtitle">{{ balanceSheetData['assetManagement'].title }}</div>
           <base-table-simple
             :data="balanceSheetData['assetManagement'].data"
@@ -220,7 +220,7 @@
             :isLoading="isLoading"
           />
         </section>
-        <section class="card">
+        <section class="card" v-if="!hasZero(balanceSheetData['capitalStructure'].data)">
           <div class="card__subtitle">{{ balanceSheetData['capitalStructure'].title }}</div>
           <base-table-simple
             :data="balanceSheetData['capitalStructure'].data"
@@ -228,7 +228,7 @@
             :isLoading="isLoading"
           />
         </section>
-        <section class="card">
+        <section class="card" v-if="!hasZero(balanceSheetData['growthAnalysis'].data)">
           <div class="card__subtitle">{{ balanceSheetData['growthAnalysis'].title }}</div>
           <base-table-simple
             :data="balanceSheetData['growthAnalysis'].data"
@@ -294,6 +294,10 @@ export default {
         period: this.timeframe
       });
     },
+    hasZero(data) {
+      if (!Array.isArray(data)) return false;
+      return data.some(row => ["0.00%", "0.00"].includes(row.value));
+    }
   },
 }
 </script>
