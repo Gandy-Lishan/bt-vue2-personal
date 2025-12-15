@@ -809,6 +809,8 @@ export default {
 			item['StdDev'] = this.displayData(item['StdDev'])
 			item['SharpeRatio'] = this.displayData(item['SharpeRatio'])
 			item['Optix'] = this.displayData(item['Optix'])
+			// Change % 格式化
+			item['PctChange'] = this.displayData(item['PctChange'], false, 2)
 		})
 		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
@@ -1011,7 +1013,7 @@ getMatchScore(target, keyword) {
 
 			// 格式化 Change %
 			if (x['PctChange'] !== undefined && x['PctChange'] !== null) {
-				x['PctChange'] = Number(x['PctChange']).toFixed(1)
+				x['PctChange'] = Number(x['PctChange']).toFixed(2)
 			}
 		})
 		let AIPickObj = {}
@@ -1084,14 +1086,14 @@ getMatchScore(target, keyword) {
 			const path = 'https://youtu.be/C-wBYWy-fQY?si=1vVrxKsKiosrhYWb'
 			window.open(path, '_blank')
 	},
-	displayData(data, removeZero = false) {
+	displayData(data, removeZero = false, decimal = 1) {
 			const numberRegex = /^-?\d+(\.\d+)?$/
 			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 			if (numberRegex.test(data)) {
-				if(!removeZero) return parseFloat(data).toFixed(1)
+				if(!removeZero) return parseFloat(data).toFixed(decimal)
 				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
-				return parseFloat(data).toFixed(1).replace(/\.0$/, '')
+				return parseFloat(data).toFixed(decimal).replace(/\.0$/, '')
 			} else if (dateRegex.test(data)) {
 				return data
 			} else if(typeof data == 'string'){
