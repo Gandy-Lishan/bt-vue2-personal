@@ -96542,5 +96542,26 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "IBIT Fund Flow",
+        "url": "etf_ibit_flow",
+        "market_symbol": "IBIT",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IBIT Outstanding Shares",
+        "url": "etf_ibit_shares",
+        "market_symbol": "IBIT",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "BTC / GOLD Ratio",
+        "url": "btc_gold_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
