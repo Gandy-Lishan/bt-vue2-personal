@@ -436,6 +436,31 @@
 									</div>
 								</el-form-item>
 							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Change Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="change_condition" label-width="0px">
+												<el-input v-model="data.change_condition" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+												</el-input>
+										</el-form-item>
+											<span class="sign"> - </span>
+											<el-form-item prop="change" label-width="0px">
+											<el-input v-model="data.change" placeholder="Enter number">
+												<template v-slot:append>(%)</template>
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -519,6 +544,8 @@ export default {
 		expected_return: 5,
 		win_rate_condition: 52,
 		win_rate: 80,
+		change_condition: 0,
+		change: 100,
 		trend_score_condition: 0,
 		trend_score: 10,
 		reltrend_score_condition: 0,
@@ -615,6 +642,36 @@ export default {
 			win_rate: [
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.win_rate_condition, 100, true)(rule, value, callback), trigger: 'blur' },
 			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.win_rate_condition, 100, true)(rule, value, callback), trigger: 'change' }
+			],
+			change_condition: [  // ← 直接粘贴上面这段
+				{
+				validator: (rule, value, callback) => {
+					if (value === '' || value === null || value === undefined) {
+					return callback();
+					}
+					const regex = /^-?\d+(\.\d{1,2})?$/;
+					if (!regex.test(value)) {
+					return callback(new Error('e.g. 12.34 or -5.67 (max 2 decimals)'));
+					}
+					callback();
+				},
+				trigger: ['blur', 'change']
+				}
+			],
+			change: [  // ← 直接粘贴上面这段（和上面一模一样）
+				{
+				validator: (rule, value, callback) => {
+					if (value === '' || value === null || value === undefined) {
+					return callback();
+					}
+					const regex = /^-?\d+(\.\d{1,2})?$/;
+					if (!regex.test(value)) {
+					return callback(new Error('e.g. 12.34 or -5.67 (max 2 decimals)'));
+					}
+					callback();
+				},
+				trigger: ['blur', 'change']
+				}
 			],
 			signals: [
 				{ validator: validateSignals, trigger: 'blur' },
@@ -753,7 +810,7 @@ export default {
 			item['SharpeRatio'] = this.displayData(item['SharpeRatio'])
 			item['Optix'] = this.displayData(item['Optix'])
 			// Change % 格式化
-			item['PctChange'] = this.displayData(item['PctChange'])
+			item['PctChange'] = this.displayData(item['PctChange'], false, 2)
 		})
 		console.log('signals', this.tableData.content.map(item => item._Signal))
 		this.$refs.tableChild.pageReset()
@@ -790,6 +847,7 @@ export default {
 			std_dev_condition, std_dev,
 			expected_return_condition, expected_return,
 			win_rate_condition, win_rate,
+			change_condition, change,
 			trend_score_condition, trend_score,
 			reltrend_score_condition, reltrend_score,
 			optix_condition, optix
@@ -811,6 +869,7 @@ export default {
 			&& (item['StdDev'] === null  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
 			&& (item['ExpectedReturn'] === null  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
 			&& (item['WinRate'] === null  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
+			&& (item['PctChange'] === null  || ( parseFloat(change_condition)<=parseFloat(item['PctChange']) && parseFloat(change)>=parseFloat(item['PctChange'])))
 			&& (item['TrendScore'] === null  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
 			&& (item['RelTrendScore'] === null  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RelTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RelTrendScore'])))
 			&& (item['Optix'] === null  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
@@ -965,7 +1024,7 @@ getMatchScore(target, keyword) {
 			{label:'Date',value:'Date',labelHtml: 'Date'},
 			{label:'Symbol',value:'Symbol',labelHtml: 'Symbol'},
 			{label:'Close',value:'Close',labelHtml: 'Close'},
-			{label:'Change %',value:'PctChange',labelHtml: 'Change %'},
+			{label:'Change (%)',value:'PctChange',labelHtml: 'Change (%)'},
 			{label:'Trend',value:'Market',labelHtml: 'Market'},
 			{label:'Trend Score',value:'TrendScore',labelHtml: 'Trend<br/>Score'},
 			{label:'Direction',value:'Direction',labelHtml: 'Direction', width: '80px'},
@@ -1027,14 +1086,14 @@ getMatchScore(target, keyword) {
 			const path = 'https://youtu.be/C-wBYWy-fQY?si=1vVrxKsKiosrhYWb'
 			window.open(path, '_blank')
 	},
-	displayData(data, removeZero = false) {
+	displayData(data, removeZero = false, decimal = 1) {
 			const numberRegex = /^-?\d+(\.\d+)?$/
 			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 			if (numberRegex.test(data)) {
-				if(!removeZero) return parseFloat(data).toFixed(1)
+				if(!removeZero) return parseFloat(data).toFixed(decimal)
 				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
-				return parseFloat(data).toFixed(1).replace(/\.0$/, '')
+				return parseFloat(data).toFixed(decimal).replace(/\.0$/, '')
 			} else if (dateRegex.test(data)) {
 				return data
 			} else if(typeof data == 'string'){
