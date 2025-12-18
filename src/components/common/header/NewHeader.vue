@@ -37,7 +37,7 @@
         </el-menu-item> -->
         <el-submenu index="1">
           <template slot="title">
-            Tutorial
+            Tutorial & Webinar Videos
             <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
           </template>
           <el-menu-item index="1-3"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Workthrough Videos</el-menu-item>
