@@ -40,15 +40,14 @@
             Tutorial
             <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
           </template>
+          <el-menu-item index="1-3"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Workthrough Videos</el-menu-item>
+          <el-menu-item index="1-6"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Webinar Videos</el-menu-item>
           <el-menu-item index="1-2">
             <i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>
             Backtest Videos
           </el-menu-item>
-          <el-menu-item index="1-3"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Overview Videos</el-menu-item>
           <el-menu-item index="1-4"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Analyst's Backtest Videos</el-menu-item>
           <el-menu-item index="1-5"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Other Tools Videos</el-menu-item>
-          <el-menu-item index="1-6"><i class="fa fa-play" aria-hidden="true" style="margin-right: 5px;"></i>Webinar Videos</el-menu-item>
-          <el-menu-item index="1-1"><i class="fa fa-book" aria-hidden="true" style="margin-right: 5px;"></i>BacktestEdge Document</el-menu-item>
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">
@@ -575,7 +574,7 @@ export default {
         return
       }
       else if(key === '1-3') {
-        let path = 'https://users.sentimentrader.com/users/videos/'
+        let path = 'https://users.sentimentrader.com/users/walkthrough_videos/'
         window.open(path, '_blank')
         return
       }
