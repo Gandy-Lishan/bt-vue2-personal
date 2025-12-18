@@ -30,7 +30,7 @@
 			<template v-for="(item, index) in consistency">
 				<tr :key="index">
 					<template v-for="(val, key, i) in item">
-						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ (!isNaN(val)) ? `${val}%` : '' }}</td>
+						<td class="tg-0lax" :key="i" :class="`${getConsistencyColor(val)}`" v-if="key !== 'Consistency'">{{ (!isNaN(val) && val !== '') ? `${val}%` : '' }}</td>
 						<td class="tg-0lax" :key="i" v-else>{{ val }}</td>
 					</template>
 				</tr>
@@ -265,7 +265,7 @@ export default {
 				}
 			} else if (dateRegex.test(data)) {
 				return data
-			} else if(typeof data == 'string'){
+			} else if(typeof data == 'string' && data !== 'null' && data !== 'NaN' && data !== 'null%'){
 				return data
 			}else if(!isNaN(data)){
 				return data
