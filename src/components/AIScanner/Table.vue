@@ -354,11 +354,12 @@ export default {
 					'DTE': 'An abbreviation for "Days to Expiration." It is calculated as: Expire Date - Last Trade Date.<br/> This value indicates how much time is left until the option expires, which is critical for assessing time decay.',
 					'Strike': 'The predetermined price at which the holder of the option can buy (for a call) or sell (for a put) the underlying asset.',
 					'Break Even': 'The price the underlying asset must reach for an option seller to incur no profit and no loss at expiration.<br/> For a short option position, it is calculated as: Strike - Credit.',
-					'Prob. of Profit': 'The estimated probability that the option will expire Out-of-the-Money (OTM), <br/>resulting in full profit for the seller. It is derived from the Black-Scholes model.<br/>Calculation:Short Call: 100 * (1 - norm.cdf(d2))Short Put: 100 * norm.cdf(d2)',
+					'Prob. of Profit': 'The estimated probability that the option will be profitable for the seller if held to expiration.<br/> It is derived from the Black-Scholes model.<br/> Calculation: • Short Call: 100 * norm.cdf(-d1) • Short Put: 100 * norm.cdf(d1)',
 					'Credit': 'The premium (price) received by an option seller from the buyer for selling one option contract.<br/> Sourced from the lastPrice.',
 					'Margin': 'The estimated amount of collateral a broker requires an option seller to hold to cover potential losses.<br/> Calculation: Strike * 100',
 					'Return %': 'The return on margin, representing the efficiency of the trade by showing the potential profit as a percentage of the required collateral.<br/> Calculation: (Credit / Margin) * 100',
-					'CAGR %': 'An abbreviation for "Compound Annual Growth Rate."<br/> This metric annualizes the return on margin to help compare the long-term profitability of options with different expiration dates.<br/> Potential Calculation: Return % * (252 / DTE)'
+					'CAGR %': 'An abbreviation for "Compound Annual Growth Rate."<br/> This metric annualizes the return on margin to help compare the long-term profitability of options with different expiration dates.<br/> Potential Calculation: Return % * (252 / DTE)',
+					'EV Score': 'Risk-adjusted expected return per unit of margin. <br/>Calculated as EV = [(Win% × Credit) - (Loss% × max(0, Strike - 0.7×Stock - Credit))] / Margin × 10,000.<br/> Higher scores indicate better risk-reward opportunities with conservative 30% downside protection.'
 				},
 				midTermMap: {
 					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',

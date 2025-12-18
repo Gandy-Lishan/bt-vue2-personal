@@ -1,5 +1,6 @@
 <template>
   <Table
+    ref="table"
     :tableCol="tableCol"
     :currentPage="currentPage"
     :isExpandAll="isExpandAll"
@@ -50,14 +51,14 @@ export default {
           width: '120px'
         },
         {
-          label: 'Total Trades',
-          labelHtml: 'Total<br/>Trades',
+          label: 'TOTAL TRADES',
+          labelHtml: 'TOTAL<br/>TRADES',
           field: 'total_trader',
           width: '90px'
         },
         {
-          label: 'Total Return',
-          labelHtml: 'Total<br/>Return',
+          label: 'TOTAL RETURN',
+          labelHtml: 'TOTAL<br/>RETURN %',
           field: 'total_return',
           width: '90px'
         }

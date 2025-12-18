@@ -55,17 +55,17 @@ export default {
          width: '1100px'
        },
        {
-         label: 'Total Trades',
-         labelHtml: 'Total<br/>Trades',
-         field: 'total_trader',
-         width: '90px'
-       },
-       {
-         label: 'Total Return',
-         labelHtml: 'Total<br/>Return',
-         field: 'total_return',
-         width: '90px'
-       }
+          label: 'TOTAL TRADES',
+          labelHtml: 'TOTAL<br/>TRADES',
+          field: 'total_trader',
+          width: '90px'
+        },
+        {
+          label: 'TOTAL RETURN',
+          labelHtml: 'TOTAL<br/>RETURN %',
+          field: 'total_return',
+          width: '90px'
+        }
      ],
      isExpandAll: true,
      currentPage: 'SubscriberShared',

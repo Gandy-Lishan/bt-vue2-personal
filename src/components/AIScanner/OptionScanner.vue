@@ -588,6 +588,13 @@ getMatchScore(target, keyword) {
 			{label:'Margin',value:'margin',labelHtml: 'Margin'},
 			{label:'Return %',value:'return_per',labelHtml: 'Return %'},
 			{label:'CAGR %',value:'cagr',labelHtml: 'CAGR %'},
+			{label:'Contract Symbol',value:'ContractSymbol',labelHtml: 'Contract Symbol'},
+			{label:'EV Score',value:'ev_score',labelHtml: 'EV Score'},
+			{label:'Volume',value:'Volume',labelHtml: 'Volume'},
+			{label:'OI',value:'OI',labelHtml: 'OI'},
+			{label:'IV',value:'IV',labelHtml: 'IV'},
+			{label:'Delta',value:'Delta',labelHtml: 'Delta'},
+			{label:'Vega',value:'Vega',labelHtml: 'Vega'},
 			// {label:'Earnings Date',value:'earnings_date',labelHtml: 'Earnings Date'}
 		]
 		const res = await getOptionScanner()
