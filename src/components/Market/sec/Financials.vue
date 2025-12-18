@@ -12,7 +12,7 @@
     />
     <div class="spacing-lg"></div>
     <div class="grid-col-3">
-      <section class="card financials__card">
+      <section class="card financials__card" v-if="!hasZero(financialsData['marginAnalysis'].data)">
         <div class="card__subtitle">Margin Analysis</div>
         <base-table-simple
           :data="financialsData['marginAnalysis'].data"
@@ -20,7 +20,7 @@
           :isLoading="isLoading"
         />
       </section>
-      <section class="card financials__card">
+      <section class="card financials__card" v-if="!hasZero(financialsData['earningsSurprises'].data)">
         <div class="card__subtitle">Earnings Surprises</div>
         <base-table-simple
           :data="financialsData['earningsSurprises'].data"
@@ -28,7 +28,7 @@
           :isLoading="isLoading"
         />
       </section>
-      <section class="card financials__card">
+      <section class="card financials__card" v-if="!hasZero(financialsData['financialScores'].data)">
         <div class="card__subtitle">Financial Scores</div>
         <base-table-simple
           :data="financialsData['financialScores'].data"
@@ -194,6 +194,10 @@ export default {
     handleCurrentChange(page) {
       console.log('当前页改变：', page)
     },
+    hasZero(data) {
+      if (!Array.isArray(data)) return false;
+      return data.some(row => ["0.00%", "0.00"].includes(row.value));
+    }
   }
 }
 </script>

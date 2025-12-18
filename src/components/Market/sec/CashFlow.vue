@@ -118,7 +118,7 @@
       </section>
 
       <div class="grid-col-3">
-        <section class="card">
+        <section class="card" v-if="!hasZero(cashFlowData['efficiencyMetrics'].data)">
           <div class="card__subtitle">Efficiency Metrics</div>
           <base-table-simple
             :data="cashFlowData['efficiencyMetrics'].data"
@@ -126,7 +126,7 @@
             :isLoading="isLoading"
           />
         </section>
-        <section class="card">
+        <section class="card" v-if="!hasZero(cashFlowData['capitalAllocation'].data)">
           <div class="card__subtitle">Capital Allocation</div>
           <base-table-simple
             :data="cashFlowData['capitalAllocation'].data"
@@ -134,7 +134,7 @@
             :isLoading="isLoading"
           />
         </section>
-        <section class="card">
+        <section class="card" v-if="!hasZero(cashFlowData['sustainabilityMetrics'].data)">
           <div class="card__subtitle">Sustainability Metrics</div>
           <base-table-simple
             :data="cashFlowData['sustainabilityMetrics'].data"
@@ -199,6 +199,10 @@ export default {
         period: this.timeframe
       });
     },
+    hasZero(data) {
+      if (!Array.isArray(data)) return false;
+      return data.some(row => ["0.00%", "0.00"].includes(row.value));
+    }
   }
 }
 </script>

@@ -253,6 +253,7 @@ export default {
 			}
 		},
 		displayData(data, type) {
+			console.log('data', data, 'type', type)
 			const numberRegex = /^-?\d+(\.\d+)?$/
 			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
@@ -265,6 +266,8 @@ export default {
 			} else if (dateRegex.test(data)) {
 				return data
 			} else if(typeof data == 'string'){
+				return data
+			}else if(!isNaN(data)){
 				return data
 			}else {
 				return ''

@@ -34,8 +34,26 @@
 				<i slot="suffix" class="el-input__icon el-icon-search"></i>
 			</el-input>
 		</div>
+		<!-- 选择器 + 已选列显示 -->
+		 <div class="col-container" v-if="isButtonVisible && currentPage == 'Favorites'">
+			<el-select
+				v-model="selectedMetrics"
+				multiple
+				filterable
+				collapse-tags
+				size="small"
+				placeholder="Columns">
+				<el-option
+				v-for="metric in metrics"
+				:key="metric.field"
+				:label="metric.label"
+				:value="metric.field">
+				</el-option>
+			</el-select>
+		 </div>
     <el-table
       header-align="center"
+			ref="dynamicTable"
       :data="dataList"
       v-loading="loading"
       :element-loading-text="loadTest"
@@ -315,16 +333,13 @@
 				</template>
 			</el-table-column>
 			<el-table-column
-				v-if="['Total Trades', 'Total Return'].includes(item.label)"
+				v-if="percentageMetrics.includes(item.field)"
 				:key="item.label"
 				:width="item.width"
 				:prop="item.field"
 				show-overflow-tooltip
 				align="center"
-				:sortable="[
-					'Total Trades',
-					'Total Return'
-				].includes(item.label) ? 'custom' : false"
+				:sortable="'custom'"
 				:sort-orders="['ascending', 'descending', item.field]"
 				>
 			<template #header>
@@ -332,6 +347,24 @@
 			</template>
 			<template slot-scope="scope">
 				<span v-if="item.label == 'Total Return'">{{scope.row[item.field] != 0 ? `${scope.row[item.field]}%` : scope.row[item.field]}}</span>
+				<span v-else>{{scope.row[item.field]}}</span>
+			</template>	
+			</el-table-column>
+			<el-table-column
+				v-if="unPercentageMetrics.includes(item.field)"
+				:key="item.label"
+				:width="item.width"
+				:prop="item.field"
+				show-overflow-tooltip
+				align="center"
+				:sortable="'custom'"
+				:sort-orders="['ascending', 'descending', item.field]"
+				>
+			<template #header>
+					<span v-html="item.labelHtml"></span>
+			</template>
+			<template slot-scope="scope">
+				<span v-if="item.label == 'Total Return'">{{scope.row[item.field] != 0 ? `${scope.row[item.field]}` : scope.row[item.field]}}</span>
 				<span v-else>{{scope.row[item.field]}}</span>
 			</template>	
 			</el-table-column>
@@ -673,7 +706,28 @@ export default {
 					backtestName: "",
 					nickName: "",
 			},
-			shareBacktestInfo: {}
+			shareBacktestInfo: {},
+			selectedMetric: '',
+			metrics: [
+				{ value: 'total_return', label: 'TOTAL RETURN %', field: 'total_return', labelHtml: 'TOTAL<br/>RETURN %' },
+				{ value: 'total_trader', label: 'TOTAL TRADES', field: 'total_trader', labelHtml: 'TOTAL<br/>TRADES' },
+				{ value: 'CAGR', label: 'Annual Return % (CAGR)', field: 'CAGR', labelHtml: 'Annual<br/>Return %<br/>(CAGR)' },
+				{ value: 'medianReturn', label: 'MEDIAN RETURN %', field: 'medianReturn', labelHtml: 'MEDIAN<br/>RETURN %' },
+				{ value: 'averageReturn', label: 'AVERAGE RETURN %', field: 'averageReturn', labelHtml: 'AVERAGE<br/>RETURN %' },
+				{ value: 'tzScore', label: 'Z-SCORE', field: 'tzScore', labelHtml: 'Z-SCORE' },
+				{ value: 'standardDeviation', label: 'STD.DEV', field: 'standardDeviation', labelHtml: 'STD.DEV' },
+				{ value: 'SharpeRatio', label: 'SHARPE RATIO', field: 'SharpeRatio', labelHtml: 'SHARPE<br/>RATIO' },
+				{ value: 'sortino_ratio', label: 'SORTINO RATIO', field: 'sortino_ratio', labelHtml: 'SORTINO<br/>RATIO' },
+				{ value: 'averageWin', label: 'AVERAGE WIN %', field: 'averageWin', labelHtml: 'AVERAGE<br/>WIN %' },
+				{ value: 'averageLoss', label: 'AVERAGE LOSS %', field: 'averageLoss', labelHtml: 'AVERAGE<br/>LOSS %' },
+				{ value: 'drawDown', label: 'MAX RISK %', field: 'drawDown', labelHtml: 'MAX<br/>RISK %' },
+				{ value: 'winRate', label: 'WIN RATE %', field: 'winRate', labelHtml: 'WIN<br/>RATE %' },
+				{ value: 'timeInMarket', label: 'TIME IN MARKET %', field: 'timeInMarket', labelHtml: 'TIME<br/>IN<br/>MARKET %' },
+			],
+			percentageMetrics: ['CAGR', 'medianReturn', 'averageReturn', 'averageWin', 'averageLoss', 'drawDown', 'winRate', 'total_return', 'timeInMarket'],
+			unPercentageMetrics: ['total_trader', 'tzScore', 'standardDeviation', 'SharpeRatio', 'sortino_ratio'],
+			selectedMetrics: ['total_return', 'total_trader'],
+			
 		}
 	},
 	directives: {
@@ -736,6 +790,39 @@ export default {
 		immediate: true,
 		deep: true
 		},
+		selectedMetrics(newMetrics, oldMetrics) {
+			debugger
+			// ➕ 新增
+			const added = newMetrics.filter(
+			f => !oldMetrics.includes(f)
+			)
+
+			// ➖ 移除
+			const removed = oldMetrics.filter(
+			f => !newMetrics.includes(f)
+			)
+
+			// 新增列
+			added.forEach(field => {
+				const metric = this.metrics.find(m => m.field === field)
+				if (metric) {
+					this.$emit('addMetric', metric)
+					this.currentSort = { prop: field, order: 'ascending' }
+					this.sortTable(field, 'ascending')
+				}
+			})
+
+			// 移除列
+			removed.forEach(field => {
+				this.$emit('deleteTableCol', field)
+				// 如果移除的是排序列，清空排序（⚠️ 不要 toggle）
+				if (this.currentSort.prop === field) {
+					this.currentSort = { prop: null, order: null }
+					this.$refs.dynamicTable?.clearSort()
+				}
+			})
+			this.applySort()
+		}
 	},
 	methods: {
 		// 处理custom symbol的特殊url显示
@@ -883,7 +970,7 @@ export default {
       let { prop, order } = this.currentSort;
 			// 这里先考虑 order 再考虑 strategy
 			if (order == null || order == prop) prop = null
-      if (order == 'ascending') prop = `-${prop}`
+     		 if (order == 'ascending') prop = `-${prop}`
 			this.currentSort = {prop, order}
 			await this.getDataList(prop)
 		},
@@ -1046,7 +1133,32 @@ export default {
 			this.shareBacktestInfo = JSON.parse(JSON.stringify(data)) || {}
 			this.shareForm.backtestName = data.name || '';
 			this.shareDialogVisible = true;
-   },
+		},
+		toggleSort(field) {
+			if (this.currentSort.prop !== field) {
+				this.currentSort = { prop: field, order: 'ascending' };
+			} else {
+				this.currentSort.order =
+				this.currentSort.order === 'ascending'
+					? 'descending'
+					: this.currentSort.order === 'descending'
+					? null
+					: 'ascending';
+			}
+
+			this.$nextTick(() => {
+				const table = this.$refs.dynamicTable;
+				table && table.sort(field, this.currentSort.order);
+			});
+
+			this.applySort();
+		},
+		sortTable(field, order) {
+			if (!field || !order) return
+			this.$nextTick(() => {
+			this.$refs.dynamicTable?.sort(field, order)
+			})
+		}
 	}
 }
 </script>
@@ -1055,11 +1167,25 @@ export default {
 .favoriteForm_container {
 	background-color: #fff;
 }
-.searchBox {
+.searchBox, .col-container {
   float: left;
   .search {
 		margin: 20px 28px 10px 10px;
 		width: 30vw;
+	}
+	.el-select {
+		width: 100%;
+		margin: 20px 28px 10px 10px;
+	}
+	/deep/ .el-select__tags {
+		right: 0;
+	}
+	/deep/ .el-select .el-input__inner {
+		padding-left: 0px;
+		margin-left: 35px;
+	}
+	/deep/ .el-select__input {
+		margin-left: 2px;
 	}
 }
 .showDate {
