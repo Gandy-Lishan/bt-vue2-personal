@@ -122,6 +122,9 @@ export default {
       this.optionsAll = this.selectedOptions.length === this.optionsData.length
       // console.log(this.selectedOptions, this.optionsData)
       this.$emit('selected', this.selectedOptions)
+    },
+    optionsAllChange(isAll) {
+      this.optionsAll = isAll
     }
   }
 }

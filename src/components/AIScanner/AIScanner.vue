@@ -777,7 +777,7 @@ export default {
 				this.tableData = JSON.parse(JSON.stringify(this.originData))
 				this.options = [...Array.from(new Set(this.tableData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
 				this.data.signals = ['All']
-    this.$refs['SelectCheck'].optionsAll = true
+				if(this.$refs['SelectCheck']) this.$refs['SelectCheck'].optionsAllChange = true
 				await this.filterData()
 				console.log('this.options', this.options)
 			},
@@ -819,7 +819,7 @@ export default {
 		this.showFilterDialog = false
 		this.handleQuery();
 	},
-	handleQuery: throttle(async function () { this.$nextTick(async () => {await this.filterData()}) }, 1000),
+	handleQuery: throttle(async function () { this.$nextTick(async () => {await this.filterData()}) }, 500),
 	async filterData(){
 		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
 		this.tableData.content.forEach(item => {
@@ -868,7 +868,6 @@ export default {
 	},
 	filterRangeCondition(searchResult){
 		debugger
-		console.log('searchResult', searchResult)
 		if(this.showFilterDialog || this.disabledFilter) return searchResult
 		const {stop_loss_condition, stop_loss, 
 			take_profit_condition, take_profit, 
@@ -889,9 +888,10 @@ export default {
 		} = this.data
 		console.log('this.data', this.data)
 		console.log('signals filter', signals)
+		const _signals = this.options.map(item => item.value)
 		console.log('signals options', this.options)
 		const condition = (signals.length === 1 && signals[0] === 'All') || (signals.length === 0)
-		return searchResult
+		const result = searchResult
 		.filter(item=>(
 			((item['StopLoss'] === null || item['StopLoss'] === '') || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
 			&& ((item['ProfitTarget'] === null || item['ProfitTarget'] === '') || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
@@ -909,6 +909,7 @@ export default {
 			&& ((item['Optix'] === null || item['Optix'] === '')  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
 			&& ((item['TradeNumber'] === null || item['TradeNumber'] === '')  || ( parseFloat(total_trades_condition)<=parseFloat(item['TradeNumber']) && parseFloat(total_trades)>=parseFloat(item['TradeNumber'])))
 		))
+		return result
 	},
 	filterShowShortCondition(searchResult){
 		debugger
@@ -1104,15 +1105,15 @@ getMatchScore(target, keyword) {
 		this.$refs['Form'].resetFields();
 		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
 		this.data.signals = ['All']
-		this.$refs['SelectCheck'].optionsAll = true
+		this.$refs['SelectCheck'].optionsAllChange = true
 		this.disabledFilter = false
 		// this.showFilterDialog = false
-		// this.handleQuery();
+		this.handleQuery();
 	},
 	disableFilter() {
 		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
 		this.data.signals = ['All']
-		this.$refs['SelectCheck'].optionsAll = true
+		this.$refs['SelectCheck'].optionsAllChange = true
 		this.disabledFilter = true
 		this.showFilterDialog = false
 		this.handleQuery();
