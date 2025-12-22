@@ -461,6 +461,29 @@
 									</div>
 								</el-form-item>
 							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Total Trades Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="total_trades_condition" label-width="0px">
+												<el-input v-model="data.total_trades_condition" placeholder="Enter number">
+												</el-input>
+										</el-form-item>
+											<span class="sign"> - </span>
+											<el-form-item prop="total_trades" label-width="0px">
+											<el-input v-model="data.total_trades" placeholder="Enter number">
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -552,6 +575,8 @@ export default {
 		reltrend_score: 10,
 		optix_condition: 0,
 		optix: 100,
+		total_trades_condition: 0,
+		total_trades: 100,
 		signals: ['All']
 	},
 	options: ['All'],
@@ -701,6 +726,14 @@ export default {
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'blur' },
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'change' }
 			],
+			total_trades_condition: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', 0, this.data.total_trades, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', 0, this.data.total_trades, true)(rule, value, callback), trigger: 'change' }
+			],
+			total_trades: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', this.data.total_trades_condition)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', this.data.total_trades_condition)(rule, value, callback), trigger: 'change' }
+			],
     }
   }
   },
@@ -849,7 +882,8 @@ export default {
 			change_condition, change,
 			trend_score_condition, trend_score,
 			reltrend_score_condition, reltrend_score,
-			optix_condition, optix
+			optix_condition, optix,
+			total_trades_condition, total_trades
 
 		} = this.data
 		console.log('this.data', this.data)
@@ -873,6 +907,7 @@ export default {
 			&& ((item['TrendScore'] === null || item['TrendScore'] === '')  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
 			&& ((item['RelTrendScore'] === null || item['RelTrendScore'] === '')  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RelTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RelTrendScore'])))
 			&& ((item['Optix'] === null || item['Optix'] === '')  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
+			&& ((item['TradeNumber'] === null || item['TradeNumber'] === '')  || ( parseFloat(total_trades_condition)<=parseFloat(item['TradeNumber']) && parseFloat(total_trades)>=parseFloat(item['TradeNumber'])))
 		))
 		return result
 	},

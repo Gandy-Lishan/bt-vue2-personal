@@ -459,6 +459,7 @@ export default {
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
 			],
+
     }
   }
   },
