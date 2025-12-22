@@ -461,6 +461,29 @@
 									</div>
 								</el-form-item>
 							</el-col>
+							<el-col :span="6">
+								<el-form-item
+									prop="risk_control_filter"
+									class="_filterConditionBox"
+									>
+									<template slot="label">
+										<label>
+											Total Trades Range:
+										</label>
+									</template>
+									<div class="_conditionBox">
+										<el-form-item prop="total_trades_condition" label-width="0px">
+												<el-input v-model="data.total_trades_condition" placeholder="Enter number">
+												</el-input>
+										</el-form-item>
+											<span class="sign"> - </span>
+											<el-form-item prop="total_trades" label-width="0px">
+											<el-input v-model="data.total_trades" placeholder="Enter number">
+											</el-input>
+											</el-form-item>
+									</div>
+								</el-form-item>
+							</el-col>
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -552,6 +575,8 @@ export default {
 		reltrend_score: 10,
 		optix_condition: 0,
 		optix: 100,
+		total_trades_condition: 0,
+		total_trades: 100,
 		signals: ['All']
 	},
 	options: ['All'],
@@ -700,6 +725,14 @@ export default {
 			optix: [
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'blur' },
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'change' }
+			],
+			total_trades_condition: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', 0, this.data.total_trades, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', 0, this.data.total_trades, true)(rule, value, callback), trigger: 'change' }
+			],
+			total_trades: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', this.data.total_trades_condition)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', this.data.total_trades_condition)(rule, value, callback), trigger: 'change' }
 			],
     }
   }
@@ -850,7 +883,8 @@ export default {
 			change_condition, change,
 			trend_score_condition, trend_score,
 			reltrend_score_condition, reltrend_score,
-			optix_condition, optix
+			optix_condition, optix,
+			total_trades_condition, total_trades
 
 		} = this.data
 		console.log('this.data', this.data)
@@ -859,20 +893,21 @@ export default {
 		const condition = (signals.length === 1 && signals[0] === 'All') || (signals.length === 0)
 		return searchResult
 		.filter(item=>(
-			(item['StopLoss'] === null || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
-			&& (item['ProfitTarget'] === null || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
-			&& (item['TimeInMarket'] === null ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
-			&& (condition || signals.includes(this.midTermMap[item['_Signal']] ? this.midTermMap[item['_Signal']] : item['_Signal']))
-			&& (item['MaxRisk'] === null  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
-			&& (item['Z_Score'] === null  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
-			&& (item['SharpeRatio'] === null  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
-			&& (item['StdDev'] === null  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
-			&& (item['ExpectedReturn'] === null  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
-			&& (item['WinRate'] === null  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
-			&& (item['PctChange'] === null  || ( parseFloat(change_condition)<=parseFloat(item['PctChange']) && parseFloat(change)>=parseFloat(item['PctChange'])))
-			&& (item['TrendScore'] === null  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
-			&& (item['RelTrendScore'] === null  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RelTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RelTrendScore'])))
-			&& (item['Optix'] === null  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
+			((item['StopLoss'] === null || item['StopLoss'] === '') || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
+			&& ((item['ProfitTarget'] === null || item['ProfitTarget'] === '') || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
+			&& ((item['TimeInMarket'] === null || item['TimeInMarket'] === '') ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
+			&& (condition || _signals.includes(this.midTermMap[item['_Signal']] ? this.midTermMap[item['_Signal']] : item['_Signal']))
+			&& ((item['MaxRisk'] === null || item['MaxRisk'] === '')  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
+			&& ((item['Z_Score'] === null || item['Z_Score'] === '')  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
+			&& ((item['SharpeRatio'] === null || item['SharpeRatio'] === '')  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
+			&& ((item['StdDev'] === null || item['StdDev'] === '')  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
+			&& ((item['ExpectedReturn'] === null || item['ExpectedReturn'] === '')  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
+			&& ((item['WinRate'] === null || item['WinRate'] === '')  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
+			&& ((item['PctChange'] === null || item['PctChange'] === '')  || ( parseFloat(change_condition)<=parseFloat(item['PctChange']) && parseFloat(change)>=parseFloat(item['PctChange'])))
+			&& ((item['TrendScore'] === null || item['TrendScore'] === '')  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
+			&& ((item['RelTrendScore'] === null || item['RelTrendScore'] === '')  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RelTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RelTrendScore'])))
+			&& ((item['Optix'] === null || item['Optix'] === '')  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
+			&& ((item['TradeNumber'] === null || item['TradeNumber'] === '')  || ( parseFloat(total_trades_condition)<=parseFloat(item['TradeNumber']) && parseFloat(total_trades)>=parseFloat(item['TradeNumber'])))
 		))
 	},
 	filterShowShortCondition(searchResult){
