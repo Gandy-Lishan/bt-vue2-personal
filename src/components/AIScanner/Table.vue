@@ -15,58 +15,80 @@
 			style="width: 100%; height: 100%"
 			border
 		>
-			<el-table-column type="expand" width="20px" v-if="currTabPage !== 'OptionScanner'">
+			<el-table-column type="expand" width="20px">
 				<template slot-scope="props">
 					<el-form label-position="left" inline class="demo-table-expand">
-						<!-- <el-form-item label="Description">
-							<span>{{ props.row.address }}</span>
-						</el-form-item>
-						<el-form-item label="Symbol Name">
-							<span>{{ props.row.desc }}</span>
-						</el-form-item> -->
-						<!-- <el-form-item label="Signal">
-							<span>{{ props.row['Signal']}}</span>
-						</el-form-item> -->
-						<el-form-item label="AVERAGE WIN %">
-							<span>{{ props.row['AvgWin']}}	</span>
-						</el-form-item>
-						<el-form-item label="MAX RISK %">
-							<span>{{ props.row['MaxRisk'] }}</span>
-						</el-form-item>
-						<el-form-item label="AVERAGE LOSS %">
-							<span>{{ props.row['AvgLoss']}}	</span>
-						</el-form-item>
-						<el-form-item label="MEDIAN RETURN %">
-							<span>{{ props.row['MedianReturn'] }}</span>
-						</el-form-item>
-						<el-form-item label="TOTAL TRADES">
-							<span>{{ props.row['TradeNumber']}}</span>
-						</el-form-item>
+						<template v-if="currTabPage !== 'OptionScanner'">
+							<!-- <el-form-item label="Description">
+								<span>{{ props.row.address }}</span>
+							</el-form-item>
+							<el-form-item label="Symbol Name">
+								<span>{{ props.row.desc }}</span>
+							</el-form-item> -->
+							<!-- <el-form-item label="Signal">
+								<span>{{ props.row['Signal']}}</span>
+							</el-form-item> -->
+							<el-form-item label="AVERAGE WIN %">
+								<span>{{ props.row['AvgWin']}}	</span>
+							</el-form-item>
+							<el-form-item label="MAX RISK %">
+								<span>{{ props.row['MaxRisk'] }}</span>
+							</el-form-item>
+							<el-form-item label="AVERAGE LOSS %">
+								<span>{{ props.row['AvgLoss']}}	</span>
+							</el-form-item>
+							<el-form-item label="MEDIAN RETURN %">
+								<span>{{ props.row['MedianReturn'] }}</span>
+							</el-form-item>
+							<el-form-item label="TOTAL TRADES">
+								<span>{{ props.row['TradeNumber']}}</span>
+							</el-form-item>
 
-						<el-form-item label="ANNUAL RETURN % (CAGR)">
-							<span>{{ props.row['AnnualReturn'] }}</span>
-						</el-form-item>
-						<el-form-item label="TOTAL POSITIVE">
-							<span>{{ Math.round((props.row['TradeNumber'] * props.row['WinRate']) / 100)}}</span>
-						</el-form-item>
-						<el-form-item label="AVERAGE RETURN %">
-							<span>{{ props.row['AvgReturn'] }}</span>
-						</el-form-item>
-						<el-form-item label="TOTAL NEGATIVE">
-							<span>{{ Math.round(props.row['TradeNumber'] - (props.row['TradeNumber'] * props.row['WinRate']) / 100)}}</span>
-						</el-form-item>
-						<el-form-item label="STD. DEV">
-							<span>{{ props.row['StdDev'] }}</span>
-						</el-form-item>
-						<el-form-item label="SHARPE RATIO" v-if="props.row['SharpeRatio'] !== null">
-							<span>{{ props.row['SharpeRatio'] }}</span>
-						</el-form-item>
-						<el-form-item label="RelTrend Score" v-if="props.row['RelTrendScore'] !== null">
-							<span>{{ props.row['RelTrendScore'] }}</span>
-						</el-form-item>
-						<el-form-item label="Optix" v-if="props.row['Optix'] !== null">
-							<span>{{ props.row['Optix'] }}</span>
-						</el-form-item>
+							<el-form-item label="ANNUAL RETURN % (CAGR)">
+								<span>{{ props.row['AnnualReturn'] }}</span>
+							</el-form-item>
+							<el-form-item label="TOTAL POSITIVE">
+								<span>{{ Math.round((props.row['TradeNumber'] * props.row['WinRate']) / 100)}}</span>
+							</el-form-item>
+							<el-form-item label="AVERAGE RETURN %">
+								<span>{{ props.row['AvgReturn'] }}</span>
+							</el-form-item>
+							<el-form-item label="TOTAL NEGATIVE">
+								<span>{{ Math.round(props.row['TradeNumber'] - (props.row['TradeNumber'] * props.row['WinRate']) / 100)}}</span>
+							</el-form-item>
+							<el-form-item label="STD. DEV">
+								<span>{{ props.row['StdDev'] }}</span>
+							</el-form-item>
+							<el-form-item label="SHARPE RATIO" v-if="props.row['SharpeRatio'] !== null">
+								<span>{{ props.row['SharpeRatio'] }}</span>
+							</el-form-item>
+							<el-form-item label="RelTrend Score" v-if="props.row['RelTrendScore'] !== null">
+								<span>{{ props.row['RelTrendScore'] }}</span>
+							</el-form-item>
+							<el-form-item label="Optix" v-if="props.row['Optix'] !== null">
+								<span>{{ props.row['Optix'] }}</span>
+							</el-form-item>
+							<el-form-item label="Contract Symbol" v-if="props.row['ContractSymbol'] !== null">
+								<span>{{ props.row['ContractSymbol'] }}</span>
+							</el-form-item>
+						</template>
+						<template v-if="currTabPage === 'OptionScanner'">
+							<el-form-item label="VOLUME" v-if="props.row['Volume'] !== null">
+								<span>{{ props.row['Volume'] }}</span>
+							</el-form-item>
+							<el-form-item label="OPEN INTEREST" v-if="props.row['OI'] !== null">
+								<span>{{ props.row['OI'] }}</span>
+							</el-form-item>
+							<el-form-item label="IMPLIED VOLATILITY" v-if="props.row['IV'] !== null">
+								<span>{{ props.row['IV'] }}</span>
+							</el-form-item>
+							<el-form-item label="DELTA" v-if="props.row['Delta'] !== null">
+								<span>{{ props.row['Delta'] }}</span>
+							</el-form-item>
+							<el-form-item label="VEGA" v-if="props.row['Vega'] !== null">
+								<span>{{ props.row['Vega'] }}</span>
+							</el-form-item>
+						</template>
 					</el-form>
 				</template>
 			</el-table-column>

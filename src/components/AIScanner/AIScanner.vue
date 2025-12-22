@@ -744,7 +744,7 @@ export default {
 				this.tableData = JSON.parse(JSON.stringify(this.originData))
 				this.options = [...Array.from(new Set(this.tableData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
 				this.data.signals = ['All']
-    this.$refs['SelectCheck'].optionsAll = true
+				if(this.$refs['SelectCheck']) this.$refs['SelectCheck'].optionsAllChange = true
 				await this.filterData()
 				console.log('this.options', this.options)
 			},
@@ -786,7 +786,7 @@ export default {
 		this.showFilterDialog = false
 		this.handleQuery();
 	},
-	handleQuery: throttle(async function () { this.$nextTick(async () => {await this.filterData()}) }, 1000),
+	handleQuery: throttle(async function () { this.$nextTick(async () => {await this.filterData()}) }, 500),
 	async filterData(){
 		this.tableData.content = this.filterShowShortCondition(this.filterPLSCondition(this.filterRangeCondition(this.getSearchresult())))
 		this.tableData.content.forEach(item => {
@@ -835,7 +835,6 @@ export default {
 	},
 	filterRangeCondition(searchResult){
 		debugger
-		console.log('searchResult', searchResult)
 		if(this.showFilterDialog || this.disabledFilter) return searchResult
 		const {stop_loss_condition, stop_loss, 
 			take_profit_condition, take_profit, 
@@ -855,25 +854,27 @@ export default {
 		} = this.data
 		console.log('this.data', this.data)
 		console.log('signals filter', signals)
+		const _signals = this.options.map(item => item.value)
 		console.log('signals options', this.options)
 		const condition = (signals.length === 1 && signals[0] === 'All') || (signals.length === 0)
-		return searchResult
+		const result = searchResult
 		.filter(item=>(
-			(item['StopLoss'] === null || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
-			&& (item['ProfitTarget'] === null || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
-			&& (item['TimeInMarket'] === null ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
-			&& (condition || signals.includes(this.midTermMap[item['_Signal']] ? this.midTermMap[item['_Signal']] : item['_Signal']))
-			&& (item['MaxRisk'] === null  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
-			&& (item['Z_Score'] === null  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
-			&& (item['SharpeRatio'] === null  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
-			&& (item['StdDev'] === null  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
-			&& (item['ExpectedReturn'] === null  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
-			&& (item['WinRate'] === null  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
-			&& (item['PctChange'] === null  || ( parseFloat(change_condition)<=parseFloat(item['PctChange']) && parseFloat(change)>=parseFloat(item['PctChange'])))
-			&& (item['TrendScore'] === null  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
-			&& (item['RelTrendScore'] === null  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RelTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RelTrendScore'])))
-			&& (item['Optix'] === null  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
+			((item['StopLoss'] === null || item['StopLoss'] === '') || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
+			&& ((item['ProfitTarget'] === null || item['ProfitTarget'] === '') || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
+			&& ((item['TimeInMarket'] === null || item['TimeInMarket'] === '') ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
+			&& (condition || _signals.includes(this.midTermMap[item['_Signal']] ? this.midTermMap[item['_Signal']] : item['_Signal']))
+			&& ((item['MaxRisk'] === null || item['MaxRisk'] === '')  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
+			&& ((item['Z_Score'] === null || item['Z_Score'] === '')  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
+			&& ((item['SharpeRatio'] === null || item['SharpeRatio'] === '')  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
+			&& ((item['StdDev'] === null || item['StdDev'] === '')  ||  (parseFloat(std_dev_condition)<=parseFloat(item['StdDev']) && parseFloat(std_dev)>=parseFloat(item['StdDev'])))
+			&& ((item['ExpectedReturn'] === null || item['ExpectedReturn'] === '')  || (parseFloat(expected_return_condition)<=parseFloat(item['ExpectedReturn']) && parseFloat(expected_return)>=parseFloat(item['ExpectedReturn'])))
+			&& ((item['WinRate'] === null || item['WinRate'] === '')  || ( parseFloat(win_rate_condition)<=parseFloat(item['WinRate']) && parseFloat(win_rate)>=parseFloat(item['WinRate'])))
+			&& ((item['PctChange'] === null || item['PctChange'] === '')  || ( parseFloat(change_condition)<=parseFloat(item['PctChange']) && parseFloat(change)>=parseFloat(item['PctChange'])))
+			&& ((item['TrendScore'] === null || item['TrendScore'] === '')  || ( parseFloat(trend_score_condition)<=parseFloat(item['TrendScore']) && parseFloat(trend_score)>=parseFloat(item['TrendScore'])))
+			&& ((item['RelTrendScore'] === null || item['RelTrendScore'] === '')  || ( parseFloat(reltrend_score_condition)<=parseFloat(item['RelTrendScore']) && parseFloat(reltrend_score)>=parseFloat(item['RelTrendScore'])))
+			&& ((item['Optix'] === null || item['Optix'] === '')  || ( parseFloat(optix_condition)<=parseFloat(item['Optix']) && parseFloat(optix)>=parseFloat(item['Optix'])))
 		))
+		return result
 	},
 	filterShowShortCondition(searchResult){
 		debugger
@@ -1069,15 +1070,15 @@ getMatchScore(target, keyword) {
 		this.$refs['Form'].resetFields();
 		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
 		this.data.signals = ['All']
-		this.$refs['SelectCheck'].optionsAll = true
+		this.$refs['SelectCheck'].optionsAllChange = true
 		this.disabledFilter = false
 		// this.showFilterDialog = false
-		// this.handleQuery();
+		this.handleQuery();
 	},
 	disableFilter() {
 		this.options = [...Array.from(new Set(this.originData.content.map(ele => this.midTermMap[ele._Signal] ? this.midTermMap[ele._Signal] : ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
 		this.data.signals = ['All']
-		this.$refs['SelectCheck'].optionsAll = true
+		this.$refs['SelectCheck'].optionsAllChange = true
 		this.disabledFilter = true
 		this.showFilterDialog = false
 		this.handleQuery();

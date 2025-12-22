@@ -591,25 +591,21 @@ export default {
 				})
 			}
 			const findSignal = (item, index) => {
-				let signal = CIQ.findSentiIndicator(item.indicator, null)
-				if(signal) {
-					// if inbdicator is sentiment indciator
-					return signal?.url || ''
-				}
-				if (!signal) {
-					signal = CIQ.findBuiltinTechIndicator(item.indicator, null)
-				}
-				// 在 symbol indicator list内检索url
-				if (!signal) {
-					if (CIQ.findSymbolIndicator(item.indicator, null)) {
-						return item.indicator
-					}
-				}
+				// if indicator is sentiment indicator
+				let sentiSignal = CIQ.findSentiIndicator(item.indicator, null)
+				if(sentiSignal) return sentiSignal?.url || ''
+
+				// if inbdicator is technical indciator
+				let techSignal = CIQ.findBuiltinTechIndicator(item.indicator, null)
+				if (techSignal) return techSignal?.url || ''
+
+				// 在 symbol ohlcv list内检索url
+				if (CIQ.findSymbolIndicator(item.indicator, null)) return item.indicator
 
 				const usersOwnList = this.$store.state.form[`usersOwn${criteriaCapFirstL}FileHash`]
 				return usersOwnList[index] !== ''
 						? usersOwnList[index]
-						: signal?.url || ''
+						: ''
 			}
 
 			let signal = null
