@@ -85064,14 +85064,14 @@
         "updated": "Weekly"
     },
     {
-        "chart_name": "# of Negative Reports (2-Month Lookback)",
+        "chart_name": "Number of Negative Reports (2-Month Lookback)",
         "url": "spy_fcst_down_cnt_2m",
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
     },
     {
-        "chart_name": "# of Positive Reports (2-Month Lookback)",
+        "chart_name": "Number of Positive Reports (2-Month Lookback)",
         "url": "spy_fcst_up_cnt_2m",
         "market_symbol": "SPX",
         "type": "other",
