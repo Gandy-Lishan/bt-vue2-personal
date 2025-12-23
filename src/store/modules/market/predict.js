@@ -23,6 +23,14 @@ const formatData = (data) => {
    label: 'Ticker',
   },
   { 
+    prop: 'LastPrice', 
+    label: 'Last Price', 
+    sortable: true,
+    type: 'number',
+    formatter: (row) => formatNumber(row.LastPrice, 'dollar'),
+    desc: 'The latest price of the stock'
+  },
+  { 
     prop: 'PredictEndDate', 
     labelHTML: 'Prediction<br/>End Date', 
     sortable: true,
@@ -30,12 +38,12 @@ const formatData = (data) => {
     desc: 'The future date to which the forecast applies'
   },
   { 
-    prop: 'LastPrice', 
-    label: 'Last Price', 
+    prop: 'Target', 
+    label: 'Target', 
     sortable: true,
     type: 'number',
-    formatter: (row) => formatNumber(row.LastPrice, 'dollar'),
-    desc: 'The latest price of the stock'
+    formatter: (row) => row.Target,
+    desc: 'The future price to which this forecast applies'
   },
   { 
     prop: 'HistoryPredictionPeriods', 
@@ -73,8 +81,9 @@ const formatData = (data) => {
  data.forEach((item, index) => {
    PredictData.push({
     Ticker: item.Ticker,
-    PredictEndDate: formatUTCDate(item.PredictEndDate),
     LastPrice: item.Close,
+    PredictEndDate: formatUTCDate(item.PredictEndDate),
+    Target: item.Target,
     HistoryPredictionPeriods: item.history_count,
     MeanAcc: item.MeanAcc,
     LastPeriodAcc: item.LastWinRate,
