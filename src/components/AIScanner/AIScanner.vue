@@ -575,7 +575,7 @@ export default {
 		reltrend_score: 10,
 		optix_condition: 0,
 		optix: 100,
-		total_trades_condition: 0,
+		total_trades_condition: 1,
 		total_trades: 100,
 		signals: ['All']
 	},
@@ -727,8 +727,8 @@ export default {
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('optix', 0, 100)(rule, value, callback), trigger: 'change' }
 			],
 			total_trades_condition: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', 0, this.data.total_trades, true)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', 0, this.data.total_trades, true)(rule, value, callback), trigger: 'change' }
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', 1, this.data.total_trades, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', 1, this.data.total_trades, true)(rule, value, callback), trigger: 'change' }
 			],
 			total_trades: [
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('total trades', this.data.total_trades_condition)(rule, value, callback), trigger: 'blur' },
