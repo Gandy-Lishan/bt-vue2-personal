@@ -64813,5 +64813,10 @@
     "chart_name": "H2O America",
     "url": "HTO",
     "updated": "Daily"
+  },
+    {
+    "chart_name": "BTC / GOLD Ratio",
+    "url": "btc_gold_ratio",
+    "updated": "Daily"
   }
 ]
