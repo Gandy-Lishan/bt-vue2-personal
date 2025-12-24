@@ -45514,7 +45514,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty Liv",
+        "chart_name": "Liberty Live Holdings-C",
         "url": "LLYVK",
         "market_symbol": "LLYVK",
         "type": "optix",
@@ -46172,21 +46172,21 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty Liv",
+        "chart_name": "Liberty Live Holdings-A",
         "url": "LLYVA",
         "market_symbol": "LLYVA",
         "type": "optix",
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty For",
+        "chart_name": "Liberty Media Corp-Formula-C",
         "url": "FWONK",
         "market_symbol": "FWONK",
         "type": "optix",
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty For",
+        "chart_name": "Liberty Media Corp-Formula-A",
         "url": "FWONA",
         "market_symbol": "FWONA",
         "type": "optix",
@@ -46200,23 +46200,9 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty Sir",
-        "url": "LSXMA",
-        "market_symbol": "LSXMA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Skyline Champion Corp",
         "url": "SKY",
         "market_symbol": "SKY",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Liberty Media Corp-Liberty Sir",
-        "url": "LSXMK",
-        "market_symbol": "LSXMK",
         "type": "optix",
         "updated": "Daily"
     },
@@ -57652,14 +57638,14 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty Liv Trend Score",
+        "chart_name": "Liberty Live Holdings-C Trend Score",
         "url": "LLYVK_trend",
         "market_symbol": "LLYVK",
         "type": "trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty Liv RelTrend Score",
+        "chart_name": "Liberty Live Holdings-C RelTrend Score",
         "url": "LLYVK_reltrend",
         "market_symbol": "LLYVK",
         "type": "reltrend",
@@ -58968,42 +58954,42 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty Liv Trend Score",
+        "chart_name": "Liberty Live Holdings-A Trend Score",
         "url": "LLYVA_trend",
         "market_symbol": "LLYVA",
         "type": "trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty Liv RelTrend Score",
+        "chart_name": "Liberty Live Holdings-A RelTrend Score",
         "url": "LLYVA_reltrend",
         "market_symbol": "LLYVA",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty For Trend Score",
+        "chart_name": "Liberty Media Corp-Formula-C Trend Score",
         "url": "FWONK_trend",
         "market_symbol": "FWONK",
         "type": "trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty For RelTrend Score",
+        "chart_name": "Liberty Media Corp-Formula-C RelTrend Score",
         "url": "FWONK_reltrend",
         "market_symbol": "FWONK",
         "type": "reltrend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty For Trend Score",
+        "chart_name": "Liberty Media Corp-Formula-A Trend Score",
         "url": "FWONA_trend",
         "market_symbol": "FWONA",
         "type": "trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty For RelTrend Score",
+        "chart_name": "Liberty Media Corp-Formula-A RelTrend Score",
         "url": "FWONA_reltrend",
         "market_symbol": "FWONA",
         "type": "reltrend",
@@ -59024,20 +59010,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Liberty Media Corp-Liberty Sir Trend Score",
-        "url": "LSXMA_trend",
-        "market_symbol": "LSXMA",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Liberty Media Corp-Liberty Sir RelTrend Score",
-        "url": "LSXMA_reltrend",
-        "market_symbol": "LSXMA",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Skyline Champion Corp Trend Score",
         "url": "SKY_trend",
         "market_symbol": "SKY",
@@ -59048,20 +59020,6 @@
         "chart_name": "Skyline Champion Corp RelTrend Score",
         "url": "SKY_reltrend",
         "market_symbol": "SKY",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Liberty Media Corp-Liberty Sir Trend Score",
-        "url": "LSXMK_trend",
-        "market_symbol": "LSXMK",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Liberty Media Corp-Liberty Sir RelTrend Score",
-        "url": "LSXMK_reltrend",
-        "market_symbol": "LSXMK",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -96560,6 +96518,13 @@
     {
         "chart_name": "BTC / GOLD Ratio",
         "url": "btc_gold_ratio",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TCTM Composite Thrust Model",
+        "url": "tctm_composite_thrust_model",
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
