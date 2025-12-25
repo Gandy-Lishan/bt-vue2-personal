@@ -380,8 +380,8 @@ export default {
 					'Credit': 'The premium (price) received by an option seller from the buyer for selling one option contract.<br/> Sourced from the lastPrice.',
 					'Margin': 'The estimated amount of collateral a broker requires an option seller to hold to cover potential losses.<br/> Calculation: Strike * 100',
 					'Return %': 'The return on margin, representing the efficiency of the trade by showing the potential profit as a percentage of the required collateral.<br/> Calculation: (Credit / Margin) * 100',
-					'CAGR %': 'An abbreviation for "Compound Annual Growth Rate."<br/> This metric annualizes the return on margin to help compare the long-term profitability of options with different expiration dates.<br/> Potential Calculation: Return % * (252 / DTE)',
-					'EV Score': 'Risk-adjusted expected return per unit of margin. <br/>Calculated as EV = [(Win% × Credit) - (Loss% × max(0, Strike - 0.7×Stock - Credit))] / Margin × 10,000.<br/> Higher scores indicate better risk-reward opportunities with conservative 30% downside protection.'
+					'CAGR %': 'An abbreviation for "Compound Annual Growth Rate.<br/> Potential Calculation: EV Score %*(252/ DTE).<br/> This metric annualizes the return on margin to help compare the long term profitability of options with diferent expiration dates',
+					'Expected Value Score': '<b>Risk-adjusted expected return on margin.</b><br/>  Calculated as: <b>EV = [(Win% × NetCredit) - (Loss% × TailLoss)] / Margin</b>.<br/> Unlike fixed models, "TailLoss" is derived from a <b>dynamic 1.2σ stress test</b> based on Implied Volatility (IV),<br/> and NetCredit includes a 2% slippage deduction. Higher scores indicate robust positive expectancy under volatility stress.'
 				},
 				midTermMap: {
 					'Symbol Close > its\' MA200 and Optix MA5 < 35':'Optix #1',
