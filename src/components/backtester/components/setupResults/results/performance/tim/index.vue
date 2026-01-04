@@ -1769,7 +1769,7 @@ export default {
 }
 .hint {
 	/* position: absolute; */
-	font-size: 14px;
+	font-size: 13px;
 	color: black !important;
 	/* right: 243px; */
 	font-weight: 300;
