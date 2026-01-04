@@ -79,6 +79,7 @@
 							</template>
 					</div>
 				</div>
+				<p class="hint"><i>NOTE: t = (Mean - Median) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
 			</el-tab-pane>
 			<el-tab-pane label="Exit With Default Time-In-Market (Short-Term)" name="third" v-if="rowFrequency === 'Daily'">
 				<div class="history-container">
@@ -149,6 +150,7 @@
 							</template>
 					</div>
 				</div>
+				<p class="hint"><i>NOTE: t = (Mean - Median) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
 			</el-tab-pane>
 			<el-tab-pane label="Exit with Customized Time-In-Market" name="second">
 				<div class="history-container">
@@ -217,6 +219,7 @@
 						</template>
 				</div>
 				</div>
+				<p class="hint"><i>NOTE: t = (Mean - Median) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
 				<el-dialog
 					title="Edit exit with different TIM Table"
 					:visible.sync="showTable"
@@ -1517,7 +1520,7 @@ export default {
 					'% Positive': Positive,
 					'Avg Max Loss': AvgMaxLoss,
 					'Avg Max Gain': AvgMaxGain,
-					'Z-Score': z_score_list[i]
+					't-Statistic': z_score_list[i]
 					}
 			})
 			if (this.activeTIM == 'first') {
@@ -1751,17 +1754,26 @@ export default {
     top: 100px;
 		right: 5px;
 }
-.history-container, .zscore-container, .hr {
+.history-container, .zscore-container, .hr, .hint {
 	margin: 0 auto;
 	width: 855px;
 }
 @media (max-width: 1200px) {
-	.history-container, .zscore-container, .hr {
+	.history-container, .zscore-container, .hr, .hint {
 		width: unset;
 	}
 	.editWithCustomBtn{
 		position: static;
 		margin-bottom: 10px;
 	}
+}
+.hint {
+	/* position: absolute; */
+	font-size: 14px;
+	color: black !important;
+	/* right: 243px; */
+	font-weight: 300;
+	padding: 10px 0px;
+	margin: 0 auto;
 }
 </style>
