@@ -515,9 +515,10 @@ removeLastSell(tradesData, initalData) {
         periodsShortTerm,
         defaultTIMTableLabels, 
         defaultTableLabels,
-        defaultShortTermTableLabels
+        defaultShortTermTableLabels,
+        signalsNumber: timSignalsNumber
       } = this.$refs.timChild.exportData()
-      const {maxMinData} = this.$refs.maxMinChild.exportData()
+      const {maxMinData, signalsNumber: maxMinSignalsNumber} = this.$refs.maxMinChild.exportData()
       let medianReturn, consistency, OtherAssets
       try {
         if(this.$refs.IndexesInfo) {
@@ -636,7 +637,7 @@ removeLastSell(tradesData, initalData) {
         const _backtestHistoryList = []
         backtestHistoryList.forEach((item) => {
           const obj = {}
-          obj['Entry Date'] = item['Entry Date']
+          obj[timSignalsNumber] = item['Entry Date']
           for(let i=1;i < defaultTableLabels.length;i++ ){
             obj[defaultTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTableLabels[i]]
           }
@@ -644,7 +645,7 @@ removeLastSell(tradesData, initalData) {
         })
         result_quotes.forEach(item => {
           const zscore = {};
-          zscore['Entry Date'] = item['property'];
+          zscore[timSignalsNumber] = item['property'];
           for (let i = 1; i < defaultTableLabels.length; i++) {
             const value = item[periods[i - 1].period];
             // 检查值是否有效
@@ -661,7 +662,7 @@ removeLastSell(tradesData, initalData) {
         const _TIMHistoryList = []
         TIMHistoryList.forEach((item) => {
           const obj = {}
-          obj['Entry Date'] = item['Entry Date']
+          obj[timSignalsNumber] = item['Entry Date']
           for(let i=1;i < defaultTIMTableLabels.length;i++ ){
             obj[defaultTIMTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultTIMTableLabels[i]]
           }
@@ -669,7 +670,7 @@ removeLastSell(tradesData, initalData) {
         })
         TIMResult_quotes.forEach(item => {
           const zscore = {}
-          zscore['Entry Date'] = item['property']
+          zscore[timSignalsNumber] = item['property']
           for (let i = 1; i < defaultTIMTableLabels.length; i++) {
             const value = item[periodsTIM[i - 1].period];
             // 检查值是否有效
@@ -686,7 +687,7 @@ removeLastSell(tradesData, initalData) {
         const _backtestShortTermHistoryList = []
         backtestShortTermHistoryList.forEach((item) => {
           const obj = {}
-          obj['Entry Date'] = item['Entry Date']
+          obj[timSignalsNumber] = item['Entry Date']
           for(let i=1;i < defaultShortTermTableLabels.length;i++ ){
             obj[defaultShortTermTableLabels[i].replace('[%]', 'Later [%]')] = item[defaultShortTermTableLabels[i]]
           }
@@ -694,7 +695,7 @@ removeLastSell(tradesData, initalData) {
         })
         result_shortTerm_quotes.forEach(item => {
           const zscore = {}
-          zscore['Entry Date'] = item['property']
+          zscore[timSignalsNumber] = item['property']
           for (let i = 1; i < defaultShortTermTableLabels.length; i++) {
             const value = item[periodsShortTerm[i - 1].period];
             // 检查值是否有效
@@ -709,11 +710,10 @@ removeLastSell(tradesData, initalData) {
 
         const _maxMinData = maxMinData.map(item => {
           const transformedItem = {
-            "Dates of Signals": item["Dates of Signals"],
+            [timSignalsNumber]: item['Dates of Signals'],
           };
-
           Object.keys(item).forEach(key => {
-            if (key !== "Dates of Signals" && key !== "Max Gain" && key !== "Max Loss") {
+            if (key !== 'Dates of Signals' && key !== "Max Gain" && key !== "Max Loss") {
               Object.keys(item[key]).forEach(subKey => {
                 transformedItem[`${key.replace('[%]', 'Later [%]')} - ${subKey}`] = item[key][subKey];
               });

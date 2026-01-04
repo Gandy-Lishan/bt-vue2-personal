@@ -267,12 +267,12 @@ name: 'Contact',
     li {
         padding-left: 10px;
         position: relative;
-        &::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #000000;
-        }
+        // &::before {
+        //     content: '•';
+        //     position: absolute;
+        //     left: 0;
+        //     color: #000000;
+        // }
     }
 }
 

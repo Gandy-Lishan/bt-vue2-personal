@@ -12,10 +12,10 @@
 								style="height: 100%; margin: 20px auto"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :key="index" align="center" v-if="l == 'Dates of Signals'" width="160px">				
-										<template slot="header">
-											{{`Dates of Signals`}}
-										</template>						
+									<el-table-column :key="index" align="center" v-if="l == 'Dates of Signals'" width="160px" :label="signalsNumber">				
+											<!-- <template slot="header">
+												{{`Dates of ${signalsNumber} Signals`}}
+										</template>						 -->
 										<template slot-scope="scope">
 												{{ displayData(scope.row[l]) }}
 										</template>
@@ -82,7 +82,7 @@ export default {
 				'Max Gain',
 				'Max Loss'
 			],
-			signalsNumber: 1
+			signalsNumber: 'Dates of Signals'
 		}
 	},
 	props: {
@@ -182,7 +182,8 @@ export default {
 			})
 				console.log('计算结果', medianMaxGainArray)
 				console.log('lishan backtestHistoryList', backtestHistoryList)
-				this.signalsNumber = backtestHistoryList.length
+				const tradesDataLength = backtestHistoryList && Array.isArray(backtestHistoryList) && backtestHistoryList.length > 0 ? backtestHistoryList.length : ''
+				if(tradesDataLength)this.signalsNumber = `Dates of ${tradesDataLength} Signals`
 				this.backtestHistoryList = [...backtestHistoryList, ...medianMaxGainArray]
 				this.start_date = formatStandardTime(datatime)
 		},
@@ -556,7 +557,7 @@ export default {
 				});
 		};
 		const cleanedArr = cleanInitField(this.backtestHistoryList);
-			return {maxMinData: cleanedArr};
+			return {maxMinData: cleanedArr, signalsNumber: this.signalsNumber};
 		},
 		tableRowClassName({row, rowIndex}) {
 		if (row['Dates of Signals'] === 'Mean') {
