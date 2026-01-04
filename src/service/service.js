@@ -2571,8 +2571,9 @@ export function sendContactTicketFront(payload) {
 	return axios.post(url, form, { headers });
 }
 
-export function getOptionScanner() {
-	const path = `/dev/option_scanner_app/option_scanner_data?type=put`
+export function getOptionScanner(date) {
+	let path = `/dev/option_scanner_app/option_scanner_data?type=put`
+	if(date) path += `&date=${date}`
 
 	return new Promise((resolve, reject) => {
 		axios
