@@ -16,6 +16,34 @@
 		<div class="table-header">
 			<!-- 预留一个过滤器的div -->
 			<div class="header-part2">
+				<div class="filterBox">
+					<div class="date-picker-container">
+						<div class="datePicker">
+							<el-date-picker
+								v-model="date"
+								type="date"
+								size="small"
+								@change="selectDate"
+								placeholder="- Select Date -"
+								value-format="yyyy-MM-dd"
+								:picker-options="startPickerOptions"
+							>
+						</el-date-picker>
+						</div>
+						<!-- <el-input 
+							placeholder="" 
+							v-model="searchItem" 
+							class="search"
+							size="small"
+							@input="handleQuery"
+							clearable
+							@clear="handleQuery"
+						>
+							<span slot="prepend" style="padding: 0 5px;">{{searchCategory}}</span>
+							<el-button slot="append" icon="el-icon-search" @click="handleQuery" size="small"></el-button>
+						</el-input> -->
+						</div>
+				</div>
 				<div class="filter-section">
 					<div class="btns">
 						<!-- <el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button> -->
@@ -374,6 +402,10 @@ export default {
 		signals: ['All']
 	},
 	options: ['All'],
+	date: '',
+	startPickerOptions: {
+		disabledDate: this.handleDisabledStartDate
+	},
 	rules: {
 			time_in_market_condition: [
 				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market, true)(rule, value, callback), trigger: 'blur' },
@@ -484,6 +516,14 @@ export default {
 		},
 	},
   methods: {
+	handleDisabledStartDate(time) {
+			const today = timestampToTime(new Date());
+
+			// 添加新限制：日期大于 curDate 或为周末
+			const isDisabled = time.getDay() === 0 || time.getDay() === 6;
+
+			return isDisabled || timestampToTime(time) > today
+	},
 	async handleDialogClose() {
 		const validForm = await this.validForm('Form');
 		if (!validForm) return
@@ -600,7 +640,7 @@ getMatchScore(target, keyword) {
 
 			// 'Contract Symbol', 'ev_score', 'Volume', 'OI', 'IV','Delta', 'Vega'
 		]
-		const res = await getOptionScanner()
+		const res = await getOptionScanner(this.date)
         AIPickObj.content = res.data.map(item => {
 			for (const key in item) {
 				if (Object.prototype.hasOwnProperty.call(item, key)) {
@@ -640,21 +680,25 @@ getMatchScore(target, keyword) {
 		this.handleQuery();
 	},
 	displayData(data, removeZero = false, numberDecimal = 1) {
-			const numberRegex = /^-?\d+(\.\d+)?$/
-			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+		const numberRegex = /^-?\d+(\.\d+)?$/
+		const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
-			if (numberRegex.test(data)) {
-				if(!removeZero) return parseFloat(data).toFixed(numberDecimal)
-				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
-				return parseFloat(data).toFixed(numberDecimal).replace(/\.0$/, '')
-			} else if (dateRegex.test(data)) {
-				return data
-			} else if(typeof data == 'string'){
-				return data
-			}else {
-				return ''
-			}
-		},
+		if (numberRegex.test(data)) {
+			if(!removeZero) return parseFloat(data).toFixed(numberDecimal)
+			// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
+			return parseFloat(data).toFixed(numberDecimal).replace(/\.0$/, '')
+		} else if (dateRegex.test(data)) {
+			return data
+		} else if(typeof data == 'string'){
+			return data
+		}else {
+			return ''
+		}
+	},
+	async selectDate(){
+		await this.loadData()
+		this.handleQuery()
+	},
   }
 };
 </script>
