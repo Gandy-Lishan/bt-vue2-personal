@@ -461,9 +461,11 @@ export default {
       console.log('nav', nav)
       if(path.includes('/sector_trend_score')) {this.activeIndex = '12'; return}
       if(path.includes('/contact')) {this.activeIndex = '4-6'; return}
+      if(path.includes('/market')) {this.activeIndex = '13'; return}
       if(nav && !nav.subMenu && (nav.label !== 'AI Trading' && nav.label !== 'Tutorial Videos')) this.activeIndex = nav.keyPath
       if(nav && nav.subMenu) {
         const navSubPath = nav.subMenu.find(ele => path.includes(ele.path))?.keyPath
+        console.log('navSubPath', navSubPath)
         if(navSubPath) this.activeIndex =navSubPath
         else if(!navSubPath && to.path.includes('/MR')) {this.activeIndex = '10-1'}
         else if(!navSubPath && to.path.includes('/backtester')) {this.activeIndex = '4'}
@@ -696,13 +698,13 @@ export default {
       if(label === 'Smart Stock Scanner') {
         return accessAllPage  || cannotAccessReport || canOnlyAccessReportStategyScanner
       }
-      if(label === 'AI Trading' || label === 'Market Prediction') {
+      if(label === 'AI Trading') {
         return email === 'hao@sentimentrader.com'
       }
       if(label === 'Portfolio') {
         return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
       }
-      if(label === 'Reports' || label === 'Dashboard') return accessAllPage || cannotAccessScanner || !cannotAccessReport|| canOnlyAccessReport || canOnlyAccessReportStategyScanner
+      if(label === 'Reports' || label === 'Dashboard' || label === 'Market Prediction') return accessAllPage || cannotAccessScanner || !cannotAccessReport|| canOnlyAccessReport || canOnlyAccessReportStategyScanner
       // if(label === 'Reports') {
       //   const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
       //   return allowedReportEmails.includes(email)
