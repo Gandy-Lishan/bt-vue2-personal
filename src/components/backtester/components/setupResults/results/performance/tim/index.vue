@@ -21,7 +21,14 @@
 								style="height: 100%; margin: 0 auto;"
 							>
 								<template v-for="(l, index) in defaultTableLabels">
-									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '125px' : '104px'">
+									<el-table-column :label="signalsNumber" :prop="l" :key="index" align="center" width="125px" v-if="l === 'Entry Date'">
+										<template slot-scope="scope">
+											<p class="tableText" :class="getCellStyle(scope.row[l])">
+												{{ displayData(scope.row[l]) }}
+											</p>
+										</template>
+									</el-table-column>
+									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :prop="l" :key="index" align="center" width="104px" v-else>
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -84,7 +91,14 @@
 								style="height: 100%; margin: 0 auto;"
 							>
 								<template v-for="(l, index) in defaultShortTermTableLabels">
-									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :prop="l" :key="index" align="center" :width="l == 'Entry Date' ? '125px' : '104px'">
+									<el-table-column :label="signalsNumber" :prop="l" :key="index" align="center" width="125px" v-if="l === 'Entry Date'">
+										<template slot-scope="scope">
+											<p class="tableText" :class="getCellStyle(scope.row[l])">
+												{{ displayData(scope.row[l]) }}
+											</p>
+										</template>
+									</el-table-column>
+									<el-table-column :label="l.replace('[%]', 'Later [%]')"  :prop="l" :key="index" align="center" width="104px" v-else>
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -146,7 +160,14 @@
 								style="height: 100%; margin: 0 auto"
 							>
 								<template v-for="(l, index) in defaultTIMTableLabels">
-									<el-table-column :label="l.replace('[%]', 'Later [%]')" :prop="l" :key="index" align="center"  width="120px">
+									<el-table-column :label="signalsNumber" :prop="l" :key="index" align="center"  width="120px" v-if="l === 'Entry Date'">
+										<template slot-scope="scope">
+											<p class="tableText" :class="getCellStyle(scope.row[l])">
+												{{ displayData(scope.row[l]) }}
+											</p>
+										</template>
+									</el-table-column>
+									<el-table-column :label="l.replace('[%]', 'Later [%]')" :prop="l" :key="index" align="center"  width="120px" v-else>
 										<template slot-scope="scope">
 											<p class="tableText" :class="getCellStyle(scope.row[l])">
 												{{ displayData(scope.row[l]) }}
@@ -328,6 +349,7 @@ export default {
 				'6 Months [%]',
 				'1 Year [%]'
 			],
+			signalsNumber: 'Dates of Signals',
 			//Exit With Default Time-In-Market/zscore-container
 			result_quotes: [],
 			periods: [],
@@ -365,7 +387,6 @@ export default {
 				rowFrequency: String
     },
 	created() {},
-	computed: {},
 	watch: {},
 	methods: {
 		// Utility function to format an output
@@ -572,6 +593,8 @@ export default {
 						if(this.rowFrequency === 'Daily') {
 							this.backtestShortTermHistoryList = this.calculateBacktestHistory(this.tradesData, shortTermPeriodArray)
 						}
+						const tradesDataLength = this.backtestHistoryList && Array.isArray(this.backtestHistoryList) && this.backtestHistoryList.length > 0 ? this.backtestHistoryList.length : ''
+						if(tradesDataLength)this.signalsNumber = `Dates of ${tradesDataLength} Signals`
 						console.log('backtestHistoryList', this.backtestHistoryList)
             const res = await getCustomTIM(rowID)
             let timPeriodArray = null
@@ -1710,7 +1733,8 @@ export default {
 				periods: this.periods, 
 				defaultTIMTableLabels: this.defaultTIMTableLabels, 
 				defaultTableLabels: this.defaultTableLabels, 
-				defaultShortTermTableLabels: this.defaultShortTermTableLabels
+				defaultShortTermTableLabels: this.defaultShortTermTableLabels,
+				signalsNumber: this.signalsNumber
 			};
 		}
 	}
