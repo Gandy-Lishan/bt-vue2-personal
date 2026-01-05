@@ -8,8 +8,12 @@
 					<h2 class="page-title">Smart Option Scanner (click to expand)</h2>
 				</div>
 			</template>
-			<div>
-				Designed exclusively for Option Sellers, this tool scans over 4,200 assets (S&P 500, Indices, ETFs) to identify premium Short Put opportunities. We target the statistical "sweet spot"—contracts with 95%–99% Probability of Profit (POP) that maintain a positive Expected Value (EV). Filter by Risk-Adjusted CAGR and EV Score to find the optimal balance between safety and yield, powered by real-time Black-Scholes analytics. Currently, the table covers option contracts for over 4,200 underlying assets, including S&P 500 components, major indices (e.g., SPX, NDX), and core ETFs. We’ll announce updates when additional underlying assets (from other market indices) are added. Helping traders target the "sweet spot" of high win rates (typically 95%–99%). By default, the table displays critical option metrics like Prob. of Profit (POP_est), Return %, and Days to Expiration (DTE) to prioritize contracts with balanced risk-reward profiles. You can refine results further using built-in filters—sort by POP_est (to focus on high-probability trades), Return % (for yield-focused picks), or DTE (to align with your time horizon). For deeper analysis, each contract has a dropdown menu that reveals additional details, including implied volatility (IV), Delta, and the full calculation logic for Break Even and Margin. All metrics (e.g., POP_est, CAGR %) are calculated using industry-standard models (Black-Scholes) and anchored to 252 trading days per year—ensuring consistency with market-wide risk and return benchmarks. These calculations, paired with real-time market data, ensure the reliability of the contract list and support informed trading decisions.
+			<div class="description-container">
+				<p>Designed exclusively for Option Sellers, this tool scans over 4,200 assets (S&P 500, Indices, ETFs) to identify premium Short Put opportunities. </p>
+				<p>We target the statistical "sweet spot"—contracts with 95%–99% Probability of Profit (POP) that maintain a positive Expected Value (EV). Filter by Risk-Adjusted CAGR and EV Score to find the optimal balance between safety and yield, powered by real-time Black-Scholes analytics. </p>
+				<p>Currently, the table covers option contracts for over 4,200 underlying assets, including S&P 500 components, major indices (e.g., SPX, NDX), and core ETFs. We’ll announce updates when additional underlying assets (from other market indices) are added. Helping traders target the "sweet spot" of high win rates (typically 95%–99%). </p>
+				<p>By default, the table displays critical option metrics like Prob. of Profit (POP_est), Return %, and Days to Expiration (DTE) to prioritize contracts with balanced risk-reward profiles. You can refine results further using built-in filters—sort by POP_est (to focus on high-probability trades), Return % (for yield-focused picks), or DTE (to align with your time horizon). </p>
+				<p>For deeper analysis, each contract has a dropdown menu that reveals additional details, including implied volatility (IV), Delta, and the full calculation logic for Break Even and Margin. All metrics (e.g., POP_est, CAGR %) are calculated using industry-standard models (Black-Scholes) and anchored to 252 trading days per year—ensuring consistency with market-wide risk and return benchmarks. These calculations, paired with real-time market data, ensure the reliability of the contract list and support informed trading decisions.</p>
 			</div>
 		</el-collapse-item>
 		</el-collapse>
@@ -888,5 +892,10 @@ h4 {
 	width: 100%;
 	justify-content: space-between;
 	align-items: center;
+}
+.description-container {
+	p {
+		margin: 0;
+	}
 }
 </style>
