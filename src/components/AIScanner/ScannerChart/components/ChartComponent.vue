@@ -727,28 +727,52 @@ export default {
       const std = Math.sqrt(variance) // 璁＄畻鏍囧噯宸
       return std
     },
-		get_period_parm(dataSeries, paramType, period) {
-      const typeDict = {
-        max: Math.max,
-        min: Math.min,
-        mean: (arr) => arr.reduce((a, b) => a + b) / arr.length,
-        sum: (arr) => arr.reduce((a, b) => a + b)
-      }
+    get_period_parm(dataSeries, paramType, period) {
+			const typeDict = {
+				max: Math.max,
+				min: Math.min,
+				mean: (arr) => arr.reduce((a, b) => a + b, 0) / arr.length,
+				sum: (arr) => arr.reduce((a, b) => a + b, 0),
+			};
 
-      const dataArr = []
+			const dataArr = [];
 
-      for (let i = 0; i < dataSeries.length; i++) {
-        if (i >= period) {
-          const tmpData = typeDict[paramType](
-            ...dataSeries.slice(i - period, i).filter((n) => !isNaN(n))
-          )
-          dataArr.push(Number(tmpData.toFixed(3)))
-        } else {
-          dataArr.push(NaN)
-        }
-      }
-      return dataArr
-    },
+			// ✅ period = 1（或更小）特殊处理
+			if (period <= 1) {
+				for (let i = 0; i < dataSeries.length; i++) {
+				const val = dataSeries[i];
+				dataArr.push(
+					isNaN(val) ? NaN : Number(val.toFixed(3))
+				);
+				}
+				return dataArr;
+			}
+
+			// ✅ period > 1 走原逻辑
+			for (let i = 0; i < dataSeries.length; i++) {
+				if (i >= period) {
+				const window = dataSeries
+					.slice(i - period, i)
+					.filter((n) => !isNaN(n));
+
+				if (window.length === 0) {
+					dataArr.push(NaN);
+					continue;
+				}
+
+				const tmpData =
+					paramType === 'mean' || paramType === 'sum'
+					? typeDict[paramType](window)
+					: typeDict[paramType](...window);
+
+				dataArr.push(Number(tmpData.toFixed(3)));
+				} else {
+				dataArr.push(NaN);
+				}
+			}
+
+			return dataArr;
+		},
 		transformZScoreData(data) {
 			const rowFrequency = 'Daily'
       data = data.map(item => {
