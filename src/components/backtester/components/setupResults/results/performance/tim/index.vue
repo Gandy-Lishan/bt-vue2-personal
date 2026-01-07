@@ -1407,6 +1407,7 @@ export default {
 			// masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
 			let period_dict = this.transformZScoreData(periodArray)
 			let quotes = CIQ.stxx.chart.masterData
+			let chartDataset = CIQ.stxx.chart.dataSet
 			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
 			for (let i in period_dict) {
 				quotes = this.generate_period_data(
@@ -1422,6 +1423,7 @@ export default {
 			})
 			//鎶婁氦鏄撳垪琛ㄨ浆鎹㈡垚鏃堕棿鎴
 			let dataTimeList = []
+			let MaxGainMinLossResult = []
 			for (let data in dataSet) {
 				if(direction === 'Long') {
 					if (dataSet[data].TradeStatus != 'BUY') continue
@@ -1430,6 +1432,61 @@ export default {
 				}
 				let entryDate = formatStandardTime(dataSet[data].Date).getTime()
 				dataTimeList.push(entryDate)
+				let res = chartDataset.findIndex((x) => {
+					return entryDate == x.DT.getTime()
+				})
+				if(res != -1) {
+				let entryPrice = chartDataset[res][this.tradePrice]
+				period_dict.sort((a, b) => a.value - b.value)
+				period_dict.map((item) => {
+					let _timArray = []
+					for (let i = 1; i <= item.value; i++) {
+						const element = chartDataset[res + i] || null
+						_timArray.push(element)
+					}
+					const timArray = _timArray.filter(item => {
+					return item !== null && item !== undefined && item !== '';
+					});
+					const preTimArray = timArray.map(item => item[this.tradePrice])
+					//console.log('timArray', timArray)
+					
+					const calculateReturn = (item, entryPrice) => {
+					const value = item;
+					if (value !== undefined && value !== null) {
+						const percentageReturn = ((value / entryPrice - 1) * 100).toFixed(1);
+						return parseFloat(percentageReturn) // Ensure non-negative value
+					}
+					return '';
+					};
+
+					const findExtremeItem = (arr, comparator) => {
+					return arr.reduce(comparator, arr[0]);
+					};
+
+					const maxItem = findExtremeItem(preTimArray, (max, current) =>
+					current > max ? current : max
+					);
+
+					const minItem = findExtremeItem(preTimArray, (min, current) =>
+					current < min ? current : min
+					);
+
+								//console.log('最大值 最小值', maxItem, minItem)
+					const maxReturn = ( maxItem !== undefined && maxItem !== null && maxItem < entryPrice) ? 0 : calculateReturn(maxItem, entryPrice);
+					const minReturn = (minItem !== undefined && minItem !== null && minItem > entryPrice) ? 0 : calculateReturn(minItem, entryPrice);
+					let finalMaxReturn = maxReturn
+					let finalMinReturn = minReturn
+					if(direction === 'Short' && minReturn && maxReturn) {
+						finalMaxReturn = -minReturn
+						finalMinReturn = -maxReturn
+					}
+					MaxGainMinLossResult.push({
+						'Max Gain': finalMaxReturn,
+						'Max Loss': finalMinReturn,
+						value: item.value
+						})
+					})
+				}
 			}
 			let used_quotes = quotes.filter(
 				(x) => dataTimeList.indexOf(x.DT.getTime()) != -1
@@ -1445,11 +1502,15 @@ export default {
 
 			let median_list = [],
 				positive_list = [],
-				max_loss_list = [],
-				max_gain_list = [],
 				z_score_list = [],
-				temp_mean_list = []
+				temp_mean_list = [],
+				new_max_loss_list = [],
+				new_max_gain_list = []
 			for (let i in period_dict) {
+				const _tmp_max_loss = this.calculate_mean(MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Loss']))
+				new_max_loss_list.push(_tmp_max_loss)
+				const _tmp_max_gain = this.calculate_mean(MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Gain']))
+				new_max_gain_list.push(_tmp_max_gain)
 				let temp_median = this.calculate_median(
 					used_quotes.map((obj) => obj[period_dict[i].timeframe])
 				)
@@ -1459,29 +1520,6 @@ export default {
 						used_quotes.map((obj) => obj[period_dict[i].timeframe])
 					)
 				)
-				if (direction == 'Short') {
-					max_loss_list.push(
-						this.calculate_mean(
-							used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
-						)
-					)
-					max_gain_list.push(
-						this.calculate_mean(
-							used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
-						)
-					)
-				} else {
-					max_loss_list.push(
-						this.calculate_mean(
-							used_quotes.map((obj) => obj['MaxLoss' + period_dict[i].value])
-						)
-					)
-					max_gain_list.push(
-						this.calculate_mean(
-							used_quotes.map((obj) => obj['MaxGain' + period_dict[i].value])
-						)
-					)
-				}
 
 				let temp_std = this.calculate_std(
 					used_quotes.map((obj) => obj[period_dict[i].timeframe])
@@ -1504,15 +1542,8 @@ export default {
 			const res = period_dict.map((val, i) => 
 				{
 					const Positive = isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100) + '%'
-					let AvgMaxLoss = !median_list[i] && median_list[i] != 0 ? '' : max_loss_list[i].toFixed(1)
-					let AvgMaxGain = !median_list[i] && median_list[i] != 0 ? '' : max_gain_list[i].toFixed(1)
-					// 如果为字符串类型，先转换为数字；注意要排除 NaN 的情况
-					if (direction === 'Short' && !isNaN(AvgMaxLoss)) {
-						AvgMaxLoss = -parseFloat(AvgMaxLoss);
-					}
-					if (direction === 'Short' && !isNaN(AvgMaxGain)) {
-						AvgMaxGain = -parseFloat(AvgMaxGain);
-					}
+					let AvgMaxLoss = new_max_loss_list[i] ? new_max_loss_list[i].toFixed(1) : ''
+					let AvgMaxGain = new_max_gain_list[i] ? new_max_gain_list[i].toFixed(1) : ''
 					return {
 						Period: val['timeframe'],
 					'Mean': temp_mean_list[i],
