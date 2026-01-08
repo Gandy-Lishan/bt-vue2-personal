@@ -102,6 +102,7 @@
 					<div class="btns">
 						<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
 						<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+						<el-button v-if="showButton" @click="toOptionScanner" type="info" size="small"><i class="el-icon-s-marketing" style="margin-right: 5px;"></i>Smart Option Scanner</el-button>
 						<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
 					</div>
 				</div>
@@ -768,7 +769,15 @@ export default {
 	computed: {
 		is_admin() {
 			return this.$store.state.user.is_admin
-		}
+		},
+		showButton() {
+			const currentDomain = window.location.hostname;
+			// 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
+			if ((currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost')) {
+				return true;
+			}
+			return false;
+		},
 	},
 	watch: {
 		// 数据源更新时tableData同时响应,只会在getAIPick时获取originData
@@ -1137,7 +1146,10 @@ getMatchScore(target, keyword) {
 			}else {
 				return ''
 			}
-		},
+	},
+	toOptionScanner(){
+		this.$router.push({path: '/aiscanner/optionscanner'})
+	},
   }
 };
 </script>
