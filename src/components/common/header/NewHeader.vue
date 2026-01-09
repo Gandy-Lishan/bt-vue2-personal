@@ -256,9 +256,21 @@ export default {
           ]
         },
         {
-          label: 'Smart Stock Scanner',
+          label: 'Smart Scanner',
           keyPath: '5',
-          path: '/scannerai'
+          path: '/scannerai',
+          subMenu: [
+            {
+              label: 'Smart Stock Scanner',
+              keyPath: '5-1',
+              path: '/scannerai'
+            },
+            {
+              label: 'Smart Option Scanner',
+              keyPath: '5-2',
+              path: '/scannerai/option'
+            }
+          ]
         },
         {
           label: 'Seasonality',
@@ -695,7 +707,7 @@ export default {
       if(label === 'BacktestEdge') {
         return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies') || canOnlyAccessReport
       }
-      if(label === 'Smart Stock Scanner') {
+      if(label === 'Smart Scanner') {
         return accessAllPage  || cannotAccessReport || canOnlyAccessReportStategyScanner
       }
       if(label === 'AI Trading') {
