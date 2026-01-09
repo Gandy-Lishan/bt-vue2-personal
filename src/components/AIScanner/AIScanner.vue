@@ -770,14 +770,6 @@ export default {
 		is_admin() {
 			return this.$store.state.user.is_admin
 		},
-		showButton() {
-			const currentDomain = window.location.hostname;
-			// 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
-			if ((currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost')) {
-				return true;
-			}
-			return false;
-		},
 	},
 	watch: {
 		// 数据源更新时tableData同时响应,只会在getAIPick时获取originData
