@@ -13526,5 +13526,9 @@
     {
         "name": "Baidu Inc.",
         "stock": "BIDU"
-    }
+    },
+    {
+     "name": "BTC / GOLD Ratio",
+        "stock": "btc_gold_ratio"
+}
 ]

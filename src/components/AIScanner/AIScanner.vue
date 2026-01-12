@@ -102,6 +102,7 @@
 					<div class="btns">
 						<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
 						<el-button @click="toScannerBacktest" type="warning" size="small"><i class="el-icon-arrow-left el-icon-s-promotion" style="margin-right: 5px;"></i>Smart Scanner Backtest</el-button>
+						<el-button v-if="showButton" @click="toOptionScanner" type="info" size="small"><i class="el-icon-s-marketing" style="margin-right: 5px;"></i>Smart Option Scanner</el-button>
 						<el-button @click="exportTable" type="primary" size="small" title="Export Table"><i class="el-icon-arrow-left el-icon-download"></i></el-button>
 					</div>
 				</div>
