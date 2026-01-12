@@ -12,6 +12,68 @@
 		<el-tabs v-model="activeTIM" type="card" v-loading="loading">
 			<el-tab-pane label="Exit With Default Time-In-Market (Long-Term)" name="first">
 				<div class="history-container">
+					<el-collapse accordion>
+						<el-collapse-item title="Advance Studies" name="1" size="small">
+							<el-form ref="form" :model="form" label-width="175px" size="small" class="advance-form" label-position="left" 
+							:rules="rules">
+								<el-row>
+									<el-col :span="13" :xs="13" :sm="13" :md="13" :lg="13" :xl="13">
+										<el-row>
+											<el-col :span="16" :xs="16" :sm="16" :md="16" :lg="16" :xl="16">
+												<el-form-item prop="shiftBars">
+													<template slot="label">
+														<label>
+															1. Single Time-Shifter
+															<el-tooltip effect="dark" placement="top">
+															<span slot="content">
+																The <b>Signal Shifter</b> is a diagnostic tool that allows users to globally offset the timestamps of generated trading signals<br/> 
+																by a fixed number of periods <b>(N-Bars)</b> to the right (future).<br/>
+																Once shifted, the system re-calculates all performance metrics based on the new entry and exit timestamps.
+															</span>
+															<i class="fa fa-question-circle right" aria-hidden="true"></i>
+															</el-tooltip>
+														</label>
+													</template>
+													<el-input placeholder="" v-model="form.shiftBars" size="small">
+														<template slot="append">Bars</template>
+													</el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+												<el-button type="primary" size="mini" @click="applySingleTimeShifter">Apply</el-button>
+												<el-button type="warning" size="mini" @click="resetApplySingleTimeShifter">Reset</el-button>
+											</el-col>
+										</el-row>
+									</el-col>
+									<el-col :span="11" :xs="11" :sm="11" :md="11" :lg="11" :xl="11">
+										<el-row>
+											<el-col :span="16" :xs="16" :sm="16" :md="16" :lg="16" :xl="16">
+												<el-form-item prop="trimmedStabilityAnalysis" label-width="0px">
+													<el-checkbox v-model="form.trimmedStabilityAnalysis">
+														<label>
+														2. Trimmed Stabity Analysis
+														<el-tooltip effect="dark" placement="top">
+														<span slot="content">
+															This feature re-evaluates strategy performance by excluding a specific number<br/>
+															of extreme values (the highest gains and lowest losses) from the signal return series. <br/>
+															Typically, this involves removing the top $N$ and bottom $N$ outliers.
+														</span>
+														<i class="fa fa-question-circle right" aria-hidden="true"></i>
+														</el-tooltip>
+													</label>
+													</el-checkbox>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+												<el-button type="primary" size="mini" @click="applyTrimmedStabilityAnalysis">Apply</el-button>
+												<el-button type="warning" size="mini" @click="resetApplyTrimmedStabilityAnalysis">Reset</el-button>
+											</el-col>
+										</el-row>
+									</el-col>
+								</el-row>
+							</el-form>
+						</el-collapse-item>
+					</el-collapse>
 						<template>
 							<el-table
 								:data="backtestHistoryList"
@@ -330,6 +392,7 @@
 import { setCustomTIM, getCustomTIM } from '@/service/service'
 import { CIQ } from '@/components/common/chart/st-development/js'
 import { formatStandardTime } from '@/utils'
+import { createPositiveScopeIntegerRule, createIntegerRule } from '@/utils/formValidate'
 
 export default {
 	name: 'TIM',
@@ -339,7 +402,8 @@ export default {
 			activeTIM: 'first',
 			loading: false,
 			start_date: null,
-
+			rowID: null,
+			datatime: null,
 			//Exit With Default Time-In-Market/HistoryList
 			backtestHistoryList: [],
 			defaultTableLabels: [
@@ -380,14 +444,24 @@ export default {
 
 			//Dialog: edit table
 			showTable: false,
-			editTIMData: []
+			editTIMData: [],
+			form: {
+				shiftBars: '',
+				trimmedStabilityAnalysis: false
+			},
+			rules: {
+				shiftBars: [
+					{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('number of bars', 0, null, true)(rule, value, callback), trigger: 'blur' },
+					{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('number of bars', 0, null, true)(rule, value, callback), trigger: 'change' }
+				],
+			}
 		}
 	},
 	props: {
-				tradesData: Array,
-				tradePrice: String,
-				editBacktestID: String,
-				rowFrequency: String
+		tradesData: Array,
+		tradePrice: String,
+		editBacktestID: String,
+		rowFrequency: String
     },
 	created() {},
 	watch: {},
@@ -409,9 +483,9 @@ export default {
         // 父组件getResultData时用清空本组件内常用数据
         clearData() {
             this.backtestHistoryList = []
-						this.backtestShortTermHistoryList = []
-						this.result_shortTerm_quotes = []
-						this.periodsShortTerm = []
+			this.backtestShortTermHistoryList = []
+			this.result_shortTerm_quotes = []
+			this.periodsShortTerm = []
             this.TIMHistoryList = []
             this.TIMResult_quotes = []
             this.result_quotes = []
@@ -575,8 +649,31 @@ export default {
             }
             return true;
         },
+		resetApplySingleTimeShifter() {
+			this.form.shiftBars = ''
+			this.$refs.form.clearValidate()
+			this.applySingleTimeShifter()
+		},
+		applySingleTimeShifter() {
+			const periodArray = this.getAllDefaultTableLabels()
+            this.backtestHistoryList = this.calculateBacktestHistory(
+                this.tradesData,
+                periodArray
+            )
+			this.calculateZScore(this.tradesData, periodArray)
+		},
+		applyTrimmedStabilityAnalysis() {
+			const periodArray = this.getAllDefaultTableLabels()
+			this.calculateZScore(this.tradesData, periodArray)
+		},
+		resetApplyTrimmedStabilityAnalysis() {
+			this.form.trimmedStabilityAnalysis = false
+			this.applyTrimmedStabilityAnalysis()
+		},
 		// calculation functions
         async prepareData(rowID,datatime) {
+			this.rowID = rowID
+			this.datatime = datatime
             // 父组件getResultData时用tradeData计算其他常用数据
             // 这里可以父组件主动调用，或者在子组件监听this.tradesData
             const periodArray = this.getAllDefaultTableLabels()
@@ -1198,11 +1295,20 @@ export default {
 				return { timeframe, period: item.period, value }
 			})
 		},
+		formatDate(dateStr) {
+			const Y = dateStr.slice(0, 4)
+			const M = dateStr.slice(4, 6)
+			const D = dateStr.slice(6, 8)
+			return `${Y}-${M}-${D}`
+		},
 		calculateBacktestHistory(dataSet, periodArray) {
 			/*
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
       */
 			let chartDataset = CIQ.stxx.chart.dataSet
+			if(this.form.shiftBars) {
+				chartDataset = CIQ.stxx.chart.masterData
+			}
 			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
 			const field = this.tradePrice
 			// dataSet = dataSet.filter((item) => item.TradeStatus == 'BUY')
@@ -1212,12 +1318,21 @@ export default {
 
 			for (let data in dataSet) {
 				let entryDate = formatStandardTime(dataSet[data].Date)
-
+				let entryDateDefault = dataSet[data].Date
 				let res = chartDataset.findIndex((x) => {
 					return entryDate.getTime() == x.DT.getTime()
 				})
 				if(res == -1) {noFound.push(dataSet[data].Date)}
 				if (res != -1) {
+					if(this.form.shiftBars) {
+						res += Number(this.form.shiftBars)
+						if(chartDataset[res] == undefined) {
+							noFound.push(dataSet[data].Date)
+							continue
+						}else {
+							entryDateDefault = this.formatDate(chartDataset[res].Date)
+						}
+					}
 					//鎷胯繘鍦轰环鏍煎拰鍓嶄竴澶╀綔姣旇緝
 					let entryPrice = chartDataset[res][field]
 					const transformData = this.transformData(periodArray)
@@ -1235,7 +1350,7 @@ export default {
 							: ''
 						obj[item.timeframe] = exitBar
 					})
-					backtestResult.push({ 'Entry Date': dataSet[data].Date, ...obj })
+					backtestResult.push({ 'Entry Date': entryDateDefault, ...obj })
 				}
 			}
 			console.log('找不到的日期', noFound)
@@ -1400,6 +1515,27 @@ export default {
 				return { timeframe, period: item.period, value }
 			})
 		},
+		removeMinAndMax(arr) {
+			if (!Array.isArray(arr) || arr.length <= 2) return []
+
+			const max = Math.max(...arr)
+			const min = Math.min(...arr)
+
+			let removedMin = false
+			let removedMax = false
+
+			return arr.filter(v => {
+				if (v === min && !removedMin) {
+				removedMin = true
+				return false
+				}
+				if (v === max && !removedMax) {
+				removedMax = true
+				return false
+				}
+				return true
+			})
+		},
 		calculateZScore(dataSet, periodArray) {
 			/*
       periodArray: [{period: 1, timeframe: 'Week'}}] => [{timefame: '1 Week [%]', period: '1', value: 5}]
@@ -1407,6 +1543,7 @@ export default {
 			// masterData涓嶅寘鍚玦ndicator value,闃叉鏃爋hlcv鐨勬儏鍐
 			let period_dict = this.transformZScoreData(periodArray)
 			let quotes = CIQ.stxx.chart.masterData
+			let originalQuotes = CIQ.stxx.chart.masterData
 			let chartDataset = CIQ.stxx.chart.dataSet
 			const direction = dataSet[0].TradeStatus == 'BUY' ? 'Long' : 'Short'
 			for (let i in period_dict) {
@@ -1431,23 +1568,33 @@ export default {
 					if (dataSet[data].TradeStatus != 'SELL') continue
 				}
 				let entryDate = formatStandardTime(dataSet[data].Date).getTime()
-				dataTimeList.push(entryDate)
 				let res = chartDataset.findIndex((x) => {
 					return entryDate == x.DT.getTime()
 				})
 				if(res != -1) {
+					if(this.form.shiftBars) {
+						res += Number(this.form.shiftBars)
+						if(chartDataset[res] == undefined) {
+							continue
+						}else {
+							entryDate = formatStandardTime(this.formatDate(chartDataset[res].Date)).getTime()
+						}
+					}
 				let entryPrice = chartDataset[res][this.tradePrice]
 				period_dict.sort((a, b) => a.value - b.value)
 				period_dict.map((item) => {
 					let _timArray = []
 					for (let i = 1; i <= item.value; i++) {
-						const element = chartDataset[res + i] || null
+						let element = chartDataset[res + i] || null
+						if(this.form.shiftBars) {
+							element = originalQuotes[res + i + Number(this.form.shiftBars)] || null
+						}
 						_timArray.push(element)
 					}
 					const timArray = _timArray.filter(item => {
 					return item !== null && item !== undefined && item !== '';
 					});
-					const preTimArray = timArray.map(item => item[this.tradePrice])
+					let preTimArray = timArray.map(item => item[this.tradePrice])
 					//console.log('timArray', timArray)
 					
 					const calculateReturn = (item, entryPrice) => {
@@ -1487,6 +1634,7 @@ export default {
 						})
 					})
 				}
+				dataTimeList.push(entryDate)
 			}
 			let used_quotes = quotes.filter(
 				(x) => dataTimeList.indexOf(x.DT.getTime()) != -1
@@ -1507,34 +1655,28 @@ export default {
 				new_max_loss_list = [],
 				new_max_gain_list = []
 			for (let i in period_dict) {
-				const _tmp_max_loss = this.calculate_mean(MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Loss']))
-				new_max_loss_list.push(_tmp_max_loss)
-				const _tmp_max_gain = this.calculate_mean(MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Gain']))
-				new_max_gain_list.push(_tmp_max_gain)
-				let temp_median = this.calculate_median(
-					used_quotes.map((obj) => obj[period_dict[i].timeframe])
-				)
-				median_list.push(temp_median.toFixed(1))
-				positive_list.push(
-					this.calculate_win_rate(
-						used_quotes.map((obj) => obj[period_dict[i].timeframe])
-					)
-				)
+				let _MaxLoss = MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Loss'])
+				let _MaxGain = MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Gain'])
+				let _Median = used_quotes.map((obj) => obj[period_dict[i].timeframe])
+				let _Positive = used_quotes.map((obj) => obj[period_dict[i].timeframe])
+				if(this.form.trimmedStabilityAnalysis) {
+					_MaxLoss = this.removeMinAndMax(_MaxLoss)
+					_MaxGain = this.removeMinAndMax(_MaxGain)
+					_Median = this.removeMinAndMax(_Median)
+					_Positive = this.removeMinAndMax(_Positive)
+				}
+				new_max_loss_list.push(this.calculate_mean(_MaxLoss))
+				new_max_gain_list.push(this.calculate_mean(_MaxGain))
+				median_list.push(this.calculate_median(_Median).toFixed(1))
+				positive_list.push(this.calculate_win_rate(_Positive))
 
-				let temp_std = this.calculate_std(
-					used_quotes.map((obj) => obj[period_dict[i].timeframe])
-				)
-				let temp_mean = this.calculate_mean(
-					used_quotes.map((obj) => obj[period_dict[i].timeframe])
-				)
-				const _temp_mean = parseFloat(temp_mean.toFixed(1))
-				temp_mean_list.push(_temp_mean)
-				const sqrt_length = used_quotes.map((obj) => obj[period_dict[i].timeframe]).filter(e => !isNaN(e)).length
+				temp_mean_list.push(this.calculate_mean(_Median).toFixed(1))
+				const sqrt_length = _Median.filter(e => !isNaN(e)).length
 				z_score_list.push(
 					parseFloat(
 						(
-							(temp_median - temp_mean) /
-							(temp_std / Math.sqrt(sqrt_length))
+							(this.calculate_median(_Median) - this.calculate_mean(_Median)) /
+							(this.calculate_std(_Median) / Math.sqrt(sqrt_length))
 						).toFixed(1)
 					)
 				)
@@ -1830,5 +1972,19 @@ export default {
 	font-weight: 300;
 	padding: 10px 0px;
 	margin: 0 auto;
+}
+.advance-form {
+	/deep/ .el-input-group {
+		width: 130px;
+	}
+	/deep/ .el-button+.el-button {
+		margin-left: 2px;
+		margin-top: 2px;
+	}
+}
+.history-container {
+	/deep/ .el-collapse-item__content {
+		padding-bottom: 0px;
+	}
 }
 </style>
