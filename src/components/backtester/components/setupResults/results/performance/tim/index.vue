@@ -1516,15 +1516,24 @@ export default {
 			})
 		},
 		removeMinAndMax(arr) {
-			if (!Array.isArray(arr) || arr.length <= 2) return []
+			if (!Array.isArray(arr)) return []
 
-			const max = Math.max(...arr)
-			const min = Math.min(...arr)
+			// 1️⃣ 去掉你定义的空值
+			const valid = arr.filter(
+				v => v !== null && v !== undefined && v !== '' && !Number.isNaN(v)
+			)
+
+			if (valid.length <= 2) return []
+
+			// 2️⃣ 计算极值（假设剩下的都是 number）
+			const min = Math.min(...valid)
+			const max = Math.max(...valid)
 
 			let removedMin = false
 			let removedMax = false
 
-			return arr.filter(v => {
+			// 3️⃣ 保持顺序，只去 1 个 min / max
+			return valid.filter(v => {
 				if (v === min && !removedMin) {
 				removedMin = true
 				return false
@@ -1656,6 +1665,7 @@ export default {
 				new_max_gain_list = []
 			for (let i in period_dict) {
 				let _MaxLoss = MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Loss'])
+				console.log(`_MaxLoss ${period_dict[i].value}`, _MaxLoss)
 				let _MaxGain = MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Gain'])
 				let _Median = used_quotes.map((obj) => obj[period_dict[i].timeframe])
 				let _Positive = used_quotes.map((obj) => obj[period_dict[i].timeframe])
@@ -1681,11 +1691,12 @@ export default {
 					)
 				)
 			}
+			const isNullValue = (v) => (v !== null && v !== undefined && v !== '' && !Number.isNaN(v)) 
 			const res = period_dict.map((val, i) => 
 				{
 					const Positive = isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100) + '%'
-					let AvgMaxLoss = new_max_loss_list[i] ? new_max_loss_list[i].toFixed(1) : ''
-					let AvgMaxGain = new_max_gain_list[i] ? new_max_gain_list[i].toFixed(1) : ''
+					let AvgMaxLoss = isNullValue(new_max_loss_list[i]) ? new_max_loss_list[i].toFixed(1) : ''
+					let AvgMaxGain = isNullValue(new_max_gain_list[i]) ? new_max_gain_list[i].toFixed(1) : ''
 					return {
 					Period: val['timeframe'],
 					'Mean': temp_mean_list[i],
