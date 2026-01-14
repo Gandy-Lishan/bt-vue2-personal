@@ -96528,5 +96528,19 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "JK Seasonal Bond Model",
+        "url": "jk_seasonal_bond_calendar",
+        "market_symbol": "thirty",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TCTM Composite Confirmation Model",
+        "url": "tctm_composite_confirmation_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
