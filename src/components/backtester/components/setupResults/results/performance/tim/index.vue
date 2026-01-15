@@ -55,8 +55,7 @@
 														<el-tooltip effect="dark" placement="top">
 														<span slot="content">
 															This feature re-evaluates strategy performance by excluding a specific number<br/>
-															of extreme values (the highest gains and lowest losses) from the signal return series. <br/>
-															Typically, this involves removing the top $N$ and bottom $N$ outliers.
+															of extreme values (the highest gains and lowest losses) from the signal return series.
 														</span>
 														<i class="fa fa-question-circle right" aria-hidden="true"></i>
 														</el-tooltip>
@@ -1609,7 +1608,7 @@ export default {
 					const calculateReturn = (item, entryPrice) => {
 					const value = item;
 					if (value !== undefined && value !== null) {
-						const percentageReturn = ((value / entryPrice - 1) * 100).toFixed(1);
+						const percentageReturn = ((value / entryPrice - 1) * 100);
 						return parseFloat(percentageReturn) // Ensure non-negative value
 					}
 					return '';

@@ -607,7 +607,7 @@ export default {
 					const calculateReturn = (item, entryPrice) => {
 					const value = item;
 					if (value !== undefined && value !== null) {
-						const percentageReturn = ((value / entryPrice - 1) * 100).toFixed(1);
+						const percentageReturn = ((value / entryPrice - 1) * 100);
 						return parseFloat(percentageReturn) // Ensure non-negative value
 					}
 					return '';
