@@ -96542,5 +96542,19 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Consumer Confidence - Bonds Down",
+        "url": "survey_conference_board_bondsd",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "Consumer Confidence - Bonds Up",
+        "url": "survey_conference_board_bondsu",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
