@@ -597,7 +597,7 @@ export default {
           '% Positive': Positive,
           'Avg Max Loss': AvgMaxLoss,
           'Avg Max Gain': AvgMaxGain,
-          'Z-Score': z_score_list[i]
+          't-Statistic': z_score_list[i]
         }
       })
       this.result_quotes = res
