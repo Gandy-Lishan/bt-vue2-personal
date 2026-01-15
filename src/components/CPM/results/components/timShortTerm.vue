@@ -708,7 +708,7 @@ export default {
 						: Math.round(positive_list[i] * 100) + '%',
 					'Avg Max Loss': AvgMaxLoss,
 					'Avg Max Gain': AvgMaxGain,
-					'Z-Score': z_score_list[i]
+					't-Statistic': z_score_list[i]
 				}
 			})
 			this.result_quotes = res

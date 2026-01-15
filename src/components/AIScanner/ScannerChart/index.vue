@@ -209,6 +209,22 @@ computed: {
         'negative-value': value < 0,
       };
 		},
+		displayData(data, removeZero = false, decimal = 1) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data)) {
+				if(!removeZero) return parseFloat(data).toFixed(decimal)
+				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
+				return parseFloat(data).toFixed(decimal).replace(/\.0$/, '')
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+	    },
 		handleDownloadCsv() {
 			console.log('backtestResultList', this.backtestResultList)
 			const backtestHistoryList = this.backtestResultList
@@ -235,6 +251,7 @@ computed: {
 				_backtestHistoryList.push(obj)
 			})
 			result_quotes.forEach(item => {
+				debugger
 				const zscore = {};
 				zscore['Entry Date'] = item['property'];
 				for (let i = 1; i < defaultTableLabels.length; i++) {
@@ -242,7 +259,7 @@ computed: {
 					const value = item[defaultTableLabels[i]]
 					// 检查值是否有效
 					if (!isNaN(value) || (typeof value === 'string' && value.endsWith('%'))) {
-						zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = value;
+						zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = this.displayData(value);
 					} else {
 						zscore[defaultTableLabels[i].replace('[%]', 'Later [%]')] = ''; // 或者您可以设置为其他默认值
 					}
