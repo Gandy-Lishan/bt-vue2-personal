@@ -1324,11 +1324,11 @@ export default {
 				if(res == -1) {noFound.push(dataSet[data].Date)}
 				if (res != -1) {
 					if(this.form.shiftBars) {
-						res += Number(this.form.shiftBars)
-						if(chartDataset[res] == undefined) {
+						if(chartDataset[res + Number(this.form.shiftBars)] == undefined) {
 							noFound.push(dataSet[data].Date)
 							continue
 						}else {
+						    res += Number(this.form.shiftBars)
 							entryDateDefault = this.formatDate(chartDataset[res].Date)
 						}
 					}
@@ -1345,7 +1345,7 @@ export default {
 										: chartDataset[res + item.value][field] - entryPrice) /
 										entryPrice) *
 									100
-							  ).toFixed(2)
+							  )
 							: ''
 						obj[item.timeframe] = exitBar
 					})
@@ -1581,10 +1581,10 @@ export default {
 				})
 				if(res != -1) {
 					if(this.form.shiftBars) {
-						res += Number(this.form.shiftBars)
-						if(chartDataset[res] == undefined) {
+						if(chartDataset[res + Number(this.form.shiftBars)] == undefined) {
 							continue
 						}else {
+						    res += Number(this.form.shiftBars)
 							entryDate = formatStandardTime(this.formatDate(chartDataset[res].Date)).getTime()
 						}
 					}
@@ -1594,16 +1594,19 @@ export default {
 					let _timArray = []
 					for (let i = 1; i <= item.value; i++) {
 						let element = chartDataset[res + i] || null
-						if(this.form.shiftBars) {
-							element = originalQuotes[res + i + Number(this.form.shiftBars)] || null
-						}
 						_timArray.push(element)
 					}
 					const timArray = _timArray.filter(item => {
 					return item !== null && item !== undefined && item !== '';
 					});
+					const formatDate = (ts) => {
+						const d = new Date(Number(ts));
+						const y = d.getFullYear();
+						const m = String(d.getMonth() + 1).padStart(2, '0');
+						const day = String(d.getDate()).padStart(2, '0');
+						return `${y}-${m}-${day}`;
+					}
 					let preTimArray = timArray.map(item => item[this.tradePrice])
-					//console.log('timArray', timArray)
 					
 					const calculateReturn = (item, entryPrice) => {
 					const value = item;
@@ -1625,7 +1628,7 @@ export default {
 					const minItem = findExtremeItem(preTimArray, (min, current) =>
 					current < min ? current : min
 					);
-
+					console.log(`${formatDate(entryDate)} preTimArray ${item.value} maxItem ${maxItem} minItem ${minItem}`, preTimArray)
 								//console.log('最大值 最小值', maxItem, minItem)
 					const maxReturn = ( maxItem !== undefined && maxItem !== null && maxItem < entryPrice) ? 0 : calculateReturn(maxItem, entryPrice);
 					const minReturn = (minItem !== undefined && minItem !== null && minItem > entryPrice) ? 0 : calculateReturn(minItem, entryPrice);
@@ -1639,7 +1642,7 @@ export default {
 						'Max Gain': finalMaxReturn,
 						'Max Loss': finalMinReturn,
 						value: item.value
-						})
+					})
 					})
 				}
 				dataTimeList.push(entryDate)
@@ -1664,7 +1667,6 @@ export default {
 				new_max_gain_list = []
 			for (let i in period_dict) {
 				let _MaxLoss = MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Loss'])
-				console.log(`_MaxLoss ${period_dict[i].value}`, _MaxLoss)
 				let _MaxGain = MaxGainMinLossResult.filter(item => item.value === period_dict[i].value).map(item => item['Max Gain'])
 				let _Median = used_quotes.map((obj) => obj[period_dict[i].timeframe])
 				let _Positive = used_quotes.map((obj) => obj[period_dict[i].timeframe])
@@ -1698,7 +1700,7 @@ export default {
 					let AvgMaxGain = isNullValue(new_max_gain_list[i]) ? new_max_gain_list[i].toFixed(1) : ''
 					return {
 					Period: val['timeframe'],
-					'Mean': temp_mean_list[i],
+					'Mean': isNaN(temp_mean_list[i]) ? '' : temp_mean_list[i],
 					Median: isNaN(median_list[i]) ? '' : median_list[i],
 					'% Positive': Positive,
 					'Avg Max Loss': AvgMaxLoss,
