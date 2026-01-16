@@ -13,7 +13,12 @@
 			<el-tab-pane label="Exit With Default Time-In-Market (Long-Term)" name="first">
 				<div class="history-container">
 					<el-collapse accordion>
-						<el-collapse-item title="Advance Studies" name="1" size="small">
+						<el-collapse-item name="1" size="small">
+							<template slot="title">
+								<div class="title-container">
+									<h3 class="page-title">Advance Studies (click to expand)</h3>
+								</div>
+							</template>
 							<el-form ref="form" :model="form" label-width="175px" size="small" class="advance-form" label-position="left" 
 							:rules="rules">
 								<el-row>
