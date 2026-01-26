@@ -500,7 +500,8 @@ export default {
   }
   },
   async created(){	
-	this.loadData()
+	await this.loadData()
+	if(Array.isArray(this.originData.content) && this.originData.content.length) this.date = this.originData.content[0].trade_date
    },
 	beforeDestroy() {
 	},
