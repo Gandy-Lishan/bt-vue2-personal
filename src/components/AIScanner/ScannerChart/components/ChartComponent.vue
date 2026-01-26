@@ -495,7 +495,7 @@ export default {
             const calculateReturn = (item, entryPrice) => {
             const value = item;
             if (value !== undefined && value !== null) {
-              const percentageReturn = ((value / entryPrice - 1) * 100).toFixed(1);
+              const percentageReturn = ((value / entryPrice - 1) * 100);
               return parseFloat(percentageReturn) // Ensure non-negative value
             }
             return '';
@@ -579,10 +579,11 @@ export default {
         //  console.log('max_gain_list',max_gain_list)
         //  console.log('z_score_list',z_score_list)
       }
+			const isNullValue = (v) => (v !== null && v !== undefined && v !== '' && !Number.isNaN(v)) 
       const res = period_dict.map((val, i) => {
 			  const Positive = isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100)
-        let AvgMaxLoss = new_max_loss_list[i] ? new_max_loss_list[i].toFixed(1) : ''
-        let AvgMaxGain = new_max_gain_list[i] ? new_max_gain_list[i].toFixed(1) : ''
+        let AvgMaxLoss = isNullValue(new_max_loss_list[i]) ? new_max_loss_list[i].toFixed(1) : ''
+        let AvgMaxGain = isNullValue(new_max_gain_list[i]) ? new_max_gain_list[i].toFixed(1) : ''
         // 如果为字符串类型，先转换为数字；注意要排除 NaN 的情况
         if (direction === 'Short' && !isNaN(AvgMaxLoss)) {
           AvgMaxLoss = -parseFloat(AvgMaxLoss);
@@ -597,7 +598,7 @@ export default {
           '% Positive': Positive,
           'Avg Max Loss': AvgMaxLoss,
           'Avg Max Gain': AvgMaxGain,
-          'Z-Score': z_score_list[i]
+          't-Statistic': z_score_list[i]
         }
       })
       this.result_quotes = res

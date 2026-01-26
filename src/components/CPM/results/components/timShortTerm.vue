@@ -608,7 +608,7 @@ export default {
 					const calculateReturn = (item, entryPrice) => {
 					const value = item;
 					if (value !== undefined && value !== null) {
-						const percentageReturn = ((value / entryPrice - 1) * 100).toFixed(1);
+						const percentageReturn = ((value / entryPrice - 1) * 100);
 						return parseFloat(percentageReturn) // Ensure non-negative value
 					}
 					return '';
@@ -695,9 +695,10 @@ export default {
 					)
 				)
 			}
+			const isNullValue = (v) => (v !== null && v !== undefined && v !== '' && !Number.isNaN(v)) 
 			const res = period_dict.map((val, i) => {
-	            let AvgMaxLoss = new_max_loss_list[i] ? new_max_loss_list[i].toFixed(1) : ''
-				let AvgMaxGain = new_max_gain_list[i] ? new_max_gain_list[i].toFixed(1) : ''
+	            let AvgMaxLoss = isNullValue(new_max_loss_list[i]) ? new_max_loss_list[i].toFixed(1) : ''
+				let AvgMaxGain = isNullValue(new_max_gain_list[i]) ? new_max_gain_list[i].toFixed(1) : ''
 				return {
 					Period: val['timeframe'],
 					'Mean': temp_mean_list[i],
@@ -707,7 +708,7 @@ export default {
 						: Math.round(positive_list[i] * 100) + '%',
 					'Avg Max Loss': AvgMaxLoss,
 					'Avg Max Gain': AvgMaxGain,
-					'Z-Score': z_score_list[i]
+					't-Statistic': z_score_list[i]
 				}
 			})
 			this.result_quotes = res
