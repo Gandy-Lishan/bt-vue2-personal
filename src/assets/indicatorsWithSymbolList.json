@@ -96556,5 +96556,12 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "TCTM Composite Thrust & Confirmation Model",
+        "url": "tctm_composite_thrust_and_confirmation_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
