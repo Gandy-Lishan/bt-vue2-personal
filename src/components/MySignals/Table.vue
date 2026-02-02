@@ -10,7 +10,7 @@
           </span>
           <el-button type="warning" size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
       </el-tooltip>
-      <span v-show="isShowLastSignalDate">Highlighted rows indicate the last signal date is today.</span>
+      <el-button type="primary" size="small" @click="performanceTracker" style="margin-right: 10px;">Performance Tracker</el-button>
      </div>
 
       <!-- <el-popconfirm
@@ -26,6 +26,9 @@
           <el-button type="warning" plain :loading="btnLoading" size="small">Find All Last Signal</el-button>
         </template>
       </el-popconfirm> -->
+    </div>
+    <div class="lastSignalDate">
+      <span v-show="isShowLastSignalDate">Highlighted rows indicate the last signal date is today.</span>
     </div>
     <el-table
 			ref="Table"
@@ -68,9 +71,8 @@
 					</template>
 				</el-table-column>
         <el-table-column
-          v-else
+          v-else-if="['bars_since_signal', 'description'].indexOf(l.value) === -1"
           align="center"
-					:label="l.label"
 					:prop="l.value"
 					:key="l.key"
           :sortable="'custom'"
@@ -78,9 +80,46 @@
           :width="l.width"
 				  :sort-orders="['ascending', 'descending']"
 				>
+        <template slot="header">
+          <span v-html="l.label"></span>
+          <template v-if="['bars_since_signal', 'current_return'].indexOf(l.value) !== -1">
+            <el-tooltip effect="dark" placement="top" style="display: inline">
+              <span slot="content" v-html="textContent[l.value]"></span>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
+            </el-tooltip>
+          </template>
+        </template>
 					<template slot-scope="scope">
 						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
 							{{ scope.row[l.value] }}%
+						</span>
+            <span class="tableText" v-else>
+							{{ scope.row[l.value] }}
+						</span>
+					</template>
+				</el-table-column>
+        <el-table-column
+          v-else
+          align="center"
+					:prop="l.value"
+					:key="l.key"
+          :sortable="'custom'"
+          :min-width="l.minWidth"
+          :width="l.width"
+				  :sort-orders="['ascending', 'descending']"
+				>
+        <template slot="header">
+          <span v-html="l.label"></span>
+          <template v-if="['bars_since_signal', 'current_return'].indexOf(l.value) !== -1">
+            <el-tooltip effect="dark" placement="top" style="display: inline">
+              <span slot="content" v-html="textContent[l.value]"></span>
+              <i class="fa fa-question-circle right" aria-hidden="true"></i>
+            </el-tooltip>
+          </template>
+        </template>
+					<template slot-scope="scope">
+						<span class="tableText" v-if="!isNaN(scope.row[l.value]) && scope.row[l.value]">
+							{{ scope.row[l.value] }}
 						</span>
             <span class="tableText" v-else>
 							{{ scope.row[l.value] }}
@@ -201,7 +240,14 @@ export default {
       total: 0,
       tableData: [],
       isShowLastSignalDate: false,
-      textContent: `Click this button to sort the list in ascending or descending order based on the signals' creation date. <br/>This helps you quickly find the most recently or earliest created signals'. Click again to toggle the sorting direction.`
+      textContent: `Click this button to sort the list in ascending or descending order based on the signals' creation date. <br/>This helps you quickly find the most recently or earliest created signals'. Click again to toggle the sorting direction.`,
+      showSignalPerformanceTracker: false,
+      showSamplePerformanceTracker: false,
+      textContent: {
+        bars_since_signal: 'Displays the cumulative number of trading days from the last signal trigger date to the current date. <br/>This helps users assess the maturity of the current trend.',
+        current_return: 'Calculates the percentage change in price from the last signal\'s trigger price to the latest closing price. <br/>It directly reflects the theoretical profit or loss status if the user followed the signal.'
+      },
+    
     }
   },
   computed: {
@@ -244,13 +290,36 @@ export default {
           width: '190px'
         }
       ]
+      let extraCol = [
+          {
+            label: 'Time<br/>Dimension',
+            value: 'bars_since_signal',
+            key: 'bars_since_signal',
+            width: '125px'
+          },
+          {
+            label: 'Return<br/>Dimension',
+            value: 'current_return',
+            key: 'current_return',
+            width: '125px'
+          }
+        ]
+      if(this.currentPageTab === 'MySignal') {
+        // “Time Dimension” 和 “Return Dimension”
+        return [
+          ..._tableCol,
+          ...(this.showSignalPerformanceTracker ? extraCol : [])
+        ]
+      }
       if(this.currentPageTab === 'Sample') return [
         ..._tableCol,
         {
           label: 'Category',
           value: 'category',
-          key: 'category'
-        }
+          key: 'category',
+          width: '120px'
+        },
+        ...(this.showSamplePerformanceTracker ? extraCol : [])
       ]
       return _tableCol
     }
@@ -400,6 +469,13 @@ export default {
 				}else{
 				}
 			}
+      if(['bars_since_signal', 'current_return'].indexOf(colName) !== -1){
+        if(sortingOrder == 'ascending'){
+          this.filterData.sort((a, b) => b[colName] - a[colName]);
+        }else if(sortingOrder == 'descending'){
+          this.filterData.sort((a, b) => a[colName] - b[colName]);
+        }
+      }
 		},
     async deleteSCBT(row) {
       const { url } = row
@@ -536,9 +612,17 @@ export default {
     tableRowClassName({row, rowIndex}) {
       if(this.lastSignalDate && this.lastSignalDate === row.last_signal_date) {this.isShowLastSignalDate = true;return 'highlighted'}
       return ''
-		}
+		},
+    performanceTracker() {
+      if(this.currentPageTab === 'MySignal') {
+        //  “Time Dimension” 和 “Return Dimension”
+        this.showSignalPerformanceTracker = !this.showSignalPerformanceTracker
+      }else if(this.currentPageTab === 'Sample') {
+        this.showSamplePerformanceTracker = !this.showSamplePerformanceTracker
+      }
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
@@ -546,8 +630,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 0px 20px 0px;
-  border-bottom: 2px solid #dddddd;
+  padding: 0px 0px 10px 0px;
 }
 .el-input-group{
   width: 20%;
@@ -602,5 +685,9 @@ export default {
     color: #000000;
     margin-right: 5px;
   }
+}
+.lastSignalDate {
+  text-align: right;
+  border-bottom: 2px solid #dddddd;
 }
 </style>
