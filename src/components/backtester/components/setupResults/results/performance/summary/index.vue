@@ -304,8 +304,8 @@
             <el-image class="benchmarkReturnImg fixWidthHeight" v-if="tableData[0]?.equityCurveFileURL" :src="tableData[0]?.equityCurveFileURL" :fit="'fill'" lazy></el-image>
             <el-image class="benchmarkReturnImg fixWidthHeight" v-if="tableData[0]?.returnsFileURL" :src="tableData[0]?.returnsFileURL" :fit="'fill'" lazy></el-image>
             <el-image class="benchmarkReturnImg fixWidthHeight" v-if="tableData[0]?.ddFileURL" :src="tableData[0]?.ddFileURL" :fit="'fill'" lazy></el-image>
-            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.returnsHeatmapFileURL" :src="tableData[0]?.returnsHeatmapFileURL" :fit="'fill'" lazy></el-image>
-            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.annualReturnsFileURL" :src="tableData[0]?.annualReturnsFileURL" :fit="'fill'" lazy></el-image>
+            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.returnsHeatmapFileURL" :src="tableData[0]?.returnsHeatmapFileURL" :fit="'contain'" lazy></el-image>
+            <el-image class="benchmarkReturnImg" v-if="tableData[0]?.annualReturnsFileURL" :src="tableData[0]?.annualReturnsFileURL" :fit="'contain'" lazy></el-image>
             <el-image class="benchmarkReturnImg wdfImg" v-if="tableData[0]?.wfd_file_url" :src="tableData[0]?.wfd_file_url" :fit="'fill'" lazy></el-image>
             <el-image class="EOYImg" v-if="tableData[0]?.eoy_file_url" :src="tableData[0]?.eoy_file_url" :fit="'fill'" lazy></el-image> 
             <el-image class="EOYImg" v-if="tableData[0]?.rb_file_url" :src="tableData[0]?.rb_file_url" :fit="'fill'" lazy></el-image> 
