@@ -96563,5 +96563,327 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX Breadth (% > 10 Day Avg)",
+        "url": "breadth_sector_tpx_10",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX Breadth (% > 50 Day Avg)",
+        "url": "breadth_sector_tpx_50",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX Breadth (% > 200 Day Avg)",
+        "url": "breadth_sector_tpx_200",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX New High %",
+        "url": "breadth_sector_tpx_nh",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX New Low %",
+        "url": "breadth_sector_tpx_nl",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX Advance / Decline",
+        "url": "breadth_sector_tpx_ad",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX 4 Week High %",
+        "url": "breadth_sector_tpx_nh4",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX 4 Week Low %",
+        "url": "breadth_sector_tpx_nl4",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX 12 Week High %",
+        "url": "breadth_sector_tpx_nh12",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX 12 Week Low %",
+        "url": "breadth_sector_tpx_nl12",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX 24 Week High %",
+        "url": "breadth_sector_tpx_nh24",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX 24 Week Low %",
+        "url": "breadth_sector_tpx_nl24",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX % Above Bband",
+        "url": "breadth_sector_tpx_bbup",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX % Below Bband",
+        "url": "breadth_sector_tpx_bbdown",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX % RSI 14-Day > 70",
+        "url": "breadth_sector_tpx_rsi70",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX % RSI 14-Day < 30",
+        "url": "breadth_sector_tpx_rsi30",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX McClellan Oscillator",
+        "url": "breadth_sector_tpx_mcosc",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX McClellan Summation",
+        "url": "breadth_sector_tpx_mcsumm",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TPX Cumulative A/D Line",
+        "url": "breadth_sector_tpx_adline",
+        "market_symbol": "TPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP Breadth (% > 10 Day Avg)",
+        "url": "breadth_sector_sxxp_10",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP Breadth (% > 50 Day Avg)",
+        "url": "breadth_sector_sxxp_50",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP Breadth (% > 200 Day Avg)",
+        "url": "breadth_sector_sxxp_200",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP New High %",
+        "url": "breadth_sector_sxxp_nh",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP New Low %",
+        "url": "breadth_sector_sxxp_nl",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP Advance / Decline",
+        "url": "breadth_sector_sxxp_ad",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP 4 Week High %",
+        "url": "breadth_sector_sxxp_nh4",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP 4 Week Low %",
+        "url": "breadth_sector_sxxp_nl4",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP 12 Week High %",
+        "url": "breadth_sector_sxxp_nh12",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP 12 Week Low %",
+        "url": "breadth_sector_sxxp_nl12",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP 24 Week High %",
+        "url": "breadth_sector_sxxp_nh24",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP 24 Week Low %",
+        "url": "breadth_sector_sxxp_nl24",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP % Above Bband",
+        "url": "breadth_sector_sxxp_bbup",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP % Below Bband",
+        "url": "breadth_sector_sxxp_bbdown",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP % RSI 14-Day > 70",
+        "url": "breadth_sector_sxxp_rsi70",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP % RSI 14-Day < 30",
+        "url": "breadth_sector_sxxp_rsi30",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP McClellan Oscillator",
+        "url": "breadth_sector_sxxp_mcosc",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP McClellan Summation",
+        "url": "breadth_sector_sxxp_mcsumm",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SXXP Cumulative A/D Line",
+        "url": "breadth_sector_sxxp_adline",
+        "market_symbol": "SXXP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MXEF 24 Week High %",
+        "url": "breadth_sector_mxef_nh24",
+        "market_symbol": "MXEF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MXEF 24 Week Low %",
+        "url": "breadth_sector_mxef_nl24",
+        "market_symbol": "MXEF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Oil Services ETF (OIH) Trend Score",
+        "url": "OIH_trend",
+        "market_symbol": "OIH",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Oil Services ETF (OIH) RelTrend Score",
+        "url": "OIH_reltrend",
+        "market_symbol": "OIH",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Junior Gold Miners ETF (GDXJ) Trend Score",
+        "url": "GDXJ_trend",
+        "market_symbol": "GDXJ",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VanEck Junior Gold Miners ETF (GDXJ) RelTrend Score",
+        "url": "GDXJ_reltrend",
+        "market_symbol": "GDXJ",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SoFi Social 50 ETF (SFYF) Trend Score",
+        "url": "SFYF_trend",
+        "market_symbol": "sfyf",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SoFi Social 50 ETF (SFYF) RelTrend Score",
+        "url": "SFYF_reltrend",
+        "market_symbol": "sfyf",
+        "type": "reltrend",
+        "updated": "Daily"
     }
 ]
