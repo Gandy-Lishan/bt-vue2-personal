@@ -5,11 +5,7 @@
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
      <div class="sortDateBtn">
-        <el-tooltip class="item" effect="dark" placement="bottom-start">
-          <span slot="content" v-html="textContent">
-          </span>
-          <el-button type="warning" size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
-      </el-tooltip>
+      <el-button type="warning" size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
       <el-button type="primary" size="small" @click="performanceTracker" style="margin-right: 10px;">Performance Tracker</el-button>
      </div>
 
