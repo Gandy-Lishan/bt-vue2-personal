@@ -383,6 +383,7 @@ export default {
               item.category = item.signal_info.category
               item.report_url = item.signal_info.report_url
             }
+            item.current_return = this.displayData(item.current_return)
 						return item
 					})
 					this.tableData = results
@@ -620,7 +621,23 @@ export default {
       }else if(this.currentPageTab === 'Sample') {
         this.showSamplePerformanceTracker = !this.showSamplePerformanceTracker
       }
-    }
+    },
+    displayData(data, removeZero = false) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data) && !isNaN(data)) {
+				if(!removeZero) return parseFloat(data).toFixed(2)
+				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
+				return parseFloat(data).toFixed(2).replace(/\.0$/, '')
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
   }
 }
 </script>
