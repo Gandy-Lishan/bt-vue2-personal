@@ -5,11 +5,7 @@
         <el-button slot="append" icon="el-icon-search" @click="handleQuery"></el-button>
       </el-input>
      <div class="sortDateBtn">
-        <el-tooltip class="item" effect="dark" placement="bottom-start">
-          <span slot="content" v-html="textContent">
-          </span>
-          <el-button type="warning" size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
-      </el-tooltip>
+      <el-button type="warning" size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
       <el-button type="primary" size="small" @click="performanceTracker" style="margin-right: 10px;">Performance Tracker</el-button>
      </div>
 
@@ -244,7 +240,7 @@ export default {
       showSignalPerformanceTracker: false,
       showSamplePerformanceTracker: false,
       textContent: {
-        bars_since_signal: 'Displays the cumulative number of trading days from the last signal trigger date to the current date. <br/>This helps users assess the maturity of the current trend.',
+        bars_since_signal: 'Displays the cumulative number of calendar days from the last signal trigger date to the current date. <br/>This helps users assess the maturity of the current trend.',
         current_return: 'Calculates the percentage change in price from the last signal\'s trigger price to the latest closing price. <br/>It directly reflects the theoretical profit or loss status if the user followed the signal.'
       },
     
@@ -383,6 +379,7 @@ export default {
               item.category = item.signal_info.category
               item.report_url = item.signal_info.report_url
             }
+            item.current_return = this.displayData(item.current_return)
 						return item
 					})
 					this.tableData = results
@@ -620,7 +617,23 @@ export default {
       }else if(this.currentPageTab === 'Sample') {
         this.showSamplePerformanceTracker = !this.showSamplePerformanceTracker
       }
-    }
+    },
+    displayData(data, removeZero = false) {
+			const numberRegex = /^-?\d+(\.\d+)?$/
+			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+
+			if (numberRegex.test(data) && !isNaN(data)) {
+				if(!removeZero) return parseFloat(data).toFixed(2)
+				// Convert to float, format to one decimal place, and remove unnecessary trailing zeros
+				return parseFloat(data).toFixed(2).replace(/\.0$/, '')
+			} else if (dateRegex.test(data)) {
+				return data
+			} else if(typeof data == 'string'){
+				return data
+			}else {
+				return ''
+			}
+		},
   }
 }
 </script>
