@@ -240,7 +240,7 @@ export default {
       showSignalPerformanceTracker: false,
       showSamplePerformanceTracker: false,
       textContent: {
-        bars_since_signal: 'Displays the cumulative number of trading days from the last signal trigger date to the current date. <br/>This helps users assess the maturity of the current trend.',
+        bars_since_signal: 'Displays the cumulative number of calendar days from the last signal trigger date to the current date. <br/>This helps users assess the maturity of the current trend.',
         current_return: 'Calculates the percentage change in price from the last signal\'s trigger price to the latest closing price. <br/>It directly reflects the theoretical profit or loss status if the user followed the signal.'
       },
     
