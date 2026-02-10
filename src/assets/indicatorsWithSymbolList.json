@@ -99293,5 +99293,12 @@
         "market_symbol": "RUM",
         "type": "reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Risk-Off Composite Model",
+        "url": "tctm_composite_risk_off_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
