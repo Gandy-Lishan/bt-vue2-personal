@@ -6,7 +6,7 @@
       </el-input>
      <div class="sortDateBtn">
       <el-button type="warning" size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
-      <el-button type="primary" size="small" @click="performanceTracker" style="margin-right: 10px;">Performance Tracker</el-button>
+      <el-button type="primary" size="small" @click="performanceTracker" style="margin-right: 10px;">Signal Tracker</el-button>
      </div>
 
       <!-- <el-popconfirm
@@ -240,8 +240,8 @@ export default {
       showSignalPerformanceTracker: false,
       showSamplePerformanceTracker: false,
       textContent: {
-        bars_since_signal: 'Displays the cumulative number of calendar days from the last signal trigger date to the current date. <br/>This helps users assess the maturity of the current trend.',
-        current_return: 'Calculates the percentage change in price from the last signal\'s trigger price to the latest closing price. <br/>It directly reflects the theoretical profit or loss status if the user followed the signal.'
+        bars_since_signal: 'The number of bars (e.g., weeks for weekly signals)<br/>that have elapsed since the last signal occurred.',
+        current_return: 'The cumulative return since the last signal up to the most recent day,<br/> expressed as a percentage (%).'
       },
     
     }
@@ -288,13 +288,13 @@ export default {
       ]
       let extraCol = [
           {
-            label: 'Time<br/>Dimension',
+            label: 'Bars Since Signal',
             value: 'bars_since_signal',
             key: 'bars_since_signal',
             width: '125px'
           },
           {
-            label: 'Return<br/>Dimension',
+            label: 'Return Since Signal',
             value: 'current_return',
             key: 'current_return',
             width: '125px'
