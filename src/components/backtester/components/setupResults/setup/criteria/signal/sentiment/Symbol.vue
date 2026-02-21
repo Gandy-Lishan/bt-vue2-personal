@@ -273,7 +273,7 @@ export default {
             relation = "Only Risk;"
             break;
           case 1:
-            relation = "Single Signal"
+            relation = "Single Condition"
             break;
           case 2:
             relation = "SameBar Multi Signal;"

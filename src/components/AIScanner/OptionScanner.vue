@@ -376,7 +376,9 @@ export default {
     };
     return {
     originData: {},
-    tableData: {},
+    tableData: {
+		content: []
+	},
     searchItem: '', // 搜索关键词
     searchCategory: "Symbol", // 存储选择的搜索类别
 	loading: false,

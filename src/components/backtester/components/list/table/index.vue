@@ -997,6 +997,8 @@ export default {
 							.replace(/^(?:[EX]):\s*[^:;]+[:;]\s*/i, '')
 							// 删除任何剩余的 "Single Condition"
 							.replace(/\bSingle Condition\b\s*/gi, '')
+							// 删除任何剩余的 "Single Signal"
+							.replace(/\bSingle Signal\b\s*/gi, '')
 							.trim();
 						else return item.commentDes
 					})
