@@ -992,7 +992,8 @@ export default {
 					debugger
 					const criteria_description = isJson(row[`${criteriaName}_description`]) ? JSON.parse(row[`${criteriaName}_description`]) : row[`${criteriaName}_description`]
 					const _description = criteria_description.map((item, i) => {
-						if(i === 0) return item.commentDes
+						if(i === 0) {
+							let str = item.commentDes
 							// 删除开头的 E: <token>[:;] 或 X: <token>[:;]，只吃掉第一段标识（token 中不能含 ':' 或 ';'）
 							.replace(/^(?:[EX]):\s*[^:;]+[:;]\s*/i, '')
 							// 删除任何剩余的 "Single Condition"
@@ -1000,6 +1001,9 @@ export default {
 							// 删除任何剩余的 "Single Signal"
 							.replace(/\bSingle Signal\b\s*/gi, '')
 							.trim();
+							if(relation === 1) str = str.replace(/^;\s*/, '')
+							return str
+						}
 						else return item.commentDes
 					})
 					const rocCond = criteria_description.map(item => item.rocCond)
