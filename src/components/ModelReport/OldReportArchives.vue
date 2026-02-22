@@ -183,8 +183,12 @@ export default {
       const dateObj = new Date(dateStr);
 
       if (!isNaN(dateObj)) {
-          const options = { year: 'numeric', month: 'long', day: '2-digit' };
-          formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateObj);
+        return new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+        timeZone: 'UTC'
+      }).format(dateObj);
       } else {
           console.log("Invalid date format");
       }
