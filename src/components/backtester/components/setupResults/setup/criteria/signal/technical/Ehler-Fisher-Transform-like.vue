@@ -175,15 +175,15 @@ delay_bars: [String, Number],
 				
 			if (this.criteria.startsWith('entry')) {
 				criteria = 'E:'
-				direction = this.direction + ':'
+				direction = this.direction + ';'
 			}
 			if (this.criteria.startsWith('exit')) {
 				criteria = 'X:'
 
 				if (this.direction == 'Long') {
-					direction = 'Close:'
+					direction = 'Close;'
 				} else if (this.direction == 'Short') {
-					direction = 'Cover:'
+					direction = 'Cover;'
 				}
 			}
 			let relation = ''
