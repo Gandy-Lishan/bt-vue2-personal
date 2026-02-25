@@ -2512,5 +2512,17 @@
     "name": "Direxion Daily Semiconductor Bull 3X Shares (SOXL)",
     "category": "ETF",
     "inception": "2010/03/11"
+  },
+    {
+    "symbol": "SIL",
+    "name": "Global X Silver Miners ETF (SIL)",
+    "category": "ETF",
+    "inception": "2010/03/11"
+  },
+  {
+    "symbol": "SILJ",
+    "name": "Amplify Junior Silver Miners ETF (SILJ)",
+    "category": "ETF",
+    "inception": "2010/03/11"
   }
 ]
