@@ -701,9 +701,10 @@
                     newData.categories
                 )
             } else if(ma1_type == 'roc') {
+                // 这边field不能用‘field’会导致没法判断为symbolohlcv，考虑到只有收盘价算roc，直接hard coding
                 CIQ.addOwnIndicatorROCStudy(
                     ma1_value,
-                    fieldName1,
+                    'Close',
                     'entry1',
                     0,
                     ma1_showInput,
@@ -730,9 +731,10 @@
                     newData.categories
                 )
             } else if(ma2_type == 'roc') {
+                // 这边field不能用‘field’会导致没法判断为symbolohlcv，考虑到只有收盘价算roc，直接hard coding
                 CIQ.addOwnIndicatorROCStudy(
                     ma2_value,
-                    fieldName2,
+                    'Close',
                     newData.categories.includes('Symbol') ? 'entry2' : 'entry1',
                     1,
                     ma2_showInput,
@@ -970,8 +972,11 @@
         // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
 
         if(!showInput || !field) return
-
+        const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
+        let display = `(${symbolLabel}) Symbol Close Rate Of Change(${value}-Bar)`
+        CIQ.setMALayout('Symbol Close', criteria, index, {ticker: symbolLabel})
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+            display: display,
             Field: field,
             condition: 'ROC',
             period: value,

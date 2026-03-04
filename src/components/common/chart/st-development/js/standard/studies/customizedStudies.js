@@ -285,7 +285,8 @@ if (!CIQ.Studies) {
 		stx,
 		sd,
 		field,
-		ticker
+		ticker,
+		shiftOffset
 	) {
 		var ohlcv = new CIQ.Studies.StudyDescriptor(
 			name + " " + sd.name,
@@ -302,6 +303,7 @@ if (!CIQ.Studies) {
 			criteria: sd.parameters.criteria,
 			index: sd.parameters.index,
 			ticker: ticker,
+			shiftOffset: shiftOffset,
 		}
 		await CIQ.Studies.calculateSymbolOhlcv(stx, ohlcv);
 	};
@@ -1109,6 +1111,8 @@ if (!CIQ.Studies) {
 			if(tickerPairdata.length == 0) {
 				tickerPairdata = await CIQ.store.dispatch('chart/get_ticker_ohlcv_pairdata',sd.parameters.ticker)
 			}
+			
+			if(sd?.parameters?.shiftOffset) tickerPairdata = formatData(tickerPairdata, sd?.parameters?.shiftOffset)
 			for (const item of tickerPairdata) {
 				if (item.DT && item[subField] !== undefined) {
 					ohlcvDataMap.set(item.DT.getTime(), item);
@@ -1996,10 +2000,11 @@ if (!CIQ.Studies) {
 					)
 					// 这里做判断的原因是，默认加载时需要异步获取数据并执行计算函数，但是编辑比如切换颜色时异步失效，需特殊处理
 					let tickerPairdata = CIQ.store.getters.getTickerOhlcvPairdata[symbolOhlcvLayout.ticker] || []
+					const shiftOffet = parseInt(sd.inputs.display.match(/shift-(\d+)/)?.[1] || 0, 10);
 					if(tickerPairdata.length == 0) {
-						await CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+						await CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker,shiftOffet)
 					}else {
-						CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker)
+						CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,symbolOhlcvLayout.url,symbolOhlcvLayout.ticker,shiftOffet)
 					}
 					CIQ.Studies.calculateSymbolROCLike(stx, sd)
 				}else CIQ.Studies.calculateSentiROCLike(stx, sd)	
@@ -2091,7 +2096,7 @@ if (!CIQ.Studies) {
 			// },
 			calculateFN: function (stx, sd) {
 				// 这里和roc加载判断不同，不需要添加await，因为calculateVolume无需等待TickerOHLCV（未知原因）
-				CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,sd.type,sd.parameters.ticker)
+				CIQ.Studies.TickerOHLCV("_OHLCV",stx,sd,sd.type,sd.parameters.ticker,0)
 				CIQ.Studies.calculateVolume(stx, sd)
 			},
 			inputs: { Field: "Volume",overlay: false},
@@ -2378,40 +2383,81 @@ if (!CIQ.Studies) {
 
 		return dataArr;
 		}
-	function formatData(data) {
-		if(data == null){
-			data = []
-		}
+	// function formatData(data) {
+	// 	if(data == null){
+	// 		data = []
+	// 	}
 		
-		var newQuotes = [];
-		if('High' in data[0]){
-			for (var i = 0; i < data.length; i++) {
-				newQuotes[i] = {};
+	// 	var newQuotes = [];
+	// 	if('High' in data[0]){
+	// 		for (var i = 0; i < data.length; i++) {
+	// 			newQuotes[i] = {};
 				
-				newQuotes[i].DT = formatStandardTime(data[i].DT)   
-				newQuotes[i].Open = data[i].Open;
-				newQuotes[i].High = data[i].High;
-				newQuotes[i].Low = data[i].Low;
-				newQuotes[i].Close = data[i].Close;
-				newQuotes[i].Volume = data[i].Volume;  
-			} 
-		}else{
-			for (var i = 0; i < data.length; i++) {
-				newQuotes[i] = {};
+	// 			newQuotes[i].DT = formatStandardTime(data[i].DT)   
+	// 			newQuotes[i].Open = data[i].Open;
+	// 			newQuotes[i].High = data[i].High;
+	// 			newQuotes[i].Low = data[i].Low;
+	// 			newQuotes[i].Close = data[i].Close;
+	// 			newQuotes[i].Volume = data[i].Volume;  
+	// 		} 
+	// 	}else{
+	// 		for (var i = 0; i < data.length; i++) {
+	// 			newQuotes[i] = {};
 	
-				newQuotes[i].DT = formatStandardTime(data[i].DT)
-				newQuotes[i].Open = data[i].Close;
-				newQuotes[i].High = data[i].Close;
-				newQuotes[i].Low = data[i].Close;
-				newQuotes[i].Close = data[i].Close;
+	// 			newQuotes[i].DT = formatStandardTime(data[i].DT)
+	// 			newQuotes[i].Open = data[i].Close;
+	// 			newQuotes[i].High = data[i].Close;
+	// 			newQuotes[i].Low = data[i].Close;
+	// 			newQuotes[i].Close = data[i].Close;
 				
-				if(data[i].Volume){
-					newQuotes[i].Volume = data[i].Volume
-				}
-			}
-		}
-		return newQuotes
-		}
+	// 			if(data[i].Volume){
+	// 				newQuotes[i].Volume = data[i].Volume
+	// 			}
+	// 		}
+	// 	}
+	// 	return newQuotes
+	// 	}
+	function formatData(data,barOffset=0) {
+        if(data == null){
+            data = []
+        }
+        var newQuotes = [];
+        if('High' in data[0]){
+            for (var i = 0; i < data.length; i++) { 
+                let shiftedIndex = i + barOffset; // 计算新的索引位置
+
+                if (shiftedIndex >= 0 && shiftedIndex < data.length) { // 确保索引在范围内
+                    newQuotes.push({
+                        DT: data[shiftedIndex].DT,
+                        Open: data[i].Open,
+                        High: data[i].High,
+                        Low: data[i].Low,
+                        Close: data[i].Close,
+                        Volume: data[i].Volume
+                    });
+                }
+            } 
+        }else{
+            for (var i = 0; i < data.length; i++) {
+                let shiftedIndex = i + barOffset; // 计算新的索引位置
+
+                if (shiftedIndex >= 0 && shiftedIndex < data.length) { // 确保索引在范围内
+                    newQuotes.push({
+                        DT: data[shiftedIndex].DT,
+                        Open: data[i].Close,
+                        High: data[i].Close,
+                        Low: data[i].Close,
+                        Close: data[i].Close,
+                    });
+                }
+                
+                if(data[i].Volume){
+                    newQuotes[i].Volume = data[i].Volume
+                }
+            }
+        }
+        return newQuotes
+     }
 }
 
 };
