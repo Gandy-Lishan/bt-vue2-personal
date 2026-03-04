@@ -1921,6 +1921,7 @@ if (!CIQ.Studies) {
 			var lastBar = quote
 			if(i >= 1) lastBar = quotes[i-1]
 
+			
 			if(getPropertyByString(lastBar,field,"Close") == 0) return 0
 			
 			quote[sd.inputs.display] = parseFloat((
