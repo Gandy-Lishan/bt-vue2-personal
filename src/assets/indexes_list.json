@@ -2524,5 +2524,11 @@
     "name": "Amplify Junior Silver Miners ETF (SILJ)",
     "category": "ETF",
     "inception": "2010/03/11"
+  },
+  {
+    "symbol": "IMVP",
+    "name": "Invesco India ETF (IMVP)",
+    "category": "ETF",
+    "inception": "2008/03/05"
   }
 ]
