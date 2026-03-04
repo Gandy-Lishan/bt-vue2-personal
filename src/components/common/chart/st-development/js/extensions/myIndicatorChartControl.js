@@ -974,6 +974,14 @@
         if(!showInput || !field) return
         const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
         let display = `(${symbolLabel}) Symbol Close Rate Of Change(${value}-Bar)`
+        // 这里必须在计算函数调用之前就设好display name,因为后续会根据display name判断是不是shift以及它的值。我没有新增属性存shift在sd主要是防止兼容问题
+        const miShift = CIQ.store.getters.getMiFormShift
+        if(!criteria.endsWith('2')) {
+		}
+        else if(miShift.showInput && miShift.display) display = `${display}(shift-${miShift.value || 0})`
+        // myindicator情况下显示带空格的display以区分左侧的ma
+        else if(!(miShift.showInput && miShift.display)) display = `${display}`
+
         CIQ.setMALayout('Symbol Close', criteria, index, {ticker: symbolLabel})
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
             display: display,
