@@ -99342,5 +99342,12 @@
         "market_symbol": "CRWV",
         "type": "reltrend",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "FOMC Decision Day",
+        "url": "fomc_decision_day",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
