@@ -194,7 +194,7 @@ export default {
       return ['Extreme Optimism', 'Extreme Pessimism'].includes(this.config.label)
     },
     inputVisibility() {
-      debugger
+      // debugger
       const isShowInput = ['EMA', 'MA', 'roc'].includes(this.MAType) && this.config['label'] !== 'Shift'
       const isShift = this.config['label'] === 'Shift' && this.showShiftInput && this.isSymbol
       const isEOEP = this.config.field === 'extreme_optimism' || this.config.field === 'extreme_pessimism'
@@ -213,10 +213,10 @@ export default {
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
-      }else if(this.MAType == 'i') {
-        this.$emit('manageMICondStudies',this.value,'MA',this.config.field,false)
       }else if(this.config.type === 'CheckInput'){
         this.$emit('handleShiftChange',Number(this.value),this.showInput)
+      }else if(this.MAType == 'i') {
+        this.$emit('manageMICondStudies',this.value,'MA',this.config.field,false)
       }
     },
     // MAType(newValue) {
@@ -232,7 +232,7 @@ export default {
     _config: {
       handler(newValue, _) {
         if(Object.keys(newValue).length === 0) return
-        debugger
+        // debugger
         console.log('lishan _config', this._config)
         const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(this.categories)
         const {field, value} = newValue
@@ -371,10 +371,10 @@ export default {
         this.$emit('manageMICondStudies',this.value,this.MAType,this.config.field,this.showInput)
       }else if(this.config.field === 'extreme_optimism' && this.config.field === 'extreme_pessimism'){
         this.$emit('handleExtremeLineChange',this.value,this.config.field)
-      }else if(this.MAType == 'i') {  
-        this.$emit('manageMICondStudies',this.value,'MA',this.config.field,false)
       }else if(this.config.type === 'CheckInput'){
         this.$emit('handleShiftChange',Number(this.value),this.showInput)
+      }else if(this.MAType == 'i') {  
+        this.$emit('manageMICondStudies',this.value,'MA',this.config.field,false)
       }
       this.validateValue()
     }, 500),

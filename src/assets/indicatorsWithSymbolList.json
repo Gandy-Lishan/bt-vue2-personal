@@ -99300,5 +99300,54 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "CoreWeave, Inc.",
+        "url": "CRWV",
+        "market_symbol": "CRWV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IMVP Optix",
+        "url": "etf_imvp",
+        "market_symbol": "imvp",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco India ETF (IMVP) Trend Score",
+        "url": "IMVP_trend",
+        "market_symbol": "imvp",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco India ETF (IMVP) RelTrend Score",
+        "url": "IMVP_reltrend",
+        "market_symbol": "imvp",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CoreWeave, Inc. Trend Score",
+        "url": "CRWV_trend",
+        "market_symbol": "CRWV",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CoreWeave, Inc. RelTrend Score",
+        "url": "CRWV_reltrend",
+        "market_symbol": "CRWV",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FOMC Decision Day",
+        "url": "fomc_decision_day",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]

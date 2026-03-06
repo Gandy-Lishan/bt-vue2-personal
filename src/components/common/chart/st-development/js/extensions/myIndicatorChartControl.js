@@ -701,9 +701,10 @@
                     newData.categories
                 )
             } else if(ma1_type == 'roc') {
+                // 这边field不能用‘field’会导致没法判断为symbolohlcv，考虑到只有收盘价算roc，直接hard coding
                 CIQ.addOwnIndicatorROCStudy(
                     ma1_value,
-                    fieldName1,
+                    'Close',
                     'entry1',
                     0,
                     ma1_showInput,
@@ -730,9 +731,10 @@
                     newData.categories
                 )
             } else if(ma2_type == 'roc') {
+                // 这边field不能用‘field’会导致没法判断为symbolohlcv，考虑到只有收盘价算roc，直接hard coding
                 CIQ.addOwnIndicatorROCStudy(
                     ma2_value,
-                    fieldName2,
+                    'Close',
                     newData.categories.includes('Symbol') ? 'entry2' : 'entry1',
                     1,
                     ma2_showInput,
@@ -970,8 +972,19 @@
         // 现在逻辑改了，symbol2的均线也直接绘制在main panel上，视作exit2(因为是symbol2的退场)
 
         if(!showInput || !field) return
+        const symbolLabel = getCoresSymbolDual(criteria.endsWith(2))
+        let display = `(${symbolLabel}) Symbol Close Rate Of Change(${value}-Bar)`
+        // 这里必须在计算函数调用之前就设好display name,因为后续会根据display name判断是不是shift以及它的值。我没有新增属性存shift在sd主要是防止兼容问题
+        const miShift = CIQ.store.getters.getMiFormShift
+        if(!criteria.endsWith('2')) {
+		}
+        else if(miShift.showInput && miShift.display) display = `${display}(shift-${miShift.value || 0})`
+        // myindicator情况下显示带空格的display以区分左侧的ma
+        else if(!(miShift.showInput && miShift.display)) display = `${display}`
 
+        CIQ.setMALayout('Symbol Close', criteria, index, {ticker: symbolLabel})
         CIQ.Studies.addStudy(CIQ.stxx, 'ST ROCLike', {
+            display: display,
             Field: field,
             condition: 'ROC',
             period: value,

@@ -741,9 +741,10 @@ export default {
         ) 
       }
       if(type == 'roc') {
+        // 这边field不能用‘field’会导致没法判断为symbolohlcv，考虑到只有收盘价算roc，直接hard coding
         CIQ.addOwnIndicatorROCStudy(
           value,
-          fieldName,
+          'Close',
           criteria,
           field == 'ma1'?0:1,
           showInput,
@@ -1523,7 +1524,7 @@ export default {
           { key: 'shift' }
         ];
         configMap.forEach(item => {
-          debugger
+          // debugger
           const value = data[item.key];
           const index = item.index
           let _value = null

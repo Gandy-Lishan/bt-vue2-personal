@@ -22894,5 +22894,11 @@
     "name": "Zillow Group Inc",
     "category": "Stock",
     "inception": "2011/07/20"
+  },
+  {
+    "stock": "CRWV",
+    "name": "CoreWeave, Inc.",
+    "category": "Stock",
+    "inception": "2025/03/28"
   }
 ]
