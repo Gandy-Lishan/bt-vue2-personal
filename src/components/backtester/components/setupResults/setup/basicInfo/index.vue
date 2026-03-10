@@ -546,34 +546,45 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                  <el-form-item prop="model" v-if="is_admin">
-                  <template slot="label">
-                    <label>
-                      {{bdFormLabel['model']}}
-                      <el-tooltip effect="dark" placement="top">
-                        <span slot="content">
-                          Select the asset to hold during idle periods between trades; default is cash,<br/>
-                          while other tickers can be chosen to maximize capital utilization.
-                        </span>
-                        <i class="fa fa-question-circle right" aria-hidden="true"></i>
-                      </el-tooltip>
-                    </label>
-                  </template>
-									<div class="selectBox">
-										<el-select
-											v-model="bd.model"
-											placeholder="— Select Model —"
-										>
-											<el-option
-												v-for="item in modelOptions"
-												:key="item.value"
-												:label="item.label"
-												:value="item.value"
-											>
-											</el-option>
-										</el-select>
-									</div>
-								</el-form-item>
+                  <el-form-item prop="model">
+                    <template slot="label">
+                      <label>
+                        {{bdFormLabel['model']}}
+                        <el-tooltip effect="dark" placement="top">
+                          <span slot="content">
+                            Select the asset to hold during idle periods between trades; default is cash,<br/>
+                            while other tickers can be chosen to maximize capital utilization.
+                          </span>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
+                        </el-tooltip>
+                      </label>
+                    </template>
+                    
+                    <div class="enterSymbolBox">
+                      <el-select
+                        ref="symbolInput"
+                        v-model="bd.model"
+                        id="symbolName"
+                        filterable
+                        remote
+                        reserve-keyword
+                        automatic-dropdown
+                        placeholder="enter keywords"
+                        :remote-method="remoteModelMethod"
+                        @visible-change="remoteModelMethod"
+                        :value-key="'key'"
+                      >
+                        <el-option
+                          
+                          v-for="item in modelOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="use_tag" v-if="is_admin">
@@ -1008,15 +1019,6 @@ export default {
         { value: 9, label: 'Upward Sloping 252-bar Moving Average' },
         { value: 10, label: 'Downward Sloping 252-bar Moving Average' }
       ],
-      modelOptions: [
-      { value: 'cash', label: 'cash' },
-      { value: 'sh', label: 'SH' },
-      { value: 'psd', label: 'PSD' },
-      { value: 'agg', label: 'AGG' },
-      { value: 'lqd', label: 'LQD' },
-      { value: 'tlt', label: 'TLT' },
-      { value: 'gld', label: 'GLD' },
-      ],
       customStocksList: [],
       loading: false,
       options: [],
@@ -1145,6 +1147,9 @@ export default {
         return []
       }
     },
+    modelOptions() {
+      return [{value: 'cash', label: 'cash'}, ...this.options]
+    }
   },
   watch: {
     handleGetComparisonSymbol: {
@@ -1489,6 +1494,75 @@ export default {
       })
     },
     remoteMethod: throttle(async function(query) {
+      let vm = this
+      if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        })
+        
+        vm.getCustomStocksList()
+
+        this.searchResults = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
+        
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        //vm.loading = false
+      }
+      else if (typeof query != 'boolean' && query !== '') {
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let customStocksListTemp = vm.customStocksList.filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+       
+        let list = symbolListTemp.concat(IndexListTemp).concat(customStocksListTemp)
+        let options = []
+        let wholeWord = []
+        // keyword全匹配
+        for (let item of list) {
+          if (
+            item.value.toLowerCase() === query.toLowerCase() ||
+            item.label.toLowerCase() === query.toLowerCase()
+          ) {
+            wholeWord.push(item)
+            continue
+          }
+          options.push(item)
+        }
+        options.unshift(...wholeWord)
+        // 去重
+        this.searchResults = options
+
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        // // 解除遮罩
+        // vm.loading = false
+      } else {
+        this.options = []
+      }
+    }, 500),
+    remoteModelMethod: throttle(async function(query) {
       let vm = this
       if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
         vm.loading = true
