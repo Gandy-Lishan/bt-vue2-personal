@@ -545,7 +545,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-show="bd.strategy === 'Single'">
                   <el-form-item prop="model">
                     <template slot="label">
                       <label>
@@ -910,12 +910,12 @@ export default {
         exclude_oo: '12. Exclude Overlapping Observation',
         market_environment: '13. Market Environment',
         index_moving_average_slope: '14. Index Moving Average Slope',
-        model: '15. Model',
+        model: 'Model',
         symbol2: '12. Symbol(2)',
         direction2: '13. Direction(2)',
         user_tag: 'User Tag',
         report_url: 'Report Url',
-        name: '16. Backtest Name'
+        name: '15. Backtest Name'
       },
       historyOptions: [
         {
@@ -1757,6 +1757,7 @@ export default {
         this.isExcludeOO = false
         bd.market_environment = 0
         bd.index_moving_average_slope = 0
+        bd.model = 'cash'
       }else if(bd.strategy === 'Single') {
         bd.symbol2 = 'SPY'
         bd.direction2 = 'Long'
