@@ -731,7 +731,8 @@ export default {
 				'description',
 				'market_environment',
 				'index_moving_average_slope',
-				'opted'
+				'opted',
+				'model'
 			]
 			if(!shouldAddExtraProperty) {
 				const propertiesToDelete = [

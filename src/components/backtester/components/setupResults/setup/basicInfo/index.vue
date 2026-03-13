@@ -545,6 +545,47 @@
                     </div>
                   </el-form-item>
                 </el-col>
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-show="bd.strategy === 'Single'">
+                  <el-form-item prop="model">
+                    <template slot="label">
+                      <label>
+                        {{bdFormLabel['model']}}
+                        <el-tooltip effect="dark" placement="top">
+                          <span slot="content">
+                            Select the asset to hold during idle periods between trades; default is cash,<br/>
+                            while other tickers can be chosen to maximize capital utilization.
+                          </span>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
+                        </el-tooltip>
+                      </label>
+                    </template>
+                    
+                    <div class="enterSymbolBox">
+                      <el-select
+                        ref="symbolInput"
+                        v-model="bd.model"
+                        id="symbolName"
+                        filterable
+                        remote
+                        reserve-keyword
+                        automatic-dropdown
+                        placeholder="enter keywords"
+                        :remote-method="remoteModelMethod"
+                        @visible-change="remoteModelMethod"
+                        :value-key="'key'"
+                      >
+                        <el-option
+                          
+                          v-for="item in modelOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="use_tag" v-if="is_admin">
                   <template slot="label">
@@ -851,7 +892,8 @@ export default {
           Rules: ''
         },
         market_environment: 0,
-        index_moving_average_slope: 0
+        index_moving_average_slope: 0,
+        model: 'cash'
       },
       bdFormLabel: {
         symbol: '1. Symbol',
@@ -868,6 +910,7 @@ export default {
         exclude_oo: '12. Exclude Overlapping Observation',
         market_environment: '13. Market Environment',
         index_moving_average_slope: '14. Index Moving Average Slope',
+        model: 'Model',
         symbol2: '12. Symbol(2)',
         direction2: '13. Direction(2)',
         user_tag: 'User Tag',
@@ -1103,6 +1146,9 @@ export default {
       }else {
         return []
       }
+    },
+    modelOptions() {
+      return [{value: 'cash', label: 'cash'}, ...this.options]
     }
   },
   watch: {
@@ -1516,6 +1562,75 @@ export default {
         this.options = []
       }
     }, 500),
+    remoteModelMethod: throttle(async function(query) {
+      let vm = this
+      if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        })
+        
+        vm.getCustomStocksList()
+
+        this.searchResults = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList).filter(item => item.value !== this.bd.symbol)
+        
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        //vm.loading = false
+      }
+      else if (typeof query != 'boolean' && query !== '') {
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let customStocksListTemp = vm.customStocksList.filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+       
+        let list = symbolListTemp.concat(IndexListTemp).concat(customStocksListTemp).filter(item => item.value !== this.bd.symbol)
+        let options = []
+        let wholeWord = []
+        // keyword全匹配
+        for (let item of list) {
+          if (
+            item.value.toLowerCase() === query.toLowerCase() ||
+            item.label.toLowerCase() === query.toLowerCase()
+          ) {
+            wholeWord.push(item)
+            continue
+          }
+          options.push(item)
+        }
+        options.unshift(...wholeWord)
+        // 去重
+        this.searchResults = options
+
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        // // 解除遮罩
+        // vm.loading = false
+      } else {
+        this.options = []
+      }
+    }, 500),
     selectRiskControl(val) {
       if (!this.isRiskControl) {
         this.$emit('IsRiskControl', false)
@@ -1642,6 +1757,7 @@ export default {
         this.isExcludeOO = false
         bd.market_environment = 0
         bd.index_moving_average_slope = 0
+        bd.model = 'cash'
       }else if(bd.strategy === 'Single') {
         bd.symbol2 = 'SPY'
         bd.direction2 = 'Long'
@@ -1852,6 +1968,7 @@ export default {
         editData.trade_price = Number(editData.trade_price)
         // 兼容之前不存在的两个参数
         editData.market_environment = editData.market_environment || 0
+        editData.model = editData.model || 'cash'
         editData.index_moving_average_slope = editData.index_moving_average_slope || 0
         this.is_admin = this.$store.getters.getIsAdmin
         this.bd = Object.assign(this.bd, editData)
