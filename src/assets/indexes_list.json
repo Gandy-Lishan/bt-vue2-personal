@@ -2530,5 +2530,11 @@
     "name": "Invesco India ETF (IMVP)",
     "category": "ETF",
     "inception": "2008/03/05"
+  },
+  {
+    "symbol": "DTCR",
+    "name": "Global X Data Center & Digital Infrastructure ETF (DTCR)",
+    "category": "ETF",
+    "inception": "2020/10/29"
   }
 ]

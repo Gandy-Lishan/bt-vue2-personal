@@ -22900,5 +22900,11 @@
     "name": "CoreWeave, Inc.",
     "category": "Stock",
     "inception": "2025/03/28"
+  },
+  {
+    "stock": "FIG",
+    "name": "Figma, Inc.",
+    "category": "Stock",
+    "inception": "2025/7/31"
   }
 ]

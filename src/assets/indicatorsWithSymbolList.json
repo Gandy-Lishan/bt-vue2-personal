@@ -99349,5 +99349,33 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Figma, Inc. (FIG)",
+        "url": "FIG",
+        "market_symbol": "FIG",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Data Center & Digital Infrastructure ETF (DTCR) Trend Score",
+        "url": "DTCR_trend",
+        "market_symbol": "dtcr",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Data Center & Digital Infrastructure ETF (DTCR) RelTrend Score",
+        "url": "DTCR_reltrend",
+        "market_symbol": "dtcr",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Data Center & Digital Infrastructure ETF (DTCR) Optix",
+        "url": "etf_dtcr",
+        "market_symbol": "dtcr",
+        "type": "optix",
+        "updated": "Daily"
     }
 ]
