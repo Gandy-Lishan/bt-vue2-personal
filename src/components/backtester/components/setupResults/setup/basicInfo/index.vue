@@ -1516,6 +1516,75 @@ export default {
         this.options = []
       }
     }, 500),
+    remoteModelMethod: throttle(async function(query) {
+      let vm = this
+      if (typeof query == 'boolean' && query){ // 点击搜索栏初始化列表
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        })
+        
+        vm.getCustomStocksList()
+
+        this.searchResults = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList).filter(item => item.value !== this.bd.symbol)
+        
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        //vm.loading = false
+      }
+      else if (typeof query != 'boolean' && query !== '') {
+        vm.loading = true
+        let symbolListTemp = vm.symbolList.map((item, index) => {
+          return { value: `${item.stock}`, label: `${item.stock}`, name: `${item.name}`, key: `${item.name}_${item.stock}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let IndexListTemp = vm.indexList.map((item, index) => {
+          return { value: `${item.symbol}`, label: `${item.symbol}`, name: `${item.name}`, key: `${item.name}_${item.symbol}_${index}` }
+        }).filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+        let customStocksListTemp = vm.customStocksList.filter((item) => {
+          return (
+            item.key.toLowerCase().indexOf(query.toLowerCase()) > -1
+          )
+        })
+       
+        let list = symbolListTemp.concat(IndexListTemp).concat(customStocksListTemp).filter(item => item.value !== this.bd.symbol)
+        let options = []
+        let wholeWord = []
+        // keyword全匹配
+        for (let item of list) {
+          if (
+            item.value.toLowerCase() === query.toLowerCase() ||
+            item.label.toLowerCase() === query.toLowerCase()
+          ) {
+            wholeWord.push(item)
+            continue
+          }
+          options.push(item)
+        }
+        options.unshift(...wholeWord)
+        // 去重
+        this.searchResults = options
+
+        this.currentPage = 1;
+        this.hasMore = true;
+        this.loadMore()
+        // // 解除遮罩
+        // vm.loading = false
+      } else {
+        this.options = []
+      }
+    }, 500),
     selectRiskControl(val) {
       if (!this.isRiskControl) {
         this.$emit('IsRiskControl', false)
