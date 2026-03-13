@@ -1575,7 +1575,7 @@ export default {
         
         vm.getCustomStocksList()
 
-        this.searchResults = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList)
+        this.searchResults = symbolListTemp.concat(IndexListTemp).concat(vm.customStocksList).filter(item => item.value !== this.bd.symbol)
         
         this.currentPage = 1;
         this.hasMore = true;
@@ -1604,7 +1604,7 @@ export default {
           )
         })
        
-        let list = symbolListTemp.concat(IndexListTemp).concat(customStocksListTemp)
+        let list = symbolListTemp.concat(IndexListTemp).concat(customStocksListTemp).filter(item => item.value !== this.bd.symbol)
         let options = []
         let wholeWord = []
         // keyword全匹配
