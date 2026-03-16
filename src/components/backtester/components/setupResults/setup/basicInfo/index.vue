@@ -545,6 +545,47 @@
                     </div>
                   </el-form-item>
                 </el-col>
+                <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-show="bd.strategy === 'Single'">
+                  <el-form-item prop="model">
+                    <template slot="label">
+                      <label>
+                        {{bdFormLabel['model']}}
+                        <el-tooltip effect="dark" placement="top">
+                          <span slot="content">
+                            Select the asset to hold during idle periods between trades; default is cash,<br/>
+                            while other tickers can be chosen to maximize capital utilization.
+                          </span>
+                          <i class="fa fa-question-circle right" aria-hidden="true"></i>
+                        </el-tooltip>
+                      </label>
+                    </template>
+                    
+                    <div class="enterSymbolBox">
+                      <el-select
+                        ref="symbolInput"
+                        v-model="bd.model"
+                        id="symbolName"
+                        filterable
+                        remote
+                        reserve-keyword
+                        automatic-dropdown
+                        placeholder="enter keywords"
+                        :remote-method="remoteModelMethod"
+                        @visible-change="remoteModelMethod"
+                        :value-key="'key'"
+                      >
+                        <el-option
+                          
+                          v-for="item in modelOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="6" :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                   <el-form-item prop="use_tag" v-if="is_admin">
                   <template slot="label">
@@ -851,7 +892,8 @@ export default {
           Rules: ''
         },
         market_environment: 0,
-        index_moving_average_slope: 0
+        index_moving_average_slope: 0,
+        model: 'cash'
       },
       bdFormLabel: {
         symbol: '1. Symbol',
@@ -868,6 +910,7 @@ export default {
         exclude_oo: '12. Exclude Overlapping Observation',
         market_environment: '13. Market Environment',
         index_moving_average_slope: '14. Index Moving Average Slope',
+        model: 'Model',
         symbol2: '12. Symbol(2)',
         direction2: '13. Direction(2)',
         user_tag: 'User Tag',
@@ -1103,6 +1146,9 @@ export default {
       }else {
         return []
       }
+    },
+    modelOptions() {
+      return [{value: 'cash', label: 'cash'}, ...this.options]
     }
   },
   watch: {
@@ -1711,6 +1757,7 @@ export default {
         this.isExcludeOO = false
         bd.market_environment = 0
         bd.index_moving_average_slope = 0
+        bd.model = 'cash'
       }else if(bd.strategy === 'Single') {
         bd.symbol2 = 'SPY'
         bd.direction2 = 'Long'
@@ -1921,6 +1968,7 @@ export default {
         editData.trade_price = Number(editData.trade_price)
         // 兼容之前不存在的两个参数
         editData.market_environment = editData.market_environment || 0
+        editData.model = editData.model || 'cash'
         editData.index_moving_average_slope = editData.index_moving_average_slope || 0
         this.is_admin = this.$store.getters.getIsAdmin
         this.bd = Object.assign(this.bd, editData)

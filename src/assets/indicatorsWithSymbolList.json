@@ -73059,7 +73059,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "IGV Optix",
+        "chart_name": "IGV Optix",
         "url": "etf_igv",
         "market_symbol": "IGV",
         "type": "optix",
@@ -99311,21 +99311,21 @@
     {
         "chart_name": "IMVP Optix",
         "url": "etf_imvp",
-        "market_symbol": "imvp",
+        "market_symbol": "IMVP",
         "type": "optix",
         "updated": "Daily"
     },
     {
         "chart_name": "Invesco India ETF (IMVP) Trend Score",
         "url": "IMVP_trend",
-        "market_symbol": "imvp",
+        "market_symbol": "IMVP",
         "type": "trend",
         "updated": "Daily"
     },
     {
         "chart_name": "Invesco India ETF (IMVP) RelTrend Score",
         "url": "IMVP_reltrend",
-        "market_symbol": "imvp",
+        "market_symbol": "IMVP",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -99358,6 +99358,20 @@
         "updated": "Daily"
     },
     {
+        "chart_name": "Bitmine Immersion Technologies, Inc.(BMNR) Trend Score",
+        "url": "BMNR_trend",
+        "market_symbol": "BMNR",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bitmine Immersion Technologies, Inc.(BMNR) RelTrend Score",
+        "url": "BMNR_reltrend",
+        "market_symbol": "BMNR",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
         "chart_name": "Ferrovial SE",
         "url": "FER",
         "market_symbol": "FER",
@@ -99368,6 +99382,34 @@
         "chart_name": "AH Realty Trust Inc",
         "url": "AHRT",
         "market_symbol": "AHRT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Callaway Golf Co",
+        "url": "CALY",
+        "market_symbol": "CALY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Covista Inc",
+        "url": "CVSA",
+        "market_symbol": "CVSA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dauch Corporation",
+        "url": "DCH",
+        "market_symbol": "DCH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Medical Properties Trust Inc",
+        "url": "MPT",
+        "market_symbol": "MPT",
         "type": "optix",
         "updated": "Daily"
     },
@@ -99396,6 +99438,34 @@
         "chart_name": "Versant Media Group Inc",
         "url": "VSNT",
         "market_symbol": "VSNT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Figma, Inc. (FIG)",
+        "url": "FIG",
+        "market_symbol": "FIG",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Data Center & Digital Infrastructure ETF (DTCR) Trend Score",
+        "url": "DTCR_trend",
+        "market_symbol": "dtcr",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Data Center & Digital Infrastructure ETF (DTCR) RelTrend Score",
+        "url": "DTCR_reltrend",
+        "market_symbol": "dtcr",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Data Center & Digital Infrastructure ETF (DTCR) Optix",
+        "url": "etf_dtcr",
+        "market_symbol": "dtcr",
         "type": "optix",
         "updated": "Daily"
     }
