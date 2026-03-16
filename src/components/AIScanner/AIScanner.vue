@@ -897,7 +897,7 @@ export default {
 			((item['StopLoss'] === null || item['StopLoss'] === '') || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
 			&& ((item['ProfitTarget'] === null || item['ProfitTarget'] === '') || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
 			&& ((item['TimeInMarket'] === null || item['TimeInMarket'] === '') ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
-			&& ((condition || _signals.includes(this.midTermMap[item['_Signal']]) ? this.midTermMap[item['_Signal']] : signals.includes(item['_Signal'])))
+			&& ((condition || (_signals.includes(this.midTermMap[item['_Signal']]) ? this.midTermMap[item['_Signal']] : signals.includes(item['_Signal']))))
 			&& ((item['MaxRisk'] === null || item['MaxRisk'] === '')  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
 			&& ((item['Z_Score'] === null || item['Z_Score'] === '')  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
 			&& ((item['SharpeRatio'] === null || item['SharpeRatio'] === '')  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
