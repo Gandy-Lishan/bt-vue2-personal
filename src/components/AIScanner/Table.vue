@@ -68,9 +68,6 @@
 							<el-form-item label="Optix" v-if="props.row['Optix'] !== null">
 								<span>{{ props.row['Optix'] }}</span>
 							</el-form-item>
-							<el-form-item label="Contract Symbol" v-if="props.row['ContractSymbol'] !== null">
-								<span>{{ props.row['ContractSymbol'] }}</span>
-							</el-form-item>
 						</template>
 						<template v-if="currTabPage === 'OptionScanner'">
 							<el-form-item label="VOLUME" v-if="props.row['Volume'] !== null">
@@ -87,6 +84,9 @@
 							</el-form-item>
 							<el-form-item label="VEGA" v-if="props.row['Vega'] !== null">
 								<span>{{ props.row['Vega'] }}</span>
+							</el-form-item>
+							<el-form-item label="Contract Symbol" v-if="props.row['ContractSymbol'] !== null">
+								<span>{{ props.row['ContractSymbol'] }}</span>
 							</el-form-item>
 						</template>
 					</el-form>
