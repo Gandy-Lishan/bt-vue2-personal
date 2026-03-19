@@ -501,10 +501,10 @@ export default {
     }
   }
   },
-  async created(){	
-	await this.loadData()
-	if(Array.isArray(this.originData.content) && this.originData.content.length) this.date = this.originData.content[0].trade_date
-   },
+	async created(){	
+				await this.loadData()
+				if(Array.isArray(this.originData.content) && this.originData.content.length) this.date = this.originData.content[0].trade_date
+ },
 	beforeDestroy() {
 	},
 	computed: {
@@ -648,7 +648,8 @@ getMatchScore(target, keyword) {
 			// 'Contract Symbol', 'ev_score', 'Volume', 'OI', 'IV','Delta', 'Vega'
 		]
 		const res = await getOptionScanner(this.date)
-        AIPickObj.content = res.data.map(item => {
+		if(Array.isArray(res.data) && res.data.length && Object.hasOwn(res.data[0], 'Latest Trade Date')){this.date = res.data[0]['Latest Trade Date']; AIPickObj.content = []; this.originData = AIPickObj; this.tableData = AIPickObj; return;}
+   AIPickObj.content = res.data.map(item => {
 			for (const key in item) {
 				if (Object.prototype.hasOwnProperty.call(item, key)) {
 					if(key === 'stkpx') item[key] = item[key].toFixed(2)
