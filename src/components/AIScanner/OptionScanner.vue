@@ -648,7 +648,7 @@ getMatchScore(target, keyword) {
 			// 'Contract Symbol', 'ev_score', 'Volume', 'OI', 'IV','Delta', 'Vega'
 		]
 		const res = await getOptionScanner(this.date)
-		if(Array.isArray(res.data) && res.data.length && Object.hasOwn(res.data[0], 'Latest Trade Date')){this.date = res.data[0]['Latest Trade Date']; AIPickObj.content = []; this.originData = AIPickObj; this.tableData = AIPickObj; return;}
+		if(Array.isArray(res.data) && res.data.length && Object.hasOwn(res.data[0], 'Latest Trade Date') && !this.date){this.date = res.data[0]['Latest Trade Date']; AIPickObj.content = []; this.originData = AIPickObj; this.tableData = AIPickObj; return;}
    AIPickObj.content = res.data.map(item => {
 			for (const key in item) {
 				if (Object.prototype.hasOwnProperty.call(item, key)) {
