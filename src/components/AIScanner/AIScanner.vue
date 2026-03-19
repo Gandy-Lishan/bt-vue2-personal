@@ -558,8 +558,8 @@ export default {
 		time_in_market: 42,
 		max_risk_condition: 5,
 		max_risk: 50,
-		z_score_condition: 0,
-		z_score: 10,
+		z_score_condition: -5,
+		z_score: 5,
 		sharpe_ratio_condition: 0,
 		sharpe_ratio: 2,
 		std_dev_condition: 0,
@@ -568,8 +568,8 @@ export default {
 		expected_return: 5,
 		win_rate_condition: 52,
 		win_rate: 80,
-		change_condition: 0,
-		change: 100,
+		change_condition: -10,
+		change: 10,
 		trend_score_condition: 0,
 		trend_score: 10,
 		reltrend_score_condition: 0,
@@ -897,7 +897,7 @@ export default {
 			((item['StopLoss'] === null || item['StopLoss'] === '') || (parseFloat(stop_loss_condition)<=parseFloat(item['StopLoss']) && parseFloat(stop_loss)>=parseFloat(item['StopLoss'])))
 			&& ((item['ProfitTarget'] === null || item['ProfitTarget'] === '') || (parseFloat(take_profit_condition)<=parseFloat(item['ProfitTarget']) && parseFloat(take_profit)>=parseFloat(item['ProfitTarget'])))
 			&& ((item['TimeInMarket'] === null || item['TimeInMarket'] === '') ||(parseFloat(time_in_market_condition)<=parseFloat(item['TimeInMarket']) && parseFloat(time_in_market)>=parseFloat(item['TimeInMarket'])))
-			&& ((condition || _signals.includes(this.midTermMap[item['_Signal']]) ? this.midTermMap[item['_Signal']] : signals.includes(item['_Signal'])))
+			&& ((condition || (signals.includes(item['_Signal']) || signals.includes(this.midTermMap[item['_Signal']]))))
 			&& ((item['MaxRisk'] === null || item['MaxRisk'] === '')  || (parseFloat(max_risk_condition)<=parseFloat(item['MaxRisk']) && parseFloat(max_risk)>=parseFloat(item['MaxRisk'])))
 			&& ((item['Z_Score'] === null || item['Z_Score'] === '')  || (parseFloat(z_score_condition)<=parseFloat(item['Z_Score']) && parseFloat(z_score)>=parseFloat(item['Z_Score'])))
 			&& ((item['SharpeRatio'] === null || item['SharpeRatio'] === '')  || (parseFloat(sharpe_ratio_condition)<=parseFloat(item['SharpeRatio']) && parseFloat(sharpe_ratio)>=parseFloat(item['SharpeRatio'])))
