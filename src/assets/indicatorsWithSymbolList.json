@@ -99468,5 +99468,19 @@
         "market_symbol": "dtcr",
         "type": "optix",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Industry % 13 Weeks Highs",
+        "url": "all_industry_breadth_13WHighs",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Industry % 13 Weeks Lows",
+        "url": "all_industry_breadth_13WLows",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
