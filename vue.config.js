@@ -54,10 +54,15 @@ const config = {
 					include: path.resolve(__dirname, 'node_modules/cesium/Source'),
 					loader: require.resolve('@open-wc/webpack-import-meta-loader')
 				},
-				{
+			{
 					test: /\.js$/,
 					include: [require.resolve('highcharts')],
 					use: 'babel-loader' // 使用babel-loader来处理Highcharts的模块
+				},
+				{
+					test: /\.js$/,
+					include: path.resolve(__dirname, 'node_modules/chartiq'),
+					use: 'babel-loader' // 使用babel-loader来处理chartiq的模块
 				},
 				// 在这里添加 lru-cache 的配置
 				{
