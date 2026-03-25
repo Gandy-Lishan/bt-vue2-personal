@@ -7799,7 +7799,7 @@ class Studies extends CIQ.UI.ContextTag {
 
 			//if(studyName == 'ma'){
 				// 给study list上选择的ma加上为panelIndex和criteria空值的ma study layout,getIndicatorMatedata会遍历到它
-				CIQ.setMALayout(studyName,null,null)
+				CIQ.setMALayout(studyName,null,null,{ticker: stx.chart.symbol})
 				CIQ.setTechLayout(studyName, null, null)
 			//}
 
