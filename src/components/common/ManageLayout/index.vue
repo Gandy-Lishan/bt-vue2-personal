@@ -477,6 +477,14 @@
     border-radius: 12px;
     max-height: 40px;
     white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .layout-list li span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
   }
   
   .layout-list li:hover {
