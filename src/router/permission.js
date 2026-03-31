@@ -221,6 +221,11 @@ export function setRouterPermission(router) {
 					if((to.path.includes('/MR') || to.path.includes('/backtester') || to.path.includes('/doc') || to.path.includes('/contact')  || to.path.includes('/dashboard') || to.path.includes('/market')) && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
 					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
 					else next('/MR/sentimentedge') 
+				}else if(access_level.some(str => str.includes('light-data-yearly'))) {
+					store.commit('states/setErrorMessage404',{status:410,message:'Backtest Engine v2.0'})
+						next({
+							path: '/404'
+						})
 				}
 				// report 所有人都能看， 但是部分是没有编辑功能的只能看
 			}

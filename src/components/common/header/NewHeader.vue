@@ -501,7 +501,9 @@ export default {
       LocalStorageUtil.set('upgradeUserLevel', exists)
     }
     // 权限验证的时候, report 子项要去掉: reports, corelite
+    const cannotAccessBacktestEdge = access_level.some(str => str.includes('light-data-yearly'))
     const canOnlyAccessPartOfReport = access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
+    if(cannotAccessBacktestEdge) this.navs = [];
     if(canOnlyAccessPartOfReport) {
       const reportIndex = this.navs.findIndex(ele => ele.label === 'Reports')
       const backtestIndex = this.navs.findIndex(ele => ele.label.includes('Backtest'))
