@@ -57,7 +57,10 @@
               @mouseleave="hoveredLayoutId = null"
               @click="handleItemSelected(layout)"
             >
-              <span>{{ layout.name }}</span>
+              <el-tooltip v-if="isTextOverflow(layout.id)" :content="layout.name" placement="top" :open-delay="300">
+                <span :ref="el => setLayoutRef(layout.id, el)">{{ layout.name }}</span>
+              </el-tooltip>
+              <span v-else :ref="el => setLayoutRef(layout.id, el)">{{ layout.name }}</span>
               <button
                 v-if="hoveredLayoutId === layout.id"
                 class="remove-button"
@@ -116,6 +119,7 @@
         newLayoutName: '',
         hoveredLayoutId: null,
         isLoading: false,
+        layoutRefs: {},
       };
     },
     computed: {
@@ -133,6 +137,20 @@
       },
     },
     methods: {
+      setLayoutRef(id, el) {
+        if (el) {
+          this.layoutRefs[id] = el;
+        }
+      },
+      isTextOverflow(id) {
+        const el = this.layoutRefs[id];
+        if (!el) {
+          // Fallback: check by character count if element not ready
+          const layout = this.layouts.find(l => l.id === id);
+          return layout && layout.name.length > 18;
+        }
+        return el.scrollWidth > el.clientWidth;
+      },
       setTickerIindicator(option) {
         const stx = CIQ.stxx
         const symbol = stx.chart.symbol
