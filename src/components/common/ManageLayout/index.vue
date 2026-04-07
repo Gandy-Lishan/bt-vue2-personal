@@ -41,6 +41,14 @@
             Manage Chart Layout
             <div class="search-container">
               <input type="search" v-model="searchQuery" placeholder="Search" />
+              <button class="expand-btn" @click="toggleExpandPanel" title="Expand">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+              </button>
             </div>
           </div>
           <div class="save-btn-wrapper"><button class="create-new-button" @click="toggleCreatePanel">
@@ -100,6 +108,76 @@
         />
         <button @click="handleSaveLayout">Confirm</button>
       </div>
+
+      <!-- 扩展面板 -->
+      <div v-if="isExpandPanelVisible" class="expand-panel">
+        <div class="expand-panel-header">
+          <span>Manage Chart Layout</span>
+          <button class="close-btn" @click="isExpandPanelVisible = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="expand-panel-toolbar">
+          <div class="toolbar-left">
+            <el-input
+              v-model="expandSearchQuery"
+              placeholder="Search"
+              size="small"
+              clearable
+            >
+              <el-button slot="append" icon="el-icon-search"></el-button>
+            </el-input>
+          </div>
+          <div class="toolbar-right">
+            <el-input
+              v-model="newLayoutName"
+              placeholder="Layout name"
+              size="small"
+              clearable
+              @keyup.enter.native="handleSaveLayoutInPanel"
+            >
+              <el-button slot="append" type="primary" @click="handleSaveLayoutInPanel">Save</el-button>
+            </el-input>
+          </div>
+        </div>
+        <el-table
+          :data="expandFilteredLayouts"
+          class="expand-table"
+          style="width: 100%; flex: 1;"
+          height="100%"
+          v-loading="isLoading"
+          empty-text="No layouts found"
+          @row-click="handleRowClick"
+          :show-header="false"
+        >
+          <el-table-column
+            prop="name"
+            label="Name"
+          >
+            <template slot-scope="scope">
+              <span class="layout-name">{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="Actions"
+            width="100"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <el-button
+                type="warning"
+                size="mini"
+                icon="el-icon-delete"
+                circle
+                @click.stop="handleRemoveLayout(scope.row.id)"
+              ></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
   </template>
   
@@ -114,7 +192,9 @@
       return {
         isDropdownVisible: false,
         isCreatePanelVisible: false,
+        isExpandPanelVisible: false,
         searchQuery: '',
+        expandSearchQuery: '',
         layouts: [],
         newLayoutName: '',
         hoveredLayoutId: null,
@@ -129,6 +209,14 @@
         }
         return this.layouts.filter(layout =>
           layout.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      },
+      expandFilteredLayouts() {
+        if (!this.expandSearchQuery) {
+          return this.layouts;
+        }
+        return this.layouts.filter(layout =>
+          layout.name.toLowerCase().includes(this.expandSearchQuery.toLowerCase())
         );
       },
       ...mapGetters(['getBacktestSymbol']), // 监听chartiq和表单的symbol改动以双向响应
@@ -215,6 +303,7 @@
       hideDropdown() {
         this.isDropdownVisible = false;
         this.isCreatePanelVisible = false;
+        this.isExpandPanelVisible = false;
       },
   
       // 新增：处理点击组件外部区域的逻辑
@@ -228,6 +317,36 @@
   
       toggleCreatePanel() {
         this.isCreatePanelVisible = !this.isCreatePanelVisible;
+      },
+
+      toggleExpandPanel() {
+        this.isExpandPanelVisible = !this.isExpandPanelVisible;
+        if (this.isExpandPanelVisible && this.layouts.length === 0) {
+          this.fetchLayouts();
+        }
+      },
+
+      handleRowClick(row) {
+        CIQ.restoreLayout(row);
+        this.isExpandPanelVisible = false;
+      },
+
+      async handleSaveLayoutInPanel() {
+        if (!this.newLayoutName.trim()) {
+          this.$message.warning('Layout name cannot be empty.');
+          return;
+        }
+        try {
+          const layout = CIQ.saveLayout(this.newLayoutName);
+          this.layouts.push(layout);
+          await updateLayout(this.layouts);
+          this.newLayoutName = '';
+          await this.fetchLayouts();
+          this.$message.success('Chart layout saved successfully!');
+        } catch (error) {
+          console.error('Failed to save layout:', error);
+          this.$message.error('Failed to save layout.');
+        }
       },
   
       async handleSaveLayout() {
@@ -427,19 +546,21 @@
   /* 搜索框 */
   .search-container {
     flex-grow: 1;
-    margin: 0 4px;
+    margin: 0 0 0 8px;
     position: relative;
     cursor: auto;
-    display: initial;
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
   }
   
   .search-container input {
     border: none;
     border-bottom: solid 1px #aaa;
     border-radius: 0;
-    margin: 0 24px 0 11px;
     padding: 0 2px;
-    width: 90%;
+    flex: 1;
+    min-width: 0;
     outline: none;
   }
 
@@ -607,6 +728,149 @@
   .create-layout-panel button:hover {
     background-color: #518bbb;
   }
+
+  /* 扩展按钮 */
+  .expand-btn {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    margin-left: 4px;
+  }
+  .expand-btn:hover {
+    color: #398dff;
+  }
+
+  /* 扩展面板 */
+  .expand-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vh;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    padding: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .ciq-night .expand-panel {
+    background: #1a2633;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .expand-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    flex-shrink: 0;
+  }
+  .ciq-night .expand-panel-header {
+    color: #fff;
+  }
+
+  .expand-panel-header .close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .expand-panel-header .close-btn:hover {
+    color: #333;
+  }
+  .ciq-night .expand-panel-header .close-btn:hover {
+    color: #fff;
+  }
+
+  .expand-panel-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 24px;
+    flex-shrink: 0;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .toolbar-left .el-input {
+    width: 220px;
+  }
+
+  .expand-panel-toolbar /deep/ .el-input__inner {
+    margin-left: 0;
+  }
+
+  .toolbar-right .el-input {
+    width: 260px;
+  }
+
+  .expand-table {
+    flex: 1;
+    min-height: 0;
+  }
+  
+  .expand-table /deep/ .el-table__body-wrapper {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .layout-name {
+    cursor: pointer;
+    color: #5b9bd1;
+    font-weight: 500;
+  }
+  .layout-name:hover {
+    text-decoration: underline;
+  }
+
+  .layout-id {
+    color: #999;
+    font-size: 12px;
+  }
+
+  /* 遮罩层 */
+  .expand-panel::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+    pointer-events: none;
+  }
   </style>
   
+  <!-- 全局样式：让 el-tooltip 点击穿透 -->
+  <style>
+  /* Element UI tooltip 点击穿透 */
+  .el-tooltip__popper {
+    pointer-events: none !important;
+  }
+  </style>
   
