@@ -817,7 +817,7 @@
   }
 
   .toolbar-left .el-input {
-    width: 220px;
+    width: 320px;
   }
 
   .expand-panel-toolbar /deep/ .el-input__inner {
@@ -825,7 +825,7 @@
   }
 
   .toolbar-right .el-input {
-    width: 260px;
+    width: 320px;
   }
 
   .expand-table {
