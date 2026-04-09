@@ -3,7 +3,7 @@
   <div class="strategy-header">
     <div class="tableHeader">
       <div class="headerSelect">
-        <h4  @click="()=>{handleTitleSelect('Trend')}" :class="{ 'selected': selectedTitle === 'Trend' }">Trend tendScore</h4>
+        <h4  @click="()=>{handleTitleSelect('Trend')}" :class="{ 'selected': selectedTitle === 'Trend' }">Trend Score</h4>
         <h4  @click="()=>{handleTitleSelect('Historical')}" :class="{ 'selected': selectedTitle === 'Historical' }">Historical Volatility</h4>
       </div>
     </div>
