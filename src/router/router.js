@@ -221,6 +221,12 @@ const routes = [
 				component: resolve =>
 					require(['@/components/CPM/PatternCorrelation.vue'], resolve)
 			},
+			{
+				path: 'transmission',
+				name: 'TransmissionAnalyzer',
+				component: resolve =>
+					require(['@/components/CPM/TransmissionAnalyzer.vue'], resolve)
+			},
 		]
 	},
 	
@@ -253,8 +259,23 @@ const routes = [
 	{
 		path: '/trend_score',
 		name: 'TrendScore',
+		redirect: '/trend_score/trend',
 		component: resolve =>
-			require(['@/components/Indicators/TrendScore/index.vue'], resolve)
+			require(['@/components/Indicators/TrendScore/index.vue'], resolve),
+		children: [
+			{
+				path: 'trend',
+				name: 'Trend',
+				component: resolve =>
+					require(['@/components/Indicators/Trend/index.vue'], resolve)
+			},
+			{
+				path: 'historical',
+				name: 'HistoricalVolatility',
+				component: resolve =>
+					require(['@/components/Indicators/HistoricalVolatility/index.vue'], resolve)
+			}
+		]
 	},
 	{
 		path: '/sector_trend_score',
@@ -281,6 +302,11 @@ const routes = [
 				path: '/doc/scanner',
 				component: resolve =>
 					require(['@/components/Tutorial/components/AIScanner.vue'], resolve)
+			},
+			{
+				path: '/doc/aiscanner',
+				component: resolve =>
+					require(['@/components/Tutorial/components/NewAIScanner.vue'], resolve)
 			},
 			{
 				path: '/doc/disclaimer',

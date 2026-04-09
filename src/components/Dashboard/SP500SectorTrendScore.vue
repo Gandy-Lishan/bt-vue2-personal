@@ -2,7 +2,7 @@
   <div class="portlet light page-content-wrapper asset-correlation" style="margin-top: 0px; padding-top:5px; padding-bottom: 0px;">
    <div class="portlet-title relevant-portlet-title">
      <div class="caption caption-md">
-       <span class="caption-subject theme-font-color bold uppercase"><a href="/trend_score?enlarge=TrendSector" target="_blank">S&P 500 Sector Trend Score</a>
+       <span class="caption-subject theme-font-color bold uppercase"><a href="/trend_score/trend?enlarge=TrendSector" target="_blank">S&P 500 Sector Trend Score</a>
        </span>
      </div>
    </div>
