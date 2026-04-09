@@ -205,12 +205,12 @@ export default {
           path: '/indicators'
         },
         {
-          label: 'Trend Score',
+          label: 'Trend & Volatility',
           keyPath: '12',
           path: '/trend_score',
           subMenu: [
             {
-              label: 'Trend',
+              label: 'Trend Score',
               keyPath: '12-1',
               path: '/trend_score/trend'
             },
@@ -314,6 +314,11 @@ export default {
               label: 'Date Range Correlation',
               keyPath: '8-4',
               path: '/cpm/pattern'
+            },
+            {
+              label: 'Beta Analyzer',
+              keyPath: '8-5',
+              path: '/cpm/transmission'
             }
           ]
         },
@@ -719,7 +724,7 @@ export default {
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
 
-      if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend Score', 'My Stuff', 'Extra Tools'].includes(label)) {
+      if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend & Volatility', 'My Stuff', 'Extra Tools'].includes(label)) {
         return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies')
       }
       if(label === 'BacktestEdge') {
