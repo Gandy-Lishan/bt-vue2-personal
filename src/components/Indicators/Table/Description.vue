@@ -219,7 +219,7 @@
         <div class="des" v-else-if="enlarged === 'Overview' && (checkedType === 'ETFCountryOverview')">
           <p>This page displays thumbnail charts for Country ETF Optimism Index 10-Day Moving Averages. The chart titles are hyperlinks...click to be taken to the main chart page.Note: If page is blank, give it a second to load</p>
         </div>
-        <div class="col-md-3 thumbnail" v-show="!(((enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto' || enlarged === 'Bond & Commodity')) && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList', 'CHMinMax'].includes(checkedType))) && enlarged !== 'Overview'">
+        <div class="col-md-3 thumbnail" v-show="!(((enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Historical Volatility' || enlarged === 'Crypto' || enlarged === 'Bond & Commodity')) && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList', 'CHMinMax', 'HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(checkedType))) && enlarged !== 'Overview'">
         <div style="text-align: center; font-size: 18px; font-weight: 300">
           <span>Optimism/Pessimism Legend</span>
         </div>
@@ -309,6 +309,16 @@
           </tbody>
         </table>
         </div>
+        <div class="des" v-show="enlarged === 'Historical Volatility'">
+          <p><b>20-Day and 60-Day Historical Volatility</b> measures price dispersion over a 20-Day and 60-Day window.</p>
+          <p><b>What High/Low Volatility Means:</b></p>
+          <ul>
+            <li><b>High Volatility:</b> Indicates large price swings, reflecting uncertainty or intense market emotion.</li>
+            <li><b>Low Volatility:</b> Indicates stable price action and market complacency.</li>
+          </ul>
+          <p><b>Calculation:</b> StdDev(ln(Pt/Pt-1), window) × √252 × 100.</p>
+          <p><b>Use Case:</b> Compare this value to the S&P 500 (SPX) volatility. If the ratio (Relative Volatility) is > 2.0, the stock is experiencing abnormal risk levels compared to the broad market.</p>
+        </div>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -334,7 +344,7 @@ export default {
     }
   },
   mounted() {
-    if(this.$route.path === '/trend_score') {
+    if(this.$route.path === '/trend_score/trend') {
       this.isTrendScorePage = true
     }
   },

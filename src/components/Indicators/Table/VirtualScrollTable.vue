@@ -17,8 +17,8 @@
           <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" @click="_toggleEnlarge" v-else-if="enlarged && !isMostPopular && !isTrendScorePage">
             <path d="M32 32H0V21.3333H21.3333V0H32V32ZM32 64H0V74.6667H21.3333V96H32V64ZM96 64H64V96H74.6667V74.6667H96V64ZM64 32H96V21.3333H74.6667V0H64V32Z" fill="black"/>
           </svg>
-          <svg @click="fullScreenTrendScorePage" v-else-if="!isTrendScoreFullScreen && isTrendScorePage" t="1746517730978" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1443" width="200" height="200"><path d="M895.4 153.7c0-0.9-0.6-1.8-0.8-2.7s-0.6-2.2-1-3.2a30.7 30.7 0 0 0-1.7-3.1 18.3 18.3 0 0 0-1.3-2.4 30 30 0 0 0-8.9-8.9c-0.7-0.5-1.6-0.9-2.3-1.3l-3.2-2.1a30 30 0 0 0-3.2 0l-3-1.4a33.6 33.6 0 0 0-6.3-0.6H672a32 32 0 0 0 0 64h114.7L553.4 425.4a31.9 31.9 0 0 0 0 45.2 31.9 31.9 0 0 0 45.2 0L832 237.3V352a32 32 0 1 0 64 0V160a33.6 33.6 0 0 0-0.6-6.3zM425.4 553.4L192 786.7V672a32 32 0 1 0-64 0v192a33.6 33.6 0 0 0 0.6 6.3c0 0.9 0.6 1.8 0.8 2.7s0.6 2.2 1 3.2a30.7 30.7 0 0 0 1.7 3.1 18.3 18.3 0 0 0 1.3 2.4 29.1 29.1 0 0 0 8.9 8.9 18.3 18.3 0 0 0 2.4 1.3 30.7 30.7 0 0 0 3.1 1.7l3.2 1 2.7 0.8a33.6 33.6 0 0 0 6.3 0.6h192a32 32 0 0 0 0-64H237.3l233.3-233.4a32 32 0 0 0-45.2-45.2z" fill="#333333" p-id="1444"></path></svg>
-          <svg @click="fullScreenTrendScorePage" v-else-if="isTrendScoreFullScreen && isTrendScorePage" t="1746518175001" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2581" width="200" height="200"><path d="M597.333333 395.861333V192a21.333333 21.333333 0 0 0-42.666666 0v256a21.333333 21.333333 0 0 0 21.333333 21.333333h256a21.333333 21.333333 0 0 0 0-42.666666h-205.12L890.24 163.306667a21.333333 21.333333 0 0 0-30.165333-30.165334L597.333333 395.861333z m-170.666666 232.277334V832a21.333333 21.333333 0 0 0 42.666666 0V576a21.333333 21.333333 0 0 0-21.333333-21.333333H192a21.333333 21.333333 0 0 0 0 42.666666h205.12L133.76 860.693333a21.333333 21.333333 0 0 0 30.165333 30.165334L426.666667 628.138667z" fill="#3D3D3D" p-id="2582"></path></svg>
+          <svg @click="fullScreenTrendScorePage" v-else-if="!isTrendScoreFullScreen && isTrendScorePage && !isHistoricalStockTrend" t="1746517730978" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1443" width="200" height="200"><path d="M895.4 153.7c0-0.9-0.6-1.8-0.8-2.7s-0.6-2.2-1-3.2a30.7 30.7 0 0 0-1.7-3.1 18.3 18.3 0 0 0-1.3-2.4 30 30 0 0 0-8.9-8.9c-0.7-0.5-1.6-0.9-2.3-1.3l-3.2-2.1a30 30 0 0 0-3.2 0l-3-1.4a33.6 33.6 0 0 0-6.3-0.6H672a32 32 0 0 0 0 64h114.7L553.4 425.4a31.9 31.9 0 0 0 0 45.2 31.9 31.9 0 0 0 45.2 0L832 237.3V352a32 32 0 1 0 64 0V160a33.6 33.6 0 0 0-0.6-6.3zM425.4 553.4L192 786.7V672a32 32 0 1 0-64 0v192a33.6 33.6 0 0 0 0.6 6.3c0 0.9 0.6 1.8 0.8 2.7s0.6 2.2 1 3.2a30.7 30.7 0 0 0 1.7 3.1 18.3 18.3 0 0 0 1.3 2.4 29.1 29.1 0 0 0 8.9 8.9 18.3 18.3 0 0 0 2.4 1.3 30.7 30.7 0 0 0 3.1 1.7l3.2 1 2.7 0.8a33.6 33.6 0 0 0 6.3 0.6h192a32 32 0 0 0 0-64H237.3l233.3-233.4a32 32 0 0 0-45.2-45.2z" fill="#333333" p-id="1444"></path></svg>
+          <svg @click="fullScreenTrendScorePage" v-else-if="isTrendScoreFullScreen && isTrendScorePage && !isHistoricalStockTrend" t="1746518175001" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2581" width="200" height="200"><path d="M597.333333 395.861333V192a21.333333 21.333333 0 0 0-42.666666 0v256a21.333333 21.333333 0 0 0 21.333333 21.333333h256a21.333333 21.333333 0 0 0 0-42.666666h-205.12L890.24 163.306667a21.333333 21.333333 0 0 0-30.165333-30.165334L597.333333 395.861333z m-170.666666 232.277334V832a21.333333 21.333333 0 0 0 42.666666 0V576a21.333333 21.333333 0 0 0-21.333333-21.333333H192a21.333333 21.333333 0 0 0 0 42.666666h205.12L133.76 860.693333a21.333333 21.333333 0 0 0 30.165333 30.165334L426.666667 628.138667z" fill="#3D3D3D" p-id="2582"></path></svg>
       </el-tooltip>
     </div>
     <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated && !showConstituentConditions) && !isMostPopular">
@@ -104,10 +104,10 @@
       <el-col :span="24">
         <el-row>
           <div class="btns">
-            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
-            <el-button v-if="(isStockTrend|| isCRPTrend) && enlarged" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
-            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
-            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged" size="small" @click="() => addCondition('rangeRank')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Strength Ratio Range Rank</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
+            <el-button v-if="(isStockTrend|| isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" @click="() => addCondition('rangeRank')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Strength Ratio Range Rank</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -181,7 +181,7 @@
         @cell-mouse-enter="handleCellMouseEnter"
         @cell-mouse-leave="handleCellMouseLeave"
 			  @sort-change="changeTableSort"
-        :height="(!enlarged && !isStockTrend) ? 300 : (!isStockTrend ? 575 : 600)">
+        :height="(!enlarged && !isStockTrend && !isHistoricalStockTrend) ? 300 : ((isStockTrend && !isHistoricalStockTrend) ? 600 : 575)">
         <!-- <el-table-column> -->
           <!-- <template #header>
             <div class="header-span">
@@ -1676,6 +1676,41 @@ export default {
             }
             ]
         ],
+        ['HistoricalScoreColumns', 
+          [
+            {
+              key: 'market_symbol',
+              label: 'Symbol',
+              value: 'market_symbol',
+              type: 'SP1500Score',
+              minWidth: '70px'
+            },
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              type: 'SP1500Score',
+              minWidth: '140px'
+            },
+            {
+              key: 'sector_name',
+              label: 'Sector',
+              value: 'sector_name',
+              type: 'SP1500Score',
+              minWidth: '150px'
+            },
+            {
+              key: 'volatility_20d',
+              label: 'Volatility 20d',
+              value: 'volatility_20d'
+            },
+            {
+              key: 'volatility_60d',
+              label: 'Volatility 60d',
+              value: 'volatility_60d'
+            },
+            ]
+        ],
       ]))
       const columnsMap = this.columnsMap
       let _checkedType = this.checkedType
@@ -1927,6 +1962,15 @@ export default {
           }
         ]])
       }
+      const isHistoricalTrendScore = ['HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(this.checkedType)
+      if(isHistoricalTrendScore) { 
+        let commonColumnName = columnsMap.get(`HistoricalScoreColumns`)
+        console.log('commonColumnName', commonColumnName)
+        if(['HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(_checkedType)) {
+          commonColumnName = commonColumnName.filter(col => col.value !== 'sector_name')
+        }
+        return commonColumnName
+      }
       const columns = columnsMap.get(`${_checkedType}Columns`)
       console.log('_checkedType',  _checkedType)
       if(this.checkedType === 'TrendSector') return []
@@ -2128,7 +2172,10 @@ export default {
       return []
     },
     isStockTrend() {
-      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'CRPScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'SectorTrendRelTrend', 'WatchList'].includes(this.checkedType)
+      return ['SP1500Score', 'SP500Score', 'RussellScore', 'NDX100Score', 'CRPScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'SectorTrendRelTrend', 'WatchList','HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(this.checkedType)
+    },
+    isHistoricalStockTrend() {
+      return ['HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(this.checkedType)
     },
     isCRPTrend() {
       return ['TSCRP', 'RTSCRP'].includes(this.checkedType)
@@ -2172,7 +2219,7 @@ export default {
     }
 	},
   mounted() {
-    if(this.$route.path === '/trend_score' || this.$route.path === '/sector_trend_score') {
+    if(this.$route.path === '/trend_score/trend' || this.$route.path === '/sector_trend_score' || this.$route.path === '/trend_score/historical') {
       this.isTrendScorePage = true
       this.enlarged = true
     }
@@ -2339,7 +2386,8 @@ export default {
     async fullScreenTrendScorePage(checked, row) {
       debugger
       if(this._loading) return
-      const isTrendSector = this.$route.fullPath.includes('/trend_score?enlarge=TrendSector') && this.refName === 'SP1500ScoreVirtualScroll'
+      const isTrendSector = this.$route.fullPath.includes('/trend_score/trend?enlarge=TrendSector') && this.refName === 'SP1500ScoreVirtualScroll'
+      if(this.isHistoricalStockTrend) row = this.firstRow
       if(((checked && checked instanceof PointerEvent) || !checked) && !row) {this.isTrendScoreFullScreen = !this.isTrendScoreFullScreen;this.enterOrExitFullScreenTrendScorePage(this.label);this.checkedOption( this.enlarged ? this.checkedType : null)}
       if(checked && typeof checked === 'string' && this.checkedType !== checked && row) {
         const option = this.options.find(item => item.value === checked)
@@ -2355,7 +2403,7 @@ export default {
       }
       this.$emit("updateChart", this.firstRow || {})
       if(isTrendSector) {
-        window.location.href = `/trend_score`
+        window.location.href = `/trend_score/trend`
       }
     },
     async loadMore () {
@@ -2674,7 +2722,7 @@ export default {
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend', 'trend_count_8_or_more', 'trend_count_less_8', 'trend_count_2_or_less', 'reltrend_count_8_or_more', 'reltrend_count_less_8', 'reltrend_count_2_or_less', 'rsr_rank10', 'rsr_rank21', 'rsr_rank42', 'rsr_rank63', 'rsr_rank84', 'rsr_rank126', 'All Countries', 'Developed Markets', 'Emerging Markets', 'Asia Pacific', 'Europe', 'South America', 'last_update', 'three_year_max', 'three_year_min', 'net_position'].indexOf(colName) !== -1) {
+        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'close', 'MA', 'AvgReturn', 'sentiment', 'trend_last_value', 'trend_five_day_score_chg', 'reltrend_last_value', 'reltrend_five_day_score_chg', 'close_over_ma1', 'close_over_ma2', 'close_over_ma3', 'ma1_over_ma2', 'ma1_over_ma3', 'ma2_over_ma3', 'ma1_over_ma1p', 'ma2_over_ma2p', 'ma3_over_ma3p', 'channel_trend', 'trend_count_8_or_more', 'trend_count_less_8', 'trend_count_2_or_less', 'reltrend_count_8_or_more', 'reltrend_count_less_8', 'reltrend_count_2_or_less', 'rsr_rank10', 'rsr_rank21', 'rsr_rank42', 'rsr_rank63', 'rsr_rank84', 'rsr_rank126', 'All Countries', 'Developed Markets', 'Emerging Markets', 'Asia Pacific', 'Europe', 'South America', 'last_update', 'three_year_max', 'three_year_min', 'net_position', 'volatility_20d', 'volatility_60d'].indexOf(colName) !== -1) {
           if (sortingOrder == 'ascending') {
               this.filterData.sort((a, b) => {
                   b[colName] = typeof b[colName] === 'number' ? String(b[colName]) : b[colName]
@@ -2798,14 +2846,29 @@ export default {
           type: 'SP1500Score'
         },
         {
+          label: 'Historical Volatility S&P 1500',
+          value: 'historical_sp1500',
+          type: 'HistoricalSP1500Score'
+        },
+        {
           label: 'S&P 500',
           value: 'spx',
           type: 'SP500Score'
         },
         {
+          label: 'Historical Volatility S&P 500',
+          value: 'historical_spx',
+          type: 'HistoricalSP500Score'
+        },
+        {
           label: 'NDX',
           value: 'ndx',
           type: 'NDX100Score'
+        },
+        {
+          label: 'Historical Volatility NDX',
+          value: 'historical_ndx',
+          type: 'HistoricalNDX100Score'
         },
         // {
         //   label: 'Crypto',
@@ -2818,9 +2881,19 @@ export default {
           type: 'RussellScore'
         },
         {
+          label: 'Historical Volatility Russell 3000',
+          value: 'historical_russell',
+          type: 'HistoricalRussellScore'
+        },
+        {
           label: 'Domestic ETF',
           value: 'etf_domestic',
           type: 'DomesticETFScore'
+        },
+        {
+          label: 'Historical Volatility Domestic ETF',
+          value: 'historical_etf_domestic',
+          type: 'HistoricalDomesticETFScore'
         },
         {
           label: 'Foreign ETF',
@@ -2828,9 +2901,19 @@ export default {
           type: 'ForeignETFScore'
         },
         {
+          label: 'Historical Volatility Foreign ETF',
+          value: 'historical_etf_foreign',
+          type: 'HistoricalForeignETFScore'
+        },
+        {
           label: 'Other Assets',
           value: 'etf_other',
           type: 'OtherAssetsETFScore'
+        },
+        {
+          label: 'Historical Volatility Other Assets',
+          value: 'historical_etf_other',
+          type: 'HistoricalOtherAssetsETFScore'
         },
         {
           label: 'Bond Market Sentiment',
@@ -2945,6 +3028,7 @@ export default {
       ]
       debugger
       const type = checks.find(item => item.type === this.checkedType)?.value
+      console.log('type', type)
       if(!type) return
       let data = isJson(this.indicatorsListData[type]) ? JSON.parse(this.indicatorsListData[type]) : []
       let cssMonthLabel = this.cssMonthLabel
@@ -2972,6 +3056,8 @@ export default {
       CommoditySeasonalityColumns chart_name 名为 Symbol,  多 win_rate, avg_return
       ETFSeasonalityColumns chart_name 名为 Symbol
       */
+      const isHistoricalTrendScore = ['historical_sp1500', 'historical_spx', 'historical_ndx', 'historical_russell', 'historical_etf_domestic', 'historical_etf_foreign', 'historical_etf_other'].includes(type)
+      console.log('isHistoricalTrendScore', isHistoricalTrendScore)
       let keysSort = ['Optix', 'Symbol', 'Name', 'Breadth Measure', 'Symbol', 'Group', 'Sub Type', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Trend Score', 'Trend 5-Day Score Change', 'RelTrend Score', 'RelTrend 5-Day Score Change', 'Net Position']
       if(type === 'commod_sentiment_seasonality') {const insertIndex = keysSort.findIndex(key => key === 'Avg Return'); if(insertIndex !== -1) keysSort.splice(insertIndex, 0, `Avg Return (%) for ${cssMonthLabel}`)}
       if(type === 'commod_seasonality' || type === 'bond_seasonality' || type === 'etf_seasonality' || type === 'index_seasonality') keysSort = ['Symbol','Name', 'Group', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', "Sentiment"]
@@ -2985,7 +3071,6 @@ export default {
         ['last_update', 'Date'],
         ['sentiment', 'Sentiment']
       ])
-      debugger
       if(type === 'etf_breadth' || type === 'country_breadth' || type === 'crypto_breadth') {keysMap.set('chart_name', 'Breadth Measure');keysMap.set('underlying_name', 'Name');}
       if(type === 'etf_breadth') {keysMap.delete('sub_type')}
       if(type === 'country_breadth' || type === 'crypto_breadth') {keysMap.delete('underlying_name'), keysMap.set('sub_type', 'Sub Type')}
@@ -2999,10 +3084,10 @@ export default {
       if(type === 'commod_sentiment_seasonality') {keysMap.set('last_update', 'Optix Date');keysMap.set('AvgReturn', `Avg Return (%) for ${cssMonthLabel}`);}
       if(type === 'commod_optix_trend') {keysMap.set('close', 'Close');keysMap.set('MA', '200-Day Moving Average');}
       if(type === 'cot_max_min') {keysMap.set('chart_name', 'Name');keysMap.set('symbol', 'Symbol');keysMap.set('last_value', 'Last Value');keysMap.set('last_update', 'Last Update');keysMap.set('three_year_max', '3-Year Max');keysMap.set('three_year_min', '3-Year Min');keysMap.set('net_position', 'Net Position');}
-      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list') {
+      if(type === 'ndx_100_complete_list' || type === 'sp_1500_complete_list' || type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list' || isHistoricalTrendScore) {
         // Name 放在 Symbol 前面
         if(type === 'russell_3000_complete_list' || type === 'russell_1000_complete_list' || type === 'russell_2000_complete_list' || type === 'crypt_complete_list') keysMap.delete('sub_type');
-        keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment'];
+        keysSort = ['Optix', 'Name', 'Symbol', 'Breadth Measure', 'Group', 'Time Frame', 'Value', 'Optix Value', 'Last Value', 'Z-Score', 'Change', 'Win Rate', 'Avg Return', 'Avg Net Return', 'Date', 'Optix Date', 'Last Update', '3-Year Max', '3-Year Min', 'Sentiment', 'Volatility 20d', 'Volatility 60d'];
       }
       const isTrendScore = ['sp1500', 'spx', 'ndx', 'crp', 'crp&rel_trend=1', 'russell', 'etf_domestic', 'etf_foreign', 'etf_other', 'sector_trend_reltrend', 'watchlist'].includes(type)
       if(isTrendScore) {
@@ -3015,6 +3100,7 @@ export default {
         ['reltrend_last_value', 'Relative Score'],
         ['reltrend_five_day_score_chg', '5-Day Relative Score Chg']
       ])
+      console.log('isHistoricalTrendScore', isHistoricalTrendScore)
       if(!['sp1500', 'spx', 'ndx', 'russell'].includes(type)) keysMap.delete('sector_name')
       if(this.condition === 'trend') {
         keysMap.delete('reltrend_last_value')
@@ -3188,6 +3274,20 @@ export default {
         ['South America', 'South America']
       ])
       }
+      if(isHistoricalTrendScore) {
+        keysMap = new Map([
+          ['market_symbol', 'Symbol'],
+          ['chart_name', 'Name'],
+          ['sector_name', 'Sector'],
+          ['volatility_20d', 'Volatility 20d'],
+          ['volatility_60d', 'Volatility 60d'],
+        ])
+        keysSort = ['Symbol', 'Name', 'Sector', 'Volatility 20d', 'Volatility 60d']
+        if(['HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(this.checkedType)) {
+          keysMap.delete('sector_name')
+          keysSort = keysSort.filter(key => key !== 'Sector')
+        }
+      }
 			const processedData = data.map(item => {
         const obj = {}
         const itemKeys = Array.from(Object.keys(item))
@@ -3210,7 +3310,7 @@ export default {
       const category = checks.find(item => item.value === type)
       if(!['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.label
       if(['commod_sentiment_seasonality', 'commod_optix_trend', 'cot_max_min'].includes(type)) xlsxName = category.name || category.label
-      const _keySort = Array.from(Object.keys(sortedArray[0]))
+      let  _keySort = Array.from(Object.keys(sortedArray[0]))
       let csvContent = sortedArray.map(row => _keySort.map(key => `"${row[key]}"`).join(',')).join('\n');
       csvContent = `${_keySort.join(',')}\n${csvContent}`;
 

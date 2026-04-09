@@ -207,7 +207,19 @@ export default {
         {
           label: 'Trend Score',
           keyPath: '12',
-          path: '/trend_score'
+          path: '/trend_score',
+          subMenu: [
+            {
+              label: 'Trend',
+              keyPath: '12-1',
+              path: '/trend_score/trend'
+            },
+            {
+              label: 'Historical Volatility',
+              keyPath: '12-2',
+              path: '/trend_score/historical'
+            },
+          ]
         },
         {
           label: 'Strategies',
