@@ -69,26 +69,48 @@
                 <span :ref="el => setLayoutRef(layout.id, el)">{{ layout.name }}</span>
               </el-tooltip>
               <span v-else :ref="el => setLayoutRef(layout.id, el)">{{ layout.name }}</span>
-              <button
-                v-if="hoveredLayoutId === layout.id"
-                class="remove-button"
-                @click.stop="handleRemoveLayout(layout.id)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+              <div class="layout-actions" v-if="hoveredLayoutId === layout.id">
+                <button
+                  class="share-link-button"
+                  @click.stop="generateLayoutLink(layout)"
+                  title="Copy share link"
                 >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                  </svg>
+                </button>
+                <button
+                  class="remove-button"
+                  @click.stop="handleRemoveLayout(layout.id)"
+                  title="Remove layout"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
             </li>
             <li v-if="isLoading" class="loading-item">Updating List...</li>
             <li v-if="!isLoading && filteredLayouts.length === 0" class="no-results-item">
@@ -390,6 +412,34 @@
         CIQ.restoreLayout(layout)
       },
 
+      // 生成单个 layout 的分享链接
+      generateLayoutLink(layout) {
+        try {
+          // URL 只包含 layout ID，数据通过 API 获取
+          const layoutId = layout.id
+          
+          const currentUrl = window.location.origin + window.location.pathname
+          const symbol = CIQ.stxx?.chart?.symbol || ''
+          const shareUrl = `${currentUrl}?layoutId=${layoutId}&symbol=${symbol}`
+          
+          navigator.clipboard.writeText(shareUrl).then(() => {
+            this.$message.success('Layout link copied to clipboard!')
+          }).catch(() => {
+            // 降级方案
+            const tempInput = document.createElement('input')
+            tempInput.value = shareUrl
+            document.body.appendChild(tempInput)
+            tempInput.select()
+            document.execCommand('copy')
+            document.body.removeChild(tempInput)
+            this.$message.success('Layout link copied to clipboard!')
+          })
+        } catch (error) {
+          console.error('Failed to generate layout link:', error)
+          this.$message.error('Failed to generate link')
+        }
+      },
+
       initializeTickerIndicatorDisplay() {
         const symbol = this.getBacktestSymbol
         
@@ -657,6 +707,29 @@
   
   
   /* 移除按钮 */
+  .layout-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .share-link-button {
+    background: transparent;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #666;
+  }
+  
+  .share-link-button:hover {
+    color: #398dff;
+    background-color: #e0e0e0;
+  }
+
   .remove-button {
     position: relative;
     // right: 30px;
