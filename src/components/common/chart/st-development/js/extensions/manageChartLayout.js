@@ -130,5 +130,36 @@ let __st_js_manage_chart_layout_ = (_exports) => {
         var drawings = localStorage.getItem(CIQ.stxx.chart.symbol);
         if (drawings) CIQ.stxx.importDrawings(JSON.parse(drawings));
     }
+
+    // 检查 URL 中是否有 layoutId，如果有则返回 layoutId，否则返回 null
+    // 注意：这个函数只检查 URL，不加载数据。数据加载需要在外部通过 API 完成
+    CIQ.checkLayoutIdInUrl = function() {
+        const urlParams = new URLSearchParams(window.location.search)
+        const layoutId = urlParams.get('layoutId')
+        
+        if (layoutId) {
+            return { layoutId }
+        }
+        return null
+    }
+    
+    // 使用 API 获取到的 layout 数据恢复图表
+    // 这个函数应该在外部 API 调用成功后执行
+    CIQ.restoreLayoutFromAPI = function(layoutData) {
+        if (!layoutData) {
+            console.error('No layout data provided')
+            return false
+        }
+        
+        try {
+            // 直接恢复 layout，CIQ.restoreLayout 内部会处理 symbol 切换
+            CIQ.restoreLayout(JSON.parse(layoutData))
+            return true
+        } catch (error) {
+            console.error('Failed to restore layout from API:', error)
+            return false
+        }
+    }
 }
+
 export { __st_js_manage_chart_layout_ }
