@@ -7,6 +7,7 @@
 					<h4  @click="selectedTitle = 'Symbol'" :class="{ 'selected': selectedTitle === 'Symbol' }">Symbol Correlation</h4>
 					<h4  @click="selectedTitle = 'Asset'" :class="{ 'selected': selectedTitle === 'Asset' }">Asset Correlation</h4>
 					<h4  @click="selectedTitle = 'Pattern'" :class="{ 'selected': selectedTitle === 'Pattern' }">Date Range Correlation</h4>
+					<h4  @click="selectedTitle = 'Transmission'" :class="{ 'selected': selectedTitle === 'Transmission' }">Beta Analyzer</h4>
 				</div>
 			</div>
 		</div>
@@ -15,7 +16,6 @@
 </template>
 
 <script>
-import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
 export default {
 	name: 'CPM',
@@ -33,6 +33,7 @@ export default {
 				else if(newValue === 'Asset' && (!this.$route.path.includes('/cpm/asset'))) this.$router.push({path: '/cpm/asset'})
 				else if(newValue === 'CPM' && (this.$route.path !== '/cpm' && this.$route.path !== '/cpm/results' )) this.$router.push({path: '/cpm/list'})
         else if(newValue === 'Pattern' && (!this.$route.path.includes('/cpm/pattern'))) this.$router.push({path: '/cpm/pattern'})
+        else if(newValue === 'Transmission' && (!this.$route.path.includes('/cpm/transmission'))) this.$router.push({path: '/cpm/transmission'})
 			},
 			deep: true
 		},
@@ -43,6 +44,8 @@ export default {
 				this.selectedTitle = 'Asset'
 			}else if (to.fullPath.includes('/cpm/pattern')) {
 				this.selectedTitle = 'Pattern'
+			}else if (to.fullPath.includes('/cpm/transmission')) {
+				this.selectedTitle = 'Transmission'
 			}else {
         this.selectedTitle = 'CPM'
 			}
@@ -52,6 +55,7 @@ export default {
     if(this.$route.fullPath.includes('/cpm/symbol')) {this.selectedTitle = 'Symbol'}
     else if(this.$route.fullPath.includes('/cpm/asset')) {this.selectedTitle = 'Asset'}
     else if(this.$route.fullPath.includes('/cpm/pattern')) {this.selectedTitle = 'Pattern'}
+    else if(this.$route.fullPath.includes('/cpm/transmission')) {this.selectedTitle = 'Transmission'}
     else {this.selectedTitle = 'CPM'}
   },
 	methods: {

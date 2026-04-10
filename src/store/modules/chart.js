@@ -830,6 +830,16 @@ get_indicator_page_btv1_list({ commit, state }) {
 					'etf_other', 'etf_other&rel_trend=1'
 				].some(subUrl => url === subUrl)) requestUrl = `trend_reltrend?index=${url}`
 				if([
+					'historical_sp1500',
+					'historical_spx',
+					'historical_ndx', 
+					'historical_crp', 
+					'historical_russell', 
+					'historical_etf_domestic', 
+					'historical_etf_foreign', 
+					'historical_etf_other',
+				].some(subUrl => url === subUrl)) requestUrl = `volatility?index=${url.replace('historical_', '')}`
+				if([
 					'commod_spotlight', 'sector_spotlight', 'country_spotlight'
 				].some(subUrl => url === subUrl)) requestUrl = `spot_light_overview/?spot_light_type=${url}`
 				if(requestUrl === 'country_breadth_overview') requestUrl = 'country_breadth_overview/'

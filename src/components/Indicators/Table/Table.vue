@@ -48,7 +48,8 @@ export default {
     constituentConditions: Array,
     selectedTitle: String,
     isShowDetails: [Boolean, Object],
-    type: String
+    type: String,
+    enlargedTable: [String, Object]
   },
   name: 'Table',
   data() {
@@ -68,14 +69,21 @@ export default {
         Russell1000: 'russell_1000_complete_list',
         Russell2000: 'russell_2000_complete_list',
         SP1500Score: 'sp1500',
+        HistoricalSP1500Score: 'historical_sp1500',
         SP500Score: 'spx',
+        HistoricalSP500Score: 'historical_spx',
         NDX100Score: 'ndx',
+        HistoricalNDX100Score: 'historical_ndx',
         CRPScore: 'crp',
         RussellScore: 'russell',
+        HistoricalRussellScore: 'historical_russell',
         WatchList: 'watchlist',
         DomesticETFScore: 'etf_domestic',
+        HistoricalDomesticETFScore: 'historical_etf_domestic',
         ForeignETFScore: 'etf_foreign',
+        HistoricalForeignETFScore: 'historical_etf_foreign',
         OtherAssetsETFScore: 'etf_other',
+        HistoricalOtherAssetsETFScore: 'historical_etf_other',
         TrendSector: 'sector_trend_score',
         bond: 'bond_complete_list',
         BondSeasonality: 'bond_seasonality',
@@ -304,6 +312,7 @@ export default {
     async loadMore (type, isUpdateChart, condition) {
       debugger
       const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TSCRP'].includes(type)
+      const isHistoricalTrendScore = ['HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(type)
       const indicator = this.$route.query.indicator
       this.optionsChecked = type
       this.loading = true
@@ -311,7 +320,7 @@ export default {
       try {
         let url = this.urlMap[this.optionsChecked]
         if((!url || url === 'sector_trend_score') && url !== 'watchlist') {this.loading = false;return}
-        if(condition === 'relative' && isTrendScore) url = `${url}&rel_trend=1`
+        if(condition === 'relative' && isTrendScore && !isHistoricalTrendScore) url = `${url}&rel_trend=1`
         if(type === 'SectorTrendRelTrend' && this.$route.query.index) url = `sector_trend_reltrend?index=${this.$route.query.index}${condition === 'relative' ? `&rel_trend=1` : ''}`
         if(url !== 'watchlist') {
           await this.fetchIndicatorsPageList(url)
@@ -344,7 +353,7 @@ export default {
       }
       this.tableData = [..._results]
       this.firstRow = this.tableData[0] || {}
-      if(isUpdateChart || (isTrendScore && !indicator && (condition !== 'related' && condition !== 'constituent_conditions')) || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll') || (this.$route.fullPath.includes('sector_trend_score') && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll')) this.$emit('updateChart', this.firstRow)
+      if(isUpdateChart || ((isTrendScore || isHistoricalTrendScore) && !indicator && (condition !== 'related' && condition !== 'constituent_conditions')) || (this.$route.fullPath.includes('?enlarge=stock') && this.tableInfo.refName === 'stockVirtualScroll') || (this.$route.fullPath.includes('sector_trend_score') && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll')) this.$emit('updateChart', this.firstRow)
       if(this.selectedTitle === 'Popular' && !this.isShowDetails) this.$emit('updateChart', this.firstRow)
       this.loading = false
     if(this.$route.fullPath.includes('sector_trend_score') && this.$route.query.index && this.tableInfo.refName === 'SectorTrendRelTrendVirtualScroll') {

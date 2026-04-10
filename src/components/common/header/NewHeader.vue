@@ -59,6 +59,7 @@
           <el-menu-item index="2-3"><i class="fa fa-book" style="margin-right: 10px;"></i>Glossary of Terms</el-menu-item>
           <el-menu-item index="2-4"><i class="fa fa-plus" style="margin-right: 10px;"></i>Whats New</el-menu-item>
           <el-menu-item index="2-5"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>BacktestEdge Document</el-menu-item>
+          <el-menu-item index="2-6"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>Smart Stock Scanner Document</el-menu-item>
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">
@@ -205,9 +206,21 @@ export default {
           path: '/indicators'
         },
         {
-          label: 'Trend Score',
+          label: 'Trend & Volatility',
           keyPath: '12',
-          path: '/trend_score'
+          path: '/trend_score',
+          subMenu: [
+            {
+              label: 'Trend Score',
+              keyPath: '12-1',
+              path: '/trend_score/trend'
+            },
+            {
+              label: 'Historical Volatility',
+              keyPath: '12-2',
+              path: '/trend_score/historical'
+            },
+          ]
         },
         {
           label: 'Strategies',
@@ -302,6 +315,11 @@ export default {
               label: 'Date Range Correlation',
               keyPath: '8-4',
               path: '/cpm/pattern'
+            },
+            {
+              label: 'Beta Analyzer',
+              keyPath: '8-5',
+              path: '/cpm/transmission'
             }
           ]
         },
@@ -632,6 +650,9 @@ export default {
       }else if(key === '2-5') {
         this.$router.push('/doc')
         return
+      }else if(key === '2-6') {
+        this.$router.push('/doc/scannerdoc/0')
+        return
       }
       else if(key === '3-1') {
         let path = 'https://users.sentimentrader.com/users/preferences/'
@@ -707,7 +728,7 @@ export default {
       const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
       const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
 
-      if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend Score', 'My Stuff', 'Extra Tools'].includes(label)) {
+      if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend & Volatility', 'My Stuff', 'Extra Tools'].includes(label)) {
         return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies')
       }
       if(label === 'BacktestEdge') {

@@ -1,7 +1,7 @@
 <template>
   <div class="details">
     <div class="chart-name">
-      <h1>{{title}}<el-button style="margin-left: 5px;" v-if="row && row.type && !row.type.includes('seasonality')" type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
+      <h1>{{title}}<el-button style="margin-left: 5px;" v-if="row && row.type && !row.type.includes('seasonality') && row.groups !== 'volatility_relvolatility'" type="text" @click="seeOnLargeChart"><em>(See this indicator on the large chart)</em></el-button></h1>
       <el-button type="text" icon="el-icon-back" @click="$emit('showDetails', row, false)">Return</el-button>
     </div>
     <ul class="indicator-info">

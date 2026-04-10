@@ -34,7 +34,7 @@
     async renderChart() {
       if(!this.row.url) return;
       const _this = this
-      let {url, pess, opt, chart_name, market_symbol, type, sub_type} = this.row
+      let {url, pess, opt, chart_name, market_symbol, type, sub_type, groups, last_value, last_change_type} = this.row
       var basicChartOptions = {
         zoomType: 'x',
         pinchType: '',
@@ -96,7 +96,7 @@
             };
 
             chart.container.parentNode.style.position = 'relative';
-            chart.container.parentNode.appendChild(button);
+            if(groups !== 'volatility_relvolatility') chart.container.parentNode.appendChild(button);
           },
         }
       };
@@ -467,7 +467,7 @@
       };
  
       try {
-      let {last_value, last_change_type, market_symbol, type, sub_type} = this.row;
+      // let {last_value, last_change_type, market_symbol, type, sub_type, groups} = this.row;
       console.log('market_symbol', market_symbol)
       let isRiskMeasure = false
       let zoonsData = [];
@@ -477,6 +477,7 @@
       try {
         const res = await axios.get(`https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/get_data?index=${url || 'etf_spy'}`);
         originalData = res.data
+        debugger
         if(typeof originalData === 'string') {
           originalData = originalData.replace(/NaN/g, 'null')
           originalData = JSON.parse(originalData)
@@ -489,7 +490,7 @@
         }
       }
         originalData = originalData.sort((a, b) => new Date(a.date) - new Date(b.date));
-        console.log('originalData', originalData)
+        console.log('originalData', originalData.slice(-3))
         try {
           if(typeof originalData === 'string') {
             originalData = originalData.replace(/NaN/g, 'null')
@@ -499,6 +500,10 @@
           console.log('error', error)
         }
         if (originalData.length === 0) return;
+        // if(groups === 'volatility_relvolatility') {
+        //   originalData = originalData.map(item => ({[market_symbol]: item.Close, date: item.date, volatility: item.volatility, volatility_60d: item.volatility_60d}))
+        // }
+        console.log('originalData', originalData.slice(-3))
         this.$emit('passIndicatorData', originalData, url)
         let allKeysName = Object.keys(originalData[0]).filter(keyName => keyName !== 'date' && keyName !== 'dumb');
         allKeysName.sort((a, b) => {
@@ -551,6 +556,7 @@
             
           })
         }
+        if(groups === 'volatility_relvolatility') allKeysName.filter(key => !['High', 'Low', 'Open', 'Volume', 'Close'].includes(key))
         const data = allKeysName.reduce((acc, keyName) => {
           acc[keyName] = originalData.map(entry => {
             const datatime = new Date(entry['date'])
@@ -569,8 +575,9 @@
         }, {});
         console.log('data', data)
         let series = Object.keys(data).map(key => {
+          debugger
           let name = 'SPY Optix'
-          if (!last_value) {
+          if (!isNaN(last_value)) {
                // 处理 last_value 的值类型
                if (typeof last_value === 'string' && last_value.includes('%'))  last_value = parseFloat(last_value.replace('%', '')) / 100;
               if (typeof last_value === 'string') {
@@ -593,14 +600,17 @@
           if((key.includes('_reltrend') || key.includes('_trend')) && type.includes('trend_reltrend')) {
             name = key.replace('_reltrend', ' Relative Trend Score')
             name = name.replace('_trend', '  Trend Score')
-          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels' && sub_type !== 'crp_trend_reltrend') name = chart_name
-          else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
+          }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels' && sub_type !== 'crp_trend_reltrend' && groups !== 'volatility_relvolatility') name = chart_name
+          else if(groups === 'volatility_relvolatility' && (key === `${market_symbol}_volatility` || key === `${market_symbol}_volatility_60d`)){
+            if(key === `${market_symbol}_volatility`) name = 'Volatility d20'
+            else if(key === `${market_symbol}_volatility_60d`) name = 'Volatility d60'
+          }else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
           else if(key.includes('_') && key === 'model_risk_stocks_short' && url === 'risk_levels') name = 'Short Term Risk Levels'
           else if(key.includes('_') && key === 'model_risk_stocks_medium' && url === 'risk_levels') name = 'Intermediate Term Risk Levels'
           else name = key
           return {
-            name: `${name}${key.includes('_') && ((sub_type === 'crp_trend_reltrend' || sub_type === 'crp_stock' || sub_type === 'crypto') && key !== market_symbol) && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
+            name: `${name}${key.includes('_') && ((sub_type === 'crp_trend_reltrend' || sub_type === 'crp_stock' || sub_type === 'crypto' || groups === 'volatility_relvolatility') && key !== market_symbol) && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
             data: data[key],
             zoneAxis: 'x',
             zones: url === 'risk_measure' ? zoonsData : []
@@ -623,6 +633,7 @@
             }
           })
         }
+        console.log('series', series)
         createChart(series, allKeysName, basicChartOptions, this.row);
       } catch (error) {
         console.error('Error fetching data', error);
