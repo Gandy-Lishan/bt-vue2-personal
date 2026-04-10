@@ -221,12 +221,12 @@ const routes = [
 				component: resolve =>
 					require(['@/components/CPM/PatternCorrelation.vue'], resolve)
 			},
-			// {
-			// 	path: 'transmission',
-			// 	name: 'TransmissionAnalyzer',
-			// 	component: resolve =>
-			// 		require(['@/components/CPM/TransmissionAnalyzer.vue'], resolve)
-			// },
+			{
+				path: 'transmission',
+				name: 'TransmissionAnalyzer',
+				component: resolve =>
+					require(['@/components/CPM/TransmissionAnalyzer.vue'], resolve)
+			},
 		]
 	},
 	
