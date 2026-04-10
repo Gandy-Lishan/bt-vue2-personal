@@ -59,6 +59,7 @@
           <el-menu-item index="2-3"><i class="fa fa-book" style="margin-right: 10px;"></i>Glossary of Terms</el-menu-item>
           <el-menu-item index="2-4"><i class="fa fa-plus" style="margin-right: 10px;"></i>Whats New</el-menu-item>
           <el-menu-item index="2-5"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>BacktestEdge Document</el-menu-item>
+          <el-menu-item index="2-6"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>Smart Stock Scanner Document</el-menu-item>
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">
@@ -648,6 +649,9 @@ export default {
         return
       }else if(key === '2-5') {
         this.$router.push('/doc')
+        return
+      }else if(key === '2-6') {
+        this.$router.push('/doc/scannerdoc/0')
         return
       }
       else if(key === '3-1') {

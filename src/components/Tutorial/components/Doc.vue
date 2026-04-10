@@ -135,19 +135,18 @@
 					backtesting, data statistical analysis, and information presentation,
 					helping users make wiser decisions in the stock and ETF markets.
 				</p>
-				<!-- <p>
-					先注释掉 Smart Stock Scanner 教程链接
+				<p>
 					This tutorial will teach you how to quickly start using Smart Stock Scanner and
 					thanks for reading!
-				</p> -->
-				<!-- <hr />
+				</p>
+				<hr />
 				<div class="edit-page">
 					<div class="edit-link">
-						<a href="/doc/scanner" target="_blank" rel="noopener noreferrer"
+						<a href="/doc/scannerdoc/0" target="_blank" rel="noopener noreferrer"
 							>Get Start Now!</a
 						>
 					</div>
-				</div> -->
+				</div>
 			</div>
 		</div>
 		<!-- <Footer></Footer> -->
