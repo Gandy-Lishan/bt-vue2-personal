@@ -95592,14 +95592,14 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "ST0XX Europe 600 Price Index EUR Trend Score",
+        "chart_name": "STOXX Europe 600 Price Index EUR Trend Score",
         "url": "SXXP_trend",
         "market_symbol": "SXXP",
         "type": "trend",
         "updated": "Daily"
     },
     {
-        "chart_name": "ST0XX Europe 600 Price Index EUR RelTrend Score",
+        "chart_name": "STOXX Europe 600 Price Index EUR RelTrend Score",
         "url": "SXXP_reltrend",
         "market_symbol": "SXXP",
         "type": "reltrend",
