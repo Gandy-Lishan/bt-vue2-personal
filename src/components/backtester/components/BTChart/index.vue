@@ -27,6 +27,7 @@ import { CIQ } from '@/components/common/chart/st-development/js'
 import { mapMutations } from "vuex"
 import { LoadingOverlayChart } from "@/components/common"
 import { seeParams, getIndicatorsRowData} from '@/service/service'
+import { getChartLayoutById } from '@/service/chartLayoutAPI'
 import { getQueryVariable, LocalStorageUtil } from '@/utils'
 
 export default {
@@ -111,6 +112,7 @@ export default {
 			// if(!this.$store.state.user.is_admin) {
 			// 	document.querySelectorAll(".cq-comparison-new")[0].style.display = 'none'
 			// }
+			await this.loadLayoutFromUrlParam()
 			CIQ.hideCover()
             CIQ.nprogress.done()
 		},
@@ -122,6 +124,26 @@ export default {
 			if (this.$route.hash === '#scrollAnchor') {
 			const el = document.querySelector('#scrollAnchor')
 			if (el) el.scrollIntoView()
+			}
+		},
+		// 从 URL 参数加载 layout from Quick Access(restore chart layout only)
+		async loadLayoutFromUrlParam() {
+			// 检查 URL 中是否有 layoutId
+			const urlInfo = CIQ.checkLayoutIdInUrl()
+			if (urlInfo && urlInfo.layoutId) {
+				try {
+					// 通过 API 获取 layout 数据
+					const layoutData = await getChartLayoutById(urlInfo.layoutId)
+					if (layoutData) {
+						// 恢复 layout
+						CIQ.restoreLayoutFromAPI(layoutData)
+						// 清除 URL 参数
+						const newUrl = window.location.pathname + window.location.hash
+						window.history.replaceState({}, document.title, newUrl)
+					}
+				} catch (error) {
+					console.error('Failed to load layout from URL:', error)
+				}
 			}
 		}
 	}
