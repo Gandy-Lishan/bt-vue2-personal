@@ -315,11 +315,11 @@ export default {
               keyPath: '8-4',
               path: '/cpm/pattern'
             },
-            {
-              label: 'Beta Analyzer',
-              keyPath: '8-5',
-              path: '/cpm/transmission'
-            }
+            // {
+            //   label: 'Beta Analyzer',
+            //   keyPath: '8-5',
+            //   path: '/cpm/transmission'
+            // }
           ]
         },
         {
