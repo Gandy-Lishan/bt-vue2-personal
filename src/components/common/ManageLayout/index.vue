@@ -185,16 +185,25 @@
           </el-table-column>
           <el-table-column
             label="Actions"
-            width="100"
+            width="150"
             align="center"
           >
             <template slot-scope="scope">
+              <el-button
+                type="primary"
+                size="mini"
+                icon="el-icon-share"
+                circle
+                @click.stop="generateLayoutLink(scope.row)"
+                title="Share layout"
+              ></el-button>
               <el-button
                 type="warning"
                 size="mini"
                 icon="el-icon-delete"
                 circle
                 @click.stop="handleRemoveLayout(scope.row.id)"
+                title="Remove layout"
               ></el-button>
             </template>
           </el-table-column>
