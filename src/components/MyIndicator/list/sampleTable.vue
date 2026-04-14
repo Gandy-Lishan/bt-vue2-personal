@@ -759,8 +759,7 @@ export default {
 					const res = await saveMyIndicators(requestData)
           console.log('res', res)
           const code = res?.data?.code
-          const name = res?.data.data.name
-          if(code === 406 && name) {this.popUpMsgBox(`The same combination indicator "${name}" already exists.`); this.loading = false; return}
+          if(code === 406) {const _name = res?.data.data.name; if(_name) this.popUpMsgBox(`The same combination indicator "${_name}" already exists.`); this.loading = false; return}
           if(res.data.create_date) this.popUpMsgBox('Successfully copied')
           this.$emit('changeTab', 'Indicator')
 				}
