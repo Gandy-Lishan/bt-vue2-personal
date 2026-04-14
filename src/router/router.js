@@ -146,7 +146,13 @@ const routes = [
 				name: 'MIcreate',
 				component: resolve =>
 					require(['@/components/MyIndicator/create/index.vue'], resolve)
-			}
+			},
+			{
+				path: 'sample',
+				name: 'MISampleTable',
+				component: resolve =>
+					require(['@/components/MyIndicator/list/sampleTable.vue'], resolve)
+			},
 		]
 	},
 	{
