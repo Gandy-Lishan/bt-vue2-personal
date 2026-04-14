@@ -683,7 +683,7 @@ export default {
     title: { text: `${benchmark}` },
     height: '50%',
     opposite: true,
-    offset: 0,
+    offset: 20,
     // alignTicks: false,
     // startOnTick: true,
     // endOnTick: true,
@@ -693,7 +693,7 @@ export default {
     title: { text: stock_comparison },
     height: '50%',
     opposite: false,
-    offset: 0,
+    offset: -15,
 
     // alignTicks: false,
     // startOnTick: true,
@@ -706,7 +706,7 @@ export default {
     title: { text: "Beta" },
     top: '50%',
     height: '50%',
-    offset: 0,
+    offset: 20,
 
     // alignTicks: false,
     // startOnTick: true,
