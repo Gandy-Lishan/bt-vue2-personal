@@ -1450,7 +1450,7 @@ export default {
       this.userSelectedTimeFrame = data.timeframe
       this.data.name = data.name;
       this.rowUrl = data.url
-
+      if(data.source === 'Sample') this.rowUrl = null
       this.dropdownList = this.getList()
       debugger
       //如果类型是weight_combination

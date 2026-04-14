@@ -116,6 +116,7 @@ export default {
 					const _data = isJson(data) ? JSON.parse(data) : data
           _this.chart_data = _data
 					// 展示出 indicator 那一行的数据
+          if(to.params.usedFor === 'showSampleIndicators') _data.source = 'Sample'
 					_this.$refs['MIForm'].displayData(_data)
 				}
 			})
