@@ -24,7 +24,7 @@
 					></path>
 				</svg>
 			</div>
-				<h1 id="0">The generation logic of Smart Stock Scanner</h1>
+				<h1 id="0">How Smart Stock Scanner Works</h1>
 				<hr />
 				<p>
 					<strong
