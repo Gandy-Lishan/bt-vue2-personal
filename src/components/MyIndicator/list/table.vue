@@ -435,6 +435,7 @@ export default {
       const former_url = indicator_1 || symbol_1_url;
       const latter_url = indicator_2 || symbol_2_url;
       const extractValues = (str) => {
+        if(str === 'null') str = null
         if(!str) return null
         const parts = str.split('|');
 
