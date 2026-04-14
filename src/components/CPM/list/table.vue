@@ -25,55 +25,6 @@
       element-loading-background="rgba(0, 0, 0, 0.8)"
 			style="width: 100%; height: 100%; margin: 0 auto;"
 		>
-    
-      <!-- <el-table-column
-        align="center"
-        type="expand">
-        <template slot-scope="scope">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-row :gutter="20">
-              <el-col :span="12">
-              <el-row :span="4">
-              <el-form-item label="Name">
-                  <span>{{ scope.row['name']}}</span>
-              </el-form-item>
-              </el-row>
-              <el-row :span="4">
-              <el-form-item label="Symbol">
-                <span>{{ scope.row['symbol']}}</span>
-              </el-form-item>
-              </el-row>
-              <el-row :span="4">
-              <el-form-item label="Timeframe">
-                <span>{{ scope.row['timeframe']}}</span>
-              </el-form-item>
-              </el-row>
-              <el-row :span="4">
-                <el-form-item label="Period">
-                  <template v-for="(item, index) in scope.row['period']">
-                    <span :key="index">{{ index === scope.row['period'].length - 1 ? item : `${item} to ` }}</span>
-                  </template>
-                </el-form-item>
-              </el-row>
-              </el-col>
-              <el-col :span="12">
-              <el-row :span="4">
-              </el-row>
-              <el-row :span="4">
-              <el-form-item label="Total Trades">
-                  <span>{{ scope.row['total_trades']}}</span>
-              </el-form-item>
-              </el-row>
-              <el-row :span="4">
-              <el-form-item label="Total Return">
-                <span>{{ scope.row['total_return']}}</span>
-              </el-form-item>
-              </el-row>
-              </el-col>
-            </el-row>
-          </el-form>
-        </template>
-      </el-table-column> -->
 			<template v-for="(l) in tableCol">
 				<el-table-column
           align="center"

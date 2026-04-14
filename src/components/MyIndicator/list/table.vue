@@ -420,7 +420,6 @@ export default {
       return data
     },
     getIncludedData(item, sentimentList, symbolList) {
-      debugger
       const url_1 = item.indicator_1_url
       const url_2 = item.indicator_2_url
       const typeAttribute = item.combine_type || 'indicator'
@@ -435,6 +434,7 @@ export default {
       const former_url = indicator_1 || symbol_1_url;
       const latter_url = indicator_2 || symbol_2_url;
       const extractValues = (str) => {
+        if(str === 'null') str = null
         if(!str) return null
         const parts = str.split('|');
 
@@ -458,7 +458,12 @@ export default {
         }
       };
       const next_process = item.next_process || ''
-      const next_process_result = extractValues(next_process)
+      let next_process_result =  null
+      try {
+        next_process_result =  extractValues(next_process) || {}
+      } catch (error) {
+        console.log('error', item, error)
+      }
       const options = [
         {
           value: 'o',
@@ -512,7 +517,6 @@ export default {
       // specialMAValues.forEach(ele => {
         maList.forEach((value, index) => {
           if(index < 2) {
-            debugger
             if(specialMAValues.some(keyword => value.includes(keyword))) {
               const deleteNum = value.replace(/^\d+/, '');
               const label = options.find(item => item.value === value)?.label || options.find(item => item.value === deleteNum)?.label || ''
@@ -536,7 +540,6 @@ export default {
         })
       // })
       console.log('_maValues', _maValues)
-      debugger
       const ma1 = _maValues[0] || ''
       const ma2 = _maValues[1] || ''
 

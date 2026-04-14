@@ -1,5 +1,8 @@
 <template>
   <div class="create-indicator-container">
+    <div class="back">
+				<span @click="backList"><i class="el-icon-arrow-left"></i><span>Back to Indicators</span></span>
+			</div>
     <div class="chart">
       <MIChart :default_symbol='default_symbol' :chart_data="chart_data"></MIChart>
     </div>
@@ -97,16 +100,19 @@ export default {
         extremeOptimism: '',
         extremePessimism: ''
       },
-      progressText: 'Loading...'
+      progressText: 'Loading...',
+      to: '/myindicator',
+      from: 'Indicator'
     }
   },
   beforeRouteEnter(to, _, next) {
 		if (to.path === '/myindicator/create') {
 			next((_this) => {
-				if (to.params.usedFor && to.params.usedFor === 'showMyIndicators') {
+				if (to.params.usedFor && (to.params.usedFor === 'showMyIndicators' || to.params.usedFor === 'showSampleIndicators')) {
 					console.log('说明是路由跳转过来携带参数的')
 					// 说明是路由跳转过来携带参数的
 					const { data } = to.params
+          if(to.params.usedFor === 'showSampleIndicators') _this.from = 'Sample'
 					const _data = isJson(data) ? JSON.parse(data) : data
           _this.chart_data = _data
 					// 展示出 indicator 那一行的数据
@@ -119,7 +125,7 @@ export default {
 	},
   created() {
     // 如果不携带表单参数则显示默认symbol并分段加载
-    if (this.$route.params.usedFor && this.$route.params.usedFor === 'showMyIndicators'){
+    if (this.$route.params.usedFor && (this.$route.params.usedFor === 'showMyIndicators' || this.$route.params.usedFor === 'showSampleIndicators')){
       this.default_symbol = ''
     }else{
       this.default_symbol = process.env.VUE_APP_DEFAULT_SYMBOL
@@ -134,6 +140,16 @@ export default {
     MIForm,
     MIChart
   },
+  methods: {
+    backList() {
+      this.$router.push({
+       name: 'MIList',
+       params: {
+         source: this.from
+       }
+     })
+    }
+  }
 }
 </script>
 
@@ -173,5 +189,23 @@ export default {
 	}
 }
 }
-
+.back {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 50px 0px 0px 15px;
+	font-size: 1.1rem;
+  font-weight: 600;
+	i {
+		font-weight: bold;
+	}
+	a {
+		color: #525456;
+		font-weight: bold;
+		&:hover {
+			color: #5b9bd1;
+		}
+	}
+  cursor: pointer;
+}
 </style>
