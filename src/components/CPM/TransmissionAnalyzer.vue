@@ -1,7 +1,7 @@
 <template>
   <div class="symbol-correlation">
     <div class="des">
-      <p>A powerful extension to our Correlation Tool, the Beta Analyzer leverages existing Correlation Coefficients and Rolling Volatility data to deeply deconstruct the risk transmission mechanism between individual stocks and the broader market (or any two selected tickers).</p>
+      <p>Our "Correlation Tool" has added a powerful feature - the "Beta Analyzer". It uses the existing correlation coefficients and rolling volatility data to deeply analyze the risk transmission mechanism between any two selected stocks.</p>
       <p><b>Calculation Methodology</b></p>
       <p>The rolling Beta is computed using its fundamental mathematical components: the rolling Pearson correlation (ρ) multiplied by the ratio of the asset's rolling volatility (σ) to the benchmark's volatility:</p>
       <el-image

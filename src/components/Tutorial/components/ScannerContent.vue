@@ -602,8 +602,8 @@ Low_X = min(Cₜ, ..., Cₜ₋_X)</pre>
         <li><strong>All-Time High (ATH)</strong>: Assets in ATH have no overhead resistance (no "bag holders" waiting to sell at break-even), often leading to rapid price appreciation</li>
         <li><strong>52-Week High/Low</strong>: The most commonly watched metric by institutional investors to determine yearly trend bias</li>
     </ul>
-
-    <h2 id="1-2">III. Trend and Chart Patterns</h2>
+    <hr>
+    <h2 id="1-2">III. Trend and Common Patterns</h2>
 
     <h3>3.1 Trendline Patterns (UpTrend & DownTrend)</h3>
     <h4>Core Logic</h4>
@@ -925,7 +925,7 @@ Lower Line: y = mx + b_lower</pre>
 
     <hr>
     <p><em>Document Version: 1.0</em><br>
-    <em>Last Updated: March 2026</em></p>
+    <em>Last Updated: April 2026</em></p>
 	</div>
 		<!-- <RightMenu
 			:menuItems="menuItems"
