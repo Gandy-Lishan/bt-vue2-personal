@@ -310,6 +310,11 @@ const routes = [
 				component: resolve =>
 					require(['@/components/Tutorial/components/AIScanner.vue'], resolve)
 			},
+			// {
+			// 	path: '/doc/aiscanner',
+			// 	component: resolve =>
+			// 		require(['@/components/Tutorial/components/NewAIScanner.vue'], resolve)
+			// },
 			{
 				path: '/doc/disclaimer',
 				component: resolve =>
