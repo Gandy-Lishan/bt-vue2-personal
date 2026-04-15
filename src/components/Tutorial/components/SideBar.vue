@@ -3,7 +3,7 @@
     <p class="sidebar-heading open">Guide</p>
     <ul class="sidebar-links sidebar-group-items">
       <li v-for="section in sections" :key="section.id" @click="scrollToSection(section.id)" :class="{ 'active': activeSection === section.id }" class="sidebar-sub-header">
-        <a class="sidebar-link" @click="toggleSection(section.id)"><i v-if="['1', 'fls', '5'].includes(section.id)" class="el-icon-video-play" style="margin-right: 5px"></i>{{ section.title }}</a>
+        <a class="sidebar-link" @click="toggleSection(section.id)"><i v-if="['1', 'fls', '5'].includes(section.id) && section.title !== 'Table of Contents'" class="el-icon-video-play" style="margin-right: 5px"></i>{{ section.title }}</a>
         <recursive-sidebar v-if="isSectionExpanded(section.id) && section.subsections" :sections="section.subsections" :activeSection="activeSection"  @scroll-to-section="scrollToSection"></recursive-sidebar>
       </li>
     </ul>

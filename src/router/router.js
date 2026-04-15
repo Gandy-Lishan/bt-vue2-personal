@@ -305,7 +305,8 @@ const routes = [
 					require(['@/components/Tutorial/components/Guide.vue'], resolve)
 			},
 			{
-				path: '/doc/scanner',
+				path: '/doc/scannerdoc/:id',
+				name: 'AIScannerDoc',
 				component: resolve =>
 					require(['@/components/Tutorial/components/AIScanner.vue'], resolve)
 			},

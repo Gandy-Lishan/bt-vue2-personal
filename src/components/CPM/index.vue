@@ -7,7 +7,7 @@
 					<h4  @click="selectedTitle = 'Symbol'" :class="{ 'selected': selectedTitle === 'Symbol' }">Symbol Correlation</h4>
 					<h4  @click="selectedTitle = 'Asset'" :class="{ 'selected': selectedTitle === 'Asset' }">Asset Correlation</h4>
 					<h4  @click="selectedTitle = 'Pattern'" :class="{ 'selected': selectedTitle === 'Pattern' }">Date Range Correlation</h4>
-					<!-- <h4  @click="selectedTitle = 'Transmission'" :class="{ 'selected': selectedTitle === 'Transmission' }">Beta Analyzer</h4> -->
+					<h4  @click="selectedTitle = 'Transmission'" :class="{ 'selected': selectedTitle === 'Transmission' }">Beta Analyzer</h4>
 				</div>
 			</div>
 		</div>
