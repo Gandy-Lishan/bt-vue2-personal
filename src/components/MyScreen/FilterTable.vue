@@ -441,7 +441,11 @@ export default {
 				if(!isSymbolOHLCV && !isTechnicalIndicator) {	// case: sentiment indicator
 					const isSentimentIndicator = code.includes('SI:')
 					const isTrendScore = code.includes('Trend Score')
+					const isVolatility20 = code.includes('Historical Volatility (20-Day)')
+					const isVolatility60 = code.includes('Historical Volatility (60-Day)')
 					const isOptix = code.includes('Optix')
+					if(isSentimentIndicator && isVolatility20) url = `${Symbol}_volatility`
+					if(isSentimentIndicator && isVolatility60) url = `${Symbol}_volatility_60d`
 					if(isSentimentIndicator && isTrendScore) url = `${Symbol}_trend`
 					else if(isSentimentIndicator && isOptix) url = `${Symbol}@indicator` // ADP
 					signal = CIQ.findSentiIndicator(null, url)

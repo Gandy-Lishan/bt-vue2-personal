@@ -444,6 +444,8 @@ export default {
       ],
       signalOptions: [
         { label: 'Trend Score', value: 'TrendScore', onlyInput: true },
+        { label: 'Historical Volatility (20-Day)', value: 'HV20', onlyInput: true },
+        { label: 'Historical Volatility (60-Day)', value: 'HV60', onlyInput: true },
         { label: 'Symbol Close', value: 'Close', type: 'Symbol' },
         { label: 'Daily Return', value: 'Change', onlyInput: true },
         { label: 'Relative Strength Index (RSI)', value: 'RSI', onlyInput: true },
