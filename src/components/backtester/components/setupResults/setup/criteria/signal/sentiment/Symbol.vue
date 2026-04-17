@@ -104,23 +104,26 @@ export default {
       }
     };
     let validateConditionPeriod = (rule, value, callback) => {
-      if (value === '') {
-        return callback(new Error('Please input value'));
-      } else if (isNaN(value)) {
-        return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
-      } else {
-        // Convert ".X" to "0.X" format
-        if (typeof value === 'string' && value.startsWith('.') && value.length > 1) {
-          value = '0' + value;
-          this.sym.value = value
+        if (value === '') {
+            return callback(new Error('Please input value'));
         }
-        const pattern = /^((-?[1-9][0-9]*)|(-?[0]\.\d{1,4}|-?[1-9][0-9]*\.\d{1,4}))$/;
-        if (!pattern.test(value) && value != 0) {
-          return callback(new Error('Only numbers with a maximum of four decimal places allowed.'));
+        const num = parseFloat(value);
+        if (isNaN(num)) {
+            return callback(new Error('Please input a valid number'));
+        }
+        
+        // CNDA(14) 和 CNDB(15) 允许正浮点数（作为阈值）
+        if (this.sym.newCondition === 14 || this.sym.newCondition === 15) {
+            if (num <= 0) {
+                return callback(new Error('Value must be positive'));
+            }
         } else {
-          callback();
+            // 其他 condition 必须是正整数
+            if (!/^[1-9]\d*$/.test(value)) {
+                return callback(new Error('Must be a positive integer'));
+            }
         }
-      }
+        callback();
     };
     return {
       isROCLike: false,
