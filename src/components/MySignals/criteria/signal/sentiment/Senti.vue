@@ -365,6 +365,7 @@ export default {
         { value: 15, label: 'Consecutive Number of Days Below' },
         { value: 16, label: 'N-Day High' },
         { value: 17, label: 'N-Day Low' },
+        { value: 18, label: 'N-Bars Ago' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -403,7 +404,7 @@ export default {
   },
   methods: {
     ROCLikeChange(val,limit) {
-      this.isROCLike = 5 <= val && val <= 17
+      this.isROCLike = 5 <= val && val <= 18
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) this.senti.condition = this.senti.newCondition
       
@@ -525,6 +526,9 @@ export default {
             break;
           case "N-Day Low":
             _newCondition = 'NL'
+            break;
+          case "N-Bars Ago":
+            _newCondition = 'NA'
             break;
           default:
             break;

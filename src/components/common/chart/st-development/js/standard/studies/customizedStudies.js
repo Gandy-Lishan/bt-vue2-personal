@@ -678,6 +678,32 @@ if (!CIQ.Studies) {
 					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
 				} 
 			break;
+			case 'NA':
+				// NA
+				// 基于当前指标数据生成N个bar前的数据，显示为一个平移的线
+				let indexNA = quotes.findIndex(row=> 
+					field in row && row[field]!=null
+				)
+				quotes = quotes.slice(indexNA)
+				
+				// period 作为 shift 的 bar 数量
+				const shiftPeriod = parseInt(period) || 0
+				resArr = quotes.map((row, i) => {
+					if(field in row && row[field]!=null){
+						// 获取当前值向前 shiftPeriod 个 bar 的值
+						const shiftedIndex = i - shiftPeriod
+						if(shiftedIndex >= 0 && shiftedIndex < quotes.length){
+							return quotes[shiftedIndex][field]
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the VOL value, please change a value')
+				}
+			break;
 			default:
 			console.error('no such condition')
 		}
@@ -1065,6 +1091,32 @@ if (!CIQ.Studies) {
 				if(resArr.length>1 && resArr.every(element => !element)){
 					//CIQ.alert('There is no enough data for calculating the ROR value, please change a value')
 				} 
+			break;
+			case 'NA':
+				// NA
+				// 基于当前指标数据生成N个bar前的数据，显示为一个平移的线
+				let indexNA = quotes.findIndex(row=> 
+					field in row && getPropertyByString(row,field,subField)!=null
+				)
+				quotes = quotes.slice(indexNA)
+				
+				// period 作为 shift 的 bar 数量
+				const shiftPeriod = parseInt(period) || 0
+				resArr = quotes.map((row, i) => {
+					if(field in row && getPropertyByString(row,field,subField)!=null){
+						// 获取当前值向前 shiftPeriod 个 bar 的值
+						const shiftedIndex = i - shiftPeriod
+						if(shiftedIndex >= 0 && shiftedIndex < quotes.length){
+							return getPropertyByString(quotes[shiftedIndex],field,subField)
+						}
+						return NaN
+					}else{
+						return NaN
+					}
+				});
+				if(resArr.length>1 && resArr.every(element => !element)){
+					//CIQ.alert('There is no enough data for calculating the VOL value, please change a value')
+				}
 			break;
 			default:
 			console.error('no such condition')

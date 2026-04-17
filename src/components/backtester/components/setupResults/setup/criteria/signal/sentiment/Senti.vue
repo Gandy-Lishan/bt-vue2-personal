@@ -382,6 +382,7 @@ export default {
         { value: 15, label: 'Consecutive Number of Days Below' },
         { value: 16, label: 'N-Day High' },
         { value: 17, label: 'N-Day Low' },
+        { value: 18, label: 'N-Bars Ago' },
       ],
       conditions: [
         { value: 0, label: '>' },
@@ -484,7 +485,7 @@ export default {
   methods: {
     ROCLikeChange(val,limit) {
       console.log('limit in rochcange', limit)
-      this.isROCLike = 5 <= val && val <= 17
+      this.isROCLike = 5 <= val && val <= 18
       // 如果不是ROC类型，则这两个condition值一致
       if (!this.isROCLike) {
         this.senti.condition = this.senti.newCondition
@@ -660,6 +661,9 @@ export default {
           case "N-Day Low":
             _newCondition = 'NL'
             break;
+          case "N-Bars Ago":
+            _newCondition = 'NA'
+            break;
           default:
             break;
         }
@@ -824,6 +828,7 @@ export default {
           [15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
           [16, { name:'N-Day High', abbr: 'NH' }],
           [17, { name:'N-Day Low', abbr: 'NL' }],
+          [18, { name:'N-Bars Ago', abbr: 'NA' }],
         ])
 
         const field = indicator_url_with_ma ? indicator_url_with_ma : indicator_url
