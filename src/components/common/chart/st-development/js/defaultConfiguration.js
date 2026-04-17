@@ -667,12 +667,12 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Month of Year"
 						},
 						{
-							"name": "# of Consecutive Days Since an N-Day High",
-							"url": "# of Consecutive Days Since an N-Day High"
+							"name": "# of Consecutive Days Since an N-Bars High",
+							"url": "# of Consecutive Days Since an N-Bars High"
 						},
 						{
-							"name": "# of Consecutive Days Since an N-Day Low",
-							"url": "# of Consecutive Days Since an N-Day Low"
+							"name": "# of Consecutive Days Since an N-Bars Low",
+							"url": "# of Consecutive Days Since an N-Bars Low"
 						},
 						{
 							"name": "# of Consecutive Days Up",
@@ -703,12 +703,12 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Deviation From Trend Between Two Moving Averages"
 						},
 						{
-							"name": "Percentage Below N-Day High",
-							"url": "Percentage Below N-Day High"
+							"name": "Percentage Below N-Bars High",
+							"url": "Percentage Below N-Bars High"
 						},
 						{
-							"name": "Percentage Above N-Day Low",
-							"url": "Percentage Above N-Day Low"
+							"name": "Percentage Above N-Bars Low",
+							"url": "Percentage Above N-Bars Low"
 						},
 						{
 							"name": "N-Day Realized Volatility",
@@ -860,12 +860,12 @@ import {CIQ} from "chartiq/js/chartiq.js";
 							"url": "Time Fcst"
 						},
 						{
-							"name": "N-Day High",
-							"url": "N-Day High"
+							"name": "N-Bars High",
+							"url": "N-Bars High"
 						},
 						{
-							"name": "N-Day Low",
-							"url": "N-Day Low"
+							"name": "N-Bars Low",
+							"url": "N-Bars Low"
 						},
 					]
 				},

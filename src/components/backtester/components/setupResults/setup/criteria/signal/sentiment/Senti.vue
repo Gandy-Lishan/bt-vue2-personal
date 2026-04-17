@@ -380,8 +380,8 @@ export default {
         { value: 13, label: 'All-time Low' },
         { value: 14, label: 'Consecutive Number of Days Above' },
         { value: 15, label: 'Consecutive Number of Days Below' },
-        { value: 16, label: 'N-Day High' },
-        { value: 17, label: 'N-Day Low' },
+        { value: 16, label: 'N-Bars High' },
+        { value: 17, label: 'N-Bars Low' },
         { value: 18, label: 'N-Bars Ago' },
       ],
       conditions: [
@@ -655,10 +655,10 @@ export default {
           case "Consecutive Number of Days Below":
             _newCondition = 'CNDB'
             break;
-          case "N-Day High":
+          case "N-Bars High":
             _newCondition = 'NH'
             break;
-          case "N-Day Low":
+          case "N-Bars Low":
             _newCondition = 'NL'
             break;
           case "N-Bars Ago":
@@ -826,8 +826,8 @@ export default {
           [13, { name:'All-time Low', abbr: 'ATL' }],
           [14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
           [15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
-          [16, { name:'N-Day High', abbr: 'NH' }],
-          [17, { name:'N-Day Low', abbr: 'NL' }],
+          [16, { name:'N-Bars High', abbr: 'NH' }],
+          [17, { name:'N-Bars Low', abbr: 'NL' }],
           [18, { name:'N-Bars Ago', abbr: 'NA' }],
         ])
 

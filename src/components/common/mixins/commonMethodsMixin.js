@@ -718,8 +718,8 @@ export const CommonMethodsMixin = {
 				[13, { name:'All-time Low', abbr: 'ATL' }],
 				[14, { name:'Consecutive Number of Days Above', abbr: 'CNDA' }],
           		[15, { name:'Consecutive Number of Days Below', abbr: 'CNDB' }],
-				[16, { name:'N-Day High', abbr: 'NH' }],
-				[17, { name:'N-Day Low', abbr: 'NL' }],
+				[16, { name:'N-Bars High', abbr: 'NH' }],
+				[17, { name:'N-Bars Low', abbr: 'NL' }],
 				[18, { name:'N-Bars Ago', abbr: 'NA' }],
 			])
 			let indicator_url = ''

@@ -2207,13 +2207,13 @@ if (!CIQ.Studies) {
 			inputs: {},
             calculateFN: CIQ.Studies.calculateMonthofYear,
         },
-		"# of Consecutive Days Since an N-Day High": {
-            name: "# of Consecutive Days Since an N-Day High",
+		"# of Consecutive Days Since an N-Bars High": {
+            name: "# of Consecutive Days Since an N-Bars High",
 			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysHigh,
         },
-		"# of Consecutive Days Since an N-Day Low": {
-            name: "# of Consecutive Days Since an N-Day Low",
+		"# of Consecutive Days Since an N-Bars Low": {
+            name: "# of Consecutive Days Since an N-Bars Low",
 			inputs: { Period: 252, },
             calculateFN: CIQ.Studies.calculateConsecutiveDaysLow,
         },
@@ -2313,14 +2313,14 @@ if (!CIQ.Studies) {
 				"Result": "auto",
 			},
         },
-		"Percentage Above N-Day Low": {
-            name: "Percentage Above N-Day Low",
+		"Percentage Above N-Bars Low": {
+            name: "Percentage Above N-Bars Low",
 			// inputs: { Period: 252 },
 			inputs: { Period: 252 },
             calculateFN: CIQ.Studies.calculatePercentageAboveNDayLow,
         },
-		"Percentage Below N-Day High": {
-            name: "Percentage Below N-Day High",
+		"Percentage Below N-Bars High": {
+            name: "Percentage Below N-Bars High",
 			inputs: { Period: 252 },
             calculateFN: CIQ.Studies.calculatePercentageBelowNDayHigh,
         },
@@ -2344,13 +2344,13 @@ if (!CIQ.Studies) {
 				"Result": "auto",
 			},
         },
-		"N-Day High": {
-            name: "N-Day High",
+		"N-Bars High": {
+            name: "N-Bars High",
 			inputs: { Period: 21, },
             calculateFN: CIQ.Studies.calculateHighOverN,
         },
-		"N-Day Low": {
-            name: "N-Day Low",
+		"N-Bars Low": {
+            name: "N-Bars Low",
 			inputs: { Period: 21, },
             calculateFN: CIQ.Studies.calculateLowOverN,
 		},
