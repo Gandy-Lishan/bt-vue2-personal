@@ -147,8 +147,8 @@ export default {
         { value: 11, label: 'Net Change' },
         { value: 12, label: 'All-time High' },
         { value: 13, label: 'All-time Low' },
-        { value: 14, label: 'Consecutive Number of Days Above' },
-        { value: 15, label: 'Consecutive Number of Days Below' },
+        { value: 14, label: 'Consecutive Number of Bars Above' },
+        { value: 15, label: 'Consecutive Number of Bars Below' },
         { value: 16, label: 'N-Bars High' },
         { value: 17, label: 'N-Bars Low' },
         { value: 18, label: 'N-Bars Ago' },
@@ -288,10 +288,10 @@ export default {
           case "All-time Low":
             _newCondition = 'ATL'
             break;
-          case "Consecutive Number of Days Above":
+          case "Consecutive Number of Bars Above":
             _newCondition = 'CNDA'
             break;
-          case "Consecutive Number of Days Below":
+          case "Consecutive Number of Bars Below":
             _newCondition = 'CNDB'
           case "N-Bars High":
             _newCondition = 'NH'
