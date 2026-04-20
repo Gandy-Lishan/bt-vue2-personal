@@ -1,5 +1,17 @@
 <template>
   <div class="symbol-correlation">
+    <div class="des">
+      <p>Deconstruct risk transmission through correlation and rolling volatility data. Gain quantitative perspectives on asset-level risk exposure and strategic hedging.</p>
+      <p><b>Calculation Methodology</b></p>
+      <p>The rolling Beta is computed using its fundamental mathematical components: the rolling Pearson correlation (ρ) multiplied by the ratio of the asset's rolling volatility (σ) to the benchmark's volatility:</p>
+      <el-image
+        class="image-border"
+        :src="betaPath"
+        fit="contain"
+        lazy
+      ></el-image>
+      <p>Track historical Beta to dynamically classify an asset's behavior as Aggressive (β > 1), Defensive (0 < β < 1), or Inverse (β < 0).</p>
+    </div>
     <el-form :model="data" size="small" status-icon :rules="rules" ref="Form" class="symbol-correlation-form" label-position="top">
       <el-row :gutter="24">
         <el-col :span="8"  :xs="24"  :sm="12" :md="8" :lg="8" :xl="8">
@@ -103,28 +115,16 @@
         </el-col>
       </el-row>
       <el-row :gutter="24">
-        <el-col :span="24" :xs="24"  :sm="24" :md="24" :lg="24" :xl="24">
+        <el-col :span="186" :xs="8"  :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item label="4. Comparison Ticker" prop="comparison_ticker">
             <div class="ticker-select">
               <SearchAutocomplete
                 ref="autocomplete"
-                v-model="symbol"
+                v-model="data.symbol"
                 @query="querySearch"
                 @select="item => getSymbol(item)"
                 placeholder="Select Ticker"
               />
-          <div class="tickerTag">
-            <el-tag
-            :key="tag"
-            size="small"
-            v-for="(tag) in stock_comparison"
-            :disable-transitions="false"
-            closable
-            @close="handleClose(tag)"
-            effect="dark">
-            {{tag}}
-          </el-tag>
-          </div>
             </div>
           </el-form-item>
         </el-col>
@@ -191,6 +191,7 @@ import Highcharts from 'highcharts/highstock';
  import 'highcharts/indicators/bollinger-bands';
 import moment from 'moment';
 import { SearchAutocomplete } from "@/components/common"
+import betaPath from "./beta-removebg-preview.png"
 
 export default {
   name: 'SymbolCorrelation',
@@ -207,14 +208,15 @@ export default {
         }
     };
       return {
+        betaPath: betaPath,
         data: {
           start_date: '',
           end_date: '',
           benchmark: 'AAPL',
           roll_window: 21,
-          barsNumber: ''
+          barsNumber: '',
+          symbol: ''
         },
-        stock_comparison: [],
         symbol: '',
         dropdownList: [],
         dateRange: [],
@@ -421,7 +423,7 @@ export default {
       return await validateForm(formName);
     },
     async saveFormData() {
-      if(this.stock_comparison.length === 0) {this.popUpMsgBox('Please select at least one ticker');return}
+      if(!this.data.symbol) {this.popUpMsgBox('Please select at least one ticker');return}
       // const validate = this.validateDateRange(this.dateRange)
       // if(!validate) return
       const validForm = await this.validForm('Form')
@@ -431,7 +433,7 @@ export default {
       }                                     
       const saveData = {
         ...this.data,
-        stock_comparison: JSON.stringify(this.stock_comparison)
+        stock_comparison: JSON.stringify([this.data.symbol])
       }
       if(this.cpm_period === 'all') {
         saveData.start_date = '1800-10-01'
@@ -524,21 +526,14 @@ export default {
           start_date: '',
           end_date: '',
           benchmark: 'AAPL',
-          roll_window: 21
+          roll_window: 21,
+          symbol: ''
         }
         this.cpm_period = 'all'
-        this.stock_comparison = []
         this.$refs[formName].clearValidate()
       },
       getSymbol(ticker) {
-        this.$nextTick(()=>{
-          this.symbol = ''
-          // 往标签数组里面推送
-          if(this.stock_comparison.length >= 1) {this.popUpMsgBox(`You can only select up to 1 ticker`);return};
-          const tickerUrl = ticker.url
-          if(this.stock_comparison.includes(tickerUrl)) {this.popUpMsgBox(`Duplicate tickers detected`);return}
-          this.stock_comparison.push(ticker.url);
-        });
+        this.data.symbol = ticker.url
       },
       getBenchMark(ticker) {
         this.$nextTick(()=>{
@@ -558,11 +553,8 @@ export default {
 
       cb(results.sort((a, b) => b.priority - a.priority))
     },
-    handleClose(tag) {
-      this.stock_comparison.splice(this.stock_comparison.indexOf(tag), 1)
-    },
     renderChart(correlationData) {
-  const stock_comparison = this.stock_comparison[0]
+  const stock_comparison = this.data.symbol
   if(!stock_comparison) return
   const benchmark = this.data.benchmark; // 比如 'SPY'
   const comparisonPriceKey = `${stock_comparison}_price`;
@@ -683,17 +675,18 @@ export default {
     title: { text: `${benchmark}` },
     height: '50%',
     opposite: true,
-    offset: 0,
+    offset: 20,
     // alignTicks: false,
     // startOnTick: true,
     // endOnTick: true,
+    gridLineWidth: 0,
     tickPixelInterval: 40
   },
   {
     title: { text: stock_comparison },
     height: '50%',
     opposite: false,
-    offset: 0,
+    offset: -15,
 
     // alignTicks: false,
     // startOnTick: true,
@@ -706,7 +699,7 @@ export default {
     title: { text: "Beta" },
     top: '50%',
     height: '50%',
-    offset: 0,
+    offset: 20,
 
     // alignTicks: false,
     // startOnTick: true,
@@ -953,5 +946,13 @@ background-color: #fff;
 }
 .symbol-correlation-chart {
   margin-top: 50px;
+}
+.des {
+  font-size: 14px;
+  font-weight: 400;
+}
+.image-border {
+  width: 150px;
+  height: 100px;
 }
 </style>

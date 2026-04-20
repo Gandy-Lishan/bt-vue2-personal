@@ -34,7 +34,8 @@ export default {
 				this.$router.push(path)
 			}else if(key == '1-2') {
 				path = this.$router.resolve({
-					path: '/doc/scanner'
+					// path: '/doc/scanner'
+					path: '/doc/scannerdoc/0'
 				}).href
 				this.$router.push(path)
 			}

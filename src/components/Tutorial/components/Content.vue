@@ -1373,7 +1373,7 @@
 				</section>
 			</section>
 			<section v-else-if="id.includes('ai')">
-				<h1 id="ai-0">The generation logic of Smart Stock Scanner</h1>
+				<h1 id="ai-0">How Smart Stock Scanner Works</h1>
 				<hr />
 				<p>
 					<strong

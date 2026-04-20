@@ -608,6 +608,20 @@ export function getMyIndicatorsList(page) {
 			})
 	})
 }
+export function getSampleIndicatorsList() {
+	const url = `/dev/my_indicator/sample_myindicator`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function getCPMList(page, sort, name) {
 	let url = null
 	url = '/dev/cpm/get_cpm_bts/?ordering=-create_date'
