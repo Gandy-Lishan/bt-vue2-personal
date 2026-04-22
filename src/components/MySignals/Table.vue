@@ -6,7 +6,7 @@
       </el-input>
      <div class="sortDateBtn">
       <el-button type="warning" size="small" @click="sortByDateCreated" style="margin-right: 10px;">Sort By Date Created</el-button>
-      <el-button type="primary" size="small" @click="performanceTracker" style="margin-right: 10px;">Signal Tracker</el-button>
+      <!-- <el-button type="primary" size="small" @click="performanceTracker" style="margin-right: 10px;">Signal Tracker</el-button> -->
      </div>
 
       <!-- <el-popconfirm
@@ -304,7 +304,7 @@ export default {
         // “Time Dimension” 和 “Return Dimension”
         return [
           ..._tableCol,
-          ...(this.showSignalPerformanceTracker ? extraCol : [])
+          ...extraCol
         ]
       }
       if(this.currentPageTab === 'Sample') return [
@@ -315,7 +315,7 @@ export default {
           key: 'category',
           width: '120px'
         },
-        ...(this.showSamplePerformanceTracker ? extraCol : [])
+        ...extraCol
       ]
       return _tableCol
     }
@@ -611,12 +611,12 @@ export default {
       return ''
 		},
     performanceTracker() {
-      if(this.currentPageTab === 'MySignal') {
-        //  “Time Dimension” 和 “Return Dimension”
-        this.showSignalPerformanceTracker = !this.showSignalPerformanceTracker
-      }else if(this.currentPageTab === 'Sample') {
-        this.showSamplePerformanceTracker = !this.showSamplePerformanceTracker
-      }
+      // if(this.currentPageTab === 'MySignal') {
+      //   //  “Time Dimension” 和 “Return Dimension”
+      //   this.showSignalPerformanceTracker = !this.showSignalPerformanceTracker
+      // }else if(this.currentPageTab === 'Sample') {
+      //   this.showSamplePerformanceTracker = !this.showSamplePerformanceTracker
+      // }
     },
     displayData(data, removeZero = false) {
 			const numberRegex = /^-?\d+(\.\d+)?$/
