@@ -10,6 +10,7 @@
  import {
     getPairData
   } from '@/service/service'
+  import SignalCode from '@/utils/cryptoUtils/codeTool'
 
  /** 独立出的myIndicator对于chartiq的控制函数，考虑到它并没有很依赖loadIndicator.js */
 
@@ -368,6 +369,55 @@
                 }
             }
 
+            // if(newData.categories.includes('Technical')){
+            //     // 可能tech list还没初始化，需要手动处理
+            //     const signalCode = new SignalCode()
+            //     console.log(item.tech_code)
+            //     let techIndicator
+            //     try{
+            //         let techDecode = signalCode.decode(item.tech_code)
+            //         // const getBuiltinList = CIQ.store.getters.getBuiltinList
+            //         // const config = getCustomConfig()
+            //         // if(getBuiltinList.length == 0) await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
+            //         // techIndicator = CIQ.findBuiltinTechIndicator(techDecode.indicator,'')
+            //         techIndicator = CIQ.findBuiltinTechIndicator(techDecode.indicator,'')
+            //     }catch(err){}
+
+            //     // 如果左侧发生变动
+            //     if(oldData.indicator1.url != newData.indicator1.url){
+            //         CIQ.objIndicator = []
+
+            //         CIQ.stxx.loadChart({
+            //             symbol: newData.indicator1.url || CIQ.stxx.chart.symbol,
+            //             startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+            //             endDate:new Date(),
+            //         },()=>{
+            //             CIQ.hideCover()
+            //             CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            //         })
+            //         resolve()
+            //     }
+            //     // 如果右侧发生变动
+            //     if(oldData.indicator2.url != newData.indicator2.url){
+            //         for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+            //             var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+            //             CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+            //         }
+            //         CIQ.Studies.addStudy(CIQ.stxx, newData.indicator2.url, {
+            //         }, null,{ 
+            //             criteria: 'entry1', 
+            //             index: 0 
+            //         }) 
+            //         CIQ.hideCover()
+            //         CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            //         resolve()
+            //     }
+
+            //     // addSingleIndicator([newData.indicator2.url],newData.indicator2.url,newData.indicator1.url || CIQ.stxx.chart.symbol,null,()=>{resolve()});
+
+
+            // }
+
             // finally,需要刷新一次，因为可能会修改timeframe
             if(
                 (oldData.categories == newData.categories) &&
@@ -515,6 +565,7 @@
             weight_list: _newVal.weightData,
             ma: _newVal.ma,
             calculate: _newVal.calculate, //symbol ohlcv field(Open,High...)
+            tech_code: _newVal.tech_code
         }
         const extremeLines = {op:_newVal.upper_extreme_value,ep:_newVal.lower_extreme_value}
            
@@ -631,7 +682,36 @@
                 CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
             })
         }
+        if(newData.categories == "Technical"){
+            debugger
+            const benchmark = CIQ.store.state.chart.miBenmark
+            CIQ.stxx.loadChart({
+                symbol: newData.indicator1.url?newData.indicator1.url:benchmark?benchmark:process.env.VUE_APP_DEFAULT_SYMBOL, 
+                indicator:[],
+                startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),endDate:new Date(),
+            }, function(){
+                // 可能tech list还没初始化，需要手动处理
+                const signalCode = new SignalCode()
+                console.log(newData.tech_code)
+                let techIndicator
+                try{
+                    let techDecode = signalCode.decode(newData.tech_code)
+                    // const getBuiltinList = CIQ.store.getters.getBuiltinList
+                    // const config = getCustomConfig()
+                    // if(getBuiltinList.length == 0) await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
+                    // techIndicator = CIQ.findBuiltinTechIndicator(techDecode.indicator,'')
+                    techIndicator = CIQ.findBuiltinTechIndicator(techDecode.indicator,'')
+                }catch(err){}
+                CIQ.Studies.addStudy(CIQ.stxx, techIndicator.url, {
+                }, null,{ 
+                    criteria: 'entry1', 
+                    index: 0 
+                }) 
 
+                CIQ.hideCover()
+                CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+            })
+        }
         // WIC也需要初始化miFormState,主要是用到设定category
         CIQ.store.commit('chart/miFormStateChange',{
             categories: newData.categories,
@@ -761,7 +841,6 @@
             i--;
         }
         }
-
         // fetch indicator information and add studies to chart
         await getUserOwnIndicatorMatedata(indicator,extremeLines)
         CIQ.stxx.loadChart(	{ 

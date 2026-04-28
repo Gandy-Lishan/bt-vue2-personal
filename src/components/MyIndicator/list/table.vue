@@ -241,6 +241,10 @@ export default {
         {
           label: 'Symbol OHLCV',
           value: 'ohlcv'
+        },
+        {
+          label: 'Technical',
+          value: 'technical'
         }
       ],
       categoriesFilter: 'categories',
@@ -296,7 +300,7 @@ export default {
       } catch (error) {
         this.currentPage = 1; listRes = await getMyIndicatorsList(1)
       }
-
+debugger
       /** private function */
       function processIndicators(obj, indicatorList) {
           const combineTypes = obj.combine_type.split('_');
@@ -396,6 +400,28 @@ export default {
           ...item,
           indicator_2_url:'', // indicator2爲空
           categories: 'Resample',
+          included,
+          included_url,
+          key: item.url,
+          former,
+          latter,
+          former_url,
+          latter_url,
+          time_frame: capitalizeFirstLetter(item.timeframe),
+          type,
+          popTitle: 'Loading...',
+          BTList: [],
+          visible: false,
+          btnLoading: false,
+        };
+      }
+      if (item.combine_type === 'technical_indicator') {
+        const {included, included_url, former, latter, former_url, latter_url, type} = this.getSTechIncludedData(item, this.symbolList);
+
+        return {
+          ...item,
+          indicator_2_url:'', // indicator2爲空
+          categories: 'Technical',
           included,
           included_url,
           key: item.url,
@@ -613,6 +639,27 @@ export default {
       return {
         included: [`${former}`],
         included_url: [`${former_url}`],
+        former,
+        latter,
+        former_url,
+        latter_url,
+        type: typeAttribute
+      }
+    },
+    getSTechIncludedData(item, symbolList) {
+      const url_1 = item.indicator_1_url
+      const typeAttribute = item.combine_type || 'technical_indicator'
+      const symbol_1 = (typeAttribute == 'technical_indicator' && symbolList.find(ele => ele.url === url_1)?.label) || ''
+      const symbol_1_url = (typeAttribute == 'technical_indicator' && symbolList.find(ele => ele.url === url_1)?.url) || ''
+      const former = symbol_1;
+      const latter = '';
+      const former_url = symbol_1_url;
+      const latter_url = ''; 
+      let calculate = 'Technical'
+
+      return {
+        included: [`${former}${calculate}`],
+        included_url: [`${former_url}${calculate}`],
         former,
         latter,
         former_url,

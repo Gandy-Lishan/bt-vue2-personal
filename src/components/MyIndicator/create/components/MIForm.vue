@@ -59,7 +59,7 @@
 			</el-form-item>
       <el-form-item
 				label="3.Timeframe"
-        v-if="!(data.categories == 'Resample')"
+        v-if="!(data.categories == 'Resample' || data.categories == 'Technical')"
 			>
         <template slot="label">
           <label>
@@ -90,7 +90,7 @@
 			</el-form-item>
 		</div>
 		<el-divider></el-divider>
-		<div class="MI-form-middle" v-if="!['WIC','OHLCV','Resample'].includes(data.categories)">
+		<div class="MI-form-middle" v-if="!['WIC','OHLCV','Resample','Technical'].includes(data.categories)">
 			<div class="left">
 				<el-form-item v-model="data.indicator_1">
           <SearchAutocomplete
@@ -229,8 +229,8 @@
 				</el-form-item>
 			</div>
     </div>
-		<el-divider v-if="!['WIC','OHLCV'].includes(data.categories)"></el-divider>
-		<div class="MI-form-bottom" v-if="!['WIC','OHLCV'].includes(data.categories)">
+		<el-divider v-if="!['WIC','OHLCV','Technical'].includes(data.categories)"></el-divider>
+		<div class="MI-form-bottom" v-if="!['WIC','OHLCV','Technical'].includes(data.categories)">
 			<CheckInput
         :categories="data.categories"
 				:config="EOCheckInputConfig"
@@ -334,9 +334,36 @@
 				></CheckInput>
       </div>
     </div>
+    <!-- {{data}}
+    {{techData}}
+    {{tech}} -->
+    <!-- Technical Container -->
+    <div class="technicalIndicator-container"
+      v-if="data.categories == 'Technical'">
+      <div class="TILeft">
+				<el-form-item v-model="techData.ticker">
+          <SearchAutocomplete
+            v-model="techData.ticker"
+            @query="querySearch"
+            @select="item => handleSelectTech(item,'indicator_1')"
+            placeholder="Please select symbol from the dropdown menu"
+          />
+				</el-form-item>
+      </div>
+      <div class="TIRight">
+        <el-form-item v-model="techData.indicator">
+            <SearchAutocomplete
+              v-model="techData.indicator"
+              @query="indicatorTechnicalSearch"
+              @select="item => handleSelectTech(item,'indicator_2')"
+              placeholder="Please select indicator or symbol from the dropdown menu"
+            />
+        </el-form-item>
+      </div>
+    </div>
 		<el-divider></el-divider>
 		<div class="MI-form-btn">
-      <el-form-item>
+      <el-form-item v-if="data.categories != 'Technical'">
 				<el-button type="primary" @click="previewIndicator()" class="delete-btn"
 					>Preview the created indicator</el-button
 				>
@@ -384,6 +411,8 @@ import {createStateFilter} from '@/utils/globalFunc'
 import { LoadingOverlay,SearchAutocomplete } from "@/components/common"
 import { mapGetters } from "vuex"
 import {recoverSymbolOptixUrl} from '@/utils/globalFunc'
+import SignalCode from '@/utils/cryptoUtils/codeTool'
+import { getCustomConfig } from '@/components/common/chart/resources' // ChartIQ library resources
 const debounce = require('lodash/debounce')
 
 export default {
@@ -438,6 +467,10 @@ export default {
         {
           label: 'Symbol OHLCV',
           value: 'OHLCV'
+        },
+        {
+          label: 'Technical Indicator',
+          value: 'Technical'
         }
       ],
       MA1CheckInputConfig: {
@@ -546,6 +579,16 @@ export default {
       popTitle: '<b>Indicator in Use:</b><br/>This indicator is currently used in a backtest. To avoid affecting those results, a new indicator will be created.',
       ignoreUsedIndicator: false,
 
+      // technical indicator obj
+      techData: {ticker:'', indicator:'', fullName:''},
+      tech: {
+        "ids": "CCI",
+        "comparison": "CCI",
+        "condition": 3,
+        "value": "10",
+        "indicator": "",
+        "analysis": "Technical"
+      }
     }
   },
   computed: {
@@ -611,6 +654,9 @@ export default {
           
           const checkInputRef = 'maohlcvForm'
       this.manageMICondStudies(this.$refs[checkInputRef].value,this.$refs[checkInputRef].MAType,'ma1',this.$refs[checkInputRef].showInput)
+        }
+        if(this.data.categories=='Technical'){
+          this.techData.ticker = newVal
         }
         if(this.data.categories == 'Resample'){
           let label = CIQ.findSentiIndicator(null,this.RESAMPLEData.indicator).chart_name
@@ -691,6 +737,15 @@ export default {
         await this.$store.dispatch('chart/set_miFormWeightedListRefresh')
       }else if(this.data.categories == 'OHLCV'){
         this.changeSymbol(this.OHLCVData.symbol)
+      }else if(this.data.categories == 'Technical'){
+        CIQ.stxx.loadChart({
+            symbol: this.techData.ticker || CIQ.stxx.chart.symbol,
+            startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+            endDate:new Date(),
+        },()=>{
+            CIQ.hideCover()
+            CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+        })
       }else {
         await this.$store.dispatch('chart/set_miFormStateRefresh')
         this.refreshMAState()
@@ -820,7 +875,9 @@ export default {
         if(this.popVisible) return
       }
       let saveData = null;
+      debugger
       if(this.data.categories == 'WIC') {
+      }else if(this.data.categories == 'Technical') {
       }else if(this.data.categories == 'OHLCV') {
         this.$refs['maohlcvForm'].saveData();
       }else if(this.data.categories == 'Resample') {
@@ -841,6 +898,8 @@ export default {
         calculate = this.OHLCVData.condition.split(' ')[1].toLowerCase()
       }else if(this.data.categories === 'Resample'){
         calculate = this.RESAMPLEData.condition
+      }else if(this.data.categories === 'Technical'){
+        calculate = 'technical'
       }else{
         calculate = this.data.categories.split(' ')[1].toLowerCase()
       }
@@ -902,6 +961,23 @@ export default {
           extreme_optimism: 0,
           extreme_pessimism: 0,
           combine_type: 'ohlcv'
+        };
+      }else if(this.data.categories == 'Technical') {
+        this.tech.indicator = this.techData.fullName
+        
+        const signalCode = new SignalCode()
+        let techIndicatorEncode = signalCode.encode(this.tech)
+
+        saveData = {
+          ...commonData,
+          indicator_1: this.techData.ticker,
+          indicator_2: 'model_smart_money',
+          ma: '1_1_1',
+          extreme_optimism: 0,
+          extreme_pessimism: 0,
+          combine_type: 'technical_indicator',
+          tech_code: techIndicatorEncode,
+          tech_period: '14',
         };
       }else if(this.data.categories == 'Resample') {
         saveData = {
@@ -1138,7 +1214,7 @@ export default {
     getList() {
       const data = this.data
       const isIndicator = data.categories.includes('Indicator')
-      const isSymbol = data.categories.includes('Symbol') || data.categories == 'OHLCV'
+      const isSymbol = data.categories.includes('Symbol') || data.categories == 'OHLCV' || data.categories == 'Technical'
       const isResample = data.categories == 'Resample'
       const neitherOfThem = data.categories == '' || data.categories == 'WIC'
       if (neitherOfThem) {
@@ -1473,6 +1549,19 @@ export default {
 
         //覆盖checkbox初始化配置
         this.MAOHLCVCheckInputConfig = { ...this.MAOHLCVCheckInputConfig, ...configMap[0].config };
+      }else if(data.categories == 'Technical'){
+        const signalCode = new SignalCode()
+        let techDecode = signalCode.decode(data.tech_code)
+
+        // 可能tech list还没初始化，需要手动处理
+        const getBuiltinList = CIQ.store.getters.getBuiltinList
+        const config = getCustomConfig()
+        if(getBuiltinList.length == 0) await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
+        const techIndicator = CIQ.findBuiltinTechIndicator(techDecode.indicator,'')
+
+        this.techData.ticker = data.indicator_1_url
+        this.techData.fullName = techIndicator.value
+        this.techData.indicator = techIndicator.url
       }else if(data.categories == 'Resample'){
         this.RESAMPLEData.indicator = data.indicator_1_url
         this.RESAMPLEData.condition = data.calculate 
@@ -1645,6 +1734,17 @@ export default {
           this.popUpMsgBox('Please choose an timeframe from the dropdown.')
           return false
         }
+      }else if(categories == 'Technical') {
+        const symbol = this.techData.ticker
+        const indicator = this.techData.indicator
+        if(!symbol) {
+          this.popUpMsgBox('Please choose a symbol from the dropdown.')
+          return false
+        }
+        if(!indicator) {
+          this.popUpMsgBox('Please choose a technical indicator from the dropdown.')
+          return false
+        }
       }else {
         // 只需要校验 indicator_1 和 indicator_2
         const indicator_1_url = this.data.indicator_1_url
@@ -1753,7 +1853,61 @@ export default {
 
       // resample条件下tf是靠condition手动选择控制的
       this.$store.commit('form/getFrequency', timeframeTransform(this.RESAMPLEData.condition))
-    }
+    },
+
+    //  tech indicator
+    handleSelectTech(item, source) {
+      this.$nextTick(async ()=>{    
+        const type = item.type
+
+        // this.data[source] = source == 'indicator_1' ? item.url : item.value
+        // this.data[`${source}_url`] = item.url
+        // this[`${source}_category`] = item.category || null
+
+        // 更新 tech 对象，使用实际选择的指标名称
+        if (source === 'indicator_1') {
+          this.techData.ticker = item.url
+
+          CIQ.objIndicator = []
+
+          CIQ.stxx.loadChart({
+              symbol: this.techData.ticker || CIQ.stxx.chart.symbol,
+              startDate:new Date(parseInt(process.env.VUE_APP_START_DATE)),
+              endDate:new Date(),
+          },()=>{
+              CIQ.hideCover()
+              CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+          })
+        }
+        if (source === 'indicator_2') {
+          this.techData.indicator = item.url
+          this.techData.fullName = item.value
+
+          for (var studyInstanceName in CIQ.stxx.layout.studies) { 
+              var sd = CIQ.stxx.layout.studies[studyInstanceName]; 
+              CIQ.Studies.removeStudy(CIQ.stxx, sd); 
+          }
+          CIQ.Studies.addStudy(CIQ.stxx, this.techData.indicator, {
+          }, null,{ 
+              criteria: 'entry1', 
+              index: 0 
+          }) 
+          CIQ.hideCover()
+          CIQ.store.commit('states/SET_MI_CREATE_LOADING', false)
+        }
+      });
+    },
+    indicatorTechnicalSearch(queryString, cb) {
+        let results = this.$store.getters.getFormateTechnicalList
+        .filter(item => item.class === 'CCI_like')
+        .map(item => ({
+          ...item,
+          priority: createStateFilter(queryString)(item),
+        }))
+        .filter(item => item.priority > 0)
+        .sort((a, b) => b.priority - a.priority)
+        cb(results)
+    },
   }
 }
 </script>
@@ -1968,6 +2122,12 @@ h4 {
 /** symbol ohlcv */
 .SOHLCV-container{
 	display: inline-grid;
+	grid-template-columns: 1fr 1fr;
+  grid-gap:50px;
+}
+
+.technicalIndicator-container {
+  display: inline-grid;
 	grid-template-columns: 1fr 1fr;
   grid-gap:50px;
 }
