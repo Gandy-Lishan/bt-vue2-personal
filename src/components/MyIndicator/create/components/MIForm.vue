@@ -351,9 +351,10 @@
 				</el-form-item>
       </div>
       <div class="TIRight">
-        <el-form-item v-model="techData.indicator">
+        <el-form-item v-model="techData.fullName">
             <SearchAutocomplete
-              v-model="techData.indicator"
+              ref="techIndicatorInput"
+              v-model="techData.fullName"
               @query="indicatorTechnicalSearch"
               @select="item => handleSelectTech(item,'indicator_2')"
               placeholder="Please select indicator or symbol from the dropdown menu"
