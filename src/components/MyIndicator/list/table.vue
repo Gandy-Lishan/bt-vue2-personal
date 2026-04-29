@@ -171,6 +171,7 @@
 import { delMyIndicator, getMyIndicatorsList, searchIndicator, getRelatedBacktest, deleteBacktest } from '@/service/service'
 import { capitalizeFirstLetter, isJson , trimTrailingZeros} from "@/utils"
 import { mapGetters } from "vuex"
+import SignalCode from '@/utils/cryptoUtils/codeTool'
 
 export default {
   name: 'MITable',
@@ -657,9 +658,17 @@ debugger
       const latter_url = ''; 
       let calculate = 'Technical'
 
+      const signalCode = new SignalCode()
+      let techDecode
+      try {
+        techDecode = signalCode.decode(item.tech_code)
+      } catch (error) {
+        
+      }
+
       return {
-        included: [`${former}${calculate}`],
-        included_url: [`${former_url}${calculate}`],
+        included: [`${former} ${techDecode?.indicator}`],
+        included_url: [`${former_url} ${techDecode?.indicator}`],
         former,
         latter,
         former_url,
