@@ -101,6 +101,36 @@
 						</template>
 					</el-table-column>
 					<el-table-column
+						:label="l.label"
+						:prop="l.value"
+						:key="l.key"
+						show-overflow-tooltip
+						:min-width="l.minWidth"
+						:max-width="l.maxWidth"
+						:width="l.width"
+						v-if="
+							[
+								'CAGR'
+							].includes(l.value)
+						"
+						:sortable="
+							[
+								'CAGR'
+							].includes(l.value)
+								? 'custom'
+								: false
+						"
+					>
+						<template #header>
+							<span v-html="l.label"></span>
+						</template>
+						<template slot-scope="scope">
+							<span class="tableText">
+								{{ scope.row[l.value] }}
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column
 						:key="l.key"
 						:width="l.width"
 						v-if="['btn'].includes(l.value)"
@@ -267,6 +297,11 @@ this.tableCol = [
     value: 'YTD_return',
     key: 'YTD_return',
     width: '125px'
+  },
+		{
+    label: `Compound Annual Growth Return (%) <br/> Since 07/01/06`, // 动态更新日期
+    value: 'CAGR',
+    key: 'CAGR',
   },
   {
     label: 'To BTV3',
@@ -454,7 +489,7 @@ this.tableCol = [
 				order: sortingOrder
 			}
 			// 数字字符串转数字类型排序
-			if (['YTD_return'].indexOf(colName) !== -1) {
+			if (['YTD_return', 'CAGR'].indexOf(colName) !== -1) {
 				if (sortingOrder == 'ascending') {
 					this.immutableTableData.sort((a, b) => {
 						b[colName] =

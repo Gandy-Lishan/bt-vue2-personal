@@ -63,7 +63,7 @@ export default {
 
 <style lang="less" scoped>
 .right-menu-wrapper {
-	width: 220px;
+	width: 330px;
 	float: right;
 	position: absolute;
 	top: 0;
