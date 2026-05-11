@@ -32466,20 +32466,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "CHUYS HOLDINGS Trend Score",
-        "url": "CHUY_trend",
-        "market_symbol": "CHUY",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "CHUYS HOLDINGS RelTrend Score",
-        "url": "CHUY_reltrend",
-        "market_symbol": "CHUY",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "COTY INC-CL A Trend Score",
         "url": "COTY_trend",
         "market_symbol": "COTY",
@@ -35724,20 +35710,6 @@
         "chart_name": "Choice Hotels International Inc RelTrend Score",
         "url": "CHH_reltrend",
         "market_symbol": "CHH",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "R1 RCM Inc Trend Score",
-        "url": "RCM_trend",
-        "market_symbol": "RCM",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "R1 RCM Inc RelTrend Score",
-        "url": "RCM_reltrend",
-        "market_symbol": "RCM",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -39196,20 +39168,6 @@
         "chart_name": "eXp World Holdings Inc RelTrend Score",
         "url": "EXPI_reltrend",
         "market_symbol": "EXPI",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Arch Resources Inc Trend Score",
-        "url": "ARCH_trend",
-        "market_symbol": "arch",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Arch Resources Inc RelTrend Score",
-        "url": "ARCH_reltrend",
-        "market_symbol": "arch",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -55048,20 +55006,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Atrion Corp Trend Score",
-        "url": "ATRI_trend",
-        "market_symbol": "ATRI",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Atrion Corp RelTrend Score",
-        "url": "ATRI_reltrend",
-        "market_symbol": "ATRI",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Regional Management Corp Trend Score",
         "url": "RM_trend",
         "market_symbol": "RM",
@@ -64386,20 +64330,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Ocean Biomedical Inc Trend Score",
-        "url": "OCEA_trend",
-        "market_symbol": "OCEA",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ocean Biomedical Inc RelTrend Score",
-        "url": "OCEA_reltrend",
-        "market_symbol": "OCEA",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Huron Consulting Group Inc Trend Score",
         "url": "HURN_trend",
         "market_symbol": "HURN",
@@ -68348,20 +68278,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "MDC Holdings Inc Trend Score",
-        "url": "MDC_trend",
-        "market_symbol": "MDC",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "MDC Holdings Inc RelTrend Score",
-        "url": "MDC_reltrend",
-        "market_symbol": "MDC",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Masonite International Corp Trend Score",
         "url": "DOOR_trend",
         "market_symbol": "DOOR",
@@ -69296,20 +69212,6 @@
         "chart_name": "First Bank/Hamilton NJ RelTrend Score",
         "url": "FRBA_reltrend",
         "market_symbol": "FRBA",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Encore Wire Corp Trend Score",
-        "url": "WIRE_trend",
-        "market_symbol": "WIRE",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Encore Wire Corp RelTrend Score",
-        "url": "WIRE_reltrend",
-        "market_symbol": "WIRE",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -72446,20 +72348,6 @@
         "chart_name": "Cara Therapeutics Inc RelTrend Score",
         "url": "CARA_reltrend",
         "market_symbol": "CARA",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Intra-Cellular Therapies Inc Trend Score",
-        "url": "ITCI_trend",
-        "market_symbol": "ITCI",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Intra-Cellular Therapies Inc RelTrend Score",
-        "url": "ITCI_reltrend",
-        "market_symbol": "ITCI",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -77150,20 +77038,6 @@
         "chart_name": "Bitfarms Ltd RelTrend Score",
         "url": "BITF_reltrend",
         "market_symbol": "BITF",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Athena Bitcoin Global Trend Score",
-        "url": "ABIT_trend",
-        "market_symbol": "ABIT",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Athena Bitcoin Global RelTrend Score",
-        "url": "ABIT_reltrend",
-        "market_symbol": "ABIT",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -90139,27 +90013,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Hall of Fame Resort & Entertainment Company Warrants Trend Score",
-        "url": "HOFVW_trend",
-        "market_symbol": "HOFVW",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hall of Fame Resort & Entertainment Company Warrants RelTrend Score",
-        "url": "HOFVW_reltrend",
-        "market_symbol": "HOFVW",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hall of Fame Resort & Entertainment Company Warrants",
-        "url": "HOFVW",
-        "market_symbol": "HOFVW",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Angi Inc Trend Score",
         "url": "ANGI_trend",
         "market_symbol": "ANGI",
@@ -91525,13 +91378,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Heska Corp",
-        "url": "HSKA",
-        "market_symbol": "HSKA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Varex Imaging Corp",
         "url": "VREX",
         "market_symbol": "VREX",
@@ -92291,20 +92137,6 @@
         "chart_name": "Chicos FAS Inc RelTrend Score",
         "url": "CHS_reltrend",
         "market_symbol": "CHS",
-        "type": "reltrend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Heska Corp Trend Score",
-        "url": "HSKA_trend",
-        "market_symbol": "HSKA",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Heska Corp RelTrend Score",
-        "url": "HSKA_reltrend",
-        "market_symbol": "HSKA",
         "type": "reltrend",
         "updated": "Daily"
     },
@@ -121576,20 +121408,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Heska Corp Historical Volatility (20-Day)",
-        "url": "HSKA_volatility",
-        "market_symbol": "HSKA",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Heska Corp Historical Volatility (60-Day)",
-        "url": "HSKA_volatility_60d",
-        "market_symbol": "HSKA",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Coherus Biosciences Inc Historical Volatility (20-Day)",
         "url": "CHRS_volatility",
         "market_symbol": "CHRS",
@@ -121842,20 +121660,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Chuys Holdings Inc Historical Volatility (20-Day)",
-        "url": "CHUY_volatility",
-        "market_symbol": "CHUY",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Chuys Holdings Inc Historical Volatility (60-Day)",
-        "url": "CHUY_volatility_60d",
-        "market_symbol": "CHUY",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Veritiv Corp Historical Volatility (20-Day)",
         "url": "VRTV_volatility",
         "market_symbol": "VRTV",
@@ -121922,20 +121726,6 @@
         "chart_name": "AngioDynamics Inc Historical Volatility (60-Day)",
         "url": "ANGO_volatility_60d",
         "market_symbol": "ANGO",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "R1 RCM Inc Historical Volatility (20-Day)",
-        "url": "RCM_volatility",
-        "market_symbol": "RCM",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "R1 RCM Inc Historical Volatility (60-Day)",
-        "url": "RCM_volatility_60d",
-        "market_symbol": "RCM",
         "type": "other",
         "updated": "Daily"
     },
@@ -122048,20 +121838,6 @@
         "chart_name": "Green Dot Corp Historical Volatility (60-Day)",
         "url": "GDOT_volatility_60d",
         "market_symbol": "GDOT",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "MDC Holdings Inc Historical Volatility (20-Day)",
-        "url": "MDC_volatility",
-        "market_symbol": "MDC",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "MDC Holdings Inc Historical Volatility (60-Day)",
-        "url": "MDC_volatility_60d",
-        "market_symbol": "MDC",
         "type": "other",
         "updated": "Daily"
     },
@@ -122370,20 +122146,6 @@
         "chart_name": "Seneca Foods Corp Historical Volatility (60-Day)",
         "url": "SENEA_volatility_60d",
         "market_symbol": "SENEA",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Encore Wire Corp Historical Volatility (20-Day)",
-        "url": "WIRE_volatility",
-        "market_symbol": "WIRE",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Encore Wire Corp Historical Volatility (60-Day)",
-        "url": "WIRE_volatility_60d",
-        "market_symbol": "WIRE",
         "type": "other",
         "updated": "Daily"
     },
@@ -124334,20 +124096,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Ramaco Resources Inc Historical Volatility (20-Day)",
-        "url": "2519469D_volatility",
-        "market_symbol": "2519469D",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ramaco Resources Inc Historical Volatility (60-Day)",
-        "url": "2519469D_volatility_60d",
-        "market_symbol": "2519469D",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Aadi Bioscience Inc Historical Volatility (20-Day)",
         "url": "AADI_volatility",
         "market_symbol": "AADI",
@@ -124442,20 +124190,6 @@
         "chart_name": "Ambev S.A. Historical Volatility (60-Day)",
         "url": "ABEV_volatility_60d",
         "market_symbol": "ABEV",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Athena Bitcoin Global Historical Volatility (20-Day)",
-        "url": "ABIT_volatility",
-        "market_symbol": "ABIT",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Athena Bitcoin Global Historical Volatility (60-Day)",
-        "url": "ABIT_volatility_60d",
-        "market_symbol": "ABIT",
         "type": "other",
         "updated": "Daily"
     },
@@ -126822,20 +126556,6 @@
         "chart_name": "AtriCure Inc Historical Volatility (60-Day)",
         "url": "ATRC_volatility_60d",
         "market_symbol": "ATRC",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Atrion Corp Historical Volatility (20-Day)",
-        "url": "ATRI_volatility",
-        "market_symbol": "ATRI",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Atrion Corp Historical Volatility (60-Day)",
-        "url": "ATRI_volatility_60d",
-        "market_symbol": "ATRI",
         "type": "other",
         "updated": "Daily"
     },
@@ -137746,20 +137466,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Hall of Fame Resort & Entertainment Company Warrants Historical Volatility (20-Day)",
-        "url": "HOFVW_volatility",
-        "market_symbol": "HOFVW",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hall of Fame Resort & Entertainment Company Warrants Historical Volatility (60-Day)",
-        "url": "HOFVW_volatility_60d",
-        "market_symbol": "HOFVW",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "HarborOne Bancorp Inc Historical Volatility (20-Day)",
         "url": "HONE_volatility",
         "market_symbol": "HONE",
@@ -139408,20 +139114,6 @@
         "chart_name": "Home Construction Historical Volatility (60-Day)",
         "url": "ITB_volatility_60d",
         "market_symbol": "ITB",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Intra-Cellular Therapies Inc Historical Volatility (20-Day)",
-        "url": "ITCI_volatility",
-        "market_symbol": "ITCI",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Intra-Cellular Therapies Inc Historical Volatility (60-Day)",
-        "url": "ITCI_volatility_60d",
-        "market_symbol": "ITCI",
         "type": "other",
         "updated": "Daily"
     },
@@ -144942,20 +144634,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Ocean Biomedical Inc Historical Volatility (20-Day)",
-        "url": "OCEA_volatility",
-        "market_symbol": "OCEA",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ocean Biomedical Inc Historical Volatility (60-Day)",
-        "url": "OCEA_volatility_60d",
-        "market_symbol": "OCEA",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "OceanFirst Financial Corp Historical Volatility (20-Day)",
         "url": "OCFC_volatility",
         "market_symbol": "OCFC",
@@ -147136,20 +146814,6 @@
         "chart_name": "Invesco S&P 600 Financials ETF Historical Volatility (60-Day)",
         "url": "PSCF_volatility_60d",
         "market_symbol": "PSCF",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Invesco S&P 600 Health Care ETF Historical Volatility (20-Day)",
-        "url": "PSCH_volatility",
-        "market_symbol": "PSCH",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Invesco S&P 600 Health Care ETF Historical Volatility (60-Day)",
-        "url": "PSCH_volatility_60d",
-        "market_symbol": "PSCH",
         "type": "other",
         "updated": "Daily"
     },
@@ -156882,5 +156546,47 @@
         "market_symbol": "ZYME",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "10-Year Treasury Yield",
+        "url": "tnx_data",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JK Misery Index Model",
+        "url": "jk_misery_index",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Economic Recession Model",
+        "url": "jk_economic_recession_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Interest Rate Trend Model",
+        "url": "jk_interest_rate_trend_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "Coincident Economic Index",
+        "url": "coitotl",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "Consumer Price Index YoY Broad",
+        "url": "cpiyoybroad",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
