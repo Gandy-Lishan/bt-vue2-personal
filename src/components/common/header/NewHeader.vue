@@ -769,13 +769,11 @@ export default {
     hasAccess(userAccessList, requiredPermissions) {
 
       if (!requiredPermissions) return true
-
       // super admin
-
-      if (userAccessList.includes('everything')) return true
-
-      return requiredPermissions.some(p => userAccessList.includes(p))
-
+      if (userAccessList.some(access => access.includes('everything'))) {
+        return true
+      }
+      return requiredPermissions.some(p => userAccessList.some(access => access.includes(p)))
       },
     showLabel(item) {
       const email = getCookieData()?.username
