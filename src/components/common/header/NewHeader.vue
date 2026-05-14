@@ -481,6 +481,23 @@ export default {
         },
       ],
       activeIndex: '1',
+      PAGE_PERMISSION_MAP: {
+        'Strategies': ['everything', 'premium', 'research', 'corelite', 'datalite'],
+        'My Indicator': ['everything', 'premium', 'research', 'datalite'],
+        'Seasonality': ['everything', 'premium', 'research', 'datalite'],
+        'Correlation': ['everything', 'premium', 'research', 'datalite'],
+        'Indicators': ['everything', 'premium',  'research', 'datalite'],
+        'Trend & Volatility': [ 'everything', 'premium', 'research', 'datalite'],
+        'My Stuff': ['everything', 'premium', 'research', 'datalite'],
+        'Extra Tools': ['everything', 'premium', 'research', 'datalite'],
+        'Smart Scanner': ['everything', 'premium', 'research', 'corelite', 'datalite'],
+        'BacktestEdge': ['everything', 'premium', 'research', 'datalite'],
+        'Reports': ['everything', 'premium', 'research', 'corelite', 'reports'],
+        'Dashboard': ['everything', 'premium', 'research', 'datalite'],
+        'Market Prediction': [ 'everything', 'premium', 'research', 'datalite'],
+        'Portfolio': ['everything', 'premium', 'research', 'datalite'],
+        'AI Trading': ['ai-admin'] // 下面单独处理 email
+      }
     }
   },
   watch: {
@@ -519,9 +536,9 @@ export default {
       LocalStorageUtil.set('upgradeUserLevel', exists)
     }
     // 权限验证的时候, report 子项要去掉: reports, corelite
-    const cannotAccessBacktestEdge = access_level.some(str => str.includes('light-data-yearly'))
+    // const cannotAccessBacktestEdge = access_level.some(str => str.includes('light-data-yearly'))
     const canOnlyAccessPartOfReport = access_level.some(str => str.includes('reports')) || access_level.some(str => str.includes('corelite'))
-    if(cannotAccessBacktestEdge) this.navs = [];
+    // if(cannotAccessBacktestEdge) this.navs = [];
     if(canOnlyAccessPartOfReport) {
       const reportIndex = this.navs.findIndex(ele => ele.label === 'Reports')
       const backtestIndex = this.navs.findIndex(ele => ele.label.includes('Backtest'))
@@ -716,39 +733,76 @@ export default {
     handleClick(e) {
       console.log('e', e)
     },
+    // showLabel(item) {
+    //   debugger
+    //   const email = getCookieData()?.username
+    //   // const access_level = getCookieData()?.access_level
+    //   const access_level = ['light-data-yearly', 'impactedge', 'datalite', 'corelite'];
+    //   console.log('access_level', access_level)
+    //   const {label} = item
+		// 	const essentialLevel = (access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research')))
+    //   const exists = JSON.parse(LocalStorageUtil.get('upgradeUserLevel'))
+    //   const accessAllPage = access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || (essentialLevel && exists)
+    //   const cannotAccessScanner = essentialLevel && !exists
+    //   // const cannotAccessReport = access_level.some(str => str.includes('datalite'))
+    //   const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
+    //   const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
+    //   console.log('accessAllPage', accessAllPage)
+
+    //   if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend & Volatility', 'My Stuff', 'Extra Tools'].includes(label)) {
+    //     return accessAllPage || cannotAccessScanner  || (canOnlyAccessReportStategyScanner && label === 'Strategies')
+    //   }
+    //   if(label === 'BacktestEdge') {
+    //     return accessAllPage || cannotAccessScanner  || (canOnlyAccessReportStategyScanner && label === 'Strategies') || canOnlyAccessReport
+    //   }
+    //   if(label === 'Smart Scanner') {
+    //     return accessAllPage   || canOnlyAccessReportStategyScanner
+    //   }
+    //   if(label === 'AI Trading') {
+    //     return email === 'hao@sentimentrader.com'
+    //   }
+    //   if(label === 'Portfolio') {
+    //     return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
+    //   }
+    //   if(label === 'Reports' || label === 'Dashboard' || label === 'Market Prediction') return accessAllPage || cannotAccessScanner || canOnlyAccessReport || canOnlyAccessReportStategyScanner
+    // },
+    hasAccess(userAccessList, requiredPermissions) {
+
+      if (!requiredPermissions) return true
+
+      // super admin
+
+      if (userAccessList.includes('everything')) return true
+
+      return requiredPermissions.some(p => userAccessList.includes(p))
+
+      },
     showLabel(item) {
       const email = getCookieData()?.username
-      const access_level = getCookieData()?.access_level
-      const {label} = item
-			const essentialLevel = (access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research')))
-      const exists = LocalStorageUtil.get('upgradeUserLevel')
-      const accessAllPage = access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || (essentialLevel && exists)
-      const cannotAccessScanner = essentialLevel && !exists
-      const cannotAccessReport = access_level.some(str => str.includes('datalite'))
-      const canOnlyAccessReport = access_level.some(str => str.includes('reports'))
-      const canOnlyAccessReportStategyScanner = access_level.some(str => str.includes('corelite'))
+      const access_level = getCookieData()?.access_level || []
+      // const access_level = ['light-data-yearly', 'impactedge', 'datalite', 'corelite'];
 
-      if(['Strategies', 'My Indicator', 'Seasonality', 'Correlation', 'Indicators', 'Trend & Volatility', 'My Stuff', 'Extra Tools'].includes(label)) {
-        return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies')
-      }
-      if(label === 'BacktestEdge') {
-        return accessAllPage || cannotAccessScanner || cannotAccessReport || (canOnlyAccessReportStategyScanner && label === 'Strategies') || canOnlyAccessReport
-      }
-      if(label === 'Smart Scanner') {
-        return accessAllPage  || cannotAccessReport || canOnlyAccessReportStategyScanner
-      }
-      if(label === 'AI Trading') {
+      const { label } = item
+
+      const requiredPermissions = this.PAGE_PERMISSION_MAP[label]
+
+      // 特殊规则（如果必须保留）
+
+      if (label === 'AI Trading') {
+
         return email === 'hao@sentimentrader.com'
+
       }
-      if(label === 'Portfolio') {
+
+      if (label === 'Portfolio') {
+
         return ['hao@sentimentrader.com', 'eve@sentimentrader.com'].includes(email)
+
       }
-      if(label === 'Reports' || label === 'Dashboard' || label === 'Market Prediction') return accessAllPage || cannotAccessScanner || !cannotAccessReport|| canOnlyAccessReport || canOnlyAccessReportStategyScanner
-      // if(label === 'Reports') {
-      //   const allowedReportEmails = ['hao@sentimentrader.com', 'dean@sentimentrader.com', 'jason@sentimentrader.com']
-      //   return allowedReportEmails.includes(email)
-      // }
-    },
+
+      return this.hasAccess(access_level, requiredPermissions)
+
+      },
     backHome() {
       this.$router.push('/')
     },

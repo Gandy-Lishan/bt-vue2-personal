@@ -195,14 +195,10 @@ export function setRouterPermission(router) {
 				}
 
 				
-				// 全部权限 everything
-				const essentialLevel = (access_level.some(str => str.includes('essential')) || access_level.some(str => str.includes('research'))) 
-				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || (essentialLevel && exists)) {
+				// 全部权限 everything, research, premium
+				const essentialLevel = (access_level.some(str => str.includes('research'))) 
+				if(access_level.some(str => str.includes('everything')) || access_level.some(str => str.includes('premium')) || essentialLevel) {
 					next()
-				}
-				// // 全部权限 Scanner 除外: essential, research
-				else if(essentialLevel && !exists) {
-					if(to.path.includes('/scannerai')) next('/dashboard')
 				}
 				// 全部权限 除了 Reports 页面: datalite
 				else if(access_level.some(str => str.includes('datalite'))) {
@@ -215,18 +211,17 @@ export function setRouterPermission(router) {
 					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
 					else next('/MR/sentimentedge')
 				}
-				// 只能访问部分页面(report（仅限三类）,strategies, scanner): corelite
+				// 只能访问部分页面(report,strategies, scanner): corelite
 				else if(access_level.some(str => str.includes('corelite'))) {
-					const requiredPrefixes = ['/sentimentedge', '/quantedge', '/kaeppelscorner', '/modeledge', '/tradingedge', '/impactedge', '/blog', '/dashboard','/favorites', '/tags', '/backtester/sr/setup', '/backtester/sr/results', '/backtester/list/sample', '/backtester/list/analyst', '/doc', '/contact', '/market']
-					if((to.path.includes('/MR') || to.path.includes('/backtester') || to.path.includes('/doc') || to.path.includes('/contact')  || to.path.includes('/dashboard') || to.path.includes('/market')) && requiredPrefixes.some(prefix => to.path.includes(prefix)) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
-					else if(to.path.includes('/backtester')) next('/backtester/list/sample')
-					else next('/MR/sentimentedge') 
-				}else if(access_level.some(str => str.includes('light-data-yearly'))) {
-					store.commit('states/setErrorMessage404',{status:410,message:'Backtest Engine v2.0'})
-						next({
-							path: '/404'
-						})
+					if((to.path.includes('/MR')) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
+					else next('/MR') 
 				}
+				// else if(access_level.some(str => str.includes('light-data-yearly'))) {
+				// 	store.commit('states/setErrorMessage404',{status:410,message:'Backtest Engine v2.0'})
+				// 		next({
+				// 			path: '/404'
+				// 		})
+				// }
 				// report 所有人都能看， 但是部分是没有编辑功能的只能看
 			}
 				next()
