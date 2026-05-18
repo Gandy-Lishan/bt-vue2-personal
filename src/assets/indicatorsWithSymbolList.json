@@ -156588,5 +156588,40 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "iShares U.S. Medical Devices ETF (IHI) Trend Score",
+        "url": "IHI_trend",
+        "market_symbol": "IHI",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares U.S. Medical Devices ETF (IHI) RelTrend Score",
+        "url": "IHI_reltrend",
+        "market_symbol": "IHI",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IHI Optix",
+        "url": "etf_ihi",
+        "market_symbol": "IHI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IHI Historical Volatility (20-Day)",
+        "url": "IHI_volatility",
+        "market_symbol": "IHI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "IHI Historical Volatility (60-Day)",
+        "url": "IHI_volatility_60d",
+        "market_symbol": "IHI",
+        "type": "other",
+        "updated": "Daily"
     }
 ]

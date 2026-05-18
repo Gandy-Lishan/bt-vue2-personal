@@ -2536,5 +2536,11 @@
     "name": "Global X Data Center & Digital Infrastructure ETF (DTCR)",
     "category": "ETF",
     "inception": "2020/10/29"
+  },
+  {
+    "symbol": "IHI",
+    "name": "iShares U.S. Medical Devices ETF (IHI)",
+    "category": "ETF",
+    "inception": "2006/05/05"
   }
 ]
