@@ -156,7 +156,7 @@ export const createTPSLScopeValidateRule = (
 		const isMatched = !pattern.test(value)
 
 		if (isMatched) {
-			return callback(new Error('Numeric input with two decimal places'))
+			return callback(new Error('Positive number (max 2 decimals)'))
 		}
 
 		const numValue = Number(value)
