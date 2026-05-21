@@ -70,12 +70,12 @@ export const createIntegerRule = (errorMsgEmpty, minVal, maxVal) => {
 	}
 }
 
-export const createPositiveScopeIntegerRule = (errorMsgEmpty, minVal, maxVal, allowZero = false) => {
+export const createPositiveScopeIntegerRule = (errorMsgEmpty, minVal, maxVal, allowZero = false, empty = false) => {
 	return (_, value, callback) => {
-		if (value === '') {
+		if (!empty && value === '') {
 			return callback(new Error(`Enter ${errorMsgEmpty}`))
 		}
-
+		if (empty && value === '') callback()
 		const pattern = /^\d+$/
 		if (!pattern.test(value)) {
 			return callback(new Error(`Enter positive integers only`))
@@ -95,7 +95,7 @@ export const createPositiveScopeIntegerRule = (errorMsgEmpty, minVal, maxVal, al
 		}
 
 		// 检查最大值
-		if (maxVal !== undefined && maxVal !== null && numVal > Number(maxVal)) {
+		if (!empty && (maxVal !== undefined && maxVal !== null && numVal > Number(maxVal))) {
 			return callback(new Error(`Value should be between ${minVal} and ${maxVal}`))
 		}
 
@@ -124,18 +124,67 @@ export const createTPSLValidateRule = (minVal) => {
 		callback()
 	}
 }
-export const createTPSLScopeValidateRule = (minVal, maxVal, canBeEqual, canBeEqualZero, canBeNegative) => {
+export const createTPSLScopeValidateRule = (
+	minVal,
+	maxVal,
+	canBeEqual,
+	canBeEqualZero,
+	canBeNegative,
+	empty = false
+) => {
 	return (_, value, callback) => {
+
+		// 允许为空
+		if (
+			empty &&
+			(value === '' || value === null || value === undefined)
+		) {
+			return callback()
+		}
+
 		// 给 Stop Loss 和 Take Profit 用
 		let pattern = /^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/
-		let isLessThanMin = Number(value) <= Number(minVal)
-		if(canBeEqual && (minVal !== undefined && minVal !== null)) isLessThanMin = Number(value) < Number(minVal)
-		if(canBeEqualZero) pattern = /^(0|([1-9][0-9]*)|([0-9]*\.\d{1,2}))$/
-		if(canBeNegative) pattern = /^(-?(0|([1-9][0-9]*)|([0-9]*\.\d{1,2})))$/
+
+		if (canBeEqualZero) {
+			pattern = /^(0|([1-9][0-9]*)|([0-9]*\.\d{1,2}))$/
+		}
+
+		if (canBeNegative) {
+			pattern = /^(-?(0|([1-9][0-9]*)|([0-9]*\.\d{1,2})))$/
+		}
+
 		const isMatched = !pattern.test(value)
-		if (isLessThanMin && (minVal !== undefined && minVal !== null)) callback(new Error(`Only positive numbers > ${minVal} allowed`))
-		if (isMatched) callback(new Error('Numeric input with two decimal places'))
-		if((maxVal && (minVal !== undefined && minVal !== null)) && (Number(value) > Number(maxVal) || Number(value) < Number(minVal))) {callback(new Error(`Value should be between ${minVal} and ${maxVal}`))}
+
+		if (isMatched) {
+			return callback(new Error('Numeric input with two decimal places'))
+		}
+
+		const numValue = Number(value)
+
+		// 最小值判断
+		if (minVal !== undefined && minVal !== null && minVal !== '') {
+			const isLessThanMin = canBeEqual
+				? numValue < Number(minVal)
+				: numValue <= Number(minVal)
+
+			if (isLessThanMin) {
+				return callback(
+					new Error(
+						`Only positive numbers ${canBeEqual ? '>=' : '>'} ${minVal} allowed`
+					)
+				)
+			}
+		}
+
+		// 最大值判断
+		if (maxVal !== undefined && maxVal !== null && maxVal !== '') {
+			if (numValue > Number(maxVal)) {
+				return callback(
+					new Error(`Value should be <= ${maxVal}`)
+				)
+			}
+		}
+
 		callback()
 	}
 }

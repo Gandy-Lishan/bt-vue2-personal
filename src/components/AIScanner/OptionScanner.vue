@@ -34,24 +34,13 @@
 							>
 						</el-date-picker>
 						</div>
-						<!-- <el-input 
-							placeholder="" 
-							v-model="searchItem" 
-							class="search"
-							size="small"
-							@input="handleQuery"
-							clearable
-							@clear="handleQuery"
-						>
-							<span slot="prepend" style="padding: 0 5px;">{{searchCategory}}</span>
-							<el-button slot="append" icon="el-icon-search" @click="handleQuery" size="small"></el-button>
-						</el-input> -->
+						<div class="btns">
+						<el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button>
+					</div>
 						</div>
 				</div>
 				<div class="filter-section">
-					<div class="btns">
-						<!-- <el-button size="small" type="info" @click="showFilterDialog = !showFilterDialog"><i class="el-icon-arrow-left el-icon-s-operation" style="margin-right: 5px;"></i>Filter</el-button> -->
-					</div>
+
 				</div>
 			</div>
 		</div>
@@ -73,276 +62,135 @@
 				<el-form
 						ref="Form"
 						:model="data"
-						label-position="top"
 						size="small"
 						:rules="rules"
-						style="margin-top: 10px;"
+						label-position="top"
 						>
-						<el-row type="flex" :gutter="20" justify="center" align="middle">
-							<el-col :span="6">
+						<el-row type="flex"  :gutter="20">
+							<el-col :span="8">
 								<el-form-item
-								prop="signals"
+									prop="risk_control_filter"
 								class="_filterConditionBox"
-								>
-								<template slot="label">
-								<label>
-									Signals Filters:
-								</label>
-								</template>
-									<SelectCheck ref="SelectCheck" :options="options" @selected="selected"/>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item
-								prop="risk_control_filter"
-								class="_filterConditionBox"
-								>
-								<template slot="label">
-									<label>
-										Profit Target Range:
-									</label>
-								</template>
-								<div class="_conditionBox">
-								<el-form-item prop="take_profit_condition" label-width="0px">
-										<el-input v-model="data.take_profit_condition" placeholder="Enter number">
-											<template v-slot:append>(%)</template>
-										</el-input>
-								</el-form-item>
-									<span class="sign"> - </span>
-								<el-form-item prop="take_profit" label-width="0px">
-								<el-input v-model="data.take_profit" placeholder="Enter number">
-									<template v-slot:append>(%)</template>
-								</el-input>
-								</el-form-item>
-								</div>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item
-								prop="risk_control_filter"
-								class="_filterConditionBox"
-								>
-								<template slot="label">
-									<label>
-										Stop Loss Range:
-									</label>
-								</template>
-								<div class="_conditionBox">
-									<el-form-item prop="stop_loss_condition" label-width="0px">
-											<el-input v-model="data.stop_loss_condition" placeholder="Enter number">
-												<template v-slot:append>(%)</template>
-											</el-input>
+									>
+									<template slot="label">
+										<label>
+											VOLUME:
+										</label>
+									</template>
+									<div class="_conditionBox">
+											<el-form-item prop="volumeMin" label-width="0px">
+												<el-input v-model="data.volumeMin" placeholder="Min">
+												</el-input>
+											</el-form-item>
+											<span class="sign"> - </span>
+											<el-form-item prop="volumeMax" label-width="0px">
+												<el-input v-model="data.volumeMax" placeholder="Max">
+												</el-input>
+											</el-form-item>
+									</div>
 									</el-form-item>
-										<span class="sign"> - </span>
-										<el-form-item prop="stop_loss" label-width="0px">
-										<el-input v-model="data.stop_loss" placeholder="Enter number">
-											<template v-slot:append>(%)</template>
-										</el-input>
-										</el-form-item>
-								</div>
-								</el-form-item>
 							</el-col>
-							<el-col :span="6">
+							<el-col :span="8">
 								<el-form-item
-								prop="risk_control_filter"
+									prop="risk_control_filter"
 								class="_filterConditionBox"
-								>
-								<template slot="label">
-									<label>
-										Time In Market Range:
-									</label>
-								</template>
-								<div class="_conditionBox">
-								<el-form-item prop="time_in_market_condition" label-width="0px">
-										<el-input v-model="data.time_in_market_condition" placeholder="Enter number">
-											<template v-slot:append>(bars)</template>
-										</el-input>
-								</el-form-item>
-									<span class="sign"> - </span>
-								<el-form-item prop="time_in_market" label-width="0px">
-								<el-input v-model="data.time_in_market" placeholder="Enter bars">
-									<template v-slot:append>(bars)</template>
-								</el-input>
-								</el-form-item>
-								</div>
-								</el-form-item>
+									>
+									<template slot="label">
+										<label>
+											OPEN INTEREST:
+										</label>
+									</template>
+									<div class="_conditionBox">
+											<el-form-item prop="openInterestMin" label-width="0px">
+												<el-input v-model="data.openInterestMin" placeholder="Min">
+												</el-input>
+											</el-form-item>
+											<span class="sign"> - </span>
+											<el-form-item prop="openInterestMax" label-width="0px">
+												<el-input v-model="data.openInterestMax" placeholder="Max">
+												</el-input>
+											</el-form-item>
+									</div>
+									</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row type="flex"  :gutter="20">
-							<el-col :span="6">
+							<el-col :span="8">
 								<el-form-item
 									prop="risk_control_filter"
-									class="_filterConditionBox"
+								class="_filterConditionBox"
 									>
 									<template slot="label">
 										<label>
-											Max Risk Range:
+											IMPLIED VOLATILITY:
 										</label>
 									</template>
 									<div class="_conditionBox">
-										<el-form-item prop="max_risk_condition" label-width="0px">
-												<el-input v-model="data.max_risk_condition" placeholder="Enter number">
+											<el-form-item prop="impliedVolatilityMin" label-width="0px">
+												<el-input v-model="data.impliedVolatilityMin" placeholder="Min">
 													<template v-slot:append>(%)</template>
 												</el-input>
-										</el-form-item>
+											</el-form-item>
 											<span class="sign"> - </span>
-											<el-form-item prop="max_risk" label-width="0px">
-											<el-input v-model="data.max_risk" placeholder="Enter number">
-												<template v-slot:append>(%)</template>
-											</el-input>
+											<el-form-item prop="impliedVolatilityMax" label-width="0px">
+												<el-input v-model="data.impliedVolatilityMax" placeholder="Max">
+													<template v-slot:append>(%)</template>
+												</el-input>
 											</el-form-item>
 									</div>
 									</el-form-item>
 							</el-col>
-							<el-col :span="6">
+							<el-col :span="8">
 								<el-form-item
 									prop="risk_control_filter"
-									class="_filterConditionBox"
+								class="_filterConditionBox"
 									>
 									<template slot="label">
 										<label>
-											Z-Score Range:
+											DELTA:
 										</label>
 									</template>
 									<div class="_conditionBox">
-										<el-form-item prop="z_score_condition" label-width="0px">
-												<el-input v-model="data.z_score_condition" placeholder="Enter number">
+											<el-form-item prop="deltaMin" label-width="0px">
+												<el-input v-model="data.deltaMin" placeholder="Min">
 												</el-input>
-										</el-form-item>
+											</el-form-item>
 											<span class="sign"> - </span>
-											<el-form-item prop="z_score" label-width="0px">
-											<el-input v-model="data.z_score" placeholder="Enter number">
-											</el-input>
+											<el-form-item prop="deltaMax" label-width="0px">
+												<el-input v-model="data.deltaMax" placeholder="Max">
+												</el-input>
 											</el-form-item>
 									</div>
 									</el-form-item>
 							</el-col>
-							<el-col :span="6">
+							<el-col :span="8">
 								<el-form-item
 									prop="risk_control_filter"
-									class="_filterConditionBox"
+								class="_filterConditionBox"
 									>
 									<template slot="label">
 										<label>
-											Sharpe Ratio Range:
+											VEGA:
 										</label>
 									</template>
 									<div class="_conditionBox">
-										<el-form-item prop="sharpe_ratio_condition" label-width="0px">
-												<el-input v-model="data.sharpe_ratio_condition" placeholder="Enter number">
+											<el-form-item prop="vegaMin" label-width="0px">
+												<el-input v-model="data.vegaMin" placeholder="Min">
 												</el-input>
-										</el-form-item>
+											</el-form-item>
 											<span class="sign"> - </span>
-											<el-form-item prop="sharpe_ratio" label-width="0px">
-											<el-input v-model="data.sharpe_ratio" placeholder="Enter number">
-											</el-input>
+											<el-form-item prop="vegaMax" label-width="0px">
+												<el-input v-model="data.vegaMax" placeholder="Max">
+												</el-input>
 											</el-form-item>
 									</div>
 									</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item
-									prop="risk_control_filter"
-									class="_filterConditionBox"
-									>
-									<template slot="label">
-										<label>
-											STD.DEV Range:
-										</label>
-									</template>
-									<div class="_conditionBox">
-										<el-form-item prop="std_dev_condition" label-width="0px">
-												<el-input v-model="data.std_dev_condition" placeholder="Enter number">
-												</el-input>
-										</el-form-item>
-											<span class="sign"> - </span>
-											<el-form-item prop="std_dev" label-width="0px">
-											<el-input v-model="data.std_dev" placeholder="Enter number">
-											</el-input>
-											</el-form-item>
-									</div>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="6">
-								<el-form-item
-									prop="risk_control_filter"
-									class="_filterConditionBox"
-									>
-									<template slot="label">
-										<label>
-											Expected Return Range:
-										</label>
-									</template>
-									<div class="_conditionBox">
-										<el-form-item prop="expected_return_condition" label-width="0px">
-												<el-input v-model="data.expected_return_condition" placeholder="Enter number">
-												<template v-slot:append>(%)</template>
-												</el-input>
-										</el-form-item>
-											<span class="sign"> - </span>
-											<el-form-item prop="expected_return" label-width="0px">
-											<el-input v-model="data.expected_return" placeholder="Enter number">
-												<template v-slot:append>(%)</template>
-											</el-input>
-											</el-form-item>
-									</div>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item
-									prop="risk_control_filter"
-									class="_filterConditionBox"
-									>
-									<template slot="label">
-										<label>
-											Win Rate Range:
-										</label>
-									</template>
-									<div class="_conditionBox">
-										<el-form-item prop="win_rate_condition" label-width="0px">
-												<el-input v-model="data.win_rate_condition" placeholder="Enter number">
-												<template v-slot:append>(%)</template>
-												</el-input>
-										</el-form-item>
-											<span class="sign"> - </span>
-											<el-form-item prop="win_rate" label-width="0px">
-											<el-input v-model="data.win_rate" placeholder="Enter number">
-												<template v-slot:append>(%)</template>
-											</el-input>
-											</el-form-item>
-									</div>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item
-									prop="risk_control_filter"
-									class="_filterConditionBox"
-									>
-									<template slot="label">
-										<label>
-											Trend Score Range:
-										</label>
-									</template>
-									<div class="_conditionBox">
-										<el-form-item prop="trend_score_condition" label-width="0px">
-												<el-input v-model="data.trend_score_condition" placeholder="Enter number">
-												</el-input>
-										</el-form-item>
-											<span class="sign"> - </span>
-											<el-form-item prop="trend_score" label-width="0px">
-											<el-input v-model="data.trend_score" placeholder="Enter number">
-											</el-input>
-											</el-form-item>
-									</div>
-								</el-form-item>
 							</el-col>
 						</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
 					<el-button size="mini" type="info" @click="disableFilter">No Filter</el-button>
-					<el-button size="mini" @click="resetForm">Reset Filter</el-button>
+					<!-- <el-button size="mini" @click="resetForm">Reset Filter</el-button> -->
 						<el-button size="mini" type="primary" @click="handleDialogClose">Apply Filter</el-button>
 				</span>
 		</el-dialog>
@@ -405,97 +253,65 @@ export default {
 		win_rate: 80,
 		trend_score_condition: 0,
 		trend_score: 10,
-		signals: ['All']
+		signals: ['All'],
+		volumeSelect: 5,
+		volumeMin: 10,
+		volumeMax: '',
+		openInterestMin: 100,
+		openInterestMax: '',
+		impliedVolatilityMin: 10,
+		impliedVolatilityMax: 150,
+		deltaMin: 0,
+		deltaMax: 0.08,
+		vegaMin: 0,
+		vegaMax: 1,
 	},
 	options: ['All'],
 	date: '',
 	startPickerOptions: {
 		disabledDate: this.handleDisabledStartDate
 	},
+	showFilterDialog: false,
 	rules: {
-			time_in_market_condition: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market, true)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', 0, this.data.time_in_market, true)(rule, value, callback), trigger: 'change' }
+			volumeMin: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('volume', 0, this.data.volumeMax, true, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('volume', 0, this.data.volumeMax, true, true)(rule, value, callback), trigger: 'change' }
 			],
-			time_in_market: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('time in market', this.data.time_in_market_condition)(rule, value, callback), trigger: 'change' }
+			volumeMax: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('volume', this.data.volumeMin, null, true, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('volume', this.data.volumeMin, null, true, true)(rule, value, callback), trigger: 'change' }
 			],
-			stop_loss_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.stop_loss, true, true)(rule, value, callback), trigger: 'change' }
+			openInterestMin: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('OPEN INTEREST', 0, this.data.openInterestMax, true, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('OPEN INTEREST', 0, this.data.openInterestMax, true, true)(rule, value, callback), trigger: 'change' }
 			],
-			stop_loss: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, 100, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.stop_loss_condition, 100, true)(rule, value, callback), trigger: 'change' }
+			openInterestMax: [
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('OPEN INTEREST', this.data.openInterestMin, null, false, true)(rule, value, callback), trigger: 'blur' },
+				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('OPEN INTEREST', this.data.openInterestMin, null, false, true)(rule, value, callback), trigger: 'change' }
 			],
-			take_profit_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.take_profit, true, true)(rule, value, callback), trigger: 'change' }
+			impliedVolatilityMin: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.impliedVolatilityMax, true, true, null, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.impliedVolatilityMax, true, true, null, true)(rule, value, callback), trigger: 'change' }
 			],
-			take_profit: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, 100, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.take_profit_condition, 100, true)(rule, value, callback), trigger: 'change' }
+			impliedVolatilityMax: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.impliedVolatilityMin, null, true, null, null, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.impliedVolatilityMin, null, true, null, null, true)(rule, value, callback), trigger: 'change' }
 			],
-			max_risk_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.max_risk, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.max_risk, true, true)(rule, value, callback), trigger: 'change' }
+			deltaMin: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.deltaMax, true, true, null, null)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.deltaMax, true, true, null, null)(rule, value, callback), trigger: 'change' }
 			],
-			max_risk: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, 100, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.max_risk_condition, 100, true)(rule, value, callback), trigger: 'change' }
+			deltaMax: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.deltaMin, null, true, null, null, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.deltaMin, null, true, null, null, true)(rule, value, callback), trigger: 'change' }
 			],
-			z_score_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.z_score, true, true, true)(rule, value, callback), trigger: 'change' }
+			vegaMin: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.vegaMax, true, true, null, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.vegaMax, true, true, null, true)(rule, value, callback), trigger: 'change' }
 			],
-			z_score: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.z_score_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
-			],
-			sharpe_ratio_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.sharpe_ratio, true, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.sharpe_ratio, true, true, true)(rule, value, callback), trigger: 'change' }
-			],
-			sharpe_ratio: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.sharpe_ratio_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.sharpe_ratio_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
-			],
-			std_dev_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.std_dev, true, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(null, this.data.std_dev, true, true, true)(rule, value, callback), trigger: 'change' }
-			],
-			std_dev: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.std_dev_condition, null, true, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.std_dev_condition, null, true, true, true)(rule, value, callback), trigger: 'change' }
-			],
-			expected_return_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.expected_return, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.expected_return, true, true)(rule, value, callback), trigger: 'change' }
-			],
-			expected_return: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.expected_return_condition, 100, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.expected_return_condition, 100, true)(rule, value, callback), trigger: 'change' }
-			],
-			win_rate_condition: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.win_rate, true, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(0, this.data.win_rate, true, true)(rule, value, callback), trigger: 'change' }
-			],
-			win_rate: [
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.win_rate_condition, 100, true)(rule, value, callback), trigger: 'blur' },
-			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.win_rate_condition, 100, true)(rule, value, callback), trigger: 'change' }
-			],
-			signals: [
-				{ validator: validateSignals, trigger: 'blur' },
-				{ validator: validateSignals, trigger: 'change' },
-			],
-			trend_score_condition: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', 0, this.data.trend_score, true)(rule, value, callback), trigger: 'change' }
-			],
-			trend_score: [
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'blur' },
-				{ validator: (rule, value, callback) => createPositiveScopeIntegerRule('trend score', this.data.trend_score_condition, 10)(rule, value, callback), trigger: 'change' }
+			vegaMax: [
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.vegaMin, null, true, null, null, true)(rule, value, callback), trigger: 'blur' },
+			{ validator: (rule, value, callback) => createTPSLScopeValidateRule(this.data.vegaMin, null, true, null, null, true)(rule, value, callback), trigger: 'change' }
 			],
 
     }
@@ -557,7 +373,34 @@ export default {
 		return await validateForm(formName)
 	},
 	filterRangeCondition(searchResult){
-		return searchResult
+		debugger
+		if(this.showFilterDialog || this.disabledFilter) return searchResult
+		console.log('searchResult', searchResult)
+			const results =  searchResult.filter(item => 
+			 this.compareValue(
+				Number(item['Volume']),
+				this.data.volumeMin,
+				this.data.volumeMax
+			) && this.compareValue(
+				Number(item['OI']),
+				this.data.openInterestMin,
+				this.data.openInterestMax
+			) && this.compareValue(
+				parseFloat(item['IV'].replace('%', '')),
+				this.data.impliedVolatilityMin,
+				this.data.impliedVolatilityMax
+			) && this.compareValue(
+				Number(item['Delta']),
+				this.data.deltaMin,
+				this.data.deltaMax
+			) && this.compareValue(
+				Number(item['Vega']),
+				this.data.vegaMin,
+				this.data.vegaMax
+			)
+			)
+			console.log(results)
+			return results
 	},
 	getSearchresult() {
 	if (!this.searchItem) {
@@ -672,17 +515,11 @@ getMatchScore(target, keyword) {
 	},
 	resetForm() {
 		this.$refs['Form'].resetFields();
-		this.options = [...Array.from(new Set(this.originData.content.map(ele => ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
-		this.data.signals = ['All']
-		this.$refs['SelectCheck'].optionsAll = true
 		this.disabledFilter = false
-		// this.showFilterDialog = false
-		// this.handleQuery();
+		this.showFilterDialog = false
+		this.handleQuery();
 	},
 	disableFilter() {
-		this.options = [...Array.from(new Set(this.originData.content.map(ele => ele._Signal).filter(ele => ele !== undefined && ele !== null && ele !== ''))).map(item => ({label: item, value: item, check: true}))]
-		this.data.signals = ['All']
-		this.$refs['SelectCheck'].optionsAll = true
 		this.disabledFilter = true
 		this.showFilterDialog = false
 		this.handleQuery();
@@ -707,7 +544,48 @@ getMatchScore(target, keyword) {
 		await this.loadData()
 		this.handleQuery()
 	},
-  }
+	compareValue(targetValue, inputMin, inputMax) {
+			debugger
+
+			const normalize = (val) => {
+				if (val === null || val === undefined || val === '') return null
+
+				return parseFloat(
+					String(val)
+						.replace(/,/g, '')
+						.replace('%', '')
+				)
+			}
+
+			const target = normalize(targetValue)
+
+			// target 空值直接通过
+			if (target === null || isNaN(target)) {
+				return true
+			}
+
+			const valueMin = normalize(inputMin)
+			const valueMax = normalize(inputMax)
+
+			// 最小值和最大值都没设置
+			if (valueMin === null && valueMax === null) {
+				return true
+			}
+
+			// 只设置最小值
+			if (valueMin !== null && valueMax === null) {
+				return target >= valueMin
+			}
+
+			// 只设置最大值
+			if (valueMin === null && valueMax !== null) {
+				return target <= valueMax
+			}
+
+			// 同时设置最小值和最大值
+			return target >= valueMin && target <= valueMax
+		}
+ }
 };
 </script>
 

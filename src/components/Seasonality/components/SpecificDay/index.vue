@@ -327,10 +327,10 @@ export default {
     },
     handleDisabledStartDate(time) {
       const end_date = this.data.end_date
-      return time.getFullYear() > end_date || time.getFullYear() < 1800;
+      return time.getFullYear() > end_date || time.getFullYear() < 1928;
     },
     handleDisabledEndDate(time) {
-      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1800  || time.getFullYear() < this.data.start_date;;
+      return time.getFullYear() > new Date().getFullYear() || time.getFullYear() < 1928  || time.getFullYear() < this.data.start_date;;
     },
     pickStartDate(start_date) {
       this.changeOptions()

@@ -22,11 +22,13 @@
         <el-form size="small" status-icon ref="TickerForm" label-position="top">
           <el-form-item>
             <el-select
+            clearable
               v-model="tickers"
               multiple
               filterable
               @change="onSelectChange"
               :filter-method="handleFilterInput"
+              allow-create
               placeholder="- Select Ticker -">
               <el-option
                 v-for="item in filteredList"
@@ -39,7 +41,7 @@
                   <span class="symbol-url">{{ item.name }}</span>
                 </div>
               </el-option>
-            </el-select>
+            </el-select>                                                                                                                             
           </el-form-item>
       </el-form>
       </div>
@@ -192,7 +194,8 @@ export default {
       rowUrl: null,
       processTips: '',
       percentage: 0,
-      filteredList: []      // 根据输入实时更新的排序列表
+      filteredList: [],      // 根据输入实时更新的排序列表
+      symbolListMap: new Map()
       /* WatchList End */
     }
   },
@@ -214,6 +217,10 @@ export default {
   },
   mounted() {
     this._dropdownList = this.symbolList
+    this.symbolList.map(item => {
+      const urlLower = item.url?.toLowerCase?.() || ''
+      if(!this.symbolListMap.has(urlLower)) this.symbolListMap.set(urlLower, item)
+    })
     this.filteredList = this._dropdownList
     this.attachScrollListener()
     this.generateName()
@@ -535,6 +542,13 @@ export default {
         this.popUpMsgBox('You can only select up to 10 tickers');
         val.splice(10); // 截断多余的值
       }
+      val.forEach(item => {
+        if (typeof item === 'string') {
+          let arr = item.split(/[\s,;，、]+/).map(i => i.trim()).filter(Boolean).filter(url => this.symbolListMap.has(url.toLowerCase())).map(url => this.symbolListMap.get(url.toLowerCase())?.url)
+          console.log('lishan arr', arr)
+          this.tickers = Array.from(new Set([...val, ...arr])).filter(url => this.symbolListMap.has(url.toLowerCase()))
+        }
+      })
       this.$emit('retainFormTicker', val)
     },
     deleteRowURL(url) {
