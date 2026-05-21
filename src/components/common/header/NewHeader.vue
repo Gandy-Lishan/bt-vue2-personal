@@ -348,6 +348,11 @@ export default {
               keyPath: '6-4',
               path: '/watchlist'
             },
+            {
+              label: 'My Stuff Concierge Setup Service',
+              keyPath: '6-5',
+              path: '/stuff_contact'
+            },
           ]
         },
         {

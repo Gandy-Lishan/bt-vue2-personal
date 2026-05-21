@@ -154,7 +154,7 @@ name: 'Contact',
    this.isSubmitting = true;
    try {
     await sendContactTicketFront({
-    data: this.formData, isInquiry: false, isEnterprise: false
+    data: this.formData, isInquiry: false, isEnterprise: false, subject: 'Backtest Concierge Setup Service'
    })
    this.popUpMsgBox('Thanks! Your message has been received. Our team will reach out soon.', 'success');
 

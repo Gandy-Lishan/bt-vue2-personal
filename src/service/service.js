@@ -2594,7 +2594,7 @@ export function sendContactTicketFront(payload) {
 	const form = {
 		message: isInquiry ? `Product:${data.message}` : data.message,
 		email: data.email,
-		subject: 'Backtest Concierge Setup Service',
+		subject: payload?.subject || 'Backtest Concierge Setup Service',
 	}
 
 	const headers = {
