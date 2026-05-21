@@ -156623,5 +156623,19 @@
         "market_symbol": "IHI",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "JK Gold Miner Calendar",
+        "url": "jk_gold_miner_calendar",
+        "market_symbol": "HUI",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Gold Miner Calendar Status",
+        "url": "jk_gold_miner_calendar_status",
+        "market_symbol": "HUI",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
