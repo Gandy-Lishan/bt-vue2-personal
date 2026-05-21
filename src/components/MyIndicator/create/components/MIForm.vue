@@ -923,6 +923,11 @@ export default {
         if(symbol_ma1 === 'roc' || symbol_ma1 === 'amplitude' || symbol_ma1 === 'amplify') symbol_ma1 = 'c'
         commonData.next_process = `sh0_${symbol_ma1 || 'c'}|sh${shift || 0}_${symbol_ma2 || 'c'}`
       }
+      debugger
+      if(this.data.categories.includes('Indicator')) {
+        let {shift} = this.data
+        commonData.next_process = `sh0_c|sh${shift || 0}_c`
+      }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
         const percentageStrings = this.weightData.map(item => {
@@ -1055,6 +1060,10 @@ export default {
         if(symbol_ma2 === 'roc' || symbol_ma2 === 'amplitude' || symbol_ma2 === 'amplify') symbol_ma2 = 'c'
         if(symbol_ma1 === 'roc' || symbol_ma1 === 'amplitude' || symbol_ma1 === 'amplify') symbol_ma1 = 'c'
         commonData.next_process = `sh0_${symbol_ma1 || 'c'}|sh${shift || 0}_${symbol_ma2 || 'c'}`
+      }
+      if(this.data.categories.includes('Indicator')) {
+        let {shift} = this.data
+        commonData.next_process = `sh0_c|sh${shift || 0}_c`
       }
       if(this.data.categories == 'WIC') {
         // if (this.weightValidErrMsg) return;
@@ -1635,7 +1644,7 @@ export default {
               }
             }
           }else if(item.key === 'shift') {
-            if(data.categories.includes('Symbol')) {
+            if(data.categories.includes('Symbol') || data.categories.includes('Indicator')) {
             if(data.next_process) {
                 const result = extractValues(data.next_process)
                 if(result !== null) {

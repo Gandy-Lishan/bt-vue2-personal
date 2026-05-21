@@ -71,7 +71,7 @@ export default {
       return this.config
     },
     isSymbol() {
-      return ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(this.categories)
+      return ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread','Indicator Addition', 'Indicator Ratio', 'Indicator Spread',].includes(this.categories)
     },
     isMAOption() {
       return ['MA', 'EMA'].includes(this.MAType)
@@ -234,7 +234,7 @@ export default {
         if(Object.keys(newValue).length === 0) return
         // debugger
         console.log('lishan _config', this._config)
-        const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(this.categories)
+        const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread', 'Indicator Addition', 'Indicator Ratio', 'Indicator Spread'].includes(this.categories)
         const {field, value} = newValue
         if(this.config.type == 'SelectInput') this.showInput = true
         else this.showInput = newValue.checked
@@ -354,6 +354,7 @@ export default {
         if(!this.showInput) value = 0
         this.$emit('saveData', this.config.field, value)
       }else if(this.config.field === 'shift') {
+        debugger
         let value = (this.showInput && this.isSymbol && this.inputVisibility === 'visible') ? this.value : 0
         this.$emit('saveData', `shift`, value)
       }
