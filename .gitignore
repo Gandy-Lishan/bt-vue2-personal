@@ -24,5 +24,12 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+# Claude Code - private assistant files
+CLAUDE.md
+CONTEXT.md
+.scratch/
+docs/agents/
+.claude/settings.local.json
+
 #ignore permission.js
 # src/router/permission.js
