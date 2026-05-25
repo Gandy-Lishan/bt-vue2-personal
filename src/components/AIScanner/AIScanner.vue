@@ -10,6 +10,10 @@
 						<el-button class="tutorial" @click="jumpToTutoiral" icon="el-icon-video-camera" type="text">
 							<span>Watch Smart Stock Scanner Tutorial</span>
 						</el-button>
+						<span> | </span>
+						<el-button class="tutorial" @click="jumpToQA" icon="el-icon-document" type="text">
+							<span>Smart Stock Scanner Q&A</span>
+						</el-button>
 					</div>
 				</div>
 			</template>
@@ -1122,6 +1126,10 @@ getMatchScore(target, keyword) {
 	jumpToTutoiral(){
 			const path = 'https://youtu.be/C-wBYWy-fQY?si=1vVrxKsKiosrhYWb'
 			window.open(path, '_blank')
+	},
+	jumpToQA() {
+		const path = 'https://btv2.sentimentrader.com/doc/QA/0'
+		window.open(path, '_blank')
 	},
 	displayData(data, removeZero = false, decimal = 1) {
 			const numberRegex = /^-?\d+(\.\d+)?$/

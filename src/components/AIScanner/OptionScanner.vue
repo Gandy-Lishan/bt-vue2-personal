@@ -6,6 +6,11 @@
 			<template slot="title">
 				<div class="title-container">
 					<h2 class="page-title">Smart Option Scanner (click to expand)</h2>
+					<div class="searchBox">
+						<el-button class="tutorial" @click="jumpToQA" icon="el-icon-document" type="text">
+							<span>Smart Option Scanner Q&A</span>
+						</el-button>
+					</div>
 				</div>
 			</template>
 			<div class="description-container">
@@ -523,6 +528,10 @@ getMatchScore(target, keyword) {
 		this.disabledFilter = true
 		this.showFilterDialog = false
 		this.handleQuery();
+	},
+	jumpToQA() {
+		const path = 'https://btv2.sentimentrader.com/doc/QA/2'
+		window.open(path, '_blank')
 	},
 	displayData(data, removeZero = false, numberDecimal = 1) {
 		const numberRegex = /^-?\d+(\.\d+)?$/

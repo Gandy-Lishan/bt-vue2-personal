@@ -8,6 +8,11 @@
         <template v-slot:title>
           <div class="title">
             <p>Scanner Backtest List</p>
+            <div class="searchBox">
+            <el-button class="tutorial" @click="jumpToQA" icon="el-icon-document" type="text">
+							<span>Smart Scanner Backtest Q&A</span>
+						</el-button>
+          </div>
           </div>
         </template>
         <div class="content">
@@ -371,6 +376,10 @@ export default {
 				return ''
 			}
 		},
+    jumpToQA() {
+		const path = 'https://btv2.sentimentrader.com/doc/QA/1'
+		window.open(path, '_blank')
+	},
   }
 }
 </script>
@@ -407,7 +416,7 @@ export default {
 }
 .title {
   display: inline-flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   font-size: 18px;
   font-weight: 300;
@@ -442,5 +451,10 @@ export default {
 	right: 90px;
   margin-left: 10px;
 	color: #333333;
+}
+.searchBox {
+  position: absolute;
+  right: 0;
+  margin-right: 35px;
 }
 </style>
