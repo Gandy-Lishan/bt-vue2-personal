@@ -2015,6 +2015,22 @@ if (!CIQ.Studies) {
 		sd.outputMap = {}
 		sd.outputMap[sd.inputs.display] = "Result";
 	};
+	CIQ.Studies.calculateSentimentWithShift = function(stx, sd) {
+		const field = sd.inputs.Field;
+		const shift = sd.inputs.shift;
+		const quotes = sd.chart.scrubbed;
+		const outputField = 'ShiftedSentimentIndicator';  // 固定字段名
+
+		for (var i = sd.startFrom; i < quotes.length; i++) {
+			const sourceIndex = i - shift;
+			if (sourceIndex >= 0 && quotes[sourceIndex][field]) {
+				quotes[i][outputField] = quotes[sourceIndex][field];
+			}
+		}
+
+		sd.outputMap = {}
+		sd.outputMap[outputField] = "Result";
+	};
 
 	/** 注册自定义Study */
 	CIQ.Studies.studyLibrary = CIQ.extend(CIQ.Studies.studyLibrary, {
@@ -2365,6 +2381,11 @@ if (!CIQ.Studies) {
 			inputs: {},
             calculateFN: CIQ.Studies.calculateCriteriaScore,
 			outputs: { Result: "auto" },
+        },
+		"ShiftedSentimentIndicator": {
+            name: "ShiftedSentimentIndicator",
+			inputs: { shift: 0 },
+            calculateFN: CIQ.Studies.calculateSentimentWithShift,
         },
 	});
 

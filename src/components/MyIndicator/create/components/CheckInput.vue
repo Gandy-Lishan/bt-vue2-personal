@@ -234,7 +234,7 @@ export default {
         if(Object.keys(newValue).length === 0) return
         // debugger
         console.log('lishan _config', this._config)
-        const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread', 'Indicator Addition', 'Indicator Ratio', 'Indicator Spread'].includes(this.categories)
+        const isSymbol = ['Symbol Addition', 'Symbol Ratio', 'Symbol Spread'].includes(this.categories)
         const {field, value} = newValue
         if(this.config.type == 'SelectInput') this.showInput = true
         else this.showInput = newValue.checked
@@ -261,7 +261,7 @@ export default {
             this.showInput = true
           }
           else {
-            this.MAType = newValue.MAType || ''
+            this.MAType = newValue.MAType || (isIndicator ? 'i' : '')
           }
         } catch (error) {
           

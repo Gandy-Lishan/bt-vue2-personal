@@ -3608,6 +3608,23 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	// console.log('invoke calculateMovingAverage', sd.type, sd.parameters)
 	// console.log('invoke calculateMovingAverage')
 	if (!sd.chart.dataSet) return;
+	// Get field early to check if we need to pre-calculate ShiftedSentimentIndicator
+	var field = sd.inputs.Field;
+	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
+
+	/** Pre-calculate ShiftedSentimentIndicator if needed (MyIndicator same indicator with shift)*/
+	if(field === 'ShiftedSentimentIndicator') {
+		// Find the ShiftedSentimentIndicator study to get source and shift
+		const shiftedStudy = Object.values(CIQ.stxx.layout.studies)
+			.find(s => s.type === 'ShiftedSentimentIndicator');
+		if(shiftedStudy && shiftedStudy.inputs) {
+			const sourceField = shiftedStudy.inputs.Field;
+			const shift = parseInt(shiftedStudy.inputs.shift) || 0;
+			// Pre-calculate shifted values in dataSet
+			CIQ.stxx.calculateShiftedSentiment(sd.chart, sourceField, shift);
+		}
+	}
+
 	var type = sd.inputs.Type;
 	if (type == "ma" || type == "sma" || !type) type = "simple"; // handle when the default inputs are passed in
 	var typeMap = CIQ.Studies.movingAverage.typeMap;
@@ -3616,7 +3633,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	} else if (type !== "simple") {
 		return;
 	}
-	
+
 	var quotes = sd.chart.scrubbed
 	var acc = 0;
 	var vals = [];
@@ -3625,8 +3642,6 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 		name = p + " " + name;
 	}
 
-	var field = sd.inputs.Field;
-	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
 	/** 用subField代替sd.subField,考虑到sd.subField一直是默认的Close */
 	var subField = field
 	/** 	

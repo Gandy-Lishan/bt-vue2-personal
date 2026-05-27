@@ -567,6 +567,19 @@ if (!CIQ.Marker) {
                              }
                         }
                      }
+                     else if(sd.type == 'ShiftedSentimentIndicator') {
+                        for (var output in sd.outputMap) {
+                            if (output && !dupMap[output]) {
+                                 fields.push({
+                                     member: output,
+                                     display: sd.inputs.display,
+                                     panel: panel,
+                                     yAxis: yAxis
+                                 });
+                                 dupMap[output] = 1;
+                             }
+                        }
+                     }
                      else if(sd.type == 'ST ROCLike' || sd.type == 'Amplitude' || sd.type == 'CriteriaScore'){ // roc自带symbol信息
                         for (var output in sd.outputMap) {
                             if (output && !dupMap[output]) {

@@ -54,6 +54,29 @@ if (CIQ.ChartEngine) {
 		}
 	};
 
+	/**
+	 * Calculates Shifted Sentiment Indicator values for the dataSet
+	 * Similar to calculateSymbolRatio, pre-computes shifted values for MA calculation
+	 * @param  {CIQ.ChartEngine.Chart} chart The chart to calculate
+	 * @param  {string} sourceField The original indicator field (e.g., 'model_aim')
+	 * @param  {number} shift The number of periods to shift
+	 * @param  {array} data The data to process, if omitted, uses chart.dataSet
+	 * @memberof CIQ.ChartEngine
+	 */
+	CIQ.ChartEngine.prototype.calculateShiftedSentiment = function (chart, sourceField, shift, data) {
+		if (!data) data = chart.dataSet;
+		if (!sourceField || shift === undefined || shift === null) return;
+
+		const outputField = 'ShiftedSentimentIndicator';
+
+		for (var i = 0; i < data.length; i++) {
+			const sourceIndex = i - shift;
+			if (sourceIndex >= 0 && data[sourceIndex][sourceField]) {
+				data[i][outputField] = data[sourceIndex][sourceField];
+			}
+		}
+	};
+
 	/*********************chartiq-DEV-ONLY-source.js**********************/
 
 	/**

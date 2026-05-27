@@ -774,7 +774,7 @@ export default {
         // 不是symbol類型的話，不用關心雙股票條件，默認爲entry1
         criteria = 'entry1'
       }
-      if(type == 'i') {
+      if(type == 'i') { // 等于没加均线
         CIQ.addOwnIndicatorMAStudy(
           0,
           'MA',
@@ -786,6 +786,7 @@ export default {
         ) 
       }
       if(['EMA','MA'].includes(type)) {
+        if(this.data.categories && this.data.categories.includes('Indicator') && this.showShiftInput && field == 'ma2') fieldName='ShiftedSentimentIndicator'
         CIQ.addOwnIndicatorMAStudy(
           value,
           type,
@@ -828,10 +829,17 @@ export default {
 
         // shift变更时同步shift状态到vuex
         await this.$store.dispatch('chart/set_mi_shift',{'display': true, 'showInput': showInput, 'value':  Number(val)})
-
         // offset仅供显示
         const offset = showInput ? Number(val) : 0
-        CIQ.addOwnIndicatorShift(offset) 
+        if(this.data.categories && this.data.categories.includes('Indicator')) {
+          CIQ.addIndicatorShift(this.data.indicator_2,this.data.indicator_2_url,offset)
+          // 当shift变化时，需要重新添加ma2（如果启用了）
+          if(this.$refs['ma2Form'].showInput && ['MA','EMA'].includes(this.$refs['ma2Form'].MAType)) {
+            this.manageMICondStudies(this.$refs['ma2Form'].value,this.$refs['ma2Form'].MAType,'ma2',this.$refs['ma2Form'].showInput)
+          }
+        }else{
+          CIQ.addSymbolShift(offset)
+        }
       }
     },
     submitForm:debounce(async function() {
