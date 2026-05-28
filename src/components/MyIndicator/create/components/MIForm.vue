@@ -786,7 +786,13 @@ export default {
         ) 
       }
       if(['EMA','MA'].includes(type)) {
-        if(this.data.categories && this.data.categories.includes('Indicator') && this.showShiftInput && field == 'ma2') fieldName='ShiftedSentimentIndicator'
+        if(this.data.categories && this.data.categories.includes('Indicator') && this.showShiftInput && field == 'ma2') {
+          const shiftedStudy = Object.values(CIQ.stxx.layout.studies)
+            .find(s => s.type === 'ShiftedSentimentIndicator');
+          if(shiftedStudy && shiftedStudy.inputs) {
+            fieldName=shiftedStudy.inputs.display
+          }
+        }
         CIQ.addOwnIndicatorMAStudy(
           value,
           type,

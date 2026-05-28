@@ -3611,9 +3611,8 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	// Get field early to check if we need to pre-calculate ShiftedSentimentIndicator
 	var field = sd.inputs.Field;
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
-
 	/** Pre-calculate ShiftedSentimentIndicator if needed (MyIndicator same indicator with shift)*/
-	if(field === 'ShiftedSentimentIndicator') {
+	if(sd.panel.startsWith("‌ShiftedSentimentIndicator‌")) {
 		// Find the ShiftedSentimentIndicator study to get source and shift
 		const shiftedStudy = Object.values(CIQ.stxx.layout.studies)
 			.find(s => s.type === 'ShiftedSentimentIndicator');
@@ -3621,7 +3620,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 			const sourceField = shiftedStudy.inputs.Field;
 			const shift = parseInt(shiftedStudy.inputs.shift) || 0;
 			// Pre-calculate shifted values in dataSet
-			CIQ.stxx.calculateShiftedSentiment(sd.chart, sourceField, shift);
+			CIQ.stxx.calculateShiftedSentiment(sd.chart, sourceField, field, shift);
 		}
 	}
 

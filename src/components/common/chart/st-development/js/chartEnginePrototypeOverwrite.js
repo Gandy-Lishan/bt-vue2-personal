@@ -63,11 +63,11 @@ if (CIQ.ChartEngine) {
 	 * @param  {array} data The data to process, if omitted, uses chart.dataSet
 	 * @memberof CIQ.ChartEngine
 	 */
-	CIQ.ChartEngine.prototype.calculateShiftedSentiment = function (chart, sourceField, shift, data) {
+	CIQ.ChartEngine.prototype.calculateShiftedSentiment = function (chart, sourceField, outputField, shift, data) {
 		if (!data) data = chart.dataSet;
 		if (!sourceField || shift === undefined || shift === null) return;
 
-		const outputField = 'ShiftedSentimentIndicator';
+		//const outputField = 'ShiftedSentimentIndicator';
 
 		for (var i = 0; i < data.length; i++) {
 			const sourceIndex = i - shift;

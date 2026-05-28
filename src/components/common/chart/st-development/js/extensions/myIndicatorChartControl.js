@@ -733,7 +733,13 @@
                 // ma2
                 // display shift indicator ma
                 const showShiftInput = (newData.indicator1.url !== '' && newData.indicator2.url !== '') && newData.indicator1.url === newData.indicator2.url
-                if(newData.categories && newData.categories.includes('Indicator') && showShiftInput) fieldName2='ShiftedSentimentIndicator'
+                if(newData.categories && newData.categories.includes('Indicator') && showShiftInput) {
+                    const shiftedStudy = Object.values(CIQ.stxx.layout.studies)
+                        .find(s => s.type === 'ShiftedSentimentIndicator');
+                    if(shiftedStudy && shiftedStudy.inputs) {
+                        fieldName2=shiftedStudy.inputs.display
+                    }
+                } 
                 CIQ.addOwnIndicatorMAStudy(
                     ma2_value,
                     ma2_type,

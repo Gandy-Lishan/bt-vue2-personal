@@ -2019,7 +2019,8 @@ if (!CIQ.Studies) {
 		const field = sd.inputs.Field;
 		const shift = sd.inputs.shift;
 		const quotes = sd.chart.scrubbed;
-		const outputField = 'ShiftedSentimentIndicator';  // 固定字段名
+		//const outputField = 'ShiftedSentimentIndicator';  // 固定字段名
+		const outputField = sd.inputs.display;
 
 		for (var i = sd.startFrom; i < quotes.length; i++) {
 			const sourceIndex = i - shift;
