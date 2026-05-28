@@ -3612,7 +3612,7 @@ CIQ.Studies.calculateMovingAverage = function (stx, sd) {
 	var field = sd.inputs.Field;
 	if (!field || field == "field") field = "Close"; // Handle when the default inputs are passed in
 	/** Pre-calculate ShiftedSentimentIndicator if needed (MyIndicator same indicator with shift)*/
-	if(sd.panel.startsWith("‌ShiftedSentimentIndicator‌")) {
+	if(sd.panel.includes("ShiftedSentimentIndicator")) {
 		// Find the ShiftedSentimentIndicator study to get source and shift
 		const shiftedStudy = Object.values(CIQ.stxx.layout.studies)
 			.find(s => s.type === 'ShiftedSentimentIndicator');
