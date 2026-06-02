@@ -849,7 +849,9 @@ export default {
       }
       const _description = Array.isArray(description) ? `${description.join(' ')}.` : ''
       // 要删除的属性列表
-      const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description']
+      if(category === 'Custom') saveData.sector_lists = JSON.stringify(this.tickers)
+      const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description', 'dates']
+      if(category === 'Custom') propertiesToRemain.push('sector_lists')
       if(this.criteria_option === 'CommonPattern') propertiesToRemain.push('system_pattern')
       const _saveData = remainProperties(saveData, propertiesToRemain)
       if(this.percentage < 99) this.percentage += 8

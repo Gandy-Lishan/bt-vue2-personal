@@ -551,9 +551,9 @@ export default {
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
-      const entry_template = isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template
+      const entry_template = (isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template) || {}
       if(system_pattern) entry_template.system_pattern = system_pattern
-      if(direction) entry_template.direction = direction
+      entry_template.direction = direction || 'Long'
       if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
       if(!Array.isArray(data) || (Array.isArray(data) && data.length === 0)) {
         this.$emit('displayFormData', row, true)
@@ -594,9 +594,9 @@ export default {
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
-      const entry_template = isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template
+      const entry_template = (isJson(res.data.data.entry_template) ? JSON.parse(res.data.data.entry_template) : res.data.data.entry_template) || {}
       if(system_pattern) entry_template.system_pattern = system_pattern
-      if(direction) entry_template.direction = direction
+      entry_template.direction = direction || 'Long'
       if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
       if(!Array.isArray(data) || (Array.isArray(data) && data.length === 0)) {
         this.$emit('displayFormData', row, true)
