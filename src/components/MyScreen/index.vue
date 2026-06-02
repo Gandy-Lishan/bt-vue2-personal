@@ -285,7 +285,7 @@ export default {
 			  // x['TimeInMarket'] = x['TimeInMarket']
       //  })
       // 更新 tableCol
-      const columns = Array.from(Object.keys(content[0])).map(column => {
+      const columns = Array.from(Object.keys(content[0])).filter(column => !column.startsWith('Date')).map(column => {
         return {
           label: column,
           value: column,

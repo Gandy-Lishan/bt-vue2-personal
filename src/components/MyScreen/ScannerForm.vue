@@ -43,6 +43,30 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item v-if="data.category === 'Custom'">
+            <el-select
+            clearable
+              v-model="tickers"
+              multiple
+              collapse-tags
+              filterable
+              @change="onSelectChange"
+              :filter-method="handleFilterInput"
+              allow-create
+              placeholder="- Select Ticker -">
+              <el-option
+                v-for="item in filteredList"
+                :key="item.key"
+                :label="item.label"
+                :value="item.value"
+              >
+                <div class="custom-option">
+                  <span class="symbol-label">{{ item.url }}</span>
+                  <span class="symbol-url">{{ item.name }}</span>
+                </div>
+              </el-option>
+            </el-select>                                                                                                                             
+          </el-form-item>
         </el-col>
         <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
           <el-form-item prop="timefame">
@@ -1113,6 +1137,7 @@ try {
           const date = saveRes.data.data.data[0].Date
           signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
           this.$emit('displayDes', signalDes)
+          this.$emit('displayTickers', `${tickersDes}`)
           this.$emit('scrollToTarget', 'scrollTopTarget')
         }
       }

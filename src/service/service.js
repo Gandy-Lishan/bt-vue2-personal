@@ -2097,6 +2097,34 @@ export function getScreenResults(url) {
 			})
 	})
 }
+export function getMyScreenFavoritesList() {
+	const url = '/dev/myscreen_app/get_myscreen_records?favorite=1'
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function updateMyScreenFavorite(data) {
+	const path = `/dev/myscreen_app/myscreen_favorite?url=${data.url}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.put(path, data.payload)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 /* My Screens End */
 
 /** Dashboard Start */

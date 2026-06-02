@@ -2,8 +2,7 @@
 	<div class="CPM-list-container ScannerBTTable">
 		<!-- <link rel="stylesheet" href="../../../../assets/font/iconfont.css"></link> -->
 			<div class="des-container">
-				<p class="filterTableDes"  v-html="signalDes">
-    </p>
+				<p class="filterTableDes"  v-html="signalDes"></p>
 					<el-button
 						v-if="signalDes !== ''"
 							@click.stop="() => {downloadCSV()}"
@@ -12,9 +11,13 @@
 							size="small"
 							icon="el-icon-download"
 							title="Download CSV"
-							></el-button
-					>
+					></el-button>
 			</div>
+			<div v-if="tickersDes">
+				<div class="tickers-des-container"><strong>Symbols:</strong><i class="el-icon-document-copy" @click="copyTickersDes()"></i></div>
+				<span v-html="tickersDes"></span>
+			</div>
+			<hr>
 		<el-table
 			ref="tableREF"
 			class="ScannerBTTable"
@@ -367,6 +370,10 @@ export default {
 			const config = defaultConfig()
 			await this.$store.dispatch('chart/initiate_tech_list', config.technicalClassCategory)
 		},
+		copyTickersDes() {
+			navigator.clipboard.writeText(this.tickersDes)
+			this.popUpMsgBox('Symbols copied to clipboard')
+			},
 		async goToBacktest(row) {
 			debugger
 			console.log('this.jumpBacktestData', this.jumpBacktestData)
@@ -650,7 +657,14 @@ export default {
 .el-pagination .el-select .el-input .el-input__inner {
   margin: 0px
 }
-.des-container {
+.des-container, .tickers-des-container {
 	display: flex;
+}
+.tickers-des-container {
+	justify-content: space-between;
+	align-content: center;
+	i {
+		cursor: pointer;
+	}
 }
 </style>
