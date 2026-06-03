@@ -66,12 +66,6 @@ export default {
               url: 'stock_complete_list'
             },
             {
-              label: 'Jay Kaeppel’s Indicators',
-              value: 'JayKeappel',
-              type: 'stock',
-              url: 'jk_complete_list'
-            },
-            {
               label: 'NASDAQ 100 Stock Sentiment',
               value: 'NASDAQ',
               type: 'stock',
@@ -121,7 +115,13 @@ export default {
               value: 'macroeconomic',
               type: 'macroeconomic',
               url: 'macro_indicator_list'
-            }
+            },
+            {
+              label: 'Jay Kaeppel’s Indicators',
+              value: 'JayKeappel',
+              type: 'macroeconomic',
+              url: 'jk_complete_list'
+            },
           ]
         },
         // {
