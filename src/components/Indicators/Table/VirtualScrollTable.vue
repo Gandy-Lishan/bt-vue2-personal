@@ -538,6 +538,49 @@ export default {
             }
             ]
         ],
+        ['JayKeappelColumns', 
+          [
+            {
+              key: 'chart_name',
+              label: 'Name',
+              value: 'chart_name',
+              minWidth: '120px'
+            },
+            {
+              key: 'sub_type',
+              label: 'Group',
+              value: 'sub_type',
+              allCapLetters: true
+            },
+            {
+              key: 'timeframe',
+              label: 'Time<br>Frame',
+              value: 'timeframe'
+            },
+            {
+              key: 'last_value',
+              label: 'Value',
+              value: 'last_value'
+            },
+            {
+              key: 'last_change',
+              label: 'Change',
+              value: 'last_change'
+            },
+            {
+              key: 'last_update',
+              label: 'Date',
+              value: 'last_update',
+              minWidth: '90px'
+            },
+            {
+              key: 'sentiment',
+              label: 'Sentiment',
+              value: 'sentiment',
+              minWidth: '100px'
+            }
+            ]
+        ],
         ['SP1500Columns', 
           [
             {
@@ -2587,6 +2630,8 @@ export default {
             url = 'commod_seasonality'
           }else if(groups === 'stocks') {
             requireUrl = 'stock_complete_list'
+          }else if(groups === 'JayKeappel') {
+            requireUrl = 'jk_complete_list'
           }else if(sub_type === 'all_country_breadth') {
             requireUrl = 'country_breadth'
           }else if(sub_type === 'crp_breadth') {
@@ -2814,6 +2859,11 @@ export default {
           label: 'Stock Market Sentiment',
           value: 'stock_complete_list',
           type: 'stock'
+        },
+                {
+          label: 'Jay Kaeppel’s Indicators',
+          value: 'jk_complete_list',
+          type: 'JayKeappel'
         },
         {
           label: 'NASDAQ 100 Stock Sentiment',
@@ -3442,6 +3492,7 @@ export default {
       // .el-table--scrollable-x .el-table__body-wrapper
       const urlMap = {
         stock: 'stock_complete_list',
+        JayKeappel: 'jk_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
         Russell1000: 'russell_1000_complete_list',

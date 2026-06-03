@@ -63,6 +63,7 @@ export default {
       cssMonthLabel: '',
       urlMap:{
         stock: 'stock_complete_list',
+        JayKeappel: 'jk_complete_list',
         NASDAQ: 'ndx_100_complete_list',
         SP1500: 'sp_1500_complete_list',
         Russell3000: 'russell_3000_complete_list',
