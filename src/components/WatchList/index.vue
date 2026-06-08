@@ -253,20 +253,18 @@ export default {
           const tickerObj = {}
           const Closes = records.map(ele => (ele.Close))
           const Optix = records.map(ele => (ele.Optix))
-          const HV20s = records.map(ele => (ele.HV20))
-          const HV60s = records.map(ele => (ele.HV60))
           const TrendScore = records.map(ele => (ele['Trend']))
           const RelTrendScore = records.map(ele => (ele['RelTrend']))
           const lastClose = Closes.at(-1)
           const _lastOptix = Optix.at(-1)
           const lastHV20 =  records.map(ele => (ele['Historical Volatility (20-Day)'])).at(-1)
           const lastHV60 =  records.map(ele => (ele['Historical Volatility (60-Day)'])).at(-1)
-          
           const lastOptix = _lastOptix !== null ? parseFloat(_lastOptix.toFixed(2)) : ''
           const lastTrend = TrendScore.at(-1)
           const lastRelTrend = RelTrendScore.at(-1)
           const colorValue = getColor(_lastOptix)
           const updateHeatMapData = (name, value, useGetTrendColor = true) => {
+            debugger
             const index = _heatMap.findIndex(ele => ele.name === name)
             if (index !== -1) {
               const processedValue = value !== null ? value : ''
@@ -278,6 +276,14 @@ export default {
           updateHeatMapData('Optix', lastOptix, false)
           updateHeatMapData('RelTrend Score', lastRelTrend)
           updateHeatMapData('Trend Score', lastTrend)
+          if(lastHV20) {
+            if(!_heatMap.find(ele => ele.name === 'Historical Volatility (20-Day)')) _heatMap.push({name: 'Historical Volatility (20-Day)', data: []});
+            updateHeatMapData('Historical Volatility (20-Day)', lastHV20, false)
+          }
+          if(lastHV60) {
+            if(!_heatMap.find(ele => ele.name === 'Historical Volatility (60-Day)'))_heatMap.push({name: 'Historical Volatility (60-Day)', data: []});
+            updateHeatMapData('Historical Volatility (60-Day)', lastHV60, false)
+          }
           tickerObj['Ticker'] = ticker
           tickerObj['Name'] = ticker_name
           tickerObj['Close'] = lastClose !== null ? parseFloat(lastClose.toFixed(2)) : ''
