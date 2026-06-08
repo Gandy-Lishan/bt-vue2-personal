@@ -253,10 +253,15 @@ export default {
           const tickerObj = {}
           const Closes = records.map(ele => (ele.Close))
           const Optix = records.map(ele => (ele.Optix))
+          const HV20s = records.map(ele => (ele.HV20))
+          const HV60s = records.map(ele => (ele.HV60))
           const TrendScore = records.map(ele => (ele['Trend']))
           const RelTrendScore = records.map(ele => (ele['RelTrend']))
           const lastClose = Closes.at(-1)
           const _lastOptix = Optix.at(-1)
+          const lastHV20 =  records.map(ele => (ele['Historical Volatility (20-Day)'])).at(-1)
+          const lastHV60 =  records.map(ele => (ele['Historical Volatility (60-Day)'])).at(-1)
+          
           const lastOptix = _lastOptix !== null ? parseFloat(_lastOptix.toFixed(2)) : ''
           const lastTrend = TrendScore.at(-1)
           const lastRelTrend = RelTrendScore.at(-1)
@@ -282,6 +287,10 @@ export default {
           tickersColumns.forEach(column => {
             let {label, indicator, bar, value} = column
             indicator = removeStartEndNumbers(indicator)
+            console.log('indicator', indicator)
+            console.log('label', label)
+            console.log('value', value)
+            console.log('bar', bar)
             if(indicator === 'Optix') {
               tickerObj[value] = lastOptix
             }
@@ -301,7 +310,15 @@ export default {
               if(!lastClose) {tickerObj[value] = '';}else{
                 tickerObj[value] = getLastBarAvg(Closes, Number(bar))
               }
-            } else if(indicator === 'Optix MA') {
+            } else if(indicator === 'HV' && bar === 20) {
+              if(!lastHV20) {tickerObj[value] = '';}else{
+                tickerObj[value] = lastHV20
+              }
+            } else if(indicator === 'HV' && bar === 60) {
+              if(!lastHV60) {tickerObj[value] = '';}else{
+                tickerObj[value] = lastHV60
+              }
+            }else if(indicator === 'Optix MA') {
               if(!lastOptix) {tickerObj[value] = '';}else{
                 const _lastOptix = getLastBarAvg(Optix, Number(bar))
                 const optixColor = getColor(_lastOptix)
@@ -330,14 +347,20 @@ export default {
       tableCol = tableCol.map(column => {
         const obj = {...column}
         const {label, indicator} = column
+        console.log('label', label)
+        console.log('indicator', indicator)
         if(indicator === 'RelTrend Score') {
           obj.labelHtml = 'RelTrend <br/>Score'
         }else if(indicator === 'Trend Score') {
           obj.labelHtml = 'Trend <br/>Score'
         }else if(label.includes('Close MA')) {
           obj.labelHtml = label.replace(/\s+/, '<br/>')
-        }else if(label.includes('Optix MA')) {
+        } else if(label.includes('Optix MA')) {
           obj.labelHtml = label.replace(/\s+/, '<br/>')
+        } else if(indicator === 'HV20') {
+          obj.labelHtml = 'Historical Volatility (20-Day)'
+        } else if(indicator === 'HV60') {
+          obj.labelHtml = 'Historical Volatility (60-Day)'
         }else{
           obj.labelHtml = label
         }

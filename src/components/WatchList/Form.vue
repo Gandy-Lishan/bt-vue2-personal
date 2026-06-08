@@ -163,6 +163,8 @@ export default {
         {value: 'RelTrend Score', label: 'RelTrend Score', inputValue: 1},
         {value: 'Optix', label: 'Optix', inputValue: 1},
         {value: 'ROC', label: 'Rate of Change', inputValue: 1},
+        {value: 'HV20', label: 'Historical Volatility (20-Day)', inputValue: 20},
+        {value: 'HV60', label: 'Historical Volatility (60-Day)', inputValue: 60},
         {value: 'Optix MA5', label: 'Symbol Optix 5-Day Moving Average', inputValue: 5},
         {value: 'Optix MA10', label: 'Symbol Optix 10-Day Moving Average', inputValue: 10},
         {value: 'Optix MA20', label: 'Symbol Optix 21-Day Moving Average', inputValue: 21},
