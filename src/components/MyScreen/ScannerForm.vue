@@ -1183,7 +1183,7 @@ try {
     displayData(data) {
       debugger
       this.rowUrl = data.url
-      const {system_pattern} = data
+      const {system_pattern, sector_lists, category} = data
       if(system_pattern) {
         this.criteria_option = 'CommonPattern'
         this.system_pattern = system_pattern
@@ -1194,6 +1194,11 @@ try {
       }
       const _data = {}
       const signals = isJson(data.signals) ? JSON.parse(data.signals) : data.signals
+      const dates = isJson(data.dates) ? JSON.parse(data.dates) : data.dates
+      if(category === 'Custom') {
+        const tickers = isJson(data.sector_lists) ? JSON.parse(data.sector_lists) : data.sector_lists
+        if(Array.isArray(tickers) && tickers.length) this.tickers = tickers
+      }
       signals.forEach((ele, index) => {
         const suffix = (index === 0) ? '' : (index + 1)
         _data[`signal${suffix}`] = ele.signal,

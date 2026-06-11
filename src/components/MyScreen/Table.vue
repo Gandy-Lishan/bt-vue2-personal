@@ -108,6 +108,7 @@
                       icon="el-icon-edit"
                       circle
                       size="mini"
+                      :loading="scope.row.editLoading"
                       v-if="currentPageTab === 'MyScreen'"
                       @click="handleRowClick(scope.row)"
                     ></el-button>
@@ -184,6 +185,7 @@
 <script>
 import { getMyScreensList, saveMyScreenForm, deleteMyScreen, editMyScreenForm, getScreenResults } from '@/service/service'
 import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
+import TradesVue from '../AIScanner/ScannerBacktest/Trades.vue'
 const debounce = require('lodash/debounce')
 
 export default {
@@ -327,6 +329,8 @@ export default {
             item.description = isJson(item.description) ? JSON.parse(item.description) : item.description
             item.cond = isJson(item.cond) ? JSON.parse(item.cond) : item.cond
             item.copyLoading = false
+            item.viewLoading = false
+            item.editLoading = false
             item.rerunLoading = false
             item.last_signal_date = item.lastdate === '2099-01-01' ? '' : item.lastdate
 						return item
@@ -542,7 +546,8 @@ export default {
 		},
     async viewResults(row) {
       debugger
-      const {url, system_pattern, direction} = row
+      const {url, system_pattern, direction = 'Long'} = row
+      row.viewLoading = TradesVue
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
@@ -550,18 +555,42 @@ export default {
       if(system_pattern) entry_template.system_pattern = system_pattern
       if(direction) entry_template.direction = direction
       if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
-      const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
-      let date = ''
-      if(data.length !== 0) date = `<strong>Date: ${data[0].Date}</strong>&nbsp;&nbsp;`
-      const _signalDes = `${date}${signalDes}`
-      this.$emit('displayDes', _signalDes)
-      this.$emit('displayResultsData', data, row)
+      if(!Array.isArray(data) || (Array.isArray(data) && data.length === 0)) {
+        this.$emit('displayFormData', row, true)
+        this.popUpMsgBox('Details Not Found')
+        row.viewLoading = false
+        return
+      }
+      let signalDes = ''
+      let tickersDes = data.map(item => item.Symbol).join(', ')
+      const item = data[0]
+      let dates = item.Date ? [item.Date] : []
+      if (!dates.length) {
+        dates = Object.keys(item)
+          .filter(key => key.startsWith('Date_'))
+          .map(key => key.replace('Date_', ''))
+          .sort((a, b) => new Date(a) - new Date(b))
+      }
+      const date = dates
+
+      if(Array.isArray(date) && date.length === 1) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description.join(' ')}`
+      if(Array.isArray(date) && date.length === 2) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description[0]} <strong>Date: ${date[1]}</strong>&nbsp;&nbsp;${row.description[1]}`
+      // this.$emit('displayDes', signalDes)
+      // if(row.category === 'Custom') this.$emit('displayTickers', tickersDes)
+      // this.$emit('displayResultsData', data, row)
       this.$emit('displayFormData', row, false)
+      if(this.currentPageTab === 'MyScreen') this.$emit('rerunScreen')
+      if(this.currentPageTab === 'System') {
+        this.$emit('displayDes', signalDes)
+        this.$emit('displayResultsData', data, row)
+      }
+      row.viewLoading = false
     },
     
     async handleRowClick(row) {
       debugger
-      const {url, system_pattern, direction} = row
+      const {url, system_pattern, direction = 'Long'} = row
+      row.editLoading = true
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
@@ -569,12 +598,31 @@ export default {
       if(system_pattern) entry_template.system_pattern = system_pattern
       if(direction) entry_template.direction = direction
       if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
-      const signalDes = Array.isArray(row.description) ? `${row.description.join(' ')}.` : ''
-      const date = data[0].Date
-      const _signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
-      this.$emit('displayDes', _signalDes)
+      if(!Array.isArray(data) || (Array.isArray(data) && data.length === 0)) {
+        this.$emit('displayFormData', row, true)
+        this.popUpMsgBox('Details Not Found')
+        row.editLoading = false
+        return
+      }
+      let signalDes = ''
+      let tickersDes = ` ${data.map(item => item.Symbol).join(', ')}`
+      const item = data[0]
+      let dates = item.Date ? [item.Date] : []
+      if (!dates.length) {
+        dates = Object.keys(item)
+          .filter(key => key.startsWith('Date_'))
+          .map(key => key.replace('Date_', ''))
+          .sort((a, b) => new Date(a) - new Date(b))
+      }
+      const date = dates
+
+      if(Array.isArray(date) && date.length === 1) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description.join(' ')}`
+      if(Array.isArray(date) && date.length === 2) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description[0]} <strong>Date: ${date[1]}</strong>&nbsp;&nbsp;${row.description[1]}`
+      this.$emit('displayDes', signalDes)
+      if(row.category === 'Custom') this.$emit('displayTickers', tickersDes)
       this.$emit('displayResultsData', data, row)
       this.$emit('displayFormData', row, true)
+      row.editLoading = false
     },
     jumpToTutoiral(){
         const path = 'https://youtu.be/7q-11S4y8xI'

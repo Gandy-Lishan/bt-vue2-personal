@@ -11,6 +11,9 @@
           <p>
             Screen is a convenient trading signals platform that provides customized trading signals through a variety of conditions to meet the needs of different users.
           </p>
+          <p>
+            You can subscribe to receive email alerts for your favorite screens by selecting the checkbox above. Please note that email alerts are only available for screens saved to your Favorites. To subscribe (or unsubscribe), simply check or uncheck the box.
+          </p>
         </div>
       </el-collapse-item>
       </el-collapse>
