@@ -547,7 +547,7 @@ export default {
     async viewResults(row) {
       debugger
       const {url, system_pattern, direction = 'Long'} = row
-      row.viewLoading = TradesVue
+      row.viewLoading = true
       const res = await getScreenResults(url)
       res.data.data = isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data
       const data = isJson(res.data.data.data) ? JSON.parse(res.data.data.data) : res.data.data.data
