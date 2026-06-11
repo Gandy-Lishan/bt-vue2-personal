@@ -156637,5 +156637,40 @@
         "market_symbol": "HUI",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Silver Model",
+        "url": "jk_silver_model",
+        "market_symbol": "silver",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Silver Model Signal",
+        "url": "jk_silver_signal",
+        "market_symbol": "silver",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Gold Bullion Strategy",
+        "url": "jk_gold_bullion_strategy",
+        "market_symbol": "GOLDLNPM",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Gold Bullion Strategy Signal",
+        "url": "jk_gold_bullion_signal",
+        "market_symbol": "GOLDLNPM",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Real Yield Model",
+        "url": "jk_real_yield_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
