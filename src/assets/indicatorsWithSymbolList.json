@@ -156672,5 +156672,159 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "SOXX Breadth (% > 50 Day Avg)",
+        "url": "breadth_sector_soxx_50",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX Breadth (% > 10 Day Avg)",
+        "url": "breadth_sector_soxx_10",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX Breadth (% > 200 Day Avg)",
+        "url": "breadth_sector_soxx_200",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX New High %",
+        "url": "breadth_sector_soxx_nh",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX New Low %",
+        "url": "breadth_sector_soxx_nl",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX % Above Bband",
+        "url": "breadth_sector_soxx_bbup",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX % Below Bband",
+        "url": "breadth_sector_soxx_bbdown",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX % RSI 14-Day < 30",
+        "url": "breadth_sector_soxx_rsi30",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX % RSI 14-Day > 70",
+        "url": "breadth_sector_soxx_rsi70",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX 12 Week High %",
+        "url": "breadth_sector_soxx_nh12",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX 12 Week Low %",
+        "url": "breadth_sector_soxx_nl12",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX 4 Week High %",
+        "url": "breadth_sector_soxx_nh4",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX 4 Week Low %",
+        "url": "breadth_sector_soxx_nl4",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX Advance / Decline",
+        "url": "breadth_sector_soxx_ad",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX Cumulative A/D Line",
+        "url": "breadth_sector_soxx_adline",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX McClellan Summation",
+        "url": "breadth_sector_soxx_mcsumm",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX McClellan Oscillator",
+        "url": "breadth_sector_soxx_mcosc",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX Panic Breadth Composite",
+        "url": "breadth_sector_soxx_panic_composite",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX 10-Day Sum Advance/Decline Ratio",
+        "url": "breadth_sector_soxx_ad10",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "STXF Optix",
+        "url": "etf_STXF",
+        "market_symbol": "STXF",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JK Inflation Model Status",
+        "url": "jk_inflation_model_status",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Inflation Model",
+        "url": "jk_inflation_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
