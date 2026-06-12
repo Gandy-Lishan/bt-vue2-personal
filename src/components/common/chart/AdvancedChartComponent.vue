@@ -640,21 +640,8 @@ export default class AdvancedChartComponent extends Vue {
 
 	beforeDestroy() {
 		// 清除预览和编辑产生的ownIndicator serie缓存
-		// 获取所有 localStorage 的键名
-		const keys = Object.keys(localStorage);
+		if (CIQ.previewIndicatorDataCache) CIQ.previewIndicatorDataCache = {}
 
-		// 要删除的特定字符串
-		const searchString = 'previewIndicatorData';
-
-		// 遍历所有键名并删除匹配的项
-		keys.forEach(key => {
-		// 检查当前键名是否包含指定的字符串
-		if (key.includes(searchString)) {
-			// 如果包含指定字符串，则使用 removeItem 方法删除该键名对应的数据
-			localStorage.removeItem(key)
-		}
-		});
-		
 		// 防止跳转到backtester时保留了Hammer followed by a rise等marker
 		CIQ.objIndicator = []
 		CIQ.store.dispatch('chart/reset_chart_study_state')

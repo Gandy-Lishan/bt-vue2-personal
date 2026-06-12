@@ -711,15 +711,12 @@ export default {
        }
      },
      async copyIndicator(data) {
-			try {
-				this.loading = true
+				try {
+					this.loading = true
 					/* 为防止出现重名, 在这里加上时间戳 */
 					const generateCopyName = (name) => {
 						const datePattern = /\(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\)/;
-						
-						// 去掉 data.name 中已有的日期时间部分
 						const cleanedName = name.replace(datePattern, '');
-						
 						const now = new Date();
 						const year = now.getFullYear();
 						const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -727,48 +724,47 @@ export default {
 						const hour = String(now.getHours()).padStart(2, '0');
 						const minute = String(now.getMinutes()).padStart(2, '0');
 						const second = String(now.getSeconds()).padStart(2, '0');
-						
-						const copyName = `${cleanedName}(copy) (${year}-${month}-${day} ${hour}:${minute}:${second})`;
-						
-						return copyName;
-				}
-				const copyName = generateCopyName(data.name)
-        const nameLookUp = await searchIndicator(copyName)
-				const isDuplicate = nameLookUp.data.results.some(
-					item => item.name === copyName
-				)
+						return `${cleanedName}(copy) (${year}-${month}-${day} ${hour}:${minute}:${second})`;
+					}
+					const copyName = generateCopyName(data.name)
+					const nameLookUp = await searchIndicator(copyName)
+					const isDuplicate = nameLookUp.data.results.some(
+						item => item.name === copyName
+					)
 
-				if (isDuplicate) {
-					this.popUpMsgBox('Name is already in use')
-          return
-				} else {
-          data.name = copyName
-          data.indicator_1 = data.indicator_1_url
-          data.indicator_2 = data.indicator_2_url
-          data.time_frame = data.timeframe
-          data.extreme_optimism = data.upper_extreme_value
-          data.extreme_pessimism = data.lower_extreme_value
-          //'mul_indicator', 'indicator_weight'
-          const requestData = {}
-          const requiredKeys = ['name', 'indicator_1', 'indicator_2', 'time_frame', 'ma', 'calculate', 'extreme_optimism', 'extreme_pessimism', 'combine_type', 'benchmark', 'next_process']
-          if(data.mul_indicator) requiredKeys.push('mul_indicator')
-          if(data.indicator_weight) requiredKeys.push('indicator_weight')
-          requiredKeys.forEach(key=> requestData[key] = data[key])
+					if (isDuplicate) {
+						this.popUpMsgBox('Name is already in use')
+						return
+					}
 
-					// 发起复制请求
+					const requestData = {
+						name: copyName,
+						indicator_1: data.indicator_1_url,
+						indicator_2: data.indicator_2_url,
+						time_frame: data.timeframe,
+						ma: data.ma,
+						calculate: data.calculate,
+						extreme_optimism: data.upper_extreme_value,
+						extreme_pessimism: data.lower_extreme_value,
+						combine_type: data.combine_type,
+						benchmark: data.benchmark,
+						next_process: data.next_process
+					}
+					if(data.mul_indicator) requestData.mul_indicator = data.mul_indicator
+					if(data.indicator_weight) requestData.indicator_weight = data.indicator_weight
+
 					const res = await saveMyIndicators(requestData)
-          console.log('res', res)
-          const code = res?.data?.code
-          if(code === 406) {const _name = res?.data.data.name; if(_name) this.popUpMsgBox(`The same combination indicator "${_name}" already exists.`); this.loading = false; return}
-          if(res.data.create_date) this.popUpMsgBox('Successfully copied')
-          this.$emit('changeTab', 'Indicator')
+					console.log('res', res)
+					const code = res?.data?.code
+					if(code === 406) {const _name = res?.data.data.name; if(_name) this.popUpMsgBox(`The same combination indicator "${_name}" already exists.`); this.loading = false; return}
+					if(res.data.create_date) this.popUpMsgBox('Successfully copied')
+					this.$emit('changeTab', 'Indicator')
+				} catch (error) {
+					console.error('An error occurred:', error)
+					this.loading = false
 				}
-			} catch (error) {
-				console.error('An error occurred:', error)
 				this.loading = false
-			}
-			this.loading = false
-		},
+			},
  }
 }
 </script>

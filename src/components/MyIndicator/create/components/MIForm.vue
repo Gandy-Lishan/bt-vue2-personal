@@ -1149,7 +1149,8 @@ export default {
         // 说明这条数据已经存在了,不让我新建,说明用户已经存在相同的组合, 直接请求数据
         const indicatorData = await getMyIndicatorData(url)
         // 暂存
-        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
+        CIQ.previewIndicatorDataCache = CIQ.previewIndicatorDataCache || {}
+        CIQ.previewIndicatorDataCache[url] = indicatorData.data.data
         // 修改名字为预览名字
         this.data.name = previewName
         this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();
@@ -1166,7 +1167,8 @@ export default {
         // 更新 rowUrl
         // this.rowUrl = ''
         // 暂存
-        localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(indicatorData.data.data))
+        CIQ.previewIndicatorDataCache = CIQ.previewIndicatorDataCache || {}
+        CIQ.previewIndicatorDataCache[url] = indicatorData.data.data
         const delRes = await delMyIndicator(url)
       }
       if(!res) {this.$store.commit('states/SET_MI_CREATE_LOADING', false);CIQ.hideCover();return}

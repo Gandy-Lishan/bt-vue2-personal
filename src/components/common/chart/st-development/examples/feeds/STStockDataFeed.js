@@ -764,7 +764,8 @@ quoteFeedSimulator.formatChartData = async function(response){
             if (CIQ.isOwnIndicator(indicator)) {
                 const [_, url] = indicator.split(/CREATE/);
                 let res = null
-                let datafeed = JSON.parse(localStorage.getItem(`previewIndicatorData_${url}`))
+                CIQ.previewIndicatorDataCache = CIQ.previewIndicatorDataCache || {}
+                let datafeed = CIQ.previewIndicatorDataCache[url]
                 if(!datafeed){
                     let validData = null;
                     try {
@@ -830,9 +831,9 @@ quoteFeedSimulator.formatChartData = async function(response){
                     datafeed = validData.data.data;
                     if(!datafeed) return
                     // 暂存
-                    localStorage.setItem(`previewIndicatorData_${url}`, JSON.stringify(datafeed))
-                }               
-        
+                    CIQ.previewIndicatorDataCache[url] = datafeed
+                }
+
                 let sortedRows = datafeed.sort(
                     (a, b) => new Date(a.DT) - new Date(b.DT)
                 );
