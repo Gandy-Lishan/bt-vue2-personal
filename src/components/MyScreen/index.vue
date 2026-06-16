@@ -13,7 +13,7 @@
           </p>
           <div class="subscribe-container">
             <p>
-              <el-checkbox v-model="checked" @change="checkedSignalAlert">My Signal Alerts</el-checkbox>
+              <el-checkbox v-model="checked" @change="checkedSignalAlert">My Screen Alerts</el-checkbox>
             </p>
             <p>
               You can subscribe to receive email alerts for your favorite screens by selecting the checkbox above. Please note that email alerts are only available for screens saved to your Favorites. To subscribe (or unsubscribe), simply check or uncheck the box.
