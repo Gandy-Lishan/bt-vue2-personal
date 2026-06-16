@@ -112,6 +112,7 @@ export default {
 		tableCol :Array,
 		loading: Boolean,
 		signalDes: String,
+		tickersDes: String,
 		jumpBacktestData: Object,
 		currentRow: Object
 	},
@@ -630,7 +631,6 @@ export default {
 	color: #000000;
 }
 .des-container {
-	border-bottom: 2px solid #dddddd;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

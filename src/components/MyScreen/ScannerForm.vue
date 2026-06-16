@@ -128,7 +128,29 @@
       </el-row>
       <div v-if="data.relation == 0 && criteria_option === 'ScreenCriteria'">
         <el-row :gutter="8">
-          <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+          <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.date"
+                  placeholder="— Select —"
+                    @change="
+                    () => {
+                      handleSignalSelect('')
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item in dateOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
             <el-form-item prop="signal" label-width="0">
               <el-select
                   v-model="data.signal"
@@ -167,7 +189,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+          <el-col :span="6" :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
             <el-form-item prop="value" label-width="0">
                 <el-autocomplete
                   class="inline-input"
@@ -201,7 +223,29 @@
         <el-row :gutter="10" type="flex" justify="center" align="middle">
           <el-col :span="20"  :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
             <el-row :gutter="10">
-          <el-col :span="10"  :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
+              <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.date"
+                  placeholder="— Select —"
+                    @change="
+                    () => {
+                      handleSignalSelect('')
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item in dateOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8"  :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item prop="signal" label-width="0">
               <el-select
                   v-model="data.signal"
@@ -240,7 +284,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="10" :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
+          <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item prop="value" label-width="0">
               <el-autocomplete
                   class="inline-input"
@@ -253,7 +297,29 @@
           </el-col>
         </el-row>
          <el-row :gutter="10">
-          <el-col :span="10" :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
+          <el-col :span="4" :xs="24" :sm="4" :md="4" :lg="4" :xl="4">
+            <el-form-item prop="signal" label-width="0">
+              <el-select
+                  v-model="data.date2"
+                  placeholder="— Select —"
+                    @change="
+                    () => {
+                      handleSignalSelect('')
+                    }
+                  "
+                >
+                  <el-option
+                    v-for="item in dateOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    :disabled="item.disabled"
+                  >
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item prop="signal" label-width="0">
               <el-select
                   v-model="data.signal2"
@@ -292,7 +358,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="10" :xs="24" :sm="10" :md="10" :lg="10" :xl="10">
+          <el-col :span="8" :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item prop="value2" label-width="0">
               <el-autocomplete
                   class="inline-input"
@@ -413,12 +479,18 @@ export default {
         // value: 'Symbol Close',
         value: '',
         value2: '',
+        date: 0,
+        date2: 0
         // value3: ''
       },
+      filteredList: [],      // 根据输入实时更新的排序列表
+      symbolListMap: new Map(),
+      _dropdownList: [],
       rowUrl: null,
       isPolling: false,
       processTips: '',
       percentage: 0,
+      tickers: [],
       symbolInfo: {strategy: 'Single', category: 'SPY', symbol2: ''}, 
       criteria_option: 'ScreenCriteria',
       system_pattern: 'head_and_shoulder_top',
@@ -455,12 +527,17 @@ export default {
         { "value": "Technology", "label": "Technology", "disabled": false },
         { "value": "Health Care", "label": "Health Care", "disabled": false },
         { "value": "Discretionary", "label": "Discretionary", "disabled": false },
-        { "value": "Communication Services", "label": "Communication Services", "disabled": false }
+        { "value": "Communication Services", "label": "Communication Services", "disabled": false },
+        { "value": "Custom", "label": "Custom", "disabled": false }
       ],
       relationsOption: [
       { value: 0, label: 'Only', disabled: false},
       { value: 1, label: 'And', disabled: false},
       { value: 2, label: 'Or', disabled: false}
+      ],
+      dateOptions: [
+        { value: 0,  label: 'Current'},
+        { value: -1,  label: 'Previous'},
       ],
       criteriaOptions: [
         { label: 'Screen Criteria', value: 'ScreenCriteria' },
@@ -592,6 +669,20 @@ export default {
       symbolList: 'getStockList',
       indexList: 'getIndexList',
     }),
+    symbolList() {
+      const data = localStorage.getItem('refactoredConcatList');
+      let _data = data ? JSON.parse(data) : []
+      console.log('symbolList', _data)
+      _data = _data.map(ele => {
+        ele.name = ele.label
+        ele.label = ele.url
+        ele.value = ele.url
+        ele.key = `${ele.name}_${ele.url}`
+        return ele
+      })
+      console.log('symbolList', _data)
+      return _data
+    },
     frequency() {
 			return this.$store.state.form.mySignalTimeframe
 		},
@@ -692,6 +783,12 @@ export default {
     // }
   },
   mounted() {
+    this._dropdownList = this.symbolList
+    this.symbolList.map(item => {
+      const urlLower = item.url?.toLowerCase?.() || ''
+      if(!this.symbolListMap.has(urlLower)) this.symbolListMap.set(urlLower, item)
+    })
+    this.filteredList = this._dropdownList
     this.setBacktestHistory(6)
     this.generateCPMName()
   },
@@ -785,6 +882,69 @@ export default {
       startDate.setMonth(startDate.getMonth() - val)
       this.data.start_date = timestampToTime(startDate);
     },
+    onSelectChange(val) {
+      console.log('val', val)
+      if (val.length > 30) {
+        this.popUpMsgBox('You can only select up to 30 tickers');
+        val.splice(30); // 截断多余的值
+      }
+      val.forEach(item => {
+        if (typeof item === 'string') {
+          let arr = item.split(/[\s,;，、]+/).map(i => i.trim()).filter(Boolean).filter(url => this.symbolListMap.has(url.toLowerCase())).map(url => this.symbolListMap.get(url.toLowerCase())?.url)
+          this.tickers = Array.from(new Set([...val, ...arr])).filter(url => this.symbolListMap.has(url.toLowerCase()))
+        }
+      })
+    },
+    handleFilterInput(queryString) {
+        const standardizeString = (str) => {
+          return String(str).toLowerCase().replace(/[_\s-]+/g, ' ');
+        };
+        
+        const escapeRegExp = (string) => {
+          return string.replace(/[.*+?^=${}()|[\]\\]/g, '\\$&');
+        };
+        
+        const fuzzyMatch = (text, query) => {
+          const escapedQuery = escapeRegExp(query);
+          let regexString = '';
+          for (let i = 0; i < escapedQuery.length; i++) {
+            const char = escapedQuery[i];
+            regexString += char;
+            if (i < escapedQuery.length - 1 && /[a-zA-Z0-9]/.test(char)) {
+              regexString += '.*?';
+            }
+          }
+          const regex = new RegExp(regexString, 'g');
+          return [...text.matchAll(regex)];
+        };
+
+        const standardizedQuery = standardizeString(queryString);
+        
+        const scoredList = this.symbolList.map((item) => {
+          const resultValue = item.value || item.name || item.label || item.model_name || '';
+          const resultUrl = item.url || item.symbol || '';
+          const standardizedValue = standardizeString(resultValue);
+          const standardizedUrl = standardizeString(resultUrl);
+          
+          let score = 0;
+          if (!standardizedQuery) score = 9999; // query 为空默认置顶
+          else if (standardizedValue === standardizedQuery || standardizedUrl === standardizedQuery) {
+            score = 100;
+          } else if (standardizedValue.startsWith(standardizedQuery) || standardizedUrl.startsWith(standardizedQuery)) {
+            score = 50;
+          } else {
+            const valMatches = fuzzyMatch(standardizedValue, standardizedQuery).length;
+            const urlMatches = fuzzyMatch(standardizedUrl, standardizedQuery).length;
+            score = (valMatches + urlMatches) * 5;
+          }
+          
+          return { ...item, _score: score };
+        });
+
+      this.filteredList = scoredList
+        .filter(i => i._score > 0)
+        .sort((a, b) => b._score - a._score);
+    },
     resetForm() {
         this.data = {
           name: '',
@@ -797,7 +957,9 @@ export default {
           condition2: 0,
           value: '',
           value2: '',
-          value3: ''
+          value3: '',
+          date: 0,
+          date2: 0
         }
         this.rowUrl = null
         this.processTips = ''
@@ -824,19 +986,28 @@ export default {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
         return [null, null]
       }
+      if(this.data.category === 'Custom' && this.tickers.length === 0) {
+        this.popUpMsgBox('Please select at least one ticker')
+        return [null, null]
+      }
       this.processTips = `Tips: Based on your conditions, the Scanner is screening stocks...`
       const rowUrl = this.rowUrl
-      const {signal,signal2, relation, condition, condition2, value, value2 } = this.data
+      const {signal,signal2, relation, condition, condition2, value, value2, category, date, date2 } = this.data
       let signals = null
       let description = null
       this.percentage = 8
+      const dateDes = (date) => {
+        if(date === 0) return 'Current'
+        else if(date === -1) return 'Previous'
+        else return ''
+      }
       debugger
       if(relation === 0) {
         const _value = this.signalOptions.find(ele => ele.label === value)?.value || value
         signals = [{signal, condition, value: _value }]
         const _condition = this.conditionOptions.find(ele => ele.value === condition)?.label
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
-        description = [`${signalLabel} ${_condition} ${value}`]
+        description = [`${dateDes(date)} ${signalLabel} ${_condition} ${value}`]
       }else {
         const _value = this.signalOptions.find(ele => ele.label === value)?.value || value
         const _value2 = this.signalOptions.find(ele => ele.label === value2)?.value || value2
@@ -846,7 +1017,7 @@ export default {
         const signalLabel = this.signalOptions.find(ele => ele.value === signal)?.label
         const signalLabel2 = this.signalOptions.find(ele => ele.value === signal2)?.label
         const relationLabel = this.relationsOption.find(ele => ele.value === relation)?.label
-        description = [`${signalLabel} ${_condition} ${value}&nbsp;&nbsp;<b>${relationLabel}</b>&nbsp;&nbsp;`, `${signalLabel2} ${_condition2} ${value2}`]
+        description = [`${dateDes(date)} ${signalLabel} ${_condition} ${value}&nbsp;&nbsp;<b>${relationLabel}</b>&nbsp;&nbsp;`, `${dateDes(date2)} ${signalLabel2} ${_condition2} ${value2}`]
       }
       if(this.criteria_option === 'CommonPattern') description = [`Common Pattern: ${this.systemPatternOptions.find(ele => ele.value === this.system_pattern)?.label}`]
       const saveData = {...this.data,
@@ -856,6 +1027,7 @@ export default {
         start_date: '2005-01-01',
         end_date: '2050-01-01',
         description: JSON.stringify(description),
+        dates: JSON.stringify([this.data.date || 0, relation === 0 ? 0 : (this.data.date2 || 0)])
       }
       if(this.criteria_option === 'CommonPattern') {
         saveData.system_pattern = this.system_pattern || ''
@@ -871,7 +1043,6 @@ export default {
           })
           return newObj
       }
-      const _description = Array.isArray(description) ? `${description.join(' ')}.` : ''
       // 要删除的属性列表
       if(category === 'Custom') saveData.sector_lists = JSON.stringify(this.tickers)
       const propertiesToRemain = ['category', 'name', 'start_date', 'end_date', 'signals', 'direction', 'relation', 'score', 'description', 'dates']
@@ -887,13 +1058,13 @@ export default {
       const failedConditions = [404, 411, 511, 512, 513, 514]
       if(failedConditions.includes(Number(code))) {
         // 保存失败
-        return [saveRes, _description]
+        return [saveRes, description]
       }
       saveRes.data.data = isJson(saveRes.data.data)?JSON.parse(saveRes.data.data):saveRes.data.data
       saveRes.data.data.data = isJson(saveRes.data.data.data)?JSON.parse(saveRes.data.data.data):saveRes.data.data.data
       let url = saveRes.data.data?.url
       this.rowUrl = url
-      return [saveRes, _description]
+      return [saveRes, description]
     },
     async saveCriteriaData(criteriaRef) {
       debugger
@@ -1098,11 +1269,11 @@ try {
       debugger
      this.percentage = 5
       let saveRes = null
-      let signalDes = null
+      let description = null
       try {
         const [_saveRes, _description] = await this.saveFormData()
         saveRes = _saveRes
-        signalDes = _description
+        description = _description
         debugger
         const _resData = _saveRes.data.data
         this.rowUrl = _resData.url
@@ -1134,8 +1305,23 @@ try {
         }
         if(entry_template)  this.$emit('saveJumpBacktestData', entry_template)
         if(Array.isArray(saveRes.data.data.data) && saveRes.data.data.data.length > 0) {
-          const date = saveRes.data.data.data[0].Date
-          signalDes = `<strong>Date: ${date}</strong>&nbsp;&nbsp;${signalDes}`
+          const item = saveRes.data.data.data[0]
+          const tickersDes = saveRes.data.data.data.map(item => item.Symbol).join(', ')
+          let dates = item.Date ? [item.Date] : []
+
+          if (!dates.length) {
+            dates = Object.keys(item)
+              .filter(key => key.startsWith('Date_'))
+              .map(key => key.replace('Date_', ''))
+              .sort((a, b) => new Date(a) - new Date(b))
+          }
+
+          const date = dates
+
+          console.log(date)
+          let  signalDes = ''
+          if(Array.isArray(date) && date.length === 1) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${description.join(' ')}`
+          if(Array.isArray(date) && date.length === 2) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${description[0]} <strong>Date: ${date[1]}</strong>&nbsp;&nbsp;${description[1]}`
           this.$emit('displayDes', signalDes)
           this.$emit('displayTickers', `${tickersDes}`)
           this.$emit('scrollToTarget', 'scrollTopTarget')
@@ -1232,6 +1418,8 @@ try {
         _data[`condition${suffix}`] = ele.condition
         const value = this.signalOptions.find(l => l.value === ele.value)?.label || ele.value
         _data[`value${suffix}`] = value
+        if(Array.isArray(dates) && dates.length) _data[`date${suffix}`] = dates[index]
+        else  _data[`date${suffix}`] = 0
       })
       this.data = {
         ...data,
@@ -1402,4 +1590,21 @@ try {
   padding: 0px;
 }
 }
+.custom-option {
+    display: flex;
+    align-items: center; /* 垂直居中对齐 */
+    justify-content: space-between;
+      .type-label {
+        font-size: 11px;
+        color: #999999;
+        font-weight: 500;
+        margin-right: 10px;
+        text-align: center;
+        margin-left: 5px;
+      }
+      .item-label {
+        font-size: 11px;
+        font-weight: 500;
+      }
+  }
 </style>

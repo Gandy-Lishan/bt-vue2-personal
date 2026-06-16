@@ -34,6 +34,14 @@
 			style="width: 100%; height: 100%; margin: 0 auto;"
       :row-class-name="tableRowClassName"
 		>
+    <el-table-column align="center" width="50px" v-if="currentPageTab === 'MyScreen'">
+				<template slot-scope="scope">
+          <el-button-group>
+            <el-button type="text" icon="el-icon-star-on" @click="addToFavorites(scope.row)" title="Remove from Favorites" v-if="scope.row.favorite"></el-button>
+            <el-button type="text" icon="el-icon-star-off" @click="addToFavorites(scope.row)" title="Add to Favorites" v-else></el-button>
+          </el-button-group>
+        </template>
+    </el-table-column>
 			<template v-for="(l) in tableCol">
         <el-table-column
           v-if="l.label === 'Signal'"
@@ -183,9 +191,8 @@
 </template>
 
 <script>
-import { getMyScreensList, saveMyScreenForm, deleteMyScreen, editMyScreenForm, getScreenResults } from '@/service/service'
+import { getMyScreensList, saveMyScreenForm, deleteMyScreen, editMyScreenForm, getScreenResults, getMyScreenFavoritesList, updateMyScreenFavorite } from '@/service/service'
 import { capitalizeFirstLetter, isJson, timestampToTime } from "@/utils"
-import TradesVue from '../AIScanner/ScannerBacktest/Trades.vue'
 const debounce = require('lodash/debounce')
 
 export default {
@@ -319,8 +326,10 @@ export default {
 				this.loading = true
         if(this.currentPage !== 1 && !doNotResetPage) this.currentPage = 1
         let res = await getMyScreensList(`/dev/myscreen_app/get_myscreen_records${tab === 'System' ? '?sample=1' : ''}`)
+        let favorite = await getMyScreenFavoritesList()
+        let {data: favResults, favStatus} = favorite
         let {data: results, status} = res
-        console.log('results', res)
+        console.log('favResults', favResults)
         if(status === 200) {
 					results = results.map(item => {
             // item.status = capitalizeFirstLetter(item.status)
@@ -333,8 +342,15 @@ export default {
             item.editLoading = false
             item.rerunLoading = false
             item.last_signal_date = item.lastdate === '2099-01-01' ? '' : item.lastdate
+            item.favorite = favResults.find(ele => ele.url === item.url) || false
 						return item
 					})
+          if(tab !== 'System') {
+            results.sort((a, b) => {
+              if (a.favorite === b.favorite) return 0; // 属性相同，不改变相对顺序
+              return a.favorite ? -1 : 1;              // a是true就排前面，b是true就排后面
+            });
+          }
 					this.tableData = results
           this.filterData = this.tableData
           this.total = this.filterData.length
@@ -576,7 +592,7 @@ export default {
       if(Array.isArray(date) && date.length === 1) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description.join(' ')}`
       if(Array.isArray(date) && date.length === 2) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description[0]} <strong>Date: ${date[1]}</strong>&nbsp;&nbsp;${row.description[1]}`
       // this.$emit('displayDes', signalDes)
-      // if(row.category === 'Custom') this.$emit('displayTickers', tickersDes)
+      if(row.category === 'Custom') this.$emit('displayTickers', tickersDes)
       // this.$emit('displayResultsData', data, row)
       this.$emit('displayFormData', row, false)
       if(this.currentPageTab === 'MyScreen') this.$emit('rerunScreen')
@@ -628,6 +644,18 @@ export default {
         const path = 'https://youtu.be/7q-11S4y8xI'
         window.open(path, '_blank')
     },
+    async addToFavorites(row) {
+      const {favorite, url} = row
+        // 添加收藏
+        const data = {
+          url,
+          payload: {favorite: !favorite ? 1 : 0}
+        }
+        const res = await updateMyScreenFavorite(data)
+        const code = res.data.code
+        if(code != 413) this.getDataList()
+        else if(code == 413) this.popUpMsgBox('Favorite limit reached (max 5).')
+    }
     }
   }
 </script>

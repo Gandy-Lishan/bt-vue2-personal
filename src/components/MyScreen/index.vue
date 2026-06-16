@@ -37,7 +37,9 @@
             @displayResultsData="displayResultsData"
             @refreshBTList="refreshBTList"
             @displayDes="displayDes"
+            @displayTickers="displayTickers"
             @saveJumpBacktestData="saveJumpBacktestData"
+            @rerunScreen="rerunScreen"
           ></SignalsTable>
           <FilterTable v-show="activeTab == 'Result'" ref="filterTable"
             :data="filterTableData" 
@@ -45,6 +47,7 @@
             :tableCol="filterTableData.tableCol" 
             :loading="loading"
             :signalDes="signalDes"
+            :tickersDes="tickersDes"
             :jumpBacktestData="jumpBacktestData"
             :currentRow="currentRow"
             ></FilterTable>
@@ -56,7 +59,9 @@
             @displayFormData="displayFormData"
             @displayResultsData="displayResultsData" 
             @displayDes="displayDes"
+            @displayTickers="displayTickers"
             @saveJumpBacktestData="saveJumpBacktestData"
+            @rerunScreen="rerunScreen"
           ></SignalsTable>
         </div>
       </el-collapse-item>
@@ -76,6 +81,7 @@
          @clearResults="clearResults"
          @displayResultsData="displayResultsData"
          @displayDes="displayDes"
+         @displayTickers="displayTickers"
          @saveJumpBacktestData="saveJumpBacktestData"
          >
         </ScannerForm>
@@ -191,6 +197,7 @@ export default {
         ]
       },
       signalDes: '',
+      tickersDes: '',
       jumpBacktestData: {},
       currentRow: {}
     }
@@ -388,8 +395,17 @@ export default {
     displayDes(des) {
       this.signalDes = des
     },
+    displayTickers(des) {
+      console.log('des', des)
+      this.tickersDes = des
+    },
     saveJumpBacktestData(data) {
       this.jumpBacktestData = data
+    },
+    rerunScreen() {
+      this.$nextTick(() => {
+        this.$refs['ScannerForm'].submitForm()
+      })
     }
   }
 }
