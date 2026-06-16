@@ -11,9 +11,14 @@
           <p>
             Screen is a convenient trading signals platform that provides customized trading signals through a variety of conditions to meet the needs of different users.
           </p>
-          <p>
-            You can subscribe to receive email alerts for your favorite screens by selecting the checkbox above. Please note that email alerts are only available for screens saved to your Favorites. To subscribe (or unsubscribe), simply check or uncheck the box.
-          </p>
+          <div class="subscribe-container">
+            <p>
+              <el-checkbox v-model="checked" @change="checkedSignalAlert">My Signal Alerts</el-checkbox>
+            </p>
+            <p>
+              You can subscribe to receive email alerts for your favorite screens by selecting the checkbox above. Please note that email alerts are only available for screens saved to your Favorites. To subscribe (or unsubscribe), simply check or uncheck the box.
+            </p>
+          </div>
         </div>
       </el-collapse-item>
       </el-collapse>
@@ -120,7 +125,7 @@ import ScannerForm from "./ScannerForm";
 import SignalsTable from "./Table";
 import FilterTable from "./FilterTable";
 import Trades from "./Trades";
-import { getLastSignalDate, changeMySignalsSubscribe } from '@/service/service';
+import { getLastSignalDate, changeMyScreenSubscribe, getMyScreenSubscribe } from '@/service/service';
 import { isJson, trimTrailingZeros } from "@/utils"
 
 export default {
@@ -199,7 +204,8 @@ export default {
       signalDes: '',
       tickersDes: '',
       jumpBacktestData: {},
-      currentRow: {}
+      currentRow: {},
+      checked: false
     }
   },
   components: {
@@ -211,6 +217,7 @@ export default {
   async mounted() {
     // get the signal whose the last signal date is today
     await this.$refs['SignalsTable'].getDataList('MyScreen')
+    await this.getMyScreenSubscribe()
     // await this.$refs['SignalsTable'].onSortChange({column: 
     //   {sortable: 'custom'},
     //   prop: 'last_signal_date',
@@ -218,6 +225,15 @@ export default {
     // })
   },
   methods: {
+    async getMyScreenSubscribe() {
+      const res = await getMyScreenSubscribe()
+      debugger
+      const code  = res.data?.code
+      if(code == 219) {
+        const my_screen_subscribe = (isJson(res.data.data) ? JSON.parse(res.data.data) : res.data.data).my_screen
+        this.checked = Boolean(Number(my_screen_subscribe))
+      }
+    },
     changeTab(val) {
       this.activeTab = val
     },
@@ -384,14 +400,6 @@ export default {
         
       }
     },
-    async checkedSignalAlert(checked) {
-      const res = await changeMySignalsSubscribe({my_signal: Number(checked)})
-        const code  = res.data?.code
-        if(code === 220 && checked) this.popUpMsgBox('Signal Email has been subscribed successfully')
-        else if(code === 220 && !checked) this.popUpMsgBox('Signal Email unsubscribed successfully')
-        else if(code === 518) this.popUpMsgBox('Add Signal Email Subscribe failed')
-        else if(code === 520) this.popUpMsgBox('Update Signal Email Subscribe failed')
-    },
     displayDes(des) {
       this.signalDes = des
     },
@@ -406,7 +414,15 @@ export default {
       this.$nextTick(() => {
         this.$refs['ScannerForm'].submitForm()
       })
-    }
+    },
+    async checkedSignalAlert(checked) {
+      const res = await changeMyScreenSubscribe({my_screen: Number(checked)})
+        const code  = res.data?.code
+        if(code === 220 && checked) this.popUpMsgBox('Signal Email has been subscribed successfully')
+        else if(code === 220 && !checked) this.popUpMsgBox('Signal Email unsubscribed successfully')
+        else if(code === 518) this.popUpMsgBox('Add Signal Email Subscribe failed')
+        else if(code === 520) this.popUpMsgBox('Update Signal Email Subscribe failed')
+    },
   }
 }
 </script>
@@ -526,5 +542,10 @@ h2.page-title {
   .title {
     flex-wrap: wrap;
   }
+}
+.subscribe-container {
+  border: 1px solid #e0e0e0;
+  padding: 10px 20px 10px 20px;
+  border-radius: 5px;
 }
 </style>

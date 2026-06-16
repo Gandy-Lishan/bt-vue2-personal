@@ -1979,8 +1979,43 @@ export function getMySignalsSubscribe () {
 			})
 	})
 }
+
+export function getMyScreenSubscribe () {
+	const path = `/dev/myscreen_app/myscreen_subscribe`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(path)
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function changeMySignalsSubscribe(data) {
 	const url = `/dev/mysignal_app/subscribe`
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios
+			.post(url, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function changeMyScreenSubscribe(data) {
+	const url = `/dev/myscreen_app/myscreen_subscribe`
 	const headers = {
 		'Content-Type': 'application/json'
 	}
