@@ -184,6 +184,7 @@ export default {
                                             initalData['Symbol Last Signal'] == initalData['BT End Date'] ? 
                                             initalData['BT End Date'] : ''
                                           : ''
+              if(this.showLastSignalMarker1 !== '' && exitReason.length && exitReason[exitReason.length - 1] === 'Time Is Up') this.showLastSignalMarker1 = ''
               this.showLastSignalMarker2 = initalData['Symbol2 Last Signal'] ? 
                                             initalData['Symbol2 Last Signal'] == initalData['BT End Date'] ? 
                                             initalData['BT End Date'] : ''
