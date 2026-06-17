@@ -184,7 +184,6 @@ export default {
                                             initalData['Symbol Last Signal'] == initalData['BT End Date'] ? 
                                             initalData['BT End Date'] : ''
                                           : ''
-              if(this.showLastSignalMarker1 !== '' && exitReason.length && exitReason[exitReason.length - 1] === 'Time Is Up') this.showLastSignalMarker1 = ''
               this.showLastSignalMarker2 = initalData['Symbol2 Last Signal'] ? 
                                             initalData['Symbol2 Last Signal'] == initalData['BT End Date'] ? 
                                             initalData['BT End Date'] : ''
@@ -303,15 +302,13 @@ export default {
                 const tradesData = cloneDeep(initalData['Trades'])
                 const tradesDataForTradeTable = cloneDeep(initalData['Trades'])
                 vm.tradesData = cloneDeep(initalData['Trades'])
-                if(this.showLastSignalMarker1) {
-                  tradesData.push({
+                vm.tradesDataWithLastSignal = tradesData
+                const showLastTradeDate = this.removeLastSell(tradesDataForTradeTable, initalData)
+                if(showLastTradeDate)  tradesData.push({
                     Symbol: initalData['Symbol'],
                     Date: this.showLastSignalMarker1,
                     TradeStatus: this.direction === 'Long' ? 'Buy' : 'Sell',
                   })
-                }
-                vm.tradesDataWithLastSignal = tradesData
-                this.removeLastSell(tradesDataForTradeTable, initalData)
                 vm.tradesDataWithRemovedLastSell = tradesDataForTradeTable
                 this.$store.commit('chart/getTradesData', vm.tradesData)
                 
@@ -407,7 +404,8 @@ removeLastSell(tradesData, initalData) {
         'Date': '',
         'TradePrice': NaN,
       }
-    }
+      return false // 不显示
+    }else return true // 不显示
 },
 
     loadMarker(initalData) {
