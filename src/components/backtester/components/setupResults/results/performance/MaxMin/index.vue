@@ -453,8 +453,9 @@ export default {
 
 			for (let data in dataSet) {
 				let entryDate = formatStandardTime(dataSet[data].Date)
-
+				if (!entryDate) continue
 				let res = chartDataset.findIndex((x) => {
+					if (!x || !x.DT) return false
 					return entryDate.getTime() == x.DT.getTime()
 				})
 
