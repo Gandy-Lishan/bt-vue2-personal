@@ -1323,7 +1323,12 @@ export default {
 			for (let data in dataSet) {
 				let entryDate = formatStandardTime(dataSet[data].Date)
 				let entryDateDefault = dataSet[data].Date
+				if (!entryDate) {
+					noFound.push(dataSet[data].Date)
+					continue
+				}
 				let res = chartDataset.findIndex((x) => {
+					if (!x || !x.DT) return false
 					return entryDate.getTime() == x.DT.getTime()
 				})
 				if(res == -1) {noFound.push(dataSet[data].Date)}
@@ -1580,8 +1585,11 @@ export default {
 				}else if(direction === 'Short') {
 					if (dataSet[data].TradeStatus != 'SELL') continue
 				}
-				let entryDate = formatStandardTime(dataSet[data].Date).getTime()
+				let _entryDate = formatStandardTime(dataSet[data].Date)
+				if (!_entryDate) continue
+				let entryDate = _entryDate.getTime()
 				let res = chartDataset.findIndex((x) => {
+					if (!x || !x.DT) return false
 					return entryDate == x.DT.getTime()
 				})
 				if(res != -1) {
