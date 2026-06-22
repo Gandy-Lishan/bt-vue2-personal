@@ -156826,5 +156826,19 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Commodity Model",
+        "url": "jk_commodity_model",
+        "market_symbol": "BCOMSP",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK Commodity Model Status",
+        "url": "jk_commodity_model_status",
+        "market_symbol": "BCOMSP",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
