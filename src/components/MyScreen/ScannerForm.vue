@@ -538,6 +538,9 @@ export default {
       dateOptions: [
         { value: 0,  label: 'Current'},
         { value: -1,  label: 'Previous'},
+        { value: -2,  label: '2 Days Prior'},
+        { value: -3,  label: '3 Days Prior'},
+        { value: -4,  label: '4 Days Prior'},
       ],
       criteriaOptions: [
         { label: 'Screen Criteria', value: 'ScreenCriteria' },
@@ -996,11 +999,7 @@ export default {
       let signals = null
       let description = null
       this.percentage = 8
-      const dateDes = (date) => {
-        if(date === 0) return 'Current'
-        else if(date === -1) return 'Previous'
-        else return ''
-      }
+      const dateDes = (date) => this.dateOptions.find(ele => ele.value === Number(date))?.label || ''
       debugger
       if(relation === 0) {
         const _value = this.signalOptions.find(ele => ele.label === value)?.value || value
