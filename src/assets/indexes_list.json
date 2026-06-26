@@ -2548,5 +2548,17 @@
     "name": "Strive 500 ETF (STXF)",
     "category": "ETF",
     "inception": "2022/09/15"
+  },
+  {
+      "symbol": "XSD",
+      "name": "SPDR S&P Semiconductor ETF (XSD)",
+      "category": "ETF",
+      "inception": "2006/02/06"
+  },
+  {
+      "symbol": "FTXL",
+      "name": "First Trust Nasdaq Semiconductor ETF (FTXL)",
+      "category": "ETF",
+      "inception": "2016/09/21"
   }
 ]
