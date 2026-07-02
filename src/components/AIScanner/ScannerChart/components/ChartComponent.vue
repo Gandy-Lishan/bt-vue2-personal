@@ -564,7 +564,7 @@ export default {
         z_score_list.push(
           parseFloat(
             (
-              (temp_median - temp_mean) /
+              (temp_mean - temp_median) /
               (temp_std / Math.sqrt(sqrt_length))
             ).toFixed(1)
           )
