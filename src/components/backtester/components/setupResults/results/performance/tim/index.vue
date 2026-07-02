@@ -145,7 +145,7 @@
 							</template>
 					</div>
 				</div>
-				<p class="hint"><i>NOTE: t = (Mean - Median) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
+				<p class="hint"><i>NOTE: t = (Median - Mean) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
 			</el-tab-pane>
 			<el-tab-pane label="Exit With Default Time-In-Market (Short-Term)" name="third" v-if="rowFrequency === 'Daily'">
 				<div class="history-container">
@@ -216,7 +216,7 @@
 							</template>
 					</div>
 				</div>
-				<p class="hint"><i>NOTE: t = (Mean - Median) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
+				<p class="hint"><i>NOTE: t = (Median - Mean) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
 			</el-tab-pane>
 			<el-tab-pane label="Exit with Customized Time-In-Market" name="second">
 				<div class="history-container">
@@ -285,7 +285,7 @@
 						</template>
 				</div>
 				</div>
-				<p class="hint"><i>NOTE: t = (Mean - Median) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
+				<p class="hint"><i>NOTE: t = (Median - Mean) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
 				<el-dialog
 					title="Edit exit with different TIM Table"
 					:visible.sync="showTable"
