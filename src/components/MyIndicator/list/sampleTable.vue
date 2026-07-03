@@ -19,57 +19,6 @@
      @sort-change="changeTableSort"
   style="width: 100%; height: 100%; margin: 0 auto;"
  >
-   
-     <el-table-column
-       type="expand">
-       <template slot-scope="scope">
-         <el-form label-position="left" inline class="demo-table-expand">
-           <!-- <el-row :gutter="20">
-             <el-col :span="8">
-             <el-form-item label="Name">
-                 <span>{{ scope.row['name']}}</span>
-             </el-form-item>
-             </el-col>
-             <el-col :span="8">
-             <el-form-item label="Categories">
-               <span>{{ scope.row['categories']}}</span>
-             </el-form-item>
-             </el-col>
-             <el-col :span="8">
-               <el-form-item label="Indicators included">
-                 <template v-for="(item, index) in scope.row['included']">
-                   <span :key="index">{{`${index + 1}. ${item}`}}<br/></span>
-                 </template>
-               </el-form-item>
-             </el-col>
-           </el-row> -->
-           <el-row :gutter="20">
-             <el-row :span="4">
-             <el-form-item label="Name">
-                 <span>{{ scope.row['name']}}</span>
-             </el-form-item>
-             </el-row>
-             <el-row :span="4">
-             <el-form-item label="Categories">
-               <span>{{ scope.row['categories']}}</span>
-             </el-form-item>
-             </el-row>
-             <el-row :span="4">
-             <el-form-item label="Timeframe">
-               <span>{{ scope.row['time_frame']}}</span>
-             </el-form-item>
-             </el-row>
-             <el-row :span="16">
-               <el-form-item label="Indicators included" class="included-box">
-                 <template v-for="(item, index) in scope.row['included_url']">
-                   <span :key="index" style="margin-right: 10px">{{`${index + 1}. ${item}`}};</span>
-                 </template>
-               </el-form-item>
-             </el-row>
-           </el-row>
-         </el-form>
-       </template>
-     </el-table-column>
   <template v-for="(l) in tableCol">
    <el-table-column
     :label="l.label"
