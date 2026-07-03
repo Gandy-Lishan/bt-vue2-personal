@@ -60,6 +60,7 @@
           <el-menu-item index="2-4"><i class="fa fa-plus" style="margin-right: 10px;"></i>Whats New</el-menu-item>
           <el-menu-item index="2-5"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>BacktestEdge Document</el-menu-item>
           <el-menu-item index="2-6"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>Smart Stock Scanner Document</el-menu-item>
+          <el-menu-item index="2-7"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>Tools API Document</el-menu-item>
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">
@@ -675,8 +676,11 @@ export default {
       }else if(key === '2-6') {
         this.$router.push('/doc/scannerdoc/0')
         return
-      }
-      else if(key === '3-1') {
+      }else if(key === '2-7') {
+        let path = 'https://st-tools.sentimentrader.com/api-docs/backtest'
+        window.open(path, '_blank')
+        return
+      }else if(key === '3-1') {
         let path = 'https://users.sentimentrader.com/users/preferences/'
         window.open(path, '_blank')
         return
