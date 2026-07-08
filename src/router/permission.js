@@ -7,7 +7,7 @@ import store from '../store'
 import { uniqWith, isEqual } from "lodash"
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
-export function setRouterPermission(router) {
+export function setRouterPermission(router) { 
 	router.beforeEach(async (to, from, next) => {
 		// 如果跳入404，则直接进入跳转外链的待定阶段，没有其他cookie或者验证判断(准备弃用，因为登录后或者购买后404应该重新验证并跳转)
 		//if(to.path == "/404") next()
