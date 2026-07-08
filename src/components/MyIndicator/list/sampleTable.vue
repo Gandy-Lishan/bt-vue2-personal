@@ -697,7 +697,7 @@ export default {
 						extreme_pessimism: data.lower_extreme_value,
 						combine_type: data.combine_type,
 						benchmark: data.benchmark,
-						next_process: data.next_process
+						next_process: data.next_process || 'sh0_c|sh0_c'
 					}
 					if(data.mul_indicator) requestData.mul_indicator = data.mul_indicator
 					if(data.indicator_weight) requestData.indicator_weight = data.indicator_weight
