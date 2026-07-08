@@ -60,7 +60,7 @@
           <el-menu-item index="2-4"><i class="fa fa-plus" style="margin-right: 10px;"></i>Whats New</el-menu-item>
           <el-menu-item index="2-5"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>BacktestEdge Document</el-menu-item>
           <el-menu-item index="2-6"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>Smart Stock Scanner Document</el-menu-item>
-          <el-menu-item index="2-7"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>Tools API Document</el-menu-item>
+          <!-- <el-menu-item index="2-7"><i class="fa fa-book" aria-hidden="true" style="margin-right: 10px;"></i>Tools API Document</el-menu-item> -->
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">
