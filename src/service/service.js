@@ -594,9 +594,10 @@ export function findLastSignalApi(data) {
 	})
 }
 
-export function getMyIndicatorsList(page, name) {
+export function getMyIndicatorsList(page, name, pageSize) {
 	let url = `/dev/my_indicator/get_records/?ordering=-create_date&page=${page}`
 	if (name) url += `&name=${encodeURIComponent(name)}`
+	if (pageSize) url += `&page_size=${encodeURIComponent(pageSize)}`
 
 	return new Promise((resolve, reject) => {
 		axios

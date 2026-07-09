@@ -62,7 +62,7 @@
               </button>
             </div>
             <div class="hub-search">
-              <input v-model="hubSearch" :placeholder="hubSearchPlaceholder" type="text" />
+              <input v-model="hubSearch" class="search-input" :placeholder="hubSearchPlaceholder" type="text" />
             </div>
           </div>
 
@@ -232,7 +232,7 @@
         <div class="panel-header">
           <span>Watchlist</span>
           <div class="panel-actions">
-            <button class="btn small" type="button" @click="openSettings">Settings</button>
+            <button class="btn blue small" type="button" @click="openSettings">Settings</button>
             <button class="collapse-btn" type="button" @click="togglePanel('watchlist')">
               {{ collapseLabel('watchlist') }}
             </button>
@@ -242,21 +242,10 @@
         <div class="panel-body" :class="{ collapsed: collapsedPanels.watchlist }">
           <div class="toolbar">
             <div class="toolbar-left">
-              <input v-model.trim="watchlistSearch" type="text" placeholder="Search symbol..." />
-              <select v-model="watchlistAssetType">
-                <option value="">All Assets</option>
-                <option value="stock">Stock</option>
-                <option value="etf">ETF</option>
-              </select>
-              <button class="btn" type="button" :disabled="watchlistLoading || watchlistConfigLoading" @click="refreshWatchlistData">Refresh</button>
-              <input v-model.trim="singleTicker" type="text" placeholder="Add ticker, e.g. AAPL" />
-              <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !singleTicker" @click="addSingleTicker">Add</button>
-              <input v-model.trim="bulkTicker" class="bulk-input" type="text" placeholder="Bulk add: MSFT, NVDA, SPY" />
-              <button class="btn" type="button" :disabled="watchlistConfigLoading || !bulkTicker" @click="bulkAddTickers">Bulk Add</button>
-            </div>
-            <div class="toolbar-right">
-              <button class="btn ghost" type="button" :disabled="watchlistConfigLoading || !selectedWatchTickers.length" @click="removeSelected">Remove Selected</button>
-              <button class="btn ghost" type="button" :disabled="watchlistConfigLoading || !watchListData.length" @click="clearWatchlist">Clear All</button>
+              <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !selectedWatchTickers.length" @click="removeSelected">Remove Selected</button>
+              <input v-model.trim="watchlistSearch" class="search-input" type="text" placeholder="Search symbol..." />
+              <input v-model.trim="singleTicker" class="bulk-input" type="text" placeholder="Add tickers, e.g. AAPL, MSFT, etf_spy" />
+              <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !singleTicker" @click="addWatchlistTickers">Add</button>
             </div>
           </div>
           <div v-if="watchlistConfigMessage" class="watchlist-message">{{ watchlistConfigMessage }}</div>
@@ -295,10 +284,10 @@
                 </template>
               </tbody>
             </table>
-            <div class="pagination-row" v-if="shouldShowPagination(watchlistTotalCount)">
+            <div class="pagination-row" v-if="shouldShowPagination(watchlistTotalCount, metricPageSize)">
               <button class="pagination-btn" type="button" :disabled="watchlistPage <= 1 || watchlistLoading" @click="changeWatchlistPage(watchlistPage - 1)">Prev</button>
-              <span>Page {{ watchlistPage }} / {{ getTotalPages(watchlistTotalCount) }} · Total {{ watchlistTotalCount }}</span>
-              <button class="pagination-btn" type="button" :disabled="watchlistPage >= getTotalPages(watchlistTotalCount) || watchlistLoading" @click="changeWatchlistPage(watchlistPage + 1)">Next</button>
+              <span>Page {{ watchlistPage }} / {{ getTotalPages(watchlistTotalCount, metricPageSize) }} · Total {{ watchlistTotalCount }}</span>
+              <button class="pagination-btn" type="button" :disabled="watchlistPage >= getTotalPages(watchlistTotalCount, metricPageSize) || watchlistLoading" @click="changeWatchlistPage(watchlistPage + 1)">Next</button>
             </div>
           </div>
         </div>
@@ -378,10 +367,10 @@
                 </template>
               </tbody>
             </table>
-            <div class="pagination-row" v-if="shouldShowPagination(marketTotalCount)">
+            <div class="pagination-row" v-if="shouldShowPagination(marketTotalCount, metricPageSize)">
               <button class="pagination-btn" type="button" :disabled="marketPage <= 1 || marketLoading" @click="changeMarketPage(marketPage - 1)">Prev</button>
-              <span>Page {{ marketPage }} / {{ getTotalPages(marketTotalCount) }} · Total {{ marketTotalCount }}</span>
-              <button class="pagination-btn" type="button" :disabled="marketPage >= getTotalPages(marketTotalCount) || marketLoading" @click="changeMarketPage(marketPage + 1)">Next</button>
+              <span>Page {{ marketPage }} / {{ getTotalPages(marketTotalCount, metricPageSize) }} · Total {{ marketTotalCount }}</span>
+              <button class="pagination-btn" type="button" :disabled="marketPage >= getTotalPages(marketTotalCount, metricPageSize) || marketLoading" @click="changeMarketPage(marketPage + 1)">Next</button>
             </div>
           </div>
         </div>
@@ -407,7 +396,7 @@
                 <span class="muted">Default table format</span>
               </div>
               <div class="toolbar-right">
-                <input v-model="sentimentIndicatorSearch" type="text" placeholder="Search indicators..." />
+                <input v-model="sentimentIndicatorSearch" class="search-input" type="text" placeholder="Search indicators..." />
               </div>
             </div>
             <div class="table-wrap">
@@ -653,13 +642,16 @@ import { mapGetters, mapActions } from 'vuex'
 import axios from '@/axios'
 import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 
+const DASHBOARD_PAGE_SIZE = 5
+const METRIC_PAGE_SIZE = 10
+
 const dashboardApi = {
   getWatchlist(params = {}) {
     return axios.get('/dev/st_data/asset_latest_metrics', {
       params: {
         paginate: true,
         page: 1,
-        page_size: 10,
+        page_size: METRIC_PAGE_SIZE,
         ...params
       },
       withCredentials: true
@@ -684,7 +676,7 @@ const dashboardApi = {
         table: 1,
         paginate: true,
         page: 1,
-        page_size: 10,
+        page_size: METRIC_PAGE_SIZE,
         ...params
       },
       withCredentials: true
@@ -703,11 +695,11 @@ const dashboardApi = {
   },
   getMyIndicators(params = {}) {
     // TODO: connect real My Indicators API here.
-    return getMyIndicatorsList(params.page || 1, params.name)
+    return getMyIndicatorsList(params.page || 1, params.name, params.page_size || DASHBOARD_PAGE_SIZE)
   },
   getFavoriteReports(params = {}) {
     // TODO: connect real Favorite Reports API here.
-    return getMRFavoritesList({ ...params, page: params.page || 1 })
+    return getMRFavoritesList({ page: params.page || 1, page_size: DASHBOARD_PAGE_SIZE, ...params })
   },
   getMarketRows() {
     // TODO: connect real Market Screen API here.
@@ -810,12 +802,12 @@ export default {
       marketConfigMessage: '',
       suppressMarketFilterSave: false,
       singleTicker: '',
-      bulkTicker: '',
       selectedWatchTickers: [],
       newColumnType: '',
       settingsOpen: false,
       savedFilter: '',
-      pageSize: 10,
+      pageSize: DASHBOARD_PAGE_SIZE,
+      metricPageSize: METRIC_PAGE_SIZE,
       signalsPagination: {
         'my-signals': 1,
         'st-signals': 1
@@ -856,28 +848,24 @@ export default {
       },
       columns: [
         { id: 'symbol', name: 'Ticker', visible: true },
-        { id: 'asset_type', name: 'Asset Type', visible: false },
-        { id: 'data_date', name: 'Date', visible: false },
+        { id: 'data_date', name: 'Date', visible: true },
         { id: 'close', name: 'Close', visible: true },
         { id: 'optix', name: 'Optix', visible: true },
         { id: 'trend', name: 'Trend Score', visible: true },
         { id: 'reltrend', name: 'RelTrend Score', visible: true },
         { id: 'volatility_20d', name: 'HV20', visible: true },
-        { id: 'volatility_60d', name: 'HV60', visible: true },
-        { id: 'updated_at', name: 'Updated At', visible: false },
+        { id: 'volatility_60d', name: 'HV60', visible: true }
       ],
       tempColumns: [],
       customColumnOptions: [
         { value: 'symbol', label: 'Ticker' },
-        { value: 'asset_type', label: 'Asset Type' },
         { value: 'data_date', label: 'Date' },
         { value: 'close', label: 'Close' },
         { value: 'optix', label: 'Optix' },
         { value: 'trend', label: 'Trend Score' },
         { value: 'reltrend', label: 'RelTrend Score' },
         { value: 'volatility_20d', label: 'HV20' },
-        { value: 'volatility_60d', label: 'HV60' },
-        { value: 'updated_at', label: 'Updated At' }
+        { value: 'volatility_60d', label: 'HV60' }
       ],
       watchListData: [],
       mySignalsData: [],
@@ -907,7 +895,7 @@ export default {
       ],
       marketColumns: [
         { id: 'symbol', name: 'Ticker', visible: true },
-        { id: 'asset_type', name: 'Asset Type', visible: true },
+        { id: 'data_date', name: 'Date', visible: true },
         { id: 'close', name: 'Close', visible: true },
         { id: 'optix', name: 'Optix', visible: true },
         { id: 'trend', name: 'Trend Score', visible: true },
@@ -1140,10 +1128,19 @@ export default {
       }
     },
     getDefaultWatchlistColumnIds() {
-      return ['symbol', 'close', 'optix', 'trend', 'reltrend', 'volatility_20d', 'volatility_60d']
+      return this.getMetricColumnOrder()
     },
     getDefaultMarketColumnIds() {
-      return ['symbol', 'asset_type', 'close', 'optix', 'trend', 'reltrend', 'volatility_20d', 'volatility_60d']
+      return this.getMetricColumnOrder()
+    },
+    getMetricColumnOrder() {
+      return ['symbol', 'data_date', 'close', 'optix', 'trend', 'reltrend', 'volatility_20d', 'volatility_60d']
+    },
+    normalizeMetricColumnIds(columnIds) {
+      const allowedIds = this.getMetricColumnOrder()
+      const requestedIds = Array.isArray(columnIds) ? columnIds.filter(Boolean) : []
+      const requestedSet = new Set(['symbol', 'data_date', ...requestedIds])
+      return allowedIds.filter(id => requestedSet.has(id))
     },
     createWatchlistTableConfig(config = {}) {
       const columns = this.parseWatchlistConfigValue(config.columns, this.getDefaultWatchlistColumnIds())
@@ -1153,7 +1150,7 @@ export default {
       return {
         name: config.name || 'My WatchList',
         columns: Array.isArray(columns) && columns.length
-          ? Array.from(new Set(columns.filter(Boolean)))
+          ? this.normalizeMetricColumnIds(columns)
           : this.getDefaultWatchlistColumnIds(),
         filters,
         symbols: this.normalizeTickerList(symbols)
@@ -1288,7 +1285,7 @@ export default {
           table: 1,
           paginate: true,
           page,
-          page_size: this.pageSize
+          page_size: this.metricPageSize
         })
         const { rows, total, columns } = this.normalizeMetricApplyResponse(response)
 
@@ -1337,7 +1334,7 @@ export default {
           table: 1,
           paginate: true,
           page: search ? 1 : page,
-          page_size: search ? 1000 : this.pageSize
+          page_size: search ? 1000 : this.metricPageSize
         })
         const { rows: appliedRows, total, columns } = this.normalizeMetricApplyResponse(response)
         let rows = appliedRows
@@ -1349,15 +1346,12 @@ export default {
 
         this.watchlistPage = page
         this.watchlistTotal = search ? rows.length : total
-        this.watchListData = search ? rows.slice((page - 1) * this.pageSize, page * this.pageSize) : rows
+        this.watchListData = search ? rows.slice((page - 1) * this.metricPageSize, page * this.metricPageSize) : rows
         this.watchlistSymbols = symbols.length ? symbols : this.extractWatchlistSymbols(rows)
         this.selectedWatchTickers = []
       } finally {
         this.watchlistLoading = false
       }
-    },
-    async refreshWatchlistData() {
-      await this.fetchWatchlistData({ page: this.watchlistPage })
     },
     buildCurrentWatchlistTableConfig() {
       const currentTable = this.getMetricWatchlistTableConfig()
@@ -1462,8 +1456,7 @@ export default {
     },
     syncWatchlistColumns(columnIds) {
       const catalog = this.getWatchlistColumnCatalog()
-      const ids = Array.isArray(columnIds) ? columnIds : []
-      const nextIds = Array.from(new Set(['symbol', ...ids.filter(Boolean)]))
+      const nextIds = this.normalizeMetricColumnIds(columnIds)
       const nextColumns = nextIds
         .map(id => catalog.find(column => column.id === id) || {
           id,
@@ -1480,15 +1473,13 @@ export default {
     getWatchlistColumnCatalog() {
       return [
         { id: 'symbol', name: 'Ticker', visible: true },
-        { id: 'asset_type', name: 'Asset Type', visible: false },
-        { id: 'data_date', name: 'Date', visible: false },
+        { id: 'data_date', name: 'Date', visible: true },
         { id: 'close', name: 'Close', visible: true },
         { id: 'optix', name: 'Optix', visible: true },
         { id: 'trend', name: 'Trend Score', visible: true },
         { id: 'reltrend', name: 'RelTrend Score', visible: true },
         { id: 'volatility_20d', name: 'HV20', visible: true },
-        { id: 'volatility_60d', name: 'HV60', visible: true },
-        { id: 'updated_at', name: 'Updated At', visible: false }
+        { id: 'volatility_60d', name: 'HV60', visible: true }
       ]
     },
     extractWatchlistSymbols(rows) {
@@ -1567,7 +1558,7 @@ export default {
         groups: [activeGroup],
         ranges,
         columns: Array.isArray(columns) && columns.length
-          ? Array.from(new Set(['symbol', ...columns.filter(Boolean)]))
+          ? this.normalizeMetricColumnIds(columns)
           : this.getDefaultMarketColumnIds()
       }
     },
@@ -1651,9 +1642,9 @@ export default {
       const catalog = this.getWatchlistColumnCatalog()
       const ids = Array.isArray(columnIds) && columnIds.length
         ? columnIds
-        : ['symbol', 'asset_type', 'close', 'optix', 'trend', 'reltrend', 'volatility_20d', 'volatility_60d']
+        : this.getDefaultMarketColumnIds()
 
-      this.marketColumns = Array.from(new Set(['symbol', ...ids.filter(Boolean)]))
+      this.marketColumns = this.normalizeMetricColumnIds(ids)
         .map(id => catalog.find(column => column.id === id) || {
           id,
           name: id.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()),
@@ -1686,7 +1677,7 @@ export default {
       const params = {
         paginate: true,
         page,
-        page_size: this.pageSize
+        page_size: this.metricPageSize
       }
 
       if (Array.isArray(groups) && groups.length) params.groups = groups.join(',')
@@ -1732,7 +1723,7 @@ export default {
             index: savedIndex,
             paginate: true,
             page,
-            page_size: this.pageSize
+            page_size: this.metricPageSize
           })
           : await dashboardApi.getWatchlist(this.buildMarketMetricsParams(currentConfig, page))
         const { rows, total, columns } = savedIndex >= 0
@@ -1922,6 +1913,7 @@ export default {
       let data = await dashboardApi.getMyIndicators({
         page,
         name: this.hubSearch.trim(),
+        page_size: this.pageSize,
         ...params
       })
       const responseData = data && data.data ? data.data : {}
@@ -2340,6 +2332,7 @@ export default {
       let data = await dashboardApi.getFavoriteReports({
         page,
         title: this.hubSearch.trim(),
+        page_size: this.pageSize,
         ...params
       })
       const responseData = data && data.data ? data.data : {}
@@ -2779,18 +2772,16 @@ export default {
       const state = this.sortStates.watchlist || {}
       const allowedFields = [
         'symbol',
+        'data_date',
         'close',
         'optix',
         'trend',
         'reltrend',
         'volatility_20d',
-        'volatility_60d',
-        'asset_type',
-        'data_date',
-        'updated_at',
+        'volatility_60d'
       ]
 
-      if (!state.key || !allowedFields.includes(state.key)) return '-updated_at'
+      if (!state.key || !allowedFields.includes(state.key)) return '-data_date'
       return state.direction === 'desc' ? `-${state.key}` : state.key
     },
     getMyIndicatorKey(item) {
@@ -2810,11 +2801,11 @@ export default {
       const startIndex = (currentPage - 1) * this.pageSize
       return list.slice(startIndex, startIndex + this.pageSize)
     },
-    getTotalPages(total) {
-      return Math.max(Math.ceil(Number(total || 0) / this.pageSize), 1)
+    getTotalPages(total, pageSize = this.pageSize) {
+      return Math.max(Math.ceil(Number(total || 0) / pageSize), 1)
     },
-    shouldShowPagination(total) {
-      return Number(total || 0) > this.pageSize
+    shouldShowPagination(total, pageSize = this.pageSize) {
+      return Number(total || 0) > pageSize
     },
     changeSignalsPage(page) {
       const totalPages = this.getTotalPages(this.filteredSignals.length)
@@ -2834,13 +2825,13 @@ export default {
       await this.fetchFavoriteReportsData({ page: nextPage })
     },
     async changeWatchlistPage(page) {
-      const totalPages = this.getTotalPages(this.watchlistTotalCount)
+      const totalPages = this.getTotalPages(this.watchlistTotalCount, this.metricPageSize)
       const nextPage = Math.min(Math.max(Number(page) || 1, 1), totalPages)
       if (nextPage === this.watchlistPage) return
       await this.fetchWatchlistData({ page: nextPage })
     },
     async changeMarketPage(page) {
-      const totalPages = this.getTotalPages(this.marketTotalCount)
+      const totalPages = this.getTotalPages(this.marketTotalCount, this.metricPageSize)
       const nextPage = Math.min(Math.max(Number(page) || 1, 1), totalPages)
       if (nextPage === this.marketPage) return
       await this.fetchMarketRowsData({ page: nextPage })
@@ -2899,20 +2890,15 @@ export default {
       if (!text) return '-'
       return text.includes('T') ? text.split('T')[0] : text
     },
-    async addSingleTicker() {
+    async addWatchlistTickers() {
       if (!this.singleTicker) return
-      await this.addTicker(this.singleTicker)
-      this.singleTicker = ''
-    },
-    async bulkAddTickers() {
-      if (!this.bulkTicker) return
-      const tickers = this.bulkTicker
-        .split(',')
+      const tickers = this.singleTicker
+        .split(/[,\s]+/)
         .map(ticker => ticker.trim())
         .filter(Boolean)
       if (!tickers.length) return
       this.watchlistSymbols = this.normalizeTickerList([...this.watchlistSymbols, ...tickers])
-      this.bulkTicker = ''
+      this.singleTicker = ''
       await this.saveWatchlistConfig({ silent: true })
     },
     async addTicker(ticker) {
@@ -2928,14 +2914,6 @@ export default {
         ? this.watchlistSymbols
         : this.extractWatchlistSymbols(this.watchListData)
       this.watchlistSymbols = currentSymbols.filter(ticker => !selected.has(this.normalizeWatchlistSymbol(ticker)))
-      this.selectedWatchTickers = []
-      await this.saveWatchlistConfig({ silent: true })
-    },
-    async clearWatchlist() {
-      this.watchlistSymbols = []
-      this.watchListData = []
-      this.watchlistTotal = 0
-      this.watchlistPage = 1
       this.selectedWatchTickers = []
       await this.saveWatchlistConfig({ silent: true })
     },
@@ -3332,9 +3310,13 @@ select {
 }
 
 .hub-search input {
-  width: 220px;
+  width: 300px;
   padding: 5px 10px;
   border-color: #c9d2da;
+}
+
+.search-input {
+  min-width: 280px;
 }
 
 .table-wrap {
@@ -4014,6 +3996,12 @@ ol {
 
   table {
     min-width: 900px;
+  }
+
+  .search-input,
+  .hub-search input {
+    width: 100%;
+    min-width: 0;
   }
 }
 .footer {
