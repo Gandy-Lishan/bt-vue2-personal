@@ -159,6 +159,13 @@ export default {
       prop: 'last_signal_date',
       order: 'descending'
     })
+    
+    if (this.$route.params.usedFor && this.$route.params.usedFor === 'showSignalDetail'){
+      const data = isJson(this.$route.params.data) ? JSON.parse(this.$route.params.data) : {}
+      console.log('data', data)
+      if(!Object.keys(data).length) return
+      this.displayResultsData(data)
+    }
   },
   methods: {
     async getMySignalsSubscribe() {

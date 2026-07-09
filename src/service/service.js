@@ -594,8 +594,9 @@ export function findLastSignalApi(data) {
 	})
 }
 
-export function getMyIndicatorsList(page) {
-	const url = `/dev/my_indicator/get_records/?ordering=-create_date&page=${page}`
+export function getMyIndicatorsList(page, name) {
+	let url = `/dev/my_indicator/get_records/?ordering=-create_date&page=${page}`
+	if (name) url += `&name=${encodeURIComponent(name)}`
 
 	return new Promise((resolve, reject) => {
 		axios
@@ -2014,6 +2015,37 @@ export function changeMySignalsSubscribe(data) {
 			})
 	})
 }
+export function postRequestMethod(requestUrl, requestData) {
+	const headers = {
+		'Content-Type': 'application/json'
+	}
+	const formData = new FormData()
+	for (const [key, value] of Object.entries(requestData)) {
+    formData.append(key, value);
+	}
+	return new Promise((resolve, reject) => {
+		axios
+			.post(requestUrl, formData, { headers, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getRequestMethod(requestUrl) {
+	return new Promise((resolve, reject) => {
+		axios
+			.get(requestUrl, { withCredentials: true, retry: null })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 export function changeMyScreenSubscribe(data) {
 	const url = `/dev/myscreen_app/myscreen_subscribe`
 	const headers = {
@@ -2504,6 +2536,30 @@ export function getUserWatchlistTrend() {
 }
 export function getCurrentUserWatchlistTrend() {
 	const url = `/dev/st_data/user_watchlist/`
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+export function getAssetLatestMetrics(params = {}) {
+	const query = new URLSearchParams()
+	query.set('paginate', 'true')
+	query.set('page', params.page || 1)
+	query.set('page_size', params.page_size || 10)
+
+	if (params.symbol) query.set('symbol', params.symbol)
+	if (params.asset_type) query.set('asset_type', params.asset_type)
+	if (params.start_date) query.set('start_date', params.start_date)
+	if (params.end_date) query.set('end_date', params.end_date)
+	if (params.ordering) query.set('ordering', params.ordering)
+
+	const url = `/dev/st_data/asset_latest_metrics?${query.toString()}`
 	return new Promise((resolve, reject) => {
 		axios
 			.get(url, { withCredentials: true })

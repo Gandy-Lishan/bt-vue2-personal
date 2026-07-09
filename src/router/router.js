@@ -444,6 +444,11 @@ const routes = [
 		]
 	},
 	{
+		path: '/my_dashboard',
+		name: 'NewDashboard',
+		component: resolve => require(['@/components/NewDashboard/index.vue'], resolve)
+	},
+	{
 		path: '/search',
 		name: 'AlgoliaSearchVue',
 		component: resolve => require(['@/components/AlgoliaSearchVue/index.vue'], resolve)
