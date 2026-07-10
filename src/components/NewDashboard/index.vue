@@ -1429,9 +1429,7 @@ export default {
       }
 
       if (Object.prototype.hasOwnProperty.call(payload, 'config_table2')) {
-        nextConfig.config_table2 = savedConfig && savedConfig.config_table2 !== undefined
-          ? savedConfig.config_table2
-          : payload.config_table2
+        nextConfig.config_table2 = payload.config_table2
       } else if (nextConfig.config_table2 === undefined) {
         nextConfig.config_table2 = activeConfig.config_table2
       }
@@ -1705,14 +1703,30 @@ export default {
         })
         .map(column => ({ ...column, visible: true }))
     },
+    cloneMarketRanges(ranges = {}) {
+      return Object.keys(ranges).reduce((nextRanges, key) => {
+        const range = ranges[key]
+        nextRanges[key] = range && typeof range === 'object' ? { ...range } : range
+        return nextRanges
+      }, {})
+    },
+    syncMarketRangesToConfigs(configs, ranges) {
+      const syncedRanges = this.cloneMarketRanges(ranges)
+      return this.normalizeMarketScreenConfigs(configs, true).map(config => this.createMarketScreenConfig({
+        ...config,
+        ranges: this.cloneMarketRanges(syncedRanges)
+      }))
+    },
     async saveMarketScreenConfig(options = {}) {
       if (this.suppressMarketFilterSave) return
-      const nextConfigs = this.normalizeMarketScreenConfigs(this.marketScreenConfigs, true)
+      let nextConfigs = this.normalizeMarketScreenConfigs(this.marketScreenConfigs, true)
       const groupIndex = this.getMarketConfigIndexByGroup(this.activeMarketGroup, nextConfigs)
       const index = groupIndex >= 0
         ? groupIndex
         : Math.max(Number(this.activeMarketConfigIndex) || 0, 0)
-      nextConfigs[index] = this.buildMarketScreenConfig()
+      const activeConfig = this.buildMarketScreenConfig()
+      nextConfigs[index] = activeConfig
+      nextConfigs = this.syncMarketRangesToConfigs(nextConfigs, activeConfig.ranges)
       this.marketScreenConfigs = nextConfigs
       this.activeMarketConfigIndex = index
 
