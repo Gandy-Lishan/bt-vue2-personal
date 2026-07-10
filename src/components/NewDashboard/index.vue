@@ -232,7 +232,7 @@
         <div class="panel-header">
           <span>Watchlist</span>
           <div class="panel-actions">
-            <button class="btn blue small" type="button" @click="openSettings">Settings</button>
+            <button class="btn small" type="button" @click="openSettings">Settings</button>
             <button class="collapse-btn" type="button" @click="togglePanel('watchlist')">
               {{ collapseLabel('watchlist') }}
             </button>
@@ -275,7 +275,13 @@
                 </tr>
                 <template v-else>
                   <tr v-for="row in sortedWatchListData" :key="`${row.symbol}-${row.asset_type}-${row.data_date}`">
-                    <td><input v-model="selectedWatchTickers" :value="getWatchlistRowTicker(row)" type="checkbox" /></td>
+                    <td>
+                      <input
+                        :checked="isWatchTickerSelected(row)"
+                        type="checkbox"
+                        @change="toggleWatchTickerSelection(row, $event.target.checked)"
+                      />
+                    </td>
                     <td v-for="column in visibleColumns" :key="column.id">
                       <!-- <span :class="getWatchlistCellClass(column.id)">{{ formatWatchlistCell(row, column.id) }}</span> -->
                       <span>{{ formatWatchlistCell(row, column.id) }}</span>
@@ -304,7 +310,7 @@
               </option>
             </select>
             <button class="btn small" type="button" :disabled="watchlistConfigLoading || marketLoading" @click="saveMarketScreenConfig({ silent: false })">Save Filter Logic</button>
-            <button class="btn small" type="button" :disabled="marketLoading" @click="fetchMarketRowsData({ page: 1 })">Refresh Results</button>
+            <button class="btn small" type="button" :disabled="watchlistConfigLoading || marketLoading" @click="refreshMarketResults">Refresh Results</button>
             <button class="collapse-btn" type="button" @click="togglePanel('marketScreen')">
               {{ collapseLabel('marketScreen') }}
             </button>
@@ -803,6 +809,7 @@ export default {
       suppressMarketFilterSave: false,
       singleTicker: '',
       selectedWatchTickers: [],
+      watchlistSelectAll: false,
       newColumnType: '',
       settingsOpen: false,
       savedFilter: '',
@@ -887,11 +894,11 @@ export default {
         volatility_60d: 'Any'
       },
       marketFilterFields: [
-        { key: 'optix', label: 'Optix', options: ['Any', 'Above 70', 'Above 80', 'Below 30', 'Below 20'] },
-        { key: 'trend', label: 'Trend Score', options: ['Any', 'Above 6', 'Above 8', 'Below 2'] },
-        { key: 'reltrend', label: 'RelTrend Score', options: ['Any', 'Above 6', 'Above 8', 'Below 2'] },
-        { key: 'volatility_20d', label: 'HV20', options: ['Any', 'Above 30', 'Below 15'] },
-        { key: 'volatility_60d', label: 'HV60', options: ['Any', 'Above 30', 'Below 15'] }
+        { key: 'optix', label: 'Optix', options: ['Any', '>= 70', '>= 80', '<= 30', '<= 20'] },
+        { key: 'trend', label: 'Trend Score', options: ['Any', '>= 6', '>= 8', '<= 2'] },
+        { key: 'reltrend', label: 'RelTrend Score', options: ['Any', '>= 6', '>= 8', '<= 2'] },
+        { key: 'volatility_20d', label: 'HV20', options: ['Any', '>= 30', '<= 15'] },
+        { key: 'volatility_60d', label: 'HV60', options: ['Any', '>= 30', '<= 15'] }
       ],
       marketColumns: [
         { id: 'symbol', name: 'Ticker', visible: true },
@@ -1027,20 +1034,19 @@ export default {
     },
     allWatchSelected: {
       get() {
-        const tickers = this.sortedWatchListData
-          .map(row => this.getWatchlistRowTicker(row))
-          .filter(Boolean)
-        return tickers.length > 0 && tickers.every(ticker => this.selectedWatchTickers.includes(ticker))
+        return this.watchlistSelectAll
       },
       set(checked) {
         const tickers = this.sortedWatchListData
           .map(row => this.getWatchlistRowTicker(row))
           .filter(Boolean)
-        if (checked) {
-          this.selectedWatchTickers = Array.from(new Set([...this.selectedWatchTickers, ...tickers]))
+        if (checked && tickers.length) {
+          this.watchlistSelectAll = true
+          this.selectedWatchTickers = tickers
           return
         }
-        this.selectedWatchTickers = this.selectedWatchTickers.filter(ticker => !tickers.includes(ticker))
+        this.watchlistSelectAll = false
+        this.selectedWatchTickers = []
       }
     },
     filteredMarketRows() {
@@ -1234,6 +1240,8 @@ export default {
       this.watchlistSetName = (config && config.name) || this.watchlistSetName || 'default'
       this.selectedWatchlistSetName = this.watchlistSetName
       this.watchlistSymbols = this.normalizeTickerList(this.parseWatchlistConfigValue(tableConfig.symbols, []))
+      this.selectedWatchTickers = []
+      this.watchlistSelectAll = false
       this.marketScreenConfigs = marketConfigs
 
       this.suppressWatchlistFilterFetch = true
@@ -1285,7 +1293,8 @@ export default {
           table: 1,
           paginate: true,
           page,
-          page_size: this.metricPageSize
+          page_size: this.metricPageSize,
+          ordering: this.getWatchlistOrdering()
         })
         const { rows, total, columns } = this.normalizeMetricApplyResponse(response)
 
@@ -1297,6 +1306,7 @@ export default {
           this.watchlistSymbols.length ? this.watchlistSymbols : this.extractWatchlistSymbols(rows)
         )
         this.selectedWatchTickers = []
+        this.watchlistSelectAll = false
       } finally {
         this.watchlistLoading = false
       }
@@ -1334,7 +1344,8 @@ export default {
           table: 1,
           paginate: true,
           page: search ? 1 : page,
-          page_size: search ? 1000 : this.metricPageSize
+          page_size: search ? 1000 : this.metricPageSize,
+          ordering: this.getWatchlistOrdering()
         })
         const { rows: appliedRows, total, columns } = this.normalizeMetricApplyResponse(response)
         let rows = appliedRows
@@ -1349,6 +1360,7 @@ export default {
         this.watchListData = search ? rows.slice((page - 1) * this.metricPageSize, page * this.metricPageSize) : rows
         this.watchlistSymbols = symbols.length ? symbols : this.extractWatchlistSymbols(rows)
         this.selectedWatchTickers = []
+        this.watchlistSelectAll = false
       } finally {
         this.watchlistLoading = false
       }
@@ -1452,7 +1464,10 @@ export default {
         configTable1: [this.buildCurrentWatchlistTableConfig()],
         silent: options.silent !== false
       })
-      if (saved && !options.skipApply) await this.fetchWatchlistData({ page: 1 })
+      if (saved && !options.skipApply) {
+        const page = Number(options.applyPage || 1)
+        await this.fetchWatchlistData({ page })
+      }
     },
     syncWatchlistColumns(columnIds) {
       const catalog = this.getWatchlistColumnCatalog()
@@ -1507,6 +1522,34 @@ export default {
     },
     getWatchlistDisplayTicker(row) {
       return this.formatWatchlistTicker(row && (row.symbol || row.ticker || row.market_symbol))
+    },
+    getConfiguredWatchlistSymbols() {
+      const tableConfig = this.getMetricWatchlistTableConfig()
+      return this.normalizeTickerList(this.parseWatchlistConfigValue(tableConfig.symbols, []))
+    },
+    getCurrentWatchlistSymbols() {
+      const configuredSymbols = this.getConfiguredWatchlistSymbols()
+      if (configuredSymbols.length) return configuredSymbols
+      if (this.watchlistSymbols.length) return this.normalizeTickerList(this.watchlistSymbols)
+      return this.extractWatchlistSymbols(this.watchListData)
+    },
+    isWatchTickerSelected(row) {
+      const ticker = this.getWatchlistRowTicker(row)
+      if (!ticker) return false
+      return this.watchlistSelectAll || this.selectedWatchTickers.includes(ticker)
+    },
+    toggleWatchTickerSelection(row, checked) {
+      const ticker = this.getWatchlistRowTicker(row)
+      if (!ticker) return
+
+      this.watchlistSelectAll = false
+      const selected = new Set(this.selectedWatchTickers.map(item => this.normalizeWatchlistSymbol(item)))
+      if (checked) {
+        selected.add(ticker)
+      } else {
+        selected.delete(ticker)
+      }
+      this.selectedWatchTickers = Array.from(selected)
     },
     showWatchlistMessage(message) {
       this.watchlistConfigMessage = message
@@ -1608,17 +1651,27 @@ export default {
     },
     parseRangeOption(option) {
       const text = String(option || '')
-      const above = text.match(/^Above\s+(-?\d+(?:\.\d+)?)$/i)
-      if (above) return { min: Number(above[1]), max: null }
-      const below = text.match(/^Below\s+(-?\d+(?:\.\d+)?)$/i)
-      if (below) return { min: null, max: Number(below[1]) }
+      const gte = text.match(/^(?:>=|≥|Above)\s+(-?\d+(?:\.\d+)?)$/i)
+      if (gte) return { min: Number(gte[1]), max: null }
+      const lte = text.match(/^(?:<=|≤|Below)\s+(-?\d+(?:\.\d+)?)$/i)
+      if (lte) return { min: null, max: Number(lte[1]) }
       return null
     },
     formatRangeOption(range) {
       if (!range || typeof range !== 'object') return 'Any'
-      if (range.min !== null && range.min !== undefined) return `Above ${range.min}`
-      if (range.max !== null && range.max !== undefined) return `Below ${range.max}`
+      if (range.min !== null && range.min !== undefined) return `>= ${range.min}`
+      if (range.max !== null && range.max !== undefined) return `<= ${range.max}`
       return 'Any'
+    },
+    getDefaultMarketFilters() {
+      return Object.keys(this.marketFilters).reduce((filters, key) => {
+        filters[key] = 'Any'
+        return filters
+      }, {})
+    },
+    async refreshMarketResults() {
+      this.marketFilters = this.getDefaultMarketFilters()
+      await this.saveMarketScreenConfig({ silent: true })
     },
     applyMarketConfigToControls(config) {
       const marketConfig = config || {}
@@ -1677,7 +1730,8 @@ export default {
       const params = {
         paginate: true,
         page,
-        page_size: this.metricPageSize
+        page_size: this.metricPageSize,
+        ordering: this.getMarketRowsOrdering()
       }
 
       if (Array.isArray(groups) && groups.length) params.groups = groups.join(',')
@@ -1723,7 +1777,8 @@ export default {
             index: savedIndex,
             paginate: true,
             page,
-            page_size: this.metricPageSize
+            page_size: this.metricPageSize,
+            ordering: this.getMarketRowsOrdering()
           })
           : await dashboardApi.getWatchlist(this.buildMarketMetricsParams(currentConfig, page))
         const { rows, total, columns } = savedIndex >= 0
@@ -2600,6 +2655,9 @@ export default {
       if (tableKey === 'watchlist') {
         this.fetchWatchlistData({ page: 1 })
       }
+      if (tableKey === 'marketRows') {
+        this.fetchMarketRowsData({ page: 1 })
+      }
       if (tableKey === 'sentimentIndicators') {
         this.changeSentimentIndicatorsPage(1, false)
         if (this.indicatorView === 'grid') this.fetchSentimentChartCards()
@@ -2769,7 +2827,13 @@ export default {
       }, 350)
     },
     getWatchlistOrdering() {
-      const state = this.sortStates.watchlist || {}
+      return this.getMetricTableOrdering('watchlist')
+    },
+    getMarketRowsOrdering() {
+      return this.getMetricTableOrdering('marketRows')
+    },
+    getMetricTableOrdering(tableKey) {
+      const state = this.sortStates[tableKey] || {}
       const allowedFields = [
         'symbol',
         'data_date',
@@ -2781,7 +2845,7 @@ export default {
         'volatility_60d'
       ]
 
-      if (!state.key || !allowedFields.includes(state.key)) return '-data_date'
+      if (!state.key || !allowedFields.includes(state.key)) return undefined
       return state.direction === 'desc' ? `-${state.key}` : state.key
     },
     getMyIndicatorKey(item) {
@@ -2909,13 +2973,29 @@ export default {
     },
     async removeSelected() {
       const selected = new Set(this.selectedWatchTickers.map(ticker => this.normalizeWatchlistSymbol(ticker)))
-      if (!selected.size) return
-      const currentSymbols = this.watchlistSymbols.length
-        ? this.watchlistSymbols
-        : this.extractWatchlistSymbols(this.watchListData)
-      this.watchlistSymbols = currentSymbols.filter(ticker => !selected.has(this.normalizeWatchlistSymbol(ticker)))
+      if (!selected.size && !this.watchlistSelectAll) return
+
+      if (this.watchlistSelectAll) {
+        this.watchlistSymbols = []
+        this.watchListData = []
+        this.watchlistTotal = 0
+        this.watchlistPage = 1
+        this.selectedWatchTickers = []
+        this.watchlistSelectAll = false
+        await this.saveWatchlistConfig({ silent: true })
+        return
+      }
+
+      const currentSymbols = this.getCurrentWatchlistSymbols()
+      const nextSymbols = currentSymbols.filter(ticker => !selected.has(this.normalizeWatchlistSymbol(ticker)))
+      const nextPage = Math.min(
+        this.watchlistPage,
+        this.getTotalPages(nextSymbols.length, this.metricPageSize)
+      )
+      this.watchlistSymbols = nextSymbols
       this.selectedWatchTickers = []
-      await this.saveWatchlistConfig({ silent: true })
+      this.watchlistSelectAll = false
+      await this.saveWatchlistConfig({ silent: true, applyPage: nextPage })
     },
     openSettings() {
       this.tempColumns = JSON.parse(JSON.stringify(this.columns))
