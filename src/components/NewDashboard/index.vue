@@ -5,7 +5,7 @@
         <h1>My Dashboard</h1>
         <p>Quickly monitor favorite tickers, market universes, sentiment indicators, and technical changes.</p>
       </div>
-      <div class="date-note">Data current as of May 22, 2026</div>
+      <div class="date-note">{{ dashboardDateNote }}</div>
     </section>
 
     <div class="dashboard-views">
@@ -243,8 +243,8 @@
           <div class="toolbar">
             <div class="toolbar-left">
               <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !selectedWatchTickers.length" @click="removeSelected">Remove Selected</button>
-              <input v-model.trim="watchlistSearch" class="search-input" type="text" placeholder="Search symbol..." />
-              <input v-model.trim="singleTicker" class="bulk-input" type="text" placeholder="Add tickers, e.g. AAPL, MSFT, etf_spy" />
+              <input v-model.trim="watchlistSearch" class="search-input" type="text" placeholder="Search within the list below..." />
+              <input v-model.trim="singleTicker" class="bulk-input" type="text" placeholder="Add tickers, e.g. AAPL, MSFT, SPY" />
               <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !singleTicker" @click="addWatchlistTickers">Add</button>
             </div>
           </div>
@@ -271,7 +271,7 @@
                   <td :colspan="visibleColumns.length + 1" class="empty-row">Loading...</td>
                 </tr>
                 <tr v-else-if="!sortedWatchListData.length">
-                  <td :colspan="visibleColumns.length + 1" class="empty-row">No data</td>
+                  <td :colspan="visibleColumns.length + 1" class="empty-row">{{ watchlistEmptyText }}</td>
                 </tr>
                 <template v-else>
                   <tr v-for="row in sortedWatchListData" :key="`${row.symbol}-${row.asset_type}-${row.data_date}`">
@@ -641,7 +641,7 @@
 </template>
 
 <script>
-import { getMySignalsList, getMyIndicatorsList, getMRFavoritesList, obtainIndicatorsList, getFavorite, getIndicatorsRowData, getLastSignalDate } from '@/service/service'
+import { getMySignalsList, getMyIndicatorsList, getMRFavoritesList, obtainIndicatorsList, getFavorite, getIndicatorsRowData, getLastSignalDate, getDashboardData } from '@/service/service'
 import { isJson, trimTrailingZeros, capitalizeFirstLetter, unifyNumber } from "@/utils"
 import SignalCode from '@/utils/cryptoUtils/codeTool'
 import { mapGetters, mapActions } from 'vuex'
@@ -772,6 +772,7 @@ export default {
     return {
       dashboardLoading: false,
       dashboardRequestError: '',
+      dashboardDate: '',
       activeView: 'all',
       activeHubTab: 'signals',
       activeSignalsTab: 'my-signals',
@@ -968,6 +969,9 @@ export default {
       if (this.activeHubTab === 'indicators') return 'Search indicators...'
       return 'Search reports...'
     },
+    dashboardDateNote() {
+      return this.dashboardDate ? `Data current as of ${this.dashboardDate}` : 'Data current as of -'
+    },
     activeSignalsData() {
       return this.activeSignalsTab === 'my-signals' ? this.mySignalsData : this.stSignalsData
     },
@@ -1025,6 +1029,11 @@ export default {
     },
     watchlistTotalCount() {
       return this.watchlistTotal || this.watchListData.length
+    },
+    watchlistEmptyText() {
+      return String(this.watchlistSearch || '').trim()
+        ? 'No matching symbols found.'
+        : 'No data'
     },
     visibleMarketColumns() {
       return this.marketColumns.filter(column => column.visible)
@@ -1090,6 +1099,7 @@ export default {
       this.dashboardLoading = true
       this.dashboardRequestError = ''
       try {
+        await this.fetchDashboardDate()
         await this.fetchLastSignalDate()
         await Promise.all([
           this.initializeWatchlistData(),
@@ -1106,6 +1116,15 @@ export default {
         this.dashboardRequestError = error && error.message ? error.message : 'Failed to load dashboard data.'
       } finally {
         this.dashboardLoading = false
+      }
+    },
+    async fetchDashboardDate() {
+      try {
+        const response = await getDashboardData()
+        const data = response && response.data ? response.data : response
+        this.dashboardDate = data?.date || data?.data?.date || ''
+      } catch (error) {
+        this.dashboardDate = ''
       }
     },
     async initializeWatchlistData() {
