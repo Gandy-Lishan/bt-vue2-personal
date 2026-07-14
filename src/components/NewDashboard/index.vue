@@ -386,8 +386,9 @@
         <div class="panel-header">
           <span>Sentiment Indicators Charts</span>
           <div class="panel-actions">
-            <button class="btn small" type="button" :class="{ active: indicatorView === 'table' }" @click="setIndicatorView('table')">Table View</button>
-            <button class="btn small" type="button" :class="{ active: indicatorView === 'grid' }" @click="setIndicatorView('grid')">Grid View</button>
+            <button class="btn small" type="button" @click="setIndicatorView(indicatorView === 'table' ? 'grid' : 'table')">
+              {{ indicatorView === 'table' ? 'Grid View' : 'Table View' }}
+            </button>
             <button class="collapse-btn" type="button" @click="togglePanel('sentiment')">
               {{ collapseLabel('sentiment') }}
             </button>
