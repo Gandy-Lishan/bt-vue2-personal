@@ -159157,5 +159157,12 @@
         "market_symbol": "XSD",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Risk Appetite Index Risk-Off Signal",
+        "url": "tctm_survey_risk_appetite_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
