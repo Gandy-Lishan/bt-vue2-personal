@@ -450,8 +450,15 @@
                 <span v-else>{{ card.title }}</span>
               </div>
               <div class="sparkline">
-                <svg v-if="card.points" viewBox="0 0 300 90">
-                  <polyline fill="none" stroke="#3d8bc0" stroke-width="2.5" :points="card.points" />
+                <svg v-if="card.lines && card.lines.length" viewBox="0 0 300 90">
+                  <polyline
+                    v-for="line in card.lines"
+                    :key="line.name"
+                    fill="none"
+                    :stroke="line.color"
+                    stroke-width="2.5"
+                    :points="line.points"
+                  />
                 </svg>
                 <div v-else class="chart-empty">{{ card.error || 'No chart data' }}</div>
               </div>
@@ -2533,10 +2540,11 @@ export default {
         const chartRows = this.normalizeSentimentChartRows(response.data)
         const visibleRows = this.filterSentimentChartRowsByPeriod(chartRows, row.timeframe)
         const series = this.extractSentimentChartSeries(visibleRows, row)
+        const primarySeries = series[0] && series[0].data ? series[0].data : []
         return {
           ...baseCard,
-          points: this.buildSparklinePoints(series),
-          last: series.length ? this.formatChartValue(series[series.length - 1].y) : baseCard.last,
+          lines: this.buildSparklineLines(series),
+          last: primarySeries.length ? this.formatChartValue(primarySeries[primarySeries.length - 1].y) : baseCard.last,
           error: series.length ? '' : 'No chart data'
         }
       } catch (error) {
@@ -2553,7 +2561,7 @@ export default {
         title: row.chart_name || row.name || row.url || 'Indicator',
         url: row.url,
         last: row.last_value,
-        points: '',
+        lines: [],
         error,
         periodLabel: timeframeLabel ? `${timeframeLabel} · ${period.label}` : period.label
       }
@@ -2578,44 +2586,75 @@ export default {
       if (!rows.length) return []
       const excludedKeys = ['date', 'Color', 'color', 'dumb']
       const keys = Object.keys(rows[0]).filter(key => !excludedKeys.includes(key))
-      const preferredKeys = [
-        indicator.market_symbol,
-        indicator.url,
-        'value',
-        'Value',
-        'close',
-        'Close',
-        'indicator',
-        'Indicator'
-      ].filter(Boolean)
-      const orderedKeys = preferredKeys.concat(keys.filter(key => !preferredKeys.includes(key)))
-      const valueKey = orderedKeys.find(key => rows.some(row => Number.isFinite(Number(row[key]))))
-      if (!valueKey) return []
+      const numericKeys = keys.filter(key => rows.some(row => Number.isFinite(Number(row[key]))))
+      const valueKeys = this.getSentimentChartValueKeys(numericKeys, indicator)
 
-      return rows
-        .map(row => ({
-          date: row.date,
-          y: Number(row[valueKey])
+      return valueKeys
+        .map((valueKey, index) => ({
+          name: valueKey,
+          color: this.getSentimentChartLineColor(valueKey, index),
+          data: rows
+            .map(row => ({
+              date: row.date,
+              y: Number(row[valueKey])
+            }))
+            .filter(point => Number.isFinite(point.y))
         }))
-        .filter(point => Number.isFinite(point.y))
+        .filter(series => series.data.length)
     },
-    buildSparklinePoints(series) {
-      if (!series.length) return ''
-      if (series.length === 1) return '150,45'
+    getSentimentChartValueKeys(keys, indicator) {
+      const lowerKeyMap = keys.reduce((map, key) => {
+        map[key.toLowerCase()] = key
+        return map
+      }, {})
+      const urlKey = indicator && indicator.url ? lowerKeyMap[String(indicator.url).toLowerCase()] : ''
+      if (urlKey) return [urlKey]
+
+      const specialKeysByUrl = {
+        smart_dumb: ['model_smart_money', 'model_dumb_money'],
+        risk_levels: ['model_risk_stocks_short', 'model_risk_stocks_medium']
+      }
+      const specialKeys = specialKeysByUrl[String(indicator && indicator.url || '').toLowerCase()] || []
+      const matchedSpecialKeys = specialKeys
+        .map(key => lowerKeyMap[key.toLowerCase()])
+        .filter(Boolean)
+      if (matchedSpecialKeys.length) return matchedSpecialKeys
+
+      const marketSymbol = indicator && indicator.market_symbol ? String(indicator.market_symbol).toLowerCase() : ''
+      const indicatorKeys = keys.filter(key => key.toLowerCase() !== marketSymbol)
+      return indicatorKeys.length ? indicatorKeys : keys.slice(0, 1)
+    },
+    getSentimentChartLineColor(key, index) {
+      if (index === 1 || String(key).toLowerCase() === 'model_dumb_money') return 'rgb(142, 35, 35)'
+      return '#3d8bc0'
+    },
+    buildSparklineLines(series) {
+      if (!series.length) return []
+      const values = series.flatMap(item => item.data.map(point => point.y))
+      if (!values.length) return []
 
       const width = 300
       const height = 90
       const padding = 8
-      const values = series.map(point => point.y)
       const min = Math.min(...values)
       const max = Math.max(...values)
       const range = max - min || 1
 
-      return series.map((point, index) => {
-        const x = padding + (index / (series.length - 1)) * (width - padding * 2)
-        const y = height - padding - ((point.y - min) / range) * (height - padding * 2)
-        return `${x.toFixed(1)},${y.toFixed(1)}`
-      }).join(' ')
+      return series.map(item => {
+        const data = item.data
+        const points = data.length === 1
+          ? '150,45'
+          : data.map((point, index) => {
+            const x = padding + (index / (data.length - 1)) * (width - padding * 2)
+            const y = height - padding - ((point.y - min) / range) * (height - padding * 2)
+            return `${x.toFixed(1)},${y.toFixed(1)}`
+          }).join(' ')
+        return {
+          name: item.name,
+          color: item.color,
+          points
+        }
+      })
     },
     filterSentimentChartRowsByPeriod(rows, timeframe) {
       if (!rows.length) return []
