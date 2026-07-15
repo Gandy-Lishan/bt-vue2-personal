@@ -192,10 +192,10 @@
                 </template>
               </tbody>
             </table>
-            <div class="pagination-row" v-if="shouldShowPagination(myIndicatorsTotalCount)">
+            <div class="pagination-row" v-if="shouldShowPagination(myIndicatorsTotalCount, serverPageSize)">
               <button class="pagination-btn" type="button" :disabled="myIndicatorsPage <= 1" @click="changeMyIndicatorsPage(myIndicatorsPage - 1)">Prev</button>
-              <span>Page {{ myIndicatorsPage }} / {{ getTotalPages(myIndicatorsTotalCount) }} · Total {{ myIndicatorsTotalCount }}</span>
-              <button class="pagination-btn" type="button" :disabled="myIndicatorsPage >= getTotalPages(myIndicatorsTotalCount)" @click="changeMyIndicatorsPage(myIndicatorsPage + 1)">Next</button>
+              <span>Page {{ myIndicatorsPage }} / {{ getTotalPages(myIndicatorsTotalCount, serverPageSize) }} · Total {{ myIndicatorsTotalCount }}</span>
+              <button class="pagination-btn" type="button" :disabled="myIndicatorsPage >= getTotalPages(myIndicatorsTotalCount, serverPageSize)" @click="changeMyIndicatorsPage(myIndicatorsPage + 1)">Next</button>
             </div>
           </div>
 
@@ -219,10 +219,10 @@
                 </tr>
               </tbody>
             </table>
-            <div class="pagination-row" v-if="shouldShowPagination(reportsTotalCount)">
+            <div class="pagination-row" v-if="shouldShowPagination(reportsTotalCount, serverPageSize)">
               <button class="pagination-btn" type="button" :disabled="reportsPage <= 1" @click="changeReportsPage(reportsPage - 1)">Prev</button>
-              <span>Page {{ reportsPage }} / {{ getTotalPages(reportsTotalCount) }} · Total {{ reportsTotalCount }}</span>
-              <button class="pagination-btn" type="button" :disabled="reportsPage >= getTotalPages(reportsTotalCount)" @click="changeReportsPage(reportsPage + 1)">Next</button>
+              <span>Page {{ reportsPage }} / {{ getTotalPages(reportsTotalCount, serverPageSize) }} · Total {{ reportsTotalCount }}</span>
+              <button class="pagination-btn" type="button" :disabled="reportsPage >= getTotalPages(reportsTotalCount, serverPageSize)" @click="changeReportsPage(reportsPage + 1)">Next</button>
             </div>
           </div>
         </div>
@@ -650,6 +650,7 @@ import axios from '@/axios'
 import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 
 const DASHBOARD_PAGE_SIZE = 5
+const DASHBOARD_SERVER_PAGE_SIZE = 10
 const METRIC_PAGE_SIZE = 10
 
 const dashboardApi = {
@@ -702,11 +703,11 @@ const dashboardApi = {
   },
   getMyIndicators(params = {}) {
     // TODO: connect real My Indicators API here.
-    return getMyIndicatorsList(params.page || 1, params.name, params.page_size || DASHBOARD_PAGE_SIZE)
+    return getMyIndicatorsList(params.page || 1, params.name, params.page_size || DASHBOARD_SERVER_PAGE_SIZE)
   },
   getFavoriteReports(params = {}) {
     // TODO: connect real Favorite Reports API here.
-    return getMRFavoritesList({ page: params.page || 1, page_size: DASHBOARD_PAGE_SIZE, ...params })
+    return getMRFavoritesList({ page: params.page || 1, page_size: DASHBOARD_SERVER_PAGE_SIZE, ...params })
   },
   getMarketRows() {
     // TODO: connect real Market Screen API here.
@@ -816,6 +817,7 @@ export default {
       settingsOpen: false,
       savedFilter: '',
       pageSize: DASHBOARD_PAGE_SIZE,
+      serverPageSize: DASHBOARD_SERVER_PAGE_SIZE,
       metricPageSize: METRIC_PAGE_SIZE,
       signalsPagination: {
         'my-signals': 1,
@@ -1165,7 +1167,7 @@ export default {
     normalizeMetricColumnIds(columnIds) {
       const allowedIds = this.getMetricColumnOrder()
       const requestedIds = Array.isArray(columnIds) ? columnIds.filter(Boolean) : []
-      const requestedSet = new Set(['symbol', 'data_date', ...requestedIds])
+      const requestedSet = new Set(['symbol', ...requestedIds])
       return allowedIds.filter(id => requestedSet.has(id))
     },
     createWatchlistTableConfig(config = {}) {
@@ -1441,9 +1443,7 @@ export default {
       }
 
       if (Object.prototype.hasOwnProperty.call(payload, 'config_table1')) {
-        nextConfig.config_table1 = savedConfig && savedConfig.config_table1 !== undefined
-          ? savedConfig.config_table1
-          : payload.config_table1
+        nextConfig.config_table1 = payload.config_table1
       } else if (nextConfig.config_table1 === undefined) {
         nextConfig.config_table1 = activeConfig.config_table1
       }
@@ -2002,7 +2002,7 @@ export default {
       let data = await dashboardApi.getMyIndicators({
         page,
         name: this.hubSearch.trim(),
-        page_size: this.pageSize,
+        page_size: this.serverPageSize,
         ...params
       })
       const responseData = data && data.data ? data.data : {}
@@ -2421,7 +2421,7 @@ export default {
       let data = await dashboardApi.getFavoriteReports({
         page,
         title: this.hubSearch.trim(),
-        page_size: this.pageSize,
+        page_size: this.serverPageSize,
         ...params
       })
       const responseData = data && data.data ? data.data : {}
@@ -2911,13 +2911,13 @@ export default {
       this.$set(this.signalsPagination, this.activeSignalsTab, nextPage)
     },
     async changeMyIndicatorsPage(page) {
-      const totalPages = this.getTotalPages(this.myIndicatorsTotalCount)
+      const totalPages = this.getTotalPages(this.myIndicatorsTotalCount, this.serverPageSize)
       const nextPage = Math.min(Math.max(Number(page) || 1, 1), totalPages)
       if (nextPage === this.myIndicatorsPage) return
       await this.fetchMyIndicatorsData({ page: nextPage })
     },
     async changeReportsPage(page) {
-      const totalPages = this.getTotalPages(this.reportsTotalCount)
+      const totalPages = this.getTotalPages(this.reportsTotalCount, this.serverPageSize)
       const nextPage = Math.min(Math.max(Number(page) || 1, 1), totalPages)
       if (nextPage === this.reportsPage) return
       await this.fetchFavoriteReportsData({ page: nextPage })
@@ -3055,10 +3055,10 @@ export default {
       })
       this.newColumnType = ''
     },
-    applySettings() {
+    async applySettings() {
       this.columns = JSON.parse(JSON.stringify(this.tempColumns))
       this.settingsOpen = false
-      if (this.activeWatchlistConfig) this.saveWatchlistConfig({ silent: true })
+      if (this.activeWatchlistConfig) await this.saveWatchlistConfig({ silent: true })
     },
     generateColumnValue(type) {
       const generators = {
