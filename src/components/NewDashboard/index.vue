@@ -333,7 +333,7 @@
           <div class="filters">
             <div v-for="field in marketFilterFields" :key="field.key" class="filter-field">
               <label>{{ field.label }}</label>
-              <select v-model="marketFilters[field.key]" @change="saveMarketScreenConfig({ silent: true })">
+              <select v-model="marketFilters[field.key]" @change="applyMarketFilters">
                 <option v-for="option in field.options" :key="option">{{ option }}</option>
               </select>
             </div>
@@ -815,6 +815,7 @@ export default {
       marketPage: 1,
       marketTotal: 0,
       marketLoading: false,
+      marketRowsRequestId: 0,
       marketConfigMessage: '',
       suppressMarketFilterSave: false,
       singleTicker: '',
@@ -1173,9 +1174,19 @@ export default {
     },
     normalizeMetricColumnIds(columnIds) {
       const allowedIds = this.getMetricColumnOrder()
+      const allowedSet = new Set(allowedIds)
       const requestedIds = Array.isArray(columnIds) ? columnIds.filter(Boolean) : []
-      const requestedSet = new Set(['symbol', ...requestedIds])
-      return allowedIds.filter(id => requestedSet.has(id))
+      const nextIds = []
+
+      if (!requestedIds.length) return allowedIds
+
+      const orderedIds = requestedIds.includes('symbol') ? requestedIds : ['symbol', ...requestedIds]
+
+      orderedIds.forEach(id => {
+        if (allowedSet.has(id) && !nextIds.includes(id)) nextIds.push(id)
+      })
+
+      return nextIds.length ? nextIds : allowedIds
     },
     createWatchlistTableConfig(config = {}) {
       const columns = this.parseWatchlistConfigValue(config.columns, this.getDefaultWatchlistColumnIds())
@@ -1327,7 +1338,7 @@ export default {
         })
         const { rows, total, columns } = this.normalizeMetricApplyResponse(response)
 
-        if (columns.length) this.syncWatchlistColumns(columns)
+        this.syncWatchlistColumnsFromConfig(columns)
         this.watchlistPage = page
         this.watchlistTotal = total
         this.watchListData = rows
@@ -1379,7 +1390,7 @@ export default {
         const { rows: appliedRows, total, columns } = this.normalizeMetricApplyResponse(response)
         let rows = appliedRows
 
-        if (columns.length) this.syncWatchlistColumns(columns)
+        this.syncWatchlistColumnsFromConfig(columns)
         if (search) {
           rows = rows.filter(row => this.getWatchlistDisplayTicker(row).toLowerCase().includes(search))
         }
@@ -1406,7 +1417,8 @@ export default {
         delete filters.asset_type
       }
 
-      const columns = Array.from(new Set(['symbol', ...this.visibleColumns.map(column => column.id)]))
+      const visibleColumnIds = this.visibleColumns.map(column => column.id)
+      const columns = visibleColumnIds.includes('symbol') ? visibleColumnIds : ['symbol', ...visibleColumnIds]
       const symbols = this.normalizeTickerList(this.watchlistSymbols)
 
       return this.createWatchlistTableConfig({
@@ -1509,6 +1521,12 @@ export default {
         .map(column => ({ ...column, visible: false }))
 
       this.columns = [...nextColumns, ...hiddenColumns]
+    },
+    syncWatchlistColumnsFromConfig(fallbackColumns = []) {
+      const tableConfig = this.getMetricWatchlistTableConfig()
+      const configColumns = this.parseWatchlistConfigValue(tableConfig.columns, [])
+      const columns = Array.isArray(configColumns) && configColumns.length ? configColumns : fallbackColumns
+      if (Array.isArray(columns) && columns.length) this.syncWatchlistColumns(columns)
     },
     getWatchlistColumnCatalog() {
       return [
@@ -1696,7 +1714,7 @@ export default {
     },
     async refreshMarketResults() {
       this.marketFilters = this.getDefaultMarketFilters()
-      await this.saveMarketScreenConfig({ silent: true })
+      await this.applyMarketFilters()
     },
     applyMarketConfigToControls(config) {
       const marketConfig = config || {}
@@ -1744,7 +1762,7 @@ export default {
         ranges: this.cloneMarketRanges(syncedRanges)
       }))
     },
-    async saveMarketScreenConfig(options = {}) {
+    syncMarketConfigFromControls() {
       if (this.suppressMarketFilterSave) return
       let nextConfigs = this.normalizeMarketScreenConfigs(this.marketScreenConfigs, true)
       const groupIndex = this.getMarketConfigIndexByGroup(this.activeMarketGroup, nextConfigs)
@@ -1756,6 +1774,16 @@ export default {
       nextConfigs = this.syncMarketRangesToConfigs(nextConfigs, activeConfig.ranges)
       this.marketScreenConfigs = nextConfigs
       this.activeMarketConfigIndex = index
+      return nextConfigs
+    },
+    async applyMarketFilters() {
+      if (this.suppressMarketFilterSave) return
+      this.syncMarketConfigFromControls()
+      await this.fetchMarketRowsData({ page: 1 })
+    },
+    async saveMarketScreenConfig(options = {}) {
+      if (this.suppressMarketFilterSave) return
+      const nextConfigs = this.syncMarketConfigFromControls()
 
       const saved = await this.saveMetricWatchlistConfig({
         configTable2: nextConfigs,
@@ -1797,44 +1825,30 @@ export default {
     },
     async fetchMarketRowsData(params = {}) {
       const page = Number(params.page || this.marketPage || 1)
+      const requestId = this.marketRowsRequestId + 1
+      this.marketRowsRequestId = requestId
 
       if (!this.marketScreenConfigs.length) {
         this.marketScreenConfigs = this.createDefaultMarketScreenConfigs()
       }
 
-      const savedMarketConfigs = this.normalizeMarketScreenConfigs(
-        this.activeWatchlistConfig && this.activeWatchlistConfig.config_table2,
-        false
-      )
-      const savedIndex = this.getMarketConfigIndexByGroup(this.activeMarketGroup, savedMarketConfigs)
       const currentConfig = this.marketScreenConfigs[this.activeMarketConfigIndex] || this.createMarketScreenConfig()
 
       this.marketLoading = true
       try {
-        const response = savedIndex >= 0
-          ? await dashboardApi.applyMetricWatchlistSet({
-            name: this.watchlistSetName || 'default',
-            table: 2,
-            index: savedIndex,
-            paginate: true,
-            page,
-            page_size: this.metricPageSize,
-            ordering: this.getMarketRowsOrdering()
-          })
-          : await dashboardApi.getWatchlist(this.buildMarketMetricsParams(currentConfig, page))
-        const { rows, total, columns } = savedIndex >= 0
-          ? this.normalizeMetricApplyResponse(response)
-          : this.normalizeAssetMetricsResponse(response)
-        if (columns.length) this.syncMarketColumns(columns)
+        const response = await dashboardApi.getWatchlist(this.buildMarketMetricsParams(currentConfig, page))
+        if (requestId !== this.marketRowsRequestId) return
+        const { rows, total } = this.normalizeAssetMetricsResponse(response)
         this.marketRows = rows
         this.marketTotal = total
         this.marketPage = page
       } catch (error) {
+        if (requestId !== this.marketRowsRequestId) return
         console.error(error)
         this.marketRows = []
         this.marketTotal = 0
       } finally {
-        this.marketLoading = false
+        if (requestId === this.marketRowsRequestId) this.marketLoading = false
       }
     },
     async changeMarketGroup(group) {
