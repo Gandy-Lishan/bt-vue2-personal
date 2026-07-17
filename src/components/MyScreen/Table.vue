@@ -589,8 +589,8 @@ export default {
       }
       const date = dates
 
-      if(Array.isArray(date) && date.length === 1) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description.join(' ')}`
-      if(Array.isArray(date) && date.length === 2) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description[0]} <strong>Date: ${date[1]}</strong>&nbsp;&nbsp;${row.description[1]}`
+      if(Array.isArray(date) && date.length === 1) signalDes =`<strong>Date: ${date[0].slice(0, 10)}</strong>&nbsp;&nbsp;${row.description.join(' ')}`
+      if(Array.isArray(date) && date.length === 2) signalDes =`<strong>Date: ${date[0].slice(0, 10)}</strong>&nbsp;&nbsp;${row.description[0]} <strong>Date: ${date[1]}</strong>&nbsp;&nbsp;${row.description[1]}`
       // this.$emit('displayDes', signalDes)
       if(row.category === 'Custom') this.$emit('displayTickers', tickersDes)
       // this.$emit('displayResultsData', data, row)
@@ -632,8 +632,8 @@ export default {
       }
       const date = dates
 
-      if(Array.isArray(date) && date.length === 1) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description.join(' ')}`
-      if(Array.isArray(date) && date.length === 2) signalDes =`<strong>Date: ${date[0]}</strong>&nbsp;&nbsp;${row.description[0]} <strong>Date: ${date[1]}</strong>&nbsp;&nbsp;${row.description[1]}`
+      if(Array.isArray(date) && date.length === 1) signalDes =`<strong>Date: ${date[0].slice(0, 10)}</strong>&nbsp;&nbsp;${row.description.join(' ')}`
+      if(Array.isArray(date) && date.length === 2) signalDes =`<strong>Date: ${date[0].slice(0, 10)}</strong>&nbsp;&nbsp;${row.description[0]} <strong>Date: ${date[1]}</strong>&nbsp;&nbsp;${row.description[1]}`
       this.$emit('displayDes', signalDes)
       if(row.category === 'Custom') this.$emit('displayTickers', tickersDes)
       this.$emit('displayResultsData', data, row)
