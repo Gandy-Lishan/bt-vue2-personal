@@ -244,14 +244,39 @@
             <div class="toolbar-left">
               <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !selectedWatchTickers.length" @click="removeSelected">Remove Selected</button>
               <input v-model.trim="watchlistSearch" class="search-input" type="text" placeholder="Search within the list below..." />
-              <input v-model.trim="singleTicker" class="bulk-input" type="text" placeholder="Add tickers, e.g. AAPL, MSFT, SPY" />
+              <div class="ticker-add-control">
+                <input
+                  v-model.trim="singleTicker"
+                  class="bulk-input ticker-add-input"
+                  type="text"
+                  placeholder="Add tickers, e.g. AAPL, SPY"
+                  @blur="queueCloseWatchlistTickerSuggestions"
+                  @focus="openWatchlistTickerSuggestions"
+                  @input="openWatchlistTickerSuggestions"
+                  @keydown.enter.prevent="addWatchlistTickers"
+                  @keydown.esc="closeWatchlistTickerSuggestions"
+                />
+                <div v-if="showWatchlistTickerSuggestions" class="ticker-suggestions">
+                  <button
+                    v-for="item in watchlistTickerSuggestions"
+                    :key="item.symbol"
+                    class="ticker-suggestion"
+                    type="button"
+                    @mousedown.prevent="selectWatchlistTicker(item)"
+                  >
+                    <span class="ticker-suggestion-symbol">{{ item.symbol }}</span>
+                    <span class="ticker-suggestion-name">{{ item.name }}</span>
+                    <span class="ticker-suggestion-category">{{ item.category }}</span>
+                  </button>
+                </div>
+              </div>
               <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !singleTicker" @click="addWatchlistTickers">Add</button>
             </div>
           </div>
           <div v-if="watchlistConfigMessage" class="watchlist-message">{{ watchlistConfigMessage }}</div>
 
           <div class="table-wrap">
-            <table>
+            <table class="watchlist-table">
               <thead>
                 <tr>
                   <th><input v-model="allWatchSelected" type="checkbox" /></th>
@@ -259,7 +284,7 @@
                     v-for="column in visibleColumns"
                     :key="column.id"
                     class="sortable"
-                    :class="sortClass('watchlist', column.id)"
+                    :class="[sortClass('watchlist', column.id), getWatchlistColumnClass(column)]"
                     @click="toggleSort('watchlist', column.id)"
                   >
                     {{ column.name }}
@@ -282,7 +307,11 @@
                         @change="toggleWatchTickerSelection(row, $event.target.checked)"
                       />
                     </td>
-                    <td v-for="column in visibleColumns" :key="column.id">
+                    <td
+                      v-for="column in visibleColumns"
+                      :key="column.id"
+                      :class="getWatchlistColumnClass(column)"
+                    >
                       <!-- <span :class="getWatchlistCellClass(column.id)">{{ formatWatchlistCell(row, column.id) }}</span> -->
                       <span>{{ formatWatchlistCell(row, column.id) }}</span>
                     </td>
@@ -819,6 +848,8 @@ export default {
       marketConfigMessage: '',
       suppressMarketFilterSave: false,
       singleTicker: '',
+      watchlistTickerMenuOpen: false,
+      watchlistTickerBlurTimer: null,
       selectedWatchTickers: [],
       watchlistSelectAll: false,
       newColumnType: '',
@@ -975,6 +1006,56 @@ export default {
       const data = localStorage.getItem('refactoredConcatList');
       return data ? JSON.parse(data) : [];
     },
+    watchlistTickerSourceList() {
+      const chartState = this.$store && this.$store.state ? this.$store.state.chart : null
+      const indexsList = chartState && Array.isArray(chartState.indexsList) ? chartState.indexsList : []
+      const stocksList = chartState && Array.isArray(chartState.stocksList) ? chartState.stocksList : []
+      const normalizeItem = item => ({
+        symbol: String((item && (item.symbol || item.stock)) || '').trim(),
+        name: String((item && item.name) || '').trim(),
+        category: String((item && item.category) || '').trim()
+      })
+      const deduped = new Map()
+
+      indexsList.concat(stocksList).map(normalizeItem).forEach(item => {
+        const key = item.symbol.toLowerCase()
+        if (item.symbol && !deduped.has(key)) deduped.set(key, item)
+      })
+
+      return Array.from(deduped.values())
+    },
+    watchlistTickerQuery() {
+      const tokens = String(this.singleTicker || '').split(/[,\s]+/).filter(Boolean)
+      return tokens.length ? tokens[tokens.length - 1] : ''
+    },
+    watchlistTickerSuggestions() {
+      const query = this.normalizeWatchlistTickerSearchText(this.watchlistTickerQuery)
+      if (!query) return []
+
+      return this.watchlistTickerSourceList
+        .map(item => {
+          const symbol = String(item && item.symbol ? item.symbol : '').trim()
+          const name = String(item && item.name ? item.name : '').trim()
+          const category = String(item && item.category ? item.category : '').trim()
+          const normalizedSymbol = this.normalizeWatchlistTickerSearchText(symbol)
+          const normalizedName = this.normalizeWatchlistTickerSearchText(name)
+          let score = 0
+
+          if (normalizedSymbol === query) score = 100
+          else if (normalizedSymbol.startsWith(query)) score = 80
+          else if (normalizedSymbol.includes(query)) score = 60
+          else if (normalizedName.startsWith(query)) score = 40
+          else if (normalizedName.includes(query)) score = 20
+
+          return { ...item, symbol, name, category, score }
+        })
+        .filter(item => item.symbol && item.score > 0)
+        .sort((left, right) => right.score - left.score || left.symbol.localeCompare(right.symbol))
+        .slice(0, 8)
+    },
+    showWatchlistTickerSuggestions() {
+      return this.watchlistTickerMenuOpen && this.watchlistTickerSuggestions.length > 0
+    },
     hubSearchPlaceholder() {
       if (this.activeHubTab === 'signals') return 'Search My Signals...'
       if (this.activeHubTab === 'indicators') return 'Search indicators...'
@@ -1103,6 +1184,7 @@ export default {
     clearTimeout(this.serverSearchTimer)
     clearTimeout(this.sentimentChartTimer)
     clearTimeout(this.watchlistSearchTimer)
+    clearTimeout(this.watchlistTickerBlurTimer)
   },
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'get_indicator_page_btv1_list', 'get_favorite']),
@@ -3031,6 +3113,14 @@ export default {
       if (columnId === 'asset_type') return String(value).toLowerCase() === 'etf' ? 'ETF' : capitalizeFirstLetter(value)
       return value
     },
+    getWatchlistColumnClass(column) {
+      const id = String(column && column.id ? column.id : '').toLowerCase()
+      const name = String(column && column.name ? column.name : '').toLowerCase()
+      const key = `${id} ${name}`
+      if (/\b(name|asset_name|ticker_name)\b/.test(key)) return 'watchlist-column-name'
+      if (/\bsignal\b/.test(key)) return 'watchlist-column-signal'
+      return ''
+    },
     formatWatchlistTicker(value) {
       const text = String(value || '')
       const ticker = text.includes('_') ? text.slice(text.indexOf('_') + 1) : text
@@ -3041,6 +3131,49 @@ export default {
       if (!text) return '-'
       return text.includes('T') ? text.split('T')[0] : text
     },
+    normalizeWatchlistTickerSearchText(value) {
+      return String(value || '').trim().replace(/^etf_/i, '').toLowerCase()
+    },
+    findWatchlistTickerOption(value) {
+      const query = this.normalizeWatchlistTickerSearchText(value)
+      if (!query) return null
+
+      return this.watchlistTickerSourceList.find(item => {
+        const symbol = this.normalizeWatchlistTickerSearchText(item && item.symbol)
+        return symbol === query
+      }) || null
+    },
+    formatWatchlistTickerSubmission(item) {
+      const symbol = String(item && item.symbol ? item.symbol : '').trim()
+      const category = String(item && item.category ? item.category : '').trim().toLowerCase()
+      if (!symbol) return ''
+      if (category === 'etf') return `etf_${symbol.toLowerCase()}`
+      return symbol.toUpperCase()
+    },
+    openWatchlistTickerSuggestions() {
+      clearTimeout(this.watchlistTickerBlurTimer)
+      this.watchlistTickerMenuOpen = true
+    },
+    closeWatchlistTickerSuggestions() {
+      clearTimeout(this.watchlistTickerBlurTimer)
+      this.watchlistTickerMenuOpen = false
+    },
+    queueCloseWatchlistTickerSuggestions() {
+      clearTimeout(this.watchlistTickerBlurTimer)
+      this.watchlistTickerBlurTimer = setTimeout(() => {
+        this.watchlistTickerMenuOpen = false
+      }, 150)
+    },
+    replaceWatchlistTickerQuery(symbol) {
+      const text = String(this.singleTicker || '')
+      const match = text.match(/^(.*?)([^,\s]*)$/)
+      const prefix = match ? match[1] : ''
+      this.singleTicker = `${prefix}${symbol}`
+    },
+    selectWatchlistTicker(item) {
+      if (item && item.symbol) this.replaceWatchlistTickerQuery(item.symbol)
+      this.closeWatchlistTickerSuggestions()
+    },
     async addWatchlistTickers() {
       if (!this.singleTicker) return
       const tickers = this.singleTicker
@@ -3048,8 +3181,30 @@ export default {
         .map(ticker => ticker.trim())
         .filter(Boolean)
       if (!tickers.length) return
-      this.watchlistSymbols = this.normalizeTickerList([...this.watchlistSymbols, ...tickers])
+
+      const resolvedTickers = []
+      const invalidTickers = []
+      tickers.forEach(ticker => {
+        const option = this.findWatchlistTickerOption(ticker)
+        if (!option) {
+          invalidTickers.push(ticker)
+          return
+        }
+
+        const formattedTicker = this.formatWatchlistTickerSubmission(option)
+        if (formattedTicker) resolvedTickers.push(formattedTicker)
+      })
+
+      if (invalidTickers.length) {
+        this.showWatchlistMessage(`Ticker not found: ${invalidTickers.join(', ')}`)
+        this.openWatchlistTickerSuggestions()
+        return
+      }
+
+      this.watchlistConfigMessage = ''
+      this.watchlistSymbols = this.normalizeTickerList([...this.watchlistSymbols, ...resolvedTickers])
       this.singleTicker = ''
+      this.closeWatchlistTickerSuggestions()
       await this.saveWatchlistConfig({ silent: true })
     },
     async addTicker(ticker) {
@@ -3607,6 +3762,18 @@ tbody tr.last-signal-highlight:hover {
   cursor: pointer;
 }
 
+/* .signals-table th:nth-child(1),
+.signals-table td:nth-child(1) {
+  width: 25%;
+  max-width: 220px;
+} */
+
+.signals-table th:nth-child(4),
+.signals-table td:nth-child(4) {
+  width: 30%;
+  min-width: 280px;
+}
+
 .muted {
   color: #777;
 }
@@ -3620,10 +3787,6 @@ tbody tr.last-signal-highlight:hover {
   line-height: 1.4;
 }
 
-.st-signals-table th:nth-child(4),
-.st-signals-table td:nth-child(4) {
-  width: 30%;
-}
 .chevron {
   display: inline-flex;
   align-items: center;
@@ -3775,6 +3938,65 @@ ol {
   min-width: 290px;
 }
 
+.ticker-add-control {
+  position: relative;
+  min-width: 290px;
+}
+
+.ticker-add-input {
+  width: 100%;
+  min-width: 0;
+}
+
+.ticker-suggestions {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid #c9d2da;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+}
+
+.ticker-suggestion {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 1px solid #edf0f2;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ticker-suggestion:hover {
+  background: #eef6fb;
+}
+
+.ticker-suggestion-symbol {
+  color: #17394d;
+  font-weight: 700;
+}
+
+.ticker-suggestion-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ticker-suggestion-category {
+  color: #777;
+  font-size: 12px;
+}
+
 .set-name-input,
 .set-select {
   min-width: 140px;
@@ -3789,6 +4011,22 @@ ol {
   color: #315f75;
   font-size: 13px;
   font-weight: 600;
+}
+
+.watchlist-table .watchlist-column-name {
+  width: 150px;
+  max-width: 150px;
+}
+
+.watchlist-table .watchlist-column-signal {
+  width: 320px;
+  min-width: 320px;
+}
+
+.watchlist-table .watchlist-column-name span,
+.watchlist-table .watchlist-column-signal span {
+  display: block;
+  overflow-wrap: anywhere;
 }
 
 .section-tabs {
@@ -4166,7 +4404,8 @@ ol {
   }
 
   .search-input,
-  .hub-search input {
+  .hub-search input,
+  .ticker-add-control {
     width: 100%;
     min-width: 0;
   }
