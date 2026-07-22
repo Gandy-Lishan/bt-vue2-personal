@@ -939,7 +939,7 @@ export default {
         { value: 'ndx', label: 'NDX' },
         { value: 'russell', label: 'Russell' },
         { value: 'etf', label: 'ETF' },
-        { value: 'crp', label: 'Cropto' }
+        { value: 'crp', label: 'Crypto' }
       ],
       marketFilters: {
         optix: 'Any',
@@ -1742,8 +1742,7 @@ export default {
         'other assets': 'etf',
         etf: 'etf',
         crp: 'crp',
-        crypto: 'crp',
-        cropto: 'crp'
+        crypto: 'crp'
       }
       if (aliases[text]) return aliases[text]
       const group = this.marketGroupOptions.find(item =>
