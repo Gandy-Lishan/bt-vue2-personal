@@ -259,14 +259,13 @@
                 <div v-if="showWatchlistTickerSuggestions" class="ticker-suggestions">
                   <button
                     v-for="item in watchlistTickerSuggestions"
-                    :key="item.symbol"
+                    :key="item.url || item.symbol"
                     class="ticker-suggestion"
                     type="button"
                     @mousedown.prevent="selectWatchlistTicker(item)"
                   >
                     <span class="ticker-suggestion-symbol">{{ item.symbol }}</span>
                     <span class="ticker-suggestion-name">{{ item.name }}</span>
-                    <span class="ticker-suggestion-category">{{ item.category }}</span>
                   </button>
                 </div>
               </div>
@@ -1008,19 +1007,22 @@ export default {
     },
     watchlistTickerSourceList() {
       const chartState = this.$store && this.$store.state ? this.$store.state.chart : null
-      const indexsList = chartState && Array.isArray(chartState.indexsList) ? chartState.indexsList : []
-      const stocksList = chartState && Array.isArray(chartState.stocksList) ? chartState.stocksList : []
+      const originIndicatorList = chartState && Array.isArray(chartState.originIndicatorList) ? chartState.originIndicatorList : []
       const normalizeItem = item => ({
-        symbol: String((item && (item.symbol || item.stock)) || '').trim(),
-        name: String((item && item.name) || '').trim(),
-        category: String((item && item.category) || '').trim()
+        symbol: String((item && item.market_symbol) || '').trim(),
+        name: String((item && item.chart_name) || '').trim(),
+        type: String((item && item.type) || '').trim(),
+        url: String((item && item.url) || '').trim()
       })
       const deduped = new Map()
 
-      indexsList.concat(stocksList).map(normalizeItem).forEach(item => {
-        const key = item.symbol.toLowerCase()
-        if (item.symbol && !deduped.has(key)) deduped.set(key, item)
-      })
+      originIndicatorList
+        .filter(item => String((item && item.type) || '').toLowerCase() === 'optix')
+        .map(normalizeItem)
+        .forEach(item => {
+          const key = item.symbol.toLowerCase()
+          if (item.symbol && item.url && !deduped.has(key)) deduped.set(key, item)
+        })
 
       return Array.from(deduped.values())
     },
@@ -1036,18 +1038,22 @@ export default {
         .map(item => {
           const symbol = String(item && item.symbol ? item.symbol : '').trim()
           const name = String(item && item.name ? item.name : '').trim()
-          const category = String(item && item.category ? item.category : '').trim()
+          const type = String(item && item.type ? item.type : '').trim()
+          const url = String(item && item.url ? item.url : '').trim()
           const normalizedSymbol = this.normalizeWatchlistTickerSearchText(symbol)
           const normalizedName = this.normalizeWatchlistTickerSearchText(name)
+          const normalizedUrl = this.normalizeWatchlistTickerSearchText(url)
           let score = 0
 
           if (normalizedSymbol === query) score = 100
           else if (normalizedSymbol.startsWith(query)) score = 80
           else if (normalizedSymbol.includes(query)) score = 60
+          else if (normalizedUrl === query) score = 55
+          else if (normalizedUrl.includes(query)) score = 45
           else if (normalizedName.startsWith(query)) score = 40
           else if (normalizedName.includes(query)) score = 20
 
-          return { ...item, symbol, name, category, score }
+          return { ...item, symbol, name, type, url, score }
         })
         .filter(item => item.symbol && item.score > 0)
         .sort((left, right) => right.score - left.score || left.symbol.localeCompare(right.symbol))
@@ -1281,7 +1287,9 @@ export default {
           ? this.normalizeMetricColumnIds(columns)
           : this.getDefaultWatchlistColumnIds(),
         filters,
-        symbols: this.normalizeTickerList(symbols)
+        symbols: config.preserveSymbolCase
+          ? this.mergeWatchlistSymbolsPreservingCase(symbols)
+          : this.normalizeTickerList(symbols)
       }
     },
     normalizeWatchlistTableConfigs(value, useDefault = false) {
@@ -1501,14 +1509,15 @@ export default {
 
       const visibleColumnIds = this.visibleColumns.map(column => column.id)
       const columns = visibleColumnIds.includes('symbol') ? visibleColumnIds : ['symbol', ...visibleColumnIds]
-      const symbols = this.normalizeTickerList(this.watchlistSymbols)
+      const symbols = this.mergeWatchlistSymbolsPreservingCase(this.watchlistSymbols)
 
       return this.createWatchlistTableConfig({
         ...currentTable,
         name: currentTable.name || 'My WatchList',
         columns,
         filters,
-        symbols
+        symbols,
+        preserveSymbolCase: true
       })
     },
     buildMetricWatchlistPayload(options = {}) {
@@ -1633,6 +1642,22 @@ export default {
           .map(value => this.normalizeWatchlistSymbol(value))
           .filter(Boolean)
       ))
+    },
+    mergeWatchlistSymbolsPreservingCase(values) {
+      const result = []
+      const seen = new Set()
+
+      const list = Array.isArray(values) ? values : []
+      list.forEach(value => {
+        const text = String(value || '').trim()
+        const key = text.toLowerCase()
+        if (!text || seen.has(key)) return
+
+        seen.add(key)
+        result.push(text)
+      })
+
+      return result
     },
     normalizeWatchlistSymbol(value) {
       const text = String(value || '').trim()
@@ -3132,7 +3157,7 @@ export default {
       return text.includes('T') ? text.split('T')[0] : text
     },
     normalizeWatchlistTickerSearchText(value) {
-      return String(value || '').trim().replace(/^etf_/i, '').toLowerCase()
+      return String(value || '').trim().toLowerCase()
     },
     findWatchlistTickerOption(value) {
       const query = this.normalizeWatchlistTickerSearchText(value)
@@ -3140,15 +3165,12 @@ export default {
 
       return this.watchlistTickerSourceList.find(item => {
         const symbol = this.normalizeWatchlistTickerSearchText(item && item.symbol)
-        return symbol === query
+        const url = this.normalizeWatchlistTickerSearchText(item && item.url)
+        return symbol === query || url === query
       }) || null
     },
     formatWatchlistTickerSubmission(item) {
-      const symbol = String(item && item.symbol ? item.symbol : '').trim()
-      const category = String(item && item.category ? item.category : '').trim().toLowerCase()
-      if (!symbol) return ''
-      if (category === 'etf') return `etf_${symbol.toLowerCase()}`
-      return symbol.toUpperCase()
+      return String(item && item.url ? item.url : '').trim()
     },
     openWatchlistTickerSuggestions() {
       clearTimeout(this.watchlistTickerBlurTimer)
@@ -3202,7 +3224,7 @@ export default {
       }
 
       this.watchlistConfigMessage = ''
-      this.watchlistSymbols = this.normalizeTickerList([...this.watchlistSymbols, ...resolvedTickers])
+      this.watchlistSymbols = this.mergeWatchlistSymbolsPreservingCase([...this.watchlistSymbols, ...resolvedTickers])
       this.singleTicker = ''
       this.closeWatchlistTickerSuggestions()
       await this.saveWatchlistConfig({ silent: true })
