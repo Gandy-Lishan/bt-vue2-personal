@@ -365,6 +365,15 @@
                 <option v-for="option in field.options" :key="option">{{ option }}</option>
               </select>
             </div>
+            <div class="filter-field market-symbol-search">
+              <label>Search</label>
+              <input
+                v-model.trim="marketSymbolSearch"
+                type="text"
+                placeholder="Search ticker..."
+                @keydown.enter.prevent="submitMarketSymbolSearch"
+              />
+            </div>
           </div>
           <div v-if="marketConfigMessage" class="watchlist-message">{{ marketConfigMessage }}</div>
 
@@ -819,6 +828,7 @@ export default {
       serverSearchTimer: null,
       sentimentChartTimer: null,
       watchlistSearchTimer: null,
+      marketSymbolSearchTimer: null,
       lastSignalDate: '',
       lastSignalDateFetched: false,
       indicatorView: 'table',
@@ -839,6 +849,7 @@ export default {
       watchlistLoading: false,
       activeMarketConfigIndex: 0,
       activeMarketGroup: 'sp1500',
+      marketSymbolSearch: '',
       marketScreenConfigs: [],
       marketPage: 1,
       marketTotal: 0,
@@ -846,6 +857,7 @@ export default {
       marketRowsRequestId: 0,
       marketConfigMessage: '',
       suppressMarketFilterSave: false,
+      suppressMarketSymbolSearch: false,
       singleTicker: '',
       watchlistTickerMenuOpen: false,
       watchlistTickerBlurTimer: null,
@@ -926,7 +938,8 @@ export default {
         { value: 'sp500', label: 'S&P 500' },
         { value: 'ndx', label: 'NDX' },
         { value: 'russell', label: 'Russell' },
-        { value: 'etf', label: 'ETF' }
+        { value: 'etf', label: 'ETF' },
+        { value: 'crp', label: 'Cropto' }
       ],
       marketFilters: {
         optix: 'Any',
@@ -1181,6 +1194,10 @@ export default {
     watchlistSearch() {
       this.queueWatchlistSearch()
     },
+    marketSymbolSearch() {
+      if (this.suppressMarketSymbolSearch) return
+      this.queueMarketSymbolSearch()
+    },
     watchlistAssetType() {
       if (this.suppressWatchlistFilterFetch) return
       this.saveWatchlistConfig({ silent: true })
@@ -1190,6 +1207,7 @@ export default {
     clearTimeout(this.serverSearchTimer)
     clearTimeout(this.sentimentChartTimer)
     clearTimeout(this.watchlistSearchTimer)
+    clearTimeout(this.marketSymbolSearchTimer)
     clearTimeout(this.watchlistTickerBlurTimer)
   },
   methods: {
@@ -1722,7 +1740,10 @@ export default {
         'domestic etf': 'etf',
         'foreign etf': 'etf',
         'other assets': 'etf',
-        etf: 'etf'
+        etf: 'etf',
+        crp: 'crp',
+        crypto: 'crp',
+        cropto: 'crp'
       }
       if (aliases[text]) return aliases[text]
       const group = this.marketGroupOptions.find(item =>
@@ -1819,8 +1840,21 @@ export default {
         return filters
       }, {})
     },
+    resetMarketSymbolSearch() {
+      this.suppressMarketSymbolSearch = true
+      this.marketSymbolSearch = ''
+      clearTimeout(this.marketSymbolSearchTimer)
+      this.$nextTick(() => {
+        this.suppressMarketSymbolSearch = false
+      })
+    },
+    submitMarketSymbolSearch() {
+      clearTimeout(this.marketSymbolSearchTimer)
+      this.fetchMarketRowsData({ page: 1 })
+    },
     async refreshMarketResults() {
       this.marketFilters = this.getDefaultMarketFilters()
+      this.resetMarketSymbolSearch()
       await this.applyMarketFilters()
     },
     applyMarketConfigToControls(config) {
@@ -1909,8 +1943,10 @@ export default {
         page_size: this.metricPageSize,
         ordering: this.getMarketRowsOrdering()
       }
+      const symbol = String(this.marketSymbolSearch || '').trim()
 
       if (Array.isArray(groups) && groups.length) params.groups = groups.join(',')
+      if (symbol) params.symbol = symbol
       Object.keys(ranges).forEach(field => {
         const range = ranges[field]
         if (!range || typeof range !== 'object') return
@@ -1971,6 +2007,7 @@ export default {
       this.marketScreenConfigs = nextConfigs
       this.activeMarketConfigIndex = Math.max(index, 0)
       this.applyMarketConfigToControls(this.marketScreenConfigs[this.activeMarketConfigIndex])
+      this.resetMarketSymbolSearch()
       await this.fetchMarketRowsData({ page: 1 })
     },
     async loadMarketScreenConfigByIndex() {
@@ -1979,6 +2016,7 @@ export default {
       this.marketScreenConfigs = configs
       this.activeMarketConfigIndex = index
       this.applyMarketConfigToControls(configs[index])
+      this.resetMarketSymbolSearch()
       await this.fetchMarketRowsData({ page: 1 })
     },
     getMarketRowSymbol(row) {
@@ -3018,6 +3056,12 @@ export default {
       clearTimeout(this.watchlistSearchTimer)
       this.watchlistSearchTimer = setTimeout(() => {
         this.fetchWatchlistData({ page: 1 })
+      }, 350)
+    },
+    queueMarketSymbolSearch() {
+      clearTimeout(this.marketSymbolSearchTimer)
+      this.marketSymbolSearchTimer = setTimeout(() => {
+        this.fetchMarketRowsData({ page: 1 })
       }, 350)
     },
     getWatchlistOrdering() {
@@ -4093,8 +4137,14 @@ ol {
   text-transform: uppercase;
 }
 
-.filter-field select {
+.filter-field select,
+.filter-field input {
   width: 100%;
+  min-height: 34px;
+}
+
+.market-symbol-search {
+  min-width: 180px;
 }
 
 .status-today {
