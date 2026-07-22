@@ -219,7 +219,7 @@
 				<p class="hint"><i>NOTE: t = (Mean - Median) / (STD / sqrt (N)), STD represents the sample standard deviation, and N indicates the number of transactions.</i></p>
 			</el-tab-pane>
 			<el-tab-pane label="Exit with Customized Time-In-Market" name="second">
-				<div class="history-container">
+				<div class="history-container custom-tim-container">
 						<template>
 							<el-table
 								:data="TIMHistoryList"
@@ -248,7 +248,7 @@
 								</div>
 							</el-table>
 						</template>
-				<div class="zscore-container">
+				<div class="zscore-container custom-tim-container">
 						<template>
 							<el-table
 								:data="TIMResult_quotes"
@@ -1973,13 +1973,20 @@ export default {
 .editWithCustomBtn{
     z-index: 999;
     position: absolute;
-    top: 100px;
-		right: 5px;
+    top: 135px;
+	right: 5px;
 }
 .history-container, .zscore-container, .hr, .hint {
 	margin: 0 auto;
 	width: 855px;
 }
+.custom-tim-container {
+	width: 100%;
+}
+.custom-tim-container:nth-child(1) {
+	margin-top: 30px;
+}
+
 @media (max-width: 1200px) {
 	.history-container, .zscore-container, .hr, .hint {
 		width: unset;
@@ -1996,7 +2003,7 @@ export default {
 	/* right: 243px; */
 	font-weight: 300;
 	padding: 10px 0px;
-	margin: 0 auto;
+	margin: 0 auto;		
 }
 .advance-form {
 	/deep/ .el-input-group {
