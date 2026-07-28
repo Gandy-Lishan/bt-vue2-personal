@@ -249,10 +249,13 @@ export default {
     const {data: latestPost } = await getBlogReportInfo(url)
     console.log(latestPost.user_level);
     window.location.href = `/MR/${latestPost.user_level}/${url}`;
+    const subPath = (latestPost.user_level && latestPost.user_level !== 'basic') ? latestPost.user_level : 'blog'
+    window.location.href = `/MR/${subPath}/${url}`;
   },
    formatDate(date) {
     if(!date) return ''
     return `${timestampToTime(date)}`
+    return String(date).split('T')[0]
    },
    truncate(text, length) {
      // 实现字符串截断逻辑

@@ -192,10 +192,10 @@
                 </template>
               </tbody>
             </table>
-            <div class="pagination-row" v-if="shouldShowPagination(myIndicatorsTotalCount)">
+            <div class="pagination-row" v-if="shouldShowPagination(myIndicatorsTotalCount, serverPageSize)">
               <button class="pagination-btn" type="button" :disabled="myIndicatorsPage <= 1" @click="changeMyIndicatorsPage(myIndicatorsPage - 1)">Prev</button>
-              <span>Page {{ myIndicatorsPage }} / {{ getTotalPages(myIndicatorsTotalCount) }} · Total {{ myIndicatorsTotalCount }}</span>
-              <button class="pagination-btn" type="button" :disabled="myIndicatorsPage >= getTotalPages(myIndicatorsTotalCount)" @click="changeMyIndicatorsPage(myIndicatorsPage + 1)">Next</button>
+              <span>Page {{ myIndicatorsPage }} / {{ getTotalPages(myIndicatorsTotalCount, serverPageSize) }} · Total {{ myIndicatorsTotalCount }}</span>
+              <button class="pagination-btn" type="button" :disabled="myIndicatorsPage >= getTotalPages(myIndicatorsTotalCount, serverPageSize)" @click="changeMyIndicatorsPage(myIndicatorsPage + 1)">Next</button>
             </div>
           </div>
 
@@ -219,10 +219,10 @@
                 </tr>
               </tbody>
             </table>
-            <div class="pagination-row" v-if="shouldShowPagination(reportsTotalCount)">
+            <div class="pagination-row" v-if="shouldShowPagination(reportsTotalCount, serverPageSize)">
               <button class="pagination-btn" type="button" :disabled="reportsPage <= 1" @click="changeReportsPage(reportsPage - 1)">Prev</button>
-              <span>Page {{ reportsPage }} / {{ getTotalPages(reportsTotalCount) }} · Total {{ reportsTotalCount }}</span>
-              <button class="pagination-btn" type="button" :disabled="reportsPage >= getTotalPages(reportsTotalCount)" @click="changeReportsPage(reportsPage + 1)">Next</button>
+              <span>Page {{ reportsPage }} / {{ getTotalPages(reportsTotalCount, serverPageSize) }} · Total {{ reportsTotalCount }}</span>
+              <button class="pagination-btn" type="button" :disabled="reportsPage >= getTotalPages(reportsTotalCount, serverPageSize)" @click="changeReportsPage(reportsPage + 1)">Next</button>
             </div>
           </div>
         </div>
@@ -244,14 +244,38 @@
             <div class="toolbar-left">
               <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !selectedWatchTickers.length" @click="removeSelected">Remove Selected</button>
               <input v-model.trim="watchlistSearch" class="search-input" type="text" placeholder="Search within the list below..." />
-              <input v-model.trim="singleTicker" class="bulk-input" type="text" placeholder="Add tickers, e.g. AAPL, MSFT, SPY" />
+              <div class="ticker-add-control">
+                <input
+                  v-model.trim="singleTicker"
+                  class="bulk-input ticker-add-input"
+                  type="text"
+                  placeholder="Add tickers, e.g. AAPL, SPY"
+                  @blur="queueCloseWatchlistTickerSuggestions"
+                  @focus="openWatchlistTickerSuggestions"
+                  @input="openWatchlistTickerSuggestions"
+                  @keydown.enter.prevent="addWatchlistTickers"
+                  @keydown.esc="closeWatchlistTickerSuggestions"
+                />
+                <div v-if="showWatchlistTickerSuggestions" class="ticker-suggestions">
+                  <button
+                    v-for="item in watchlistTickerSuggestions"
+                    :key="item.url || item.symbol"
+                    class="ticker-suggestion"
+                    type="button"
+                    @mousedown.prevent="selectWatchlistTicker(item)"
+                  >
+                    <span class="ticker-suggestion-symbol">{{ item.symbol }}</span>
+                    <span class="ticker-suggestion-name">{{ item.name }}</span>
+                  </button>
+                </div>
+              </div>
               <button class="btn blue" type="button" :disabled="watchlistConfigLoading || !singleTicker" @click="addWatchlistTickers">Add</button>
             </div>
           </div>
           <div v-if="watchlistConfigMessage" class="watchlist-message">{{ watchlistConfigMessage }}</div>
 
           <div class="table-wrap">
-            <table>
+            <table class="watchlist-table">
               <thead>
                 <tr>
                   <th><input v-model="allWatchSelected" type="checkbox" /></th>
@@ -259,7 +283,7 @@
                     v-for="column in visibleColumns"
                     :key="column.id"
                     class="sortable"
-                    :class="sortClass('watchlist', column.id)"
+                    :class="[sortClass('watchlist', column.id), getWatchlistColumnClass(column)]"
                     @click="toggleSort('watchlist', column.id)"
                   >
                     {{ column.name }}
@@ -282,7 +306,11 @@
                         @change="toggleWatchTickerSelection(row, $event.target.checked)"
                       />
                     </td>
-                    <td v-for="column in visibleColumns" :key="column.id">
+                    <td
+                      v-for="column in visibleColumns"
+                      :key="column.id"
+                      :class="getWatchlistColumnClass(column)"
+                    >
                       <!-- <span :class="getWatchlistCellClass(column.id)">{{ formatWatchlistCell(row, column.id) }}</span> -->
                       <span>{{ formatWatchlistCell(row, column.id) }}</span>
                     </td>
@@ -333,9 +361,18 @@
           <div class="filters">
             <div v-for="field in marketFilterFields" :key="field.key" class="filter-field">
               <label>{{ field.label }}</label>
-              <select v-model="marketFilters[field.key]" @change="saveMarketScreenConfig({ silent: true })">
+              <select v-model="marketFilters[field.key]" @change="applyMarketFilters">
                 <option v-for="option in field.options" :key="option">{{ option }}</option>
               </select>
+            </div>
+            <div class="filter-field market-symbol-search">
+              <label>Search</label>
+              <input
+                v-model.trim="marketSymbolSearch"
+                type="text"
+                placeholder="Search ticker..."
+                @keydown.enter.prevent="submitMarketSymbolSearch"
+              />
             </div>
           </div>
           <div v-if="marketConfigMessage" class="watchlist-message">{{ marketConfigMessage }}</div>
@@ -450,8 +487,15 @@
                 <span v-else>{{ card.title }}</span>
               </div>
               <div class="sparkline">
-                <svg v-if="card.points" viewBox="0 0 300 90">
-                  <polyline fill="none" stroke="#3d8bc0" stroke-width="2.5" :points="card.points" />
+                <svg v-if="card.lines && card.lines.length" viewBox="0 0 300 90">
+                  <polyline
+                    v-for="line in card.lines"
+                    :key="line.name"
+                    fill="none"
+                    :stroke="line.color"
+                    stroke-width="2.5"
+                    :points="line.points"
+                  />
                 </svg>
                 <div v-else class="chart-empty">{{ card.error || 'No chart data' }}</div>
               </div>
@@ -650,6 +694,7 @@ import axios from '@/axios'
 import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 
 const DASHBOARD_PAGE_SIZE = 5
+const DASHBOARD_SERVER_PAGE_SIZE = 10
 const METRIC_PAGE_SIZE = 10
 
 const dashboardApi = {
@@ -702,11 +747,11 @@ const dashboardApi = {
   },
   getMyIndicators(params = {}) {
     // TODO: connect real My Indicators API here.
-    return getMyIndicatorsList(params.page || 1, params.name, params.page_size || DASHBOARD_PAGE_SIZE)
+    return getMyIndicatorsList(params.page || 1, params.name, params.page_size || DASHBOARD_SERVER_PAGE_SIZE)
   },
   getFavoriteReports(params = {}) {
     // TODO: connect real Favorite Reports API here.
-    return getMRFavoritesList({ page: params.page || 1, page_size: DASHBOARD_PAGE_SIZE, ...params })
+    return getMRFavoritesList({ page: params.page || 1, page_size: DASHBOARD_SERVER_PAGE_SIZE, ...params })
   },
   getMarketRows() {
     // TODO: connect real Market Screen API here.
@@ -783,6 +828,7 @@ export default {
       serverSearchTimer: null,
       sentimentChartTimer: null,
       watchlistSearchTimer: null,
+      marketSymbolSearchTimer: null,
       lastSignalDate: '',
       lastSignalDateFetched: false,
       indicatorView: 'table',
@@ -803,19 +849,25 @@ export default {
       watchlistLoading: false,
       activeMarketConfigIndex: 0,
       activeMarketGroup: 'sp1500',
+      marketSymbolSearch: '',
       marketScreenConfigs: [],
       marketPage: 1,
       marketTotal: 0,
       marketLoading: false,
+      marketRowsRequestId: 0,
       marketConfigMessage: '',
       suppressMarketFilterSave: false,
+      suppressMarketSymbolSearch: false,
       singleTicker: '',
+      watchlistTickerMenuOpen: false,
+      watchlistTickerBlurTimer: null,
       selectedWatchTickers: [],
       watchlistSelectAll: false,
       newColumnType: '',
       settingsOpen: false,
       savedFilter: '',
       pageSize: DASHBOARD_PAGE_SIZE,
+      serverPageSize: DASHBOARD_SERVER_PAGE_SIZE,
       metricPageSize: METRIC_PAGE_SIZE,
       signalsPagination: {
         'my-signals': 1,
@@ -886,7 +938,8 @@ export default {
         { value: 'sp500', label: 'S&P 500' },
         { value: 'ndx', label: 'NDX' },
         { value: 'russell', label: 'Russell' },
-        { value: 'etf', label: 'ETF' }
+        { value: 'etf', label: 'ETF' },
+        { value: 'crp', label: 'Crypto' }
       ],
       marketFilters: {
         optix: 'Any',
@@ -964,6 +1017,63 @@ export default {
     symbolList() {
       const data = localStorage.getItem('refactoredConcatList');
       return data ? JSON.parse(data) : [];
+    },
+    watchlistTickerSourceList() {
+      const chartState = this.$store && this.$store.state ? this.$store.state.chart : null
+      const originIndicatorList = chartState && Array.isArray(chartState.originIndicatorList) ? chartState.originIndicatorList : []
+      const normalizeItem = item => ({
+        symbol: String((item && item.market_symbol) || '').trim(),
+        name: String((item && item.chart_name) || '').trim(),
+        type: String((item && item.type) || '').trim(),
+        url: String((item && item.url) || '').trim()
+      })
+      const deduped = new Map()
+
+      originIndicatorList
+        .filter(item => String((item && item.type) || '').toLowerCase() === 'optix')
+        .map(normalizeItem)
+        .forEach(item => {
+          const key = item.symbol.toLowerCase()
+          if (item.symbol && item.url && !deduped.has(key)) deduped.set(key, item)
+        })
+
+      return Array.from(deduped.values())
+    },
+    watchlistTickerQuery() {
+      const tokens = String(this.singleTicker || '').split(/[,\s]+/).filter(Boolean)
+      return tokens.length ? tokens[tokens.length - 1] : ''
+    },
+    watchlistTickerSuggestions() {
+      const query = this.normalizeWatchlistTickerSearchText(this.watchlistTickerQuery)
+      if (!query) return []
+
+      return this.watchlistTickerSourceList
+        .map(item => {
+          const symbol = String(item && item.symbol ? item.symbol : '').trim()
+          const name = String(item && item.name ? item.name : '').trim()
+          const type = String(item && item.type ? item.type : '').trim()
+          const url = String(item && item.url ? item.url : '').trim()
+          const normalizedSymbol = this.normalizeWatchlistTickerSearchText(symbol)
+          const normalizedName = this.normalizeWatchlistTickerSearchText(name)
+          const normalizedUrl = this.normalizeWatchlistTickerSearchText(url)
+          let score = 0
+
+          if (normalizedSymbol === query) score = 100
+          else if (normalizedSymbol.startsWith(query)) score = 80
+          else if (normalizedSymbol.includes(query)) score = 60
+          else if (normalizedUrl === query) score = 55
+          else if (normalizedUrl.includes(query)) score = 45
+          else if (normalizedName.startsWith(query)) score = 40
+          else if (normalizedName.includes(query)) score = 20
+
+          return { ...item, symbol, name, type, url, score }
+        })
+        .filter(item => item.symbol && item.score > 0)
+        .sort((left, right) => right.score - left.score || left.symbol.localeCompare(right.symbol))
+        .slice(0, 8)
+    },
+    showWatchlistTickerSuggestions() {
+      return this.watchlistTickerMenuOpen && this.watchlistTickerSuggestions.length > 0
     },
     hubSearchPlaceholder() {
       if (this.activeHubTab === 'signals') return 'Search My Signals...'
@@ -1084,6 +1194,10 @@ export default {
     watchlistSearch() {
       this.queueWatchlistSearch()
     },
+    marketSymbolSearch() {
+      if (this.suppressMarketSymbolSearch) return
+      this.queueMarketSymbolSearch()
+    },
     watchlistAssetType() {
       if (this.suppressWatchlistFilterFetch) return
       this.saveWatchlistConfig({ silent: true })
@@ -1093,6 +1207,8 @@ export default {
     clearTimeout(this.serverSearchTimer)
     clearTimeout(this.sentimentChartTimer)
     clearTimeout(this.watchlistSearchTimer)
+    clearTimeout(this.marketSymbolSearchTimer)
+    clearTimeout(this.watchlistTickerBlurTimer)
   },
   methods: {
     ...mapActions('chart', ['update_indicators_favorite', 'get_indicator_page_btv1_list', 'get_favorite']),
@@ -1164,9 +1280,19 @@ export default {
     },
     normalizeMetricColumnIds(columnIds) {
       const allowedIds = this.getMetricColumnOrder()
+      const allowedSet = new Set(allowedIds)
       const requestedIds = Array.isArray(columnIds) ? columnIds.filter(Boolean) : []
-      const requestedSet = new Set(['symbol', 'data_date', ...requestedIds])
-      return allowedIds.filter(id => requestedSet.has(id))
+      const nextIds = []
+
+      if (!requestedIds.length) return allowedIds
+
+      const orderedIds = requestedIds.includes('symbol') ? requestedIds : ['symbol', ...requestedIds]
+
+      orderedIds.forEach(id => {
+        if (allowedSet.has(id) && !nextIds.includes(id)) nextIds.push(id)
+      })
+
+      return nextIds.length ? nextIds : allowedIds
     },
     createWatchlistTableConfig(config = {}) {
       const columns = this.parseWatchlistConfigValue(config.columns, this.getDefaultWatchlistColumnIds())
@@ -1179,7 +1305,9 @@ export default {
           ? this.normalizeMetricColumnIds(columns)
           : this.getDefaultWatchlistColumnIds(),
         filters,
-        symbols: this.normalizeTickerList(symbols)
+        symbols: config.preserveSymbolCase
+          ? this.mergeWatchlistSymbolsPreservingCase(symbols)
+          : this.normalizeTickerList(symbols)
       }
     },
     normalizeWatchlistTableConfigs(value, useDefault = false) {
@@ -1318,7 +1446,7 @@ export default {
         })
         const { rows, total, columns } = this.normalizeMetricApplyResponse(response)
 
-        if (columns.length) this.syncWatchlistColumns(columns)
+        this.syncWatchlistColumnsFromConfig(columns)
         this.watchlistPage = page
         this.watchlistTotal = total
         this.watchListData = rows
@@ -1370,7 +1498,7 @@ export default {
         const { rows: appliedRows, total, columns } = this.normalizeMetricApplyResponse(response)
         let rows = appliedRows
 
-        if (columns.length) this.syncWatchlistColumns(columns)
+        this.syncWatchlistColumnsFromConfig(columns)
         if (search) {
           rows = rows.filter(row => this.getWatchlistDisplayTicker(row).toLowerCase().includes(search))
         }
@@ -1397,15 +1525,17 @@ export default {
         delete filters.asset_type
       }
 
-      const columns = Array.from(new Set(['symbol', ...this.visibleColumns.map(column => column.id)]))
-      const symbols = this.normalizeTickerList(this.watchlistSymbols)
+      const visibleColumnIds = this.visibleColumns.map(column => column.id)
+      const columns = visibleColumnIds.includes('symbol') ? visibleColumnIds : ['symbol', ...visibleColumnIds]
+      const symbols = this.mergeWatchlistSymbolsPreservingCase(this.watchlistSymbols)
 
       return this.createWatchlistTableConfig({
         ...currentTable,
         name: currentTable.name || 'My WatchList',
         columns,
         filters,
-        symbols
+        symbols,
+        preserveSymbolCase: true
       })
     },
     buildMetricWatchlistPayload(options = {}) {
@@ -1441,9 +1571,7 @@ export default {
       }
 
       if (Object.prototype.hasOwnProperty.call(payload, 'config_table1')) {
-        nextConfig.config_table1 = savedConfig && savedConfig.config_table1 !== undefined
-          ? savedConfig.config_table1
-          : payload.config_table1
+        nextConfig.config_table1 = payload.config_table1
       } else if (nextConfig.config_table1 === undefined) {
         nextConfig.config_table1 = activeConfig.config_table1
       }
@@ -1503,6 +1631,12 @@ export default {
 
       this.columns = [...nextColumns, ...hiddenColumns]
     },
+    syncWatchlistColumnsFromConfig(fallbackColumns = []) {
+      const tableConfig = this.getMetricWatchlistTableConfig()
+      const configColumns = this.parseWatchlistConfigValue(tableConfig.columns, [])
+      const columns = Array.isArray(configColumns) && configColumns.length ? configColumns : fallbackColumns
+      if (Array.isArray(columns) && columns.length) this.syncWatchlistColumns(columns)
+    },
     getWatchlistColumnCatalog() {
       return [
         { id: 'symbol', name: 'Ticker', visible: true },
@@ -1526,6 +1660,22 @@ export default {
           .map(value => this.normalizeWatchlistSymbol(value))
           .filter(Boolean)
       ))
+    },
+    mergeWatchlistSymbolsPreservingCase(values) {
+      const result = []
+      const seen = new Set()
+
+      const list = Array.isArray(values) ? values : []
+      list.forEach(value => {
+        const text = String(value || '').trim()
+        const key = text.toLowerCase()
+        if (!text || seen.has(key)) return
+
+        seen.add(key)
+        result.push(text)
+      })
+
+      return result
     },
     normalizeWatchlistSymbol(value) {
       const text = String(value || '').trim()
@@ -1590,7 +1740,9 @@ export default {
         'domestic etf': 'etf',
         'foreign etf': 'etf',
         'other assets': 'etf',
-        etf: 'etf'
+        etf: 'etf',
+        crp: 'crp',
+        crypto: 'crp'
       }
       if (aliases[text]) return aliases[text]
       const group = this.marketGroupOptions.find(item =>
@@ -1687,9 +1839,22 @@ export default {
         return filters
       }, {})
     },
+    resetMarketSymbolSearch() {
+      this.suppressMarketSymbolSearch = true
+      this.marketSymbolSearch = ''
+      clearTimeout(this.marketSymbolSearchTimer)
+      this.$nextTick(() => {
+        this.suppressMarketSymbolSearch = false
+      })
+    },
+    submitMarketSymbolSearch() {
+      clearTimeout(this.marketSymbolSearchTimer)
+      this.fetchMarketRowsData({ page: 1 })
+    },
     async refreshMarketResults() {
       this.marketFilters = this.getDefaultMarketFilters()
-      await this.saveMarketScreenConfig({ silent: true })
+      this.resetMarketSymbolSearch()
+      await this.applyMarketFilters()
     },
     applyMarketConfigToControls(config) {
       const marketConfig = config || {}
@@ -1737,7 +1902,7 @@ export default {
         ranges: this.cloneMarketRanges(syncedRanges)
       }))
     },
-    async saveMarketScreenConfig(options = {}) {
+    syncMarketConfigFromControls() {
       if (this.suppressMarketFilterSave) return
       let nextConfigs = this.normalizeMarketScreenConfigs(this.marketScreenConfigs, true)
       const groupIndex = this.getMarketConfigIndexByGroup(this.activeMarketGroup, nextConfigs)
@@ -1749,6 +1914,16 @@ export default {
       nextConfigs = this.syncMarketRangesToConfigs(nextConfigs, activeConfig.ranges)
       this.marketScreenConfigs = nextConfigs
       this.activeMarketConfigIndex = index
+      return nextConfigs
+    },
+    async applyMarketFilters() {
+      if (this.suppressMarketFilterSave) return
+      this.syncMarketConfigFromControls()
+      await this.fetchMarketRowsData({ page: 1 })
+    },
+    async saveMarketScreenConfig(options = {}) {
+      if (this.suppressMarketFilterSave) return
+      const nextConfigs = this.syncMarketConfigFromControls()
 
       const saved = await this.saveMetricWatchlistConfig({
         configTable2: nextConfigs,
@@ -1767,8 +1942,10 @@ export default {
         page_size: this.metricPageSize,
         ordering: this.getMarketRowsOrdering()
       }
+      const symbol = String(this.marketSymbolSearch || '').trim()
 
       if (Array.isArray(groups) && groups.length) params.groups = groups.join(',')
+      if (symbol) params.symbol = symbol
       Object.keys(ranges).forEach(field => {
         const range = ranges[field]
         if (!range || typeof range !== 'object') return
@@ -1790,44 +1967,30 @@ export default {
     },
     async fetchMarketRowsData(params = {}) {
       const page = Number(params.page || this.marketPage || 1)
+      const requestId = this.marketRowsRequestId + 1
+      this.marketRowsRequestId = requestId
 
       if (!this.marketScreenConfigs.length) {
         this.marketScreenConfigs = this.createDefaultMarketScreenConfigs()
       }
 
-      const savedMarketConfigs = this.normalizeMarketScreenConfigs(
-        this.activeWatchlistConfig && this.activeWatchlistConfig.config_table2,
-        false
-      )
-      const savedIndex = this.getMarketConfigIndexByGroup(this.activeMarketGroup, savedMarketConfigs)
       const currentConfig = this.marketScreenConfigs[this.activeMarketConfigIndex] || this.createMarketScreenConfig()
 
       this.marketLoading = true
       try {
-        const response = savedIndex >= 0
-          ? await dashboardApi.applyMetricWatchlistSet({
-            name: this.watchlistSetName || 'default',
-            table: 2,
-            index: savedIndex,
-            paginate: true,
-            page,
-            page_size: this.metricPageSize,
-            ordering: this.getMarketRowsOrdering()
-          })
-          : await dashboardApi.getWatchlist(this.buildMarketMetricsParams(currentConfig, page))
-        const { rows, total, columns } = savedIndex >= 0
-          ? this.normalizeMetricApplyResponse(response)
-          : this.normalizeAssetMetricsResponse(response)
-        if (columns.length) this.syncMarketColumns(columns)
+        const response = await dashboardApi.getWatchlist(this.buildMarketMetricsParams(currentConfig, page))
+        if (requestId !== this.marketRowsRequestId) return
+        const { rows, total } = this.normalizeAssetMetricsResponse(response)
         this.marketRows = rows
         this.marketTotal = total
         this.marketPage = page
       } catch (error) {
+        if (requestId !== this.marketRowsRequestId) return
         console.error(error)
         this.marketRows = []
         this.marketTotal = 0
       } finally {
-        this.marketLoading = false
+        if (requestId === this.marketRowsRequestId) this.marketLoading = false
       }
     },
     async changeMarketGroup(group) {
@@ -1843,6 +2006,7 @@ export default {
       this.marketScreenConfigs = nextConfigs
       this.activeMarketConfigIndex = Math.max(index, 0)
       this.applyMarketConfigToControls(this.marketScreenConfigs[this.activeMarketConfigIndex])
+      this.resetMarketSymbolSearch()
       await this.fetchMarketRowsData({ page: 1 })
     },
     async loadMarketScreenConfigByIndex() {
@@ -1851,6 +2015,7 @@ export default {
       this.marketScreenConfigs = configs
       this.activeMarketConfigIndex = index
       this.applyMarketConfigToControls(configs[index])
+      this.resetMarketSymbolSearch()
       await this.fetchMarketRowsData({ page: 1 })
     },
     getMarketRowSymbol(row) {
@@ -2002,7 +2167,7 @@ export default {
       let data = await dashboardApi.getMyIndicators({
         page,
         name: this.hubSearch.trim(),
-        page_size: this.pageSize,
+        page_size: this.serverPageSize,
         ...params
       })
       const responseData = data && data.data ? data.data : {}
@@ -2421,7 +2586,7 @@ export default {
       let data = await dashboardApi.getFavoriteReports({
         page,
         title: this.hubSearch.trim(),
-        page_size: this.pageSize,
+        page_size: this.serverPageSize,
         ...params
       })
       const responseData = data && data.data ? data.data : {}
@@ -2533,10 +2698,11 @@ export default {
         const chartRows = this.normalizeSentimentChartRows(response.data)
         const visibleRows = this.filterSentimentChartRowsByPeriod(chartRows, row.timeframe)
         const series = this.extractSentimentChartSeries(visibleRows, row)
+        const primarySeries = series[0] && series[0].data ? series[0].data : []
         return {
           ...baseCard,
-          points: this.buildSparklinePoints(series),
-          last: series.length ? this.formatChartValue(series[series.length - 1].y) : baseCard.last,
+          lines: this.buildSparklineLines(series),
+          last: primarySeries.length ? this.formatChartValue(primarySeries[primarySeries.length - 1].y) : baseCard.last,
           error: series.length ? '' : 'No chart data'
         }
       } catch (error) {
@@ -2553,7 +2719,7 @@ export default {
         title: row.chart_name || row.name || row.url || 'Indicator',
         url: row.url,
         last: row.last_value,
-        points: '',
+        lines: [],
         error,
         periodLabel: timeframeLabel ? `${timeframeLabel} · ${period.label}` : period.label
       }
@@ -2578,44 +2744,75 @@ export default {
       if (!rows.length) return []
       const excludedKeys = ['date', 'Color', 'color', 'dumb']
       const keys = Object.keys(rows[0]).filter(key => !excludedKeys.includes(key))
-      const preferredKeys = [
-        indicator.market_symbol,
-        indicator.url,
-        'value',
-        'Value',
-        'close',
-        'Close',
-        'indicator',
-        'Indicator'
-      ].filter(Boolean)
-      const orderedKeys = preferredKeys.concat(keys.filter(key => !preferredKeys.includes(key)))
-      const valueKey = orderedKeys.find(key => rows.some(row => Number.isFinite(Number(row[key]))))
-      if (!valueKey) return []
+      const numericKeys = keys.filter(key => rows.some(row => Number.isFinite(Number(row[key]))))
+      const valueKeys = this.getSentimentChartValueKeys(numericKeys, indicator)
 
-      return rows
-        .map(row => ({
-          date: row.date,
-          y: Number(row[valueKey])
+      return valueKeys
+        .map((valueKey, index) => ({
+          name: valueKey,
+          color: this.getSentimentChartLineColor(valueKey, index),
+          data: rows
+            .map(row => ({
+              date: row.date,
+              y: Number(row[valueKey])
+            }))
+            .filter(point => Number.isFinite(point.y))
         }))
-        .filter(point => Number.isFinite(point.y))
+        .filter(series => series.data.length)
     },
-    buildSparklinePoints(series) {
-      if (!series.length) return ''
-      if (series.length === 1) return '150,45'
+    getSentimentChartValueKeys(keys, indicator) {
+      const lowerKeyMap = keys.reduce((map, key) => {
+        map[key.toLowerCase()] = key
+        return map
+      }, {})
+      const urlKey = indicator && indicator.url ? lowerKeyMap[String(indicator.url).toLowerCase()] : ''
+      if (urlKey) return [urlKey]
+
+      const specialKeysByUrl = {
+        smart_dumb: ['model_smart_money', 'model_dumb_money'],
+        risk_levels: ['model_risk_stocks_short', 'model_risk_stocks_medium']
+      }
+      const specialKeys = specialKeysByUrl[String(indicator && indicator.url || '').toLowerCase()] || []
+      const matchedSpecialKeys = specialKeys
+        .map(key => lowerKeyMap[key.toLowerCase()])
+        .filter(Boolean)
+      if (matchedSpecialKeys.length) return matchedSpecialKeys
+
+      const marketSymbol = indicator && indicator.market_symbol ? String(indicator.market_symbol).toLowerCase() : ''
+      const indicatorKeys = keys.filter(key => key.toLowerCase() !== marketSymbol)
+      return indicatorKeys.length ? indicatorKeys : keys.slice(0, 1)
+    },
+    getSentimentChartLineColor(key, index) {
+      if (index === 1 || String(key).toLowerCase() === 'model_dumb_money') return 'rgb(142, 35, 35)'
+      return '#3d8bc0'
+    },
+    buildSparklineLines(series) {
+      if (!series.length) return []
+      const values = series.flatMap(item => item.data.map(point => point.y))
+      if (!values.length) return []
 
       const width = 300
       const height = 90
       const padding = 8
-      const values = series.map(point => point.y)
       const min = Math.min(...values)
       const max = Math.max(...values)
       const range = max - min || 1
 
-      return series.map((point, index) => {
-        const x = padding + (index / (series.length - 1)) * (width - padding * 2)
-        const y = height - padding - ((point.y - min) / range) * (height - padding * 2)
-        return `${x.toFixed(1)},${y.toFixed(1)}`
-      }).join(' ')
+      return series.map(item => {
+        const data = item.data
+        const points = data.length === 1
+          ? '150,45'
+          : data.map((point, index) => {
+            const x = padding + (index / (data.length - 1)) * (width - padding * 2)
+            const y = height - padding - ((point.y - min) / range) * (height - padding * 2)
+            return `${x.toFixed(1)},${y.toFixed(1)}`
+          }).join(' ')
+        return {
+          name: item.name,
+          color: item.color,
+          points
+        }
+      })
     },
     filterSentimentChartRowsByPeriod(rows, timeframe) {
       if (!rows.length) return []
@@ -2860,6 +3057,12 @@ export default {
         this.fetchWatchlistData({ page: 1 })
       }, 350)
     },
+    queueMarketSymbolSearch() {
+      clearTimeout(this.marketSymbolSearchTimer)
+      this.marketSymbolSearchTimer = setTimeout(() => {
+        this.fetchMarketRowsData({ page: 1 })
+      }, 350)
+    },
     getWatchlistOrdering() {
       return this.getMetricTableOrdering('watchlist')
     },
@@ -2911,13 +3114,13 @@ export default {
       this.$set(this.signalsPagination, this.activeSignalsTab, nextPage)
     },
     async changeMyIndicatorsPage(page) {
-      const totalPages = this.getTotalPages(this.myIndicatorsTotalCount)
+      const totalPages = this.getTotalPages(this.myIndicatorsTotalCount, this.serverPageSize)
       const nextPage = Math.min(Math.max(Number(page) || 1, 1), totalPages)
       if (nextPage === this.myIndicatorsPage) return
       await this.fetchMyIndicatorsData({ page: nextPage })
     },
     async changeReportsPage(page) {
-      const totalPages = this.getTotalPages(this.reportsTotalCount)
+      const totalPages = this.getTotalPages(this.reportsTotalCount, this.serverPageSize)
       const nextPage = Math.min(Math.max(Number(page) || 1, 1), totalPages)
       if (nextPage === this.reportsPage) return
       await this.fetchFavoriteReportsData({ page: nextPage })
@@ -2978,6 +3181,14 @@ export default {
       if (columnId === 'asset_type') return String(value).toLowerCase() === 'etf' ? 'ETF' : capitalizeFirstLetter(value)
       return value
     },
+    getWatchlistColumnClass(column) {
+      const id = String(column && column.id ? column.id : '').toLowerCase()
+      const name = String(column && column.name ? column.name : '').toLowerCase()
+      const key = `${id} ${name}`
+      if (/\b(name|asset_name|ticker_name)\b/.test(key)) return 'watchlist-column-name'
+      if (/\bsignal\b/.test(key)) return 'watchlist-column-signal'
+      return ''
+    },
     formatWatchlistTicker(value) {
       const text = String(value || '')
       const ticker = text.includes('_') ? text.slice(text.indexOf('_') + 1) : text
@@ -2988,6 +3199,46 @@ export default {
       if (!text) return '-'
       return text.includes('T') ? text.split('T')[0] : text
     },
+    normalizeWatchlistTickerSearchText(value) {
+      return String(value || '').trim().toLowerCase()
+    },
+    findWatchlistTickerOption(value) {
+      const query = this.normalizeWatchlistTickerSearchText(value)
+      if (!query) return null
+
+      return this.watchlistTickerSourceList.find(item => {
+        const symbol = this.normalizeWatchlistTickerSearchText(item && item.symbol)
+        const url = this.normalizeWatchlistTickerSearchText(item && item.url)
+        return symbol === query || url === query
+      }) || null
+    },
+    formatWatchlistTickerSubmission(item) {
+      return String(item && item.url ? item.url : '').trim()
+    },
+    openWatchlistTickerSuggestions() {
+      clearTimeout(this.watchlistTickerBlurTimer)
+      this.watchlistTickerMenuOpen = true
+    },
+    closeWatchlistTickerSuggestions() {
+      clearTimeout(this.watchlistTickerBlurTimer)
+      this.watchlistTickerMenuOpen = false
+    },
+    queueCloseWatchlistTickerSuggestions() {
+      clearTimeout(this.watchlistTickerBlurTimer)
+      this.watchlistTickerBlurTimer = setTimeout(() => {
+        this.watchlistTickerMenuOpen = false
+      }, 150)
+    },
+    replaceWatchlistTickerQuery(symbol) {
+      const text = String(this.singleTicker || '')
+      const match = text.match(/^(.*?)([^,\s]*)$/)
+      const prefix = match ? match[1] : ''
+      this.singleTicker = `${prefix}${symbol}`
+    },
+    selectWatchlistTicker(item) {
+      if (item && item.symbol) this.replaceWatchlistTickerQuery(item.symbol)
+      this.closeWatchlistTickerSuggestions()
+    },
     async addWatchlistTickers() {
       if (!this.singleTicker) return
       const tickers = this.singleTicker
@@ -2995,8 +3246,30 @@ export default {
         .map(ticker => ticker.trim())
         .filter(Boolean)
       if (!tickers.length) return
-      this.watchlistSymbols = this.normalizeTickerList([...this.watchlistSymbols, ...tickers])
+
+      const resolvedTickers = []
+      const invalidTickers = []
+      tickers.forEach(ticker => {
+        const option = this.findWatchlistTickerOption(ticker)
+        if (!option) {
+          invalidTickers.push(ticker)
+          return
+        }
+
+        const formattedTicker = this.formatWatchlistTickerSubmission(option)
+        if (formattedTicker) resolvedTickers.push(formattedTicker)
+      })
+
+      if (invalidTickers.length) {
+        this.showWatchlistMessage(`Ticker not found: ${invalidTickers.join(', ')}`)
+        this.openWatchlistTickerSuggestions()
+        return
+      }
+
+      this.watchlistConfigMessage = ''
+      this.watchlistSymbols = this.mergeWatchlistSymbolsPreservingCase([...this.watchlistSymbols, ...resolvedTickers])
       this.singleTicker = ''
+      this.closeWatchlistTickerSuggestions()
       await this.saveWatchlistConfig({ silent: true })
     },
     async addTicker(ticker) {
@@ -3055,10 +3328,10 @@ export default {
       })
       this.newColumnType = ''
     },
-    applySettings() {
+    async applySettings() {
       this.columns = JSON.parse(JSON.stringify(this.tempColumns))
       this.settingsOpen = false
-      if (this.activeWatchlistConfig) this.saveWatchlistConfig({ silent: true })
+      if (this.activeWatchlistConfig) await this.saveWatchlistConfig({ silent: true })
     },
     generateColumnValue(type) {
       const generators = {
@@ -3554,6 +3827,18 @@ tbody tr.last-signal-highlight:hover {
   cursor: pointer;
 }
 
+/* .signals-table th:nth-child(1),
+.signals-table td:nth-child(1) {
+  width: 25%;
+  max-width: 220px;
+} */
+
+.signals-table th:nth-child(4),
+.signals-table td:nth-child(4) {
+  width: 30%;
+  min-width: 280px;
+}
+
 .muted {
   color: #777;
 }
@@ -3567,10 +3852,6 @@ tbody tr.last-signal-highlight:hover {
   line-height: 1.4;
 }
 
-.st-signals-table th:nth-child(4),
-.st-signals-table td:nth-child(4) {
-  width: 30%;
-}
 .chevron {
   display: inline-flex;
   align-items: center;
@@ -3722,6 +4003,65 @@ ol {
   min-width: 290px;
 }
 
+.ticker-add-control {
+  position: relative;
+  min-width: 290px;
+}
+
+.ticker-add-input {
+  width: 100%;
+  min-width: 0;
+}
+
+.ticker-suggestions {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid #c9d2da;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+}
+
+.ticker-suggestion {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 1px solid #edf0f2;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ticker-suggestion:hover {
+  background: #eef6fb;
+}
+
+.ticker-suggestion-symbol {
+  color: #17394d;
+  font-weight: 700;
+}
+
+.ticker-suggestion-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ticker-suggestion-category {
+  color: #777;
+  font-size: 12px;
+}
+
 .set-name-input,
 .set-select {
   min-width: 140px;
@@ -3736,6 +4076,22 @@ ol {
   color: #315f75;
   font-size: 13px;
   font-weight: 600;
+}
+
+.watchlist-table .watchlist-column-name {
+  width: 150px;
+  max-width: 150px;
+}
+
+.watchlist-table .watchlist-column-signal {
+  width: 320px;
+  min-width: 320px;
+}
+
+.watchlist-table .watchlist-column-name span,
+.watchlist-table .watchlist-column-signal span {
+  display: block;
+  overflow-wrap: anywhere;
 }
 
 .section-tabs {
@@ -3780,8 +4136,14 @@ ol {
   text-transform: uppercase;
 }
 
-.filter-field select {
+.filter-field select,
+.filter-field input {
   width: 100%;
+  min-height: 34px;
+}
+
+.market-symbol-search {
+  min-width: 180px;
 }
 
 .status-today {
@@ -4113,7 +4475,8 @@ ol {
   }
 
   .search-input,
-  .hub-search input {
+  .hub-search input,
+  .ticker-add-control {
     width: 100%;
     min-width: 0;
   }
