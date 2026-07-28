@@ -604,13 +604,27 @@
                   <td class="score">
                     <a :href="`/indicators?indicator=${row['sector']}_constituent_trend_score`" target="_blank">{{ row.constituent_trend_score }}</a>
                   </td>
-                  <td>{{ `${row.trend_above8_ratio}%` }}</td>
-                  <td>{{ `${row.trend_below2_ratio}%` }}</td>
-                  <td>{{ `${row.reltrend_above8_ratio}%` }}</td>
-                  <td>{{ `${row.reltrend_below2_ratio}%` }}</td>
-                  <td>{{ `${row.trend_and_reltrend_above8_ratio}%` }}</td>
-                  <td>{{ `${row.trend_and_reltrend_below2_ratio}%` }}</td>
-                  <td>{{ `${row.reltrend_above8_spx_ratio}%` }}</td>
+                  <td>
+                    <a :href="`/indicators?indicator=${row['sector']}_trend_above8_ratio`" target="_blank">{{ `${row.trend_above8_ratio}%` }}</a>
+                  </td>
+                  <td>
+                    <a :href="`/indicators?indicator=${row['sector']}_trend_below2_ratio`" target="_blank">{{ `${row.trend_below2_ratio}%` }}</a>
+                  </td>
+                  <td>
+                    <a :href="`/indicators?indicator=${row['sector']}_reltrend_above8_ratio`" target="_blank">{{ `${row.reltrend_above8_ratio}%` }}</a>
+                  </td>
+                  <td>
+                    <a :href="`/indicators?indicator=${row['sector']}_reltrend_below2_ratio`" target="_blank">{{ `${row.reltrend_below2_ratio}%` }}</a>
+                  </td>
+                  <td>
+                    <a :href="`/indicators?indicator=${row['sector']}_trend_and_reltrend_above8_ratio`" target="_blank">{{ `${row.trend_and_reltrend_above8_ratio}%` }}</a>
+                  </td>
+                  <td>
+                    <a :href="`/indicators?indicator=${row['sector']}_trend_and_reltrend_below2_ratio`" target="_blank">{{ `${row.trend_and_reltrend_below2_ratio}%` }}</a>
+                  </td>
+                  <td>
+                    <a :href="`/indicators?indicator=${row['sector']}_reltrend_above8_spx_ratio`" target="_blank">{{ `${row.reltrend_above8_spx_ratio}%` }}</a>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -1564,25 +1578,32 @@ export default {
     },
     mergeMetricWatchlistConfig(payload, savedConfig = {}) {
       const activeConfig = this.activeWatchlistConfig || {}
+      const hasConfigTable1 = Object.prototype.hasOwnProperty.call(payload, 'config_table1')
+      const hasConfigTable2 = Object.prototype.hasOwnProperty.call(payload, 'config_table2')
       const nextConfig = {
         ...activeConfig,
         ...savedConfig,
         name: (savedConfig && savedConfig.name) || payload.name || activeConfig.name || 'default'
       }
 
-      if (Object.prototype.hasOwnProperty.call(payload, 'config_table1')) {
+      if (hasConfigTable1) {
         nextConfig.config_table1 = payload.config_table1
-      } else if (nextConfig.config_table1 === undefined) {
+      } else if (activeConfig.config_table1 !== undefined) {
         nextConfig.config_table1 = activeConfig.config_table1
       }
 
-      if (Object.prototype.hasOwnProperty.call(payload, 'config_table2')) {
+      if (hasConfigTable2) {
         nextConfig.config_table2 = payload.config_table2
-      } else if (nextConfig.config_table2 === undefined) {
+      } else if (activeConfig.config_table2 !== undefined) {
         nextConfig.config_table2 = activeConfig.config_table2
       }
 
       return nextConfig
+    },
+    syncMetricWatchlistConfigIdentity(config = {}) {
+      this.activeWatchlistConfig = config || null
+      this.watchlistSetName = (config && config.name) || this.watchlistSetName || 'default'
+      this.selectedWatchlistSetName = this.watchlistSetName
     },
     async saveMetricWatchlistConfig(options = {}) {
       const payload = this.buildMetricWatchlistPayload(options)
@@ -1593,7 +1614,12 @@ export default {
       try {
         const response = await dashboardApi.saveMetricWatchlistSet(payload)
         const savedConfig = this.extractSavedMetricWatchlistConfig(response) || {}
-        this.applyMetricWatchlistSettings(this.mergeMetricWatchlistConfig(payload, savedConfig))
+        const nextConfig = this.mergeMetricWatchlistConfig(payload, savedConfig)
+        if (options.skipApplySettings) {
+          this.syncMetricWatchlistConfigIdentity(nextConfig)
+        } else {
+          this.applyMetricWatchlistSettings(nextConfig)
+        }
         await this.fetchMetricWatchlistConfigs()
         if (!options.silent) this.showWatchlistMessage('Watchlist updated.')
         return true
@@ -1608,6 +1634,7 @@ export default {
     async saveWatchlistConfig(options = {}) {
       const saved = await this.saveMetricWatchlistConfig({
         configTable1: [this.buildCurrentWatchlistTableConfig()],
+        skipApplySettings: true,
         silent: options.silent !== false
       })
       if (saved && !options.skipApply) {
