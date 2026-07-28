@@ -2560,5 +2560,11 @@
       "name": "First Trust Nasdaq Semiconductor ETF (FTXL)",
       "category": "ETF",
       "inception": "2016/09/21"
+  },
+  {
+      "symbol": "PDBC",
+      "name": "Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF (PDBC)",
+      "category": "ETF",
+      "inception": "2014/11/07"
   }
 ]

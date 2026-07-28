@@ -159164,5 +159164,40 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF (PDBC)",
+        "url": "etf_pdbc",
+        "market_symbol": "PDBC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF (PDBC) Trend Score",
+        "url": "PDBC_trend",
+        "market_symbol": "PDBC",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF (PDBC) RelTrend Score",
+        "url": "PDBC_reltrend",
+        "market_symbol": "PDBC",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF (PDBC) Historical Volatility (20-Day)",
+        "url": "PDBC_volatility",
+        "market_symbol": "PDBC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF (PDBC) Historical Volatility (60-Day)",
+        "url": "PDBC_volatility_60d",
+        "market_symbol": "PDBC",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
