@@ -89,45 +89,53 @@
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="signal in paginatedSignals"
-                  :key="signal.name + signal.symbol"
-                  :class="{ 'last-signal-highlight': signal.isLastSignalToday }"
-                >
-                  <td>
-                    <div>
-                      <a @click="viewSignal(signal)" target="_blank" class="primary-link">{{ signal.name }}</a>
-                    </div>
-                    <div v-if="activeSignalsTab === 'st-signals' && signal.analystUrl" class="muted small-text">
-                      Analyst Report URL:
-                      <a :href="signal.analystUrl" target="_blank">{{ signal.analystUrl }}</a>
-                    </div>
-                  </td>
-                  <td>{{ signal.symbol }}</td>
-                  <td>{{ signal.timeframe }}</td>
-                  <td>
-                    <template v-if="getSignalConditions(signal).length">
-                      <div class="signal-first-condition">{{ getSignalConditionText(getSignalConditions(signal)[0]) }}</div>
-                      <ol v-if="getSignalConditions(signal).length > 1" class="signal-preview-list">
-                        <li>
-                          {{ getSignalConditionText(getSignalConditions(signal)[1]) }}<template v-if="getSignalConditions(signal).length > 2">...
-                            <button
-                              class="inline-link-btn"
-                              type="button"
-                              @click="openSignalConditionsModal(signal)"
-                            >
-                              Show All
-                            </button>
-                          </template>
-                        </li>
-                      </ol>
-                    </template>
-                    <template v-else>-</template>
-                  </td>
-                  <td>{{ signal.date || '-' }}</td>
-                  <td>{{ signal.bars }}</td>
-                  <td :class="returnClass(signal.return)">{{ `${signal.return}%` }}</td>
+                <tr v-if="activeSignalsLoading">
+                  <td colspan="7" class="empty-row">Loading...</td>
                 </tr>
+                <tr v-else-if="shouldShowSignalsEmptyRow">
+                  <td colspan="7" class="empty-row">{{ signalsEmptyText }}</td>
+                </tr>
+                <template v-if="!activeSignalsLoading && paginatedSignals.length">
+                  <tr
+                    v-for="signal in paginatedSignals"
+                    :key="signal.name + signal.symbol"
+                    :class="{ 'last-signal-highlight': signal.isLastSignalToday }"
+                  >
+                    <td>
+                      <div>
+                        <a @click="viewSignal(signal)" target="_blank" class="primary-link">{{ signal.name }}</a>
+                      </div>
+                      <div v-if="activeSignalsTab === 'st-signals' && signal.analystUrl" class="muted small-text">
+                        Analyst Report URL:
+                        <a :href="signal.analystUrl" target="_blank">{{ signal.analystUrl }}</a>
+                      </div>
+                    </td>
+                    <td>{{ signal.symbol }}</td>
+                    <td>{{ signal.timeframe }}</td>
+                    <td>
+                      <template v-if="getSignalConditions(signal).length">
+                        <div class="signal-first-condition">{{ getSignalConditionText(getSignalConditions(signal)[0]) }}</div>
+                        <ol v-if="getSignalConditions(signal).length > 1" class="signal-preview-list">
+                          <li>
+                            {{ getSignalConditionText(getSignalConditions(signal)[1]) }}<template v-if="getSignalConditions(signal).length > 2">...
+                              <button
+                                class="inline-link-btn"
+                                type="button"
+                                @click="openSignalConditionsModal(signal)"
+                              >
+                                Show All
+                              </button>
+                            </template>
+                          </li>
+                        </ol>
+                      </template>
+                      <template v-else>-</template>
+                    </td>
+                    <td>{{ signal.date || '-' }}</td>
+                    <td>{{ signal.bars }}</td>
+                    <td :class="returnClass(signal.return)">{{ `${signal.return}%` }}</td>
+                  </tr>
+                </template>
               </tbody>
             </table>
             <div class="pagination-row" v-if="shouldShowPagination(filteredSignals.length)">
@@ -294,10 +302,10 @@
                 <tr v-if="watchlistLoading">
                   <td :colspan="visibleColumns.length + 1" class="empty-row">Loading...</td>
                 </tr>
-                <tr v-else-if="!sortedWatchListData.length">
+                <tr v-else-if="shouldShowWatchlistEmptyRow">
                   <td :colspan="visibleColumns.length + 1" class="empty-row">{{ watchlistEmptyText }}</td>
                 </tr>
-                <template v-else>
+                <template v-if="!watchlistLoading && sortedWatchListData.length">
                   <tr v-for="row in sortedWatchListData" :key="`${row.symbol}-${row.asset_type}-${row.data_date}`">
                     <td>
                       <input
@@ -836,6 +844,10 @@ export default {
       activeView: 'all',
       activeHubTab: 'signals',
       activeSignalsTab: 'my-signals',
+      signalsLoading: {
+        'my-signals': true,
+        'st-signals': true
+      },
       activeSignalConditions: null,
       hubSearch: '',
       sentimentIndicatorSearch: '',
@@ -1100,6 +1112,9 @@ export default {
     activeSignalsData() {
       return this.activeSignalsTab === 'my-signals' ? this.mySignalsData : this.stSignalsData
     },
+    activeSignalsLoading() {
+      return !!(this.signalsLoading && this.signalsLoading[this.activeSignalsTab])
+    },
     activeSignalsPage() {
       return this.signalsPagination[this.activeSignalsTab] || 1
     },
@@ -1109,6 +1124,14 @@ export default {
     },
     paginatedSignals() {
       return this.paginateRows(this.filteredSignals, this.activeSignalsPage)
+    },
+    shouldShowSignalsEmptyRow() {
+      return !this.activeSignalsLoading && !this.paginatedSignals.length
+    },
+    signalsEmptyText() {
+      return String(this.hubSearch || '').trim()
+        ? 'No matching signals found.'
+        : 'No Data'
     },
     hasLastSignalHighlightedRows() {
       return this.filteredSignals.some(row => row.isLastSignalToday)
@@ -1152,13 +1175,16 @@ export default {
     sortedWatchListData() {
       return this.sortRows(this.watchListData, 'watchlist')
     },
+    shouldShowWatchlistEmptyRow() {
+      return !this.watchlistLoading && !this.sortedWatchListData.length
+    },
     watchlistTotalCount() {
       return this.watchlistTotal || this.watchListData.length
     },
     watchlistEmptyText() {
       return String(this.watchlistSearch || '').trim()
         ? 'No matching symbols found.'
-        : 'No data'
+        : 'No Data'
     },
     visibleMarketColumns() {
       return this.marketColumns.filter(column => column.visible)
@@ -1469,6 +1495,13 @@ export default {
         )
         this.selectedWatchTickers = []
         this.watchlistSelectAll = false
+      } catch (error) {
+        console.error(error)
+        this.watchlistPage = page
+        this.watchlistTotal = 0
+        this.watchListData = []
+        this.selectedWatchTickers = []
+        this.watchlistSelectAll = false
       } finally {
         this.watchlistLoading = false
       }
@@ -1521,6 +1554,13 @@ export default {
         this.watchlistTotal = search ? rows.length : total
         this.watchListData = search ? rows.slice((page - 1) * this.metricPageSize, page * this.metricPageSize) : rows
         this.watchlistSymbols = symbols.length ? symbols : this.extractWatchlistSymbols(rows)
+        this.selectedWatchTickers = []
+        this.watchlistSelectAll = false
+      } catch (error) {
+        console.error(error)
+        this.watchlistPage = page
+        this.watchlistTotal = 0
+        this.watchListData = []
         this.selectedWatchTickers = []
         this.watchlistSelectAll = false
       } finally {
@@ -2100,55 +2140,67 @@ export default {
         .map(item => item.row)
     },
     async fetchMySignalsData() {
-      await this.ensureLastSignalDate()
-      let {data, status} = await dashboardApi.getMySignals()
-      const parseJsonOrString = (value) => {
-          if (typeof value === 'string') {
-              try {
-                  return JSON.parse(value);
-              } catch (error) {
-                  return [{
-                      commentDes: value,
-                      rocCond: {
-                        newCondition: 3,
-                        conditionPeriod: 5
-                      }
-                  }];
-              }
-          }
-          return value;
-			};
-      const parseSignalInfo = value => {
-        if (typeof value !== 'string') return value || {}
-        const normalizedValue = value.replace(/^"+|"+$/g, '').replace(/'/g, '"')
-        return isJson(normalizedValue) ? JSON.parse(normalizedValue) : {}
-      }
+      this.$set(this.signalsLoading, 'my-signals', true)
+      try {
+        await this.ensureLastSignalDate()
+        let {data, status} = await dashboardApi.getMySignals()
+        const parseJsonOrString = (value) => {
+            if (typeof value === 'string') {
+                try {
+                    return JSON.parse(value);
+                } catch (error) {
+                    return [{
+                        commentDes: value,
+                        rocCond: {
+                          newCondition: 3,
+                          conditionPeriod: 5
+                        }
+                    }];
+                }
+            }
+            return value;
+        };
+        const parseSignalInfo = value => {
+          if (typeof value !== 'string') return value || {}
+          const normalizedValue = value.replace(/^"+|"+$/g, '').replace(/'/g, '"')
+          return isJson(normalizedValue) ? JSON.parse(normalizedValue) : {}
+        }
 
-      if(status === 200 && Array.isArray(data)) {
-        data = data.map(item => {
-          const signalInfo = parseSignalInfo(item.signal_info)
-          return {
-            ...item,
-            signals: isJson(item.signals) ? JSON.parse(item.signals) : item.signals,
-            cond: isJson(item.cond) ? JSON.parse(item.cond) : item.cond,
-            date: this.normalizeSignalDate(item.lastdate),
-            last_signal_date: this.normalizeSignalDate(item.lastdate),
-            isLastSignalToday: this.isLastSignalToday(item.lastdate),
-            signal: parseJsonOrString(item.description),
-            signal_info: signalInfo,
-            return: this.displayData(item.current_return),
-            bars: item.bars_since_signal,
-            analystUrl: signalInfo.report_url || ''
-          }
-        })
-        data = this.prioritizeLastSignalRows(data)
-      }
+        if(status === 200 && Array.isArray(data)) {
+          data = data.map(item => {
+            const signalInfo = parseSignalInfo(item.signal_info)
+            return {
+              ...item,
+              signals: isJson(item.signals) ? JSON.parse(item.signals) : item.signals,
+              cond: isJson(item.cond) ? JSON.parse(item.cond) : item.cond,
+              date: this.normalizeSignalDate(item.lastdate),
+              last_signal_date: this.normalizeSignalDate(item.lastdate),
+              isLastSignalToday: this.isLastSignalToday(item.lastdate),
+              signal: parseJsonOrString(item.description),
+              signal_info: signalInfo,
+              return: this.displayData(item.current_return),
+              bars: item.bars_since_signal,
+              analystUrl: signalInfo.report_url || ''
+            }
+          })
+          data = this.prioritizeLastSignalRows(data)
+        } else {
+          data = []
+        }
 
-      this.applyListResponse(data, 'mySignalsData')
+        this.applyListResponse(data, 'mySignalsData')
+      } catch (error) {
+        console.error(error)
+        this.mySignalsData = []
+      } finally {
+        this.$set(this.signalsLoading, 'my-signals', false)
+      }
     },
     async fetchSentimentraderSignalsData() {
-      await this.ensureLastSignalDate()
-      let {data, status} = await dashboardApi.getSentimentraderSignals()
+      this.$set(this.signalsLoading, 'st-signals', true)
+      try {
+        await this.ensureLastSignalDate()
+        let {data, status} = await dashboardApi.getSentimentraderSignals()
         const parseJsonOrString = (value) => {
             if (typeof value === 'string') {
                 try {
@@ -2186,9 +2238,17 @@ export default {
             return item
           })
           data = this.prioritizeLastSignalRows(data)
+        } else {
+          data = []
         }
         this.applyListResponse(data, 'stSignalsData')
-      },
+      } catch (error) {
+        console.error(error)
+        this.stSignalsData = []
+      } finally {
+        this.$set(this.signalsLoading, 'st-signals', false)
+      }
+    },
     async fetchMyIndicatorsData(params = {}) {
       const page = Number(params.page || this.myIndicatorsPage || 1)
       let data = await dashboardApi.getMyIndicators({
