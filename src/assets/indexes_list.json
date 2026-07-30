@@ -2566,5 +2566,29 @@
       "name": "Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF (PDBC)",
       "category": "ETF",
       "inception": "2014/11/07"
+  },
+  {
+    "symbol": "ITA",
+    "name": "iShares U.S. Aerospace & Defense ETF (ITA)",
+    "category": "ETF",
+    "inception": "2006/05/05"
+  },
+  {
+    "symbol": "PICK",
+    "name": "iShares MSCI Global Metals & Mining Producers ETF (PICK)",
+    "category": "ETF",
+    "inception": "2012/02/02"
+  },
+  {
+    "symbol": "SIL",
+    "name": "Global X Silver Miners ETF (SIL)",
+    "category": "ETF",
+    "inception": "2010/04/20"
+  },
+  {
+    "symbol": "VUG",
+    "name": "Vanguard Growth Index Fund ETF Shares (VUG)",
+    "category": "ETF",
+    "inception": "2004/01/30"
   }
 ]

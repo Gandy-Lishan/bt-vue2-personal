@@ -159199,5 +159199,180 @@
         "market_symbol": "PDBC",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Information Technology Index Fund ETF Shares",
+        "url": "etf_vgt",
+        "market_symbol": "VGT",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Information Technology Index Fund ETF Shares Trend Score",
+        "url": "VGT_trend",
+        "market_symbol": "VGT",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Information Technology Index Fund ETF Shares RelTrend Score",
+        "url": "VGT_reltrend",
+        "market_symbol": "VGT",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Information Technology Index Fund ETF Shares Historical Volatility (20-Day)",
+        "url": "VGT_volatility",
+        "market_symbol": "VGT",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Information Technology Index Fund ETF Shares Historical Volatility (60-Day)",
+        "url": "VGT_volatility_60d",
+        "market_symbol": "VGT",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares U.S. Aerospace & Defense ETF",
+        "url": "etf_ita",
+        "market_symbol": "ITA",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares U.S. Aerospace & Defense ETF Trend Score",
+        "url": "ITA_trend",
+        "market_symbol": "ITA",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares U.S. Aerospace & Defense ETF RelTrend Score",
+        "url": "ITA_reltrend",
+        "market_symbol": "ITA",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares U.S. Aerospace & Defense ETF Historical Volatility (20-Day)",
+        "url": "ITA_volatility",
+        "market_symbol": "ITA",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares U.S. Aerospace & Defense ETF Historical Volatility (60-Day)",
+        "url": "ITA_volatility_60d",
+        "market_symbol": "ITA",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares MSCI Global Metals & Mining Producers ETF",
+        "url": "etf_pick",
+        "market_symbol": "PICK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares MSCI Global Metals & Mining Producers ETF Trend Score",
+        "url": "PICK_trend",
+        "market_symbol": "PICK",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares MSCI Global Metals & Mining Producers ETF RelTrend Score",
+        "url": "PICK_reltrend",
+        "market_symbol": "PICK",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares MSCI Global Metals & Mining Producers ETF Historical Volatility (20-Day)",
+        "url": "PICK_volatility",
+        "market_symbol": "PICK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "iShares MSCI Global Metals & Mining Producers ETF Historical Volatility (60-Day)",
+        "url": "PICK_volatility_60d",
+        "market_symbol": "PICK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Silver Miners ETF",
+        "url": "etf_sil",
+        "market_symbol": "SIL",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Silver Miners ETF Trend Score",
+        "url": "SIL_trend",
+        "market_symbol": "SIL",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Silver Miners ETF RelTrend Score",
+        "url": "SIL_reltrend",
+        "market_symbol": "SIL",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Silver Miners ETF Historical Volatility (20-Day)",
+        "url": "SIL_volatility",
+        "market_symbol": "SIL",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Global X Silver Miners ETF Historical Volatility (60-Day)",
+        "url": "SIL_volatility_60d",
+        "market_symbol": "SIL",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Growth Index Fund ETF Shares",
+        "url": "etf_vug",
+        "market_symbol": "VUG",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Growth Index Fund ETF Shares Trend Score",
+        "url": "VUG_trend",
+        "market_symbol": "VUG",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Growth Index Fund ETF Shares RelTrend Score",
+        "url": "VUG_reltrend",
+        "market_symbol": "VUG",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Growth Index Fund ETF Shares Historical Volatility (20-Day)",
+        "url": "VUG_volatility",
+        "market_symbol": "VUG",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vanguard Growth Index Fund ETF Shares Historical Volatility (60-Day)",
+        "url": "VUG_volatility_60d",
+        "market_symbol": "VUG",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
