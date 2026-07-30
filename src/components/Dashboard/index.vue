@@ -1,6 +1,28 @@
 <template>
  <div class="dashboard">
-    <div class="container">
+    <div v-if="isMyDashboardPanel" class="dashboard-panel dashboard-panel-my">
+      <div class="dashboard-switch-banner">
+        <div class="dashboard-switch-copy">
+          <strong>You are viewing My Dashboard.</strong>
+          <span>Return to the classic Dashboard panel when needed.</span>
+        </div>
+        <button class="dashboard-switch-btn" type="button" @click="switchToClassicDashboard">
+          Back to Classic Dashboard
+        </button>
+      </div>
+      <NewDashboard />
+    </div>
+
+    <div v-else class="container">
+      <div class="dashboard-switch-banner">
+        <div class="dashboard-switch-copy">
+          <strong>Want a quick view of your saved research?</strong>
+          <span>Switch to My Dashboard to review your created signals, custom indicators, favorite indicators, and watchlists.</span>
+        </div>
+        <button class="dashboard-switch-btn" type="button" @click="switchToMyDashboard">
+          Switch to My Dashboard
+        </button>
+      </div>
       <!-- Flashed Messages -->
       <!-- <div class="row">
         <FlashedMessages />
@@ -39,6 +61,7 @@ import { isJson, trimTrailingZeros } from "@/utils";
 import AboutUs from "@/components/Indicators/Table/AboutUs.vue";
 import SPXMostRelevantIndicators from "./SPXMostRelevantIndicators.vue"
 import SP500SectorTrendScore from "./SP500SectorTrendScore.vue"
+import NewDashboard from "@/components/NewDashboard/index.vue";
 
 export default {
  name: 'Dashboard',
@@ -50,32 +73,65 @@ export default {
   Overview,
   AboutUs,
   SPXMostRelevantIndicators,
-  SP500SectorTrendScore
+  SP500SectorTrendScore,
+  NewDashboard
  },
  data() {
   return {
+    dashboardPanel: this.$route && this.$route.query && this.$route.query.panel === 'my' ? 'my' : 'classic',
+    classicDashboardLoaded: false,
     dashBoardData: {},
     mostRelevantIndicatorsData: []
   }
  },
  computed: {
+  isMyDashboardPanel() {
+    return this.dashboardPanel === 'my'
+  },
   dashBoardChartData() {
     return this.dashBoardData.data
   },
  },
+ watch: {
+  '$route.query.panel'(panel) {
+    const nextPanel = panel === 'my' ? 'my' : 'classic'
+    if (nextPanel === this.dashboardPanel) return
+    this.dashboardPanel = nextPanel
+    if (nextPanel === 'classic') this.loadClassicDashboard()
+  }
+ },
  async mounted() {
-   // Equivalent to $(document).ready
-   await this.getDashboardData()
-   let {data} = await getSPXMostRelevantIndicators()
-   data = data.map(item => {
-    item.latest_value = item.latest_value.toFixed(2)
-    item.corr_kendall = item.corr_kendall.toFixed(2)
-    return item
-   })
-   this.mostRelevantIndicatorsData = data
-   this.initializeChartPopups();
+   if (!this.isMyDashboardPanel) await this.loadClassicDashboard()
  },
  methods: {
+   async loadClassicDashboard() {
+     if (!this.classicDashboardLoaded) {
+       await this.getDashboardData()
+       let {data} = await getSPXMostRelevantIndicators()
+       data = data.map(item => {
+        item.latest_value = item.latest_value.toFixed(2)
+        item.corr_kendall = item.corr_kendall.toFixed(2)
+        return item
+       })
+       this.mostRelevantIndicatorsData = data
+       this.classicDashboardLoaded = true
+     }
+     this.$nextTick(() => {
+       this.initializeChartPopups()
+     })
+   },
+   switchToMyDashboard() {
+     this.dashboardPanel = 'my'
+     const query = { ...this.$route.query, panel: 'my' }
+     this.$router.replace({ path: '/dashboard', query }).catch(() => {})
+   },
+   switchToClassicDashboard() {
+     this.dashboardPanel = 'classic'
+     const query = { ...this.$route.query }
+     delete query.panel
+     this.$router.replace({ path: '/dashboard', query }).catch(() => {})
+     this.loadClassicDashboard()
+   },
    initializeChartPopups() {
      // Equivalent to chart_thumb_popup_non_dt functionality
      this.bindChartPopups("#phase-table a");
@@ -230,4 +286,70 @@ export default {
 
 <style lang="less" scoped>
 @import "./index.less";
+
+.dashboard-panel {
+  min-height: 100%;
+}
+
+.dashboard-switch-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  max-width: 1200px;
+  margin: 18px auto 16px;
+  padding: 12px 16px;
+  border: 1px solid #d7e2ec;
+  border-radius: 4px;
+  background: #f7fbff;
+  color: #34495e;
+}
+
+.container > .dashboard-switch-banner {
+  margin-top: 18px;
+}
+
+.dashboard-switch-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dashboard-switch-copy strong {
+  color: #2f506f;
+  font-size: 15px;
+}
+
+.dashboard-switch-copy span {
+  color: #5d6d7e;
+}
+
+.dashboard-switch-btn {
+  flex: 0 0 auto;
+  padding: 7px 14px;
+  border: 1px solid #5f7f9f;
+  border-radius: 3px;
+  background: #5f7f9f;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dashboard-switch-btn:hover {
+  background: #486985;
+}
+
+@media (max-width: 700px) {
+  .dashboard-switch-banner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dashboard-switch-btn {
+    width: 100%;
+  }
+}
 </style>
