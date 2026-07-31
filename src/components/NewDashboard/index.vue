@@ -1173,7 +1173,7 @@ export default {
       return this.customColumnOptions.filter(column => !currentIds.has(column.value))
     },
     sortedWatchListData() {
-      return this.sortRows(this.watchListData, 'watchlist')
+      return Array.isArray(this.watchListData) ? this.watchListData : []
     },
     shouldShowWatchlistEmptyRow() {
       return !this.watchlistLoading && !this.sortedWatchListData.length
