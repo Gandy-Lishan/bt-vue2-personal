@@ -159054,7 +159054,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Tower Semiconductor Ltd. (TSEM)",
+        "chart_name": "TSEM Optix",
         "url": "etf_tsem",
         "market_symbol": "tsem",
         "type": "other",
@@ -159089,7 +159089,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "First Trust Nasdaq Semiconductor ETF (FTXL)",
+        "chart_name": "FTXL Optix",
         "url": "etf_ftxl",
         "market_symbol": "FTXL",
         "type": "other",
@@ -159124,7 +159124,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "State Street SPDR S&P Semiconductor ETF (XSD)",
+        "chart_name": "XSD Optix",
         "url": "etf_xsd",
         "market_symbol": "XSD",
         "type": "other",
@@ -159166,7 +159166,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Invesco Optimum Yield Diversified Commodity Strategy No K-1 ETF (PDBC)",
+        "chart_name": "PDBC Optix",
         "url": "etf_pdbc",
         "market_symbol": "PDBC",
         "type": "other",
@@ -159201,7 +159201,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Vanguard Information Technology Index Fund ETF Shares",
+        "chart_name": "VGT Optix",
         "url": "etf_vgt",
         "market_symbol": "VGT",
         "type": "other",
@@ -159236,7 +159236,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "iShares U.S. Aerospace & Defense ETF",
+        "chart_name": "ITA Optix",
         "url": "etf_ita",
         "market_symbol": "ITA",
         "type": "other",
@@ -159271,7 +159271,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "iShares MSCI Global Metals & Mining Producers ETF",
+        "chart_name": "PICK Optix",
         "url": "etf_pick",
         "market_symbol": "PICK",
         "type": "other",
@@ -159306,7 +159306,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Global X Silver Miners ETF",
+        "chart_name": "SIL Optix",
         "url": "etf_sil",
         "market_symbol": "SIL",
         "type": "other",
@@ -159341,7 +159341,7 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Vanguard Growth Index Fund ETF Shares",
+        "chart_name": "VUG Optix",
         "url": "etf_vug",
         "market_symbol": "VUG",
         "type": "other",
