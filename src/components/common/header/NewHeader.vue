@@ -226,7 +226,19 @@ export default {
         {
           label: 'Strategies',
           keyPath: '3',
-          path: '/strategy'
+          path: '/strategy',
+          subMenu: [
+            {
+              label: 'Strategies',
+              keyPath: '3-3',
+              path: '/strategy'
+            },
+            {
+              label: 'Swing Trading',
+              keyPath: '3-4',
+              path: '/swing_trading'
+            }
+          ]
         },
         {
           label: 'BacktestEdge',
@@ -489,6 +501,7 @@ export default {
       activeIndex: '1',
       PAGE_PERMISSION_MAP: {
         'Strategies': ['everything', 'premium', 'research', 'corelite', 'datalite'],
+        'Swing Trading': ['everything', 'premium', 'research', 'corelite', 'datalite'],
         'My Indicator': ['everything', 'premium', 'research', 'datalite'],
         'Seasonality': ['everything', 'premium', 'research', 'datalite'],
         'Correlation': ['everything', 'premium', 'research', 'datalite'],

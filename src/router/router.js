@@ -253,8 +253,31 @@ const routes = [
 				name: 'Descriptions',
 				component: resolve =>
 					require(['@/components/Strategy/Descriptions.vue'], resolve)
+			},
+			{
+				path: 'swing_trading',
+				name: 'SwingTrading',
+				component: resolve =>
+					require(['@/components/SwingTrading/index.vue'], resolve)
+			},
+			{
+				path: 'swing_trading/detail/:strategyId',
+				name: 'SwingTradingDetail',
+				component: resolve =>
+					require(['@/components/SwingTrading/Detail.vue'], resolve)
 			}
 		]
+	},
+	{
+		path: '/swing_trading',
+		redirect: '/strategy/swing_trading'
+	},
+	{
+		path: '/swing_trading/detail/:strategyId',
+		redirect: to => ({
+			path: `/strategy/swing_trading/detail/${to.params.strategyId}`,
+			query: to.query
+		})
 	},
 	{
 		path: '/indicators',

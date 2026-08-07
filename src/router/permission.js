@@ -213,7 +213,7 @@ export function setRouterPermission(router) {
 				}
 				// 只能访问部分页面(report,strategies, scanner): corelite
 				else if(access_level.some(str => str.includes('corelite'))) {
-					if((to.path.includes('/MR')) || to.path.includes('/strategy') || to.path.includes('/scannerai')) next()
+					if((to.path.includes('/MR')) || to.path.includes('/strategy') || to.path.includes('/swing_trading') || to.path.includes('/scannerai')) next()
 					else next('/MR') 
 				}
 				// else if(access_level.some(str => str.includes('light-data-yearly'))) {
