@@ -430,7 +430,7 @@ export default {
       if(!validForm) {
         this.popUpMsgBox('Kindly ensure that the form fields are filled correctly')
         return
-      }                                     
+      }
       const saveData = {
         ...this.data,
         stock_comparison: JSON.stringify([this.data.symbol])
@@ -470,7 +470,7 @@ export default {
       } catch (error) {
         this.btnLoading = false
       }
-      
+
      if(!saveRes) { this.btnLoading = false; return}
      const code = saveRes.data.code
      const name = saveRes.data?.data?.name
@@ -545,8 +545,9 @@ export default {
       if(!dropdownList || dropdownList.length == 0) {
         dropdownList = this.symbolList
       }
-      var results = dropdownList.map(item => ({
+        var results = dropdownList.map(item => ({
           ...item,
+          value: item.value || item.url || item.label,
           priority: createStateFilter(queryString)(item),
         }))
         .filter(item => item.priority > 0)
@@ -747,7 +748,7 @@ export default {
         const diffTime = endDate - startDate;
 
         // 将毫秒差转换为月数，假设一个月有30天
-        const diffMonths = diffTime / (1000 * 3600 * 24 * 30); 
+        const diffMonths = diffTime / (1000 * 3600 * 24 * 30);
 
         // 如果时间差小于3个月，给出提示并清空日期选择
         if (diffMonths < 3) {
