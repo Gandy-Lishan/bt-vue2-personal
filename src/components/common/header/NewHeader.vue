@@ -227,18 +227,6 @@ export default {
           label: 'Strategies',
           keyPath: '3',
           path: '/strategy',
-          subMenu: [
-            {
-              label: 'Strategies',
-              keyPath: '3-3',
-              path: '/strategy'
-            },
-            {
-              label: 'Swing Trading',
-              keyPath: '3-4',
-              path: '/swing_trading'
-            }
-          ]
         },
         {
           label: 'BacktestEdge',
