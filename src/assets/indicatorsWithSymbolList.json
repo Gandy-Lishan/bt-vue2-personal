@@ -159374,5 +159374,12 @@
         "market_symbol": "VUG",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "SPCX Optix",
+        "url": "SPCX",
+        "market_symbol": "SPCX",
+        "type": "optix",
+        "updated": "Daily"
     }
 ]
