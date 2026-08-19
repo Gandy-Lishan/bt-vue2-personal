@@ -159381,5 +159381,19 @@
         "market_symbol": "SPCX",
         "type": "optix",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "SPY New High-New Low Line",
+        "url": "breadth_sector_spy_nhnldiff",
+        "market_symbol": "SPY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPY Cumulative New High-New Low Line",
+        "url": "breadth_sector_spy_nhnlcum",
+        "market_symbol": "SPY",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
