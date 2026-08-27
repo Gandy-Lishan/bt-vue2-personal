@@ -1,6 +1,6 @@
 <template>
  <div class="indicators-container">
-   <h3 style="font-size: 23px; font-weight: 300; margin: 10px 0;">Related Charts</h3>
+   <h3 style="font-size: 23px; font-weight: 300; margin: 10px 0;">Constituent Conditions</h3>
    <div class="indicator-left" ref="IndicatorTable">
      <template v-for="item in tableInfoList">
        <Table
