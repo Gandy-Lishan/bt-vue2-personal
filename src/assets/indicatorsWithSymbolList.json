@@ -159395,5 +159395,278 @@
         "market_symbol": "SPY",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "SPY 4 Week Outperform %",
+        "url": "breadth_sector_spy_op4",
+        "market_symbol": "SPY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPY 12 Week Outperform %",
+        "url": "breadth_sector_spy_op12",
+        "market_symbol": "SPY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SPY 52 Week Outperform %",
+        "url": "breadth_sector_spy_op52",
+        "market_symbol": "SPY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX 4 Week Outperform %",
+        "url": "breadth_sector_soxx_op4",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX 12 Week Outperform %",
+        "url": "breadth_sector_soxx_op12",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SOXX 52 Week Outperform %",
+        "url": "breadth_sector_soxx_op52",
+        "market_symbol": "SOXX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLB 4 Week Outperform %",
+        "url": "breadth_sector_xlb_op4",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLB 12 Week Outperform %",
+        "url": "breadth_sector_xlb_op12",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLB 52 Week Outperform %",
+        "url": "breadth_sector_xlb_op52",
+        "market_symbol": "XLB",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC 4 Week Outperform %",
+        "url": "breadth_sector_xlc_op4",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC 12 Week Outperform %",
+        "url": "breadth_sector_xlc_op12",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLC 52 Week Outperform %",
+        "url": "breadth_sector_xlc_op52",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLE 4 Week Outperform %",
+        "url": "breadth_sector_xle_op4",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLE 12 Week Outperform %",
+        "url": "breadth_sector_xle_op12",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLE 52 Week Outperform %",
+        "url": "breadth_sector_xle_op52",
+        "market_symbol": "XLE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLF 4 Week Outperform %",
+        "url": "breadth_sector_xlf_op4",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLF 12 Week Outperform %",
+        "url": "breadth_sector_xlf_op12",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLF 52 Week Outperform %",
+        "url": "breadth_sector_xlf_op52",
+        "market_symbol": "XLF",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLI 4 Week Outperform %",
+        "url": "breadth_sector_xli_op4",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLI 12 Week Outperform %",
+        "url": "breadth_sector_xli_op12",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLI 52 Week Outperform %",
+        "url": "breadth_sector_xli_op52",
+        "market_symbol": "XLI",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLK 4 Week Outperform %",
+        "url": "breadth_sector_xlk_op4",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLK 12 Week Outperform %",
+        "url": "breadth_sector_xlk_op12",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLK 52 Week Outperform %",
+        "url": "breadth_sector_xlk_op52",
+        "market_symbol": "XLK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLP 4 Week Outperform %",
+        "url": "breadth_sector_xlp_op4",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLP 12 Week Outperform %",
+        "url": "breadth_sector_xlp_op12",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLP 52 Week Outperform %",
+        "url": "breadth_sector_xlp_op52",
+        "market_symbol": "XLP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLU 4 Week Outperform %",
+        "url": "breadth_sector_xlu_op4",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLU 12 Week Outperform %",
+        "url": "breadth_sector_xlu_op12",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLU 52 Week Outperform %",
+        "url": "breadth_sector_xlu_op52",
+        "market_symbol": "XLU",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLV 4 Week Outperform %",
+        "url": "breadth_sector_xlv_op4",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLV 12 Week Outperform %",
+        "url": "breadth_sector_xlv_op12",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLV 52 Week Outperform %",
+        "url": "breadth_sector_xlv_op52",
+        "market_symbol": "XLV",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLY 4 Week Outperform %",
+        "url": "breadth_sector_xly_op4",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLY 12 Week Outperform %",
+        "url": "breadth_sector_xly_op12",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLY 52 Week Outperform %",
+        "url": "breadth_sector_xly_op52",
+        "market_symbol": "XLY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE 4 Week Outperform %",
+        "url": "breadth_sector_s5rlst_op4",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE 12 Week Outperform %",
+        "url": "breadth_sector_s5rlst_op12",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XLRE 52 Week Outperform %",
+        "url": "breadth_sector_s5rlst_op52",
+        "market_symbol": "XLRE",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
