@@ -22,6 +22,9 @@
     <el-tab-pane label="Other Charts & Data" name="third">
 			<Others></Others>
 		</el-tab-pane>
+    <el-tab-pane label="The growth of one U.S. dollar" name="fourth">
+      <GrowthOfOneDollar></GrowthOfOneDollar>
+    </el-tab-pane>
   </el-tabs>
   </div>
 </template>
@@ -30,6 +33,7 @@
 import DayOfMonth from "./components/DayOfMonth/index.vue"
 import SpecificDay from "./components/SpecificDay/index.vue"
 import Others from "./components/Others/index.vue"
+import GrowthOfOneDollar from "./components/GrowthOfOneDollar/index.vue"
 export default {
   name: 'Seasonality',
   data() {
@@ -40,9 +44,17 @@ export default {
   components: {
     DayOfMonth,
 		SpecificDay,
-		Others
+		Others,
+    GrowthOfOneDollar
   },
   methods: {
+    handleClick() {
+      return true
+    },
+    jumpToQA() {
+      const path = 'https://btv2.sentimentrader.com/doc/QA/3'
+      window.open(path, '_blank')
+    },
   }
 }
 </script>
@@ -68,7 +80,7 @@ export default {
   width: 100%;
 }
 /deep/ .el-tabs__item.is-top{
-  width: 33.33%;
+  width: 25%;
   text-align: center;
 }
 }
