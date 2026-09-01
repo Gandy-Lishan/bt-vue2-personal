@@ -3047,7 +3047,7 @@ export default {
       const numberValue = this.getNumberValue(value)
       if (numberValue === null) return null
 
-      return String(value).indexOf('%') !== -1 || Math.abs(numberValue) > 1 ? numberValue / 100 : numberValue
+      return String(value).indexOf('%') !== -1 || Math.abs(numberValue) > 1 ? numberValue / 100 : numberValue / 100
     },
     calculateWholeShares(cash, allocationRate, currentPrice) {
       if (allocationRate === null || !currentPrice || currentPrice <= 0) return 0
