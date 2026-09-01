@@ -4415,7 +4415,7 @@ export default {
           key: 'hv20',
           label: 'Historical Volatility (20-Day)',
           value: row.hv20,
-          href: `/indicators?indicator=${indicatorSymbol}_volatility_20d`,
+          // href: `/indicators?indicator=${indicatorSymbol}_volatility_20d`,
         })
       }
       if(row && row.hv60 && row.hv60 !== '--') {
@@ -4432,19 +4432,19 @@ export default {
           key: 'optix',
           label: 'Optix',
           value: row && row.optix ? row.optix : '--',
-          href: `/indicators?indicator=${indicatorSymbol}_optix`,
+          // href: `/indicators?indicator=${indicatorSymbol}_optix`,
         },
         {
           key: 'trend-score',
           label: 'Trend score',
           value: row && row.trendScore ? row.trendScore : '--',
-          href: `/trend_score/trend?indicator=${indicatorSymbol}_trend`,
+          // href: `/trend_score/trend?indicator=${indicatorSymbol}_trend`,
         },
         {
           key: 'relative-trend-score',
           label: 'Relative Trend Score',
           value: row && row.relativeTrendScore ? row.relativeTrendScore : '--',
-          href: `/trend_score/trend?indicator=${indicatorSymbol}_reltrend`,
+          // href: `/trend_score/trend?indicator=${indicatorSymbol}_reltrend`,
         },
         ...HV
       ]
