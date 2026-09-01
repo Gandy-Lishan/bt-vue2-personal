@@ -254,18 +254,6 @@ const routes = [
 				component: resolve =>
 					require(['@/components/Strategy/Descriptions.vue'], resolve)
 			},
-			{
-				path: 'swing_trading',
-				name: 'SwingTrading',
-				component: resolve =>
-					require(['@/components/SwingTrading/index.vue'], resolve)
-			},
-			{
-				path: 'swing_trading/detail/:strategyId',
-				name: 'SwingTradingDetail',
-				component: resolve =>
-					require(['@/components/SwingTrading/Detail.vue'], resolve)
-			}
 		]
 	},
 	{
@@ -278,6 +266,11 @@ const routes = [
 			path: `/strategy/swing_trading/detail/${to.params.strategyId}`,
 			query: to.query
 		})
+	},
+	{
+		path: '/swing_trading_dashboard',
+		component: resolve =>
+			require(['@/components/SwingTradingDashboard/index.vue'], resolve)
 	},
 	{
 		path: '/indicators',

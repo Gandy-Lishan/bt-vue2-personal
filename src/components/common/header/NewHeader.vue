@@ -357,6 +357,11 @@ export default {
           ]
         },
         {
+          label: 'Swing Trading',
+          keyPath: '16',
+          path: '/swing_trading_dashboard'
+        },
+        {
           label: 'AI Trading',
           keyPath: '10',
           path: 'https://autotrader-ui-dev-e20d0e03fac4.herokuapp.com/home/aitrade'

@@ -1840,8 +1840,8 @@ if (queryParams) {
 }
 /* Blog Report END*/
 /**
- * 
- * @returns 
+ *
+ * @returns
  */
 export function getSymbolStrategySigal(symbol) {
 	let url = `/dev/dev/symbolstrategysigal/?symbol_url=${symbol}&trend=1`
@@ -2199,7 +2199,7 @@ export function updateMyScreenFavorite(data) {
 export async function getSmartDumbSentiment() {
 	// 在配置env之前暂时用NODE_ENV判断url
 	let url = `dev/st_data/smart_dump_sentiment`
-  
+
 	try {
 	  const response = await axios.get(url);
 	  return response.data;  // Assuming the API response contains a data field
@@ -2210,35 +2210,35 @@ export async function getSmartDumbSentiment() {
   }
 
   export async function getPairDataDashboard(
-	symbol, 
+	symbol,
 	timeframe,
 	startDate,          // 可选参数
 	endDate,             // 可选参数
 	indicators,   // 可选参数
   ) {
 	  let url = `dev/st_data/pair_data?symbol=${symbol}&freq=${timeframe}`
-	
+
 	// if (startDate) {
 	//   url += `&start=${startDate}`;
 	// }
 	// if (endDate) {
 	//   url += `&end=${endDate}`;
 	// }
-  
+
 	if(indicators) {
 	  for(let i=0; i<indicators.length; i++){
 		url += `&${i==0?'indicator':'indicator_'+(i+1)}=${indicators[i]}`
 	  }
 	}
-  
+
 	try {
 	  const response = await axios.get(url, { auth: author });
 	//   return response.data
 	  if (startDate || endDate) {
 		return response.data.filter(
-		  it => 
-			moment(it.DT).isAfter(moment(startDate)) && moment(it.DT).isBefore(moment(endDate)) 
-		);  
+		  it =>
+			moment(it.DT).isAfter(moment(startDate)) && moment(it.DT).isBefore(moment(endDate))
+		);
 	  }else return response.data
 	  // Assuming the API response contains a data field
 	} catch (error) {
@@ -2250,7 +2250,7 @@ export async function getSmartDumbSentiment() {
 	export async function getDashboardData() {
 		// 在配置env之前暂时用NODE_ENV判断url
 		let path = `/dev/st_data/dashboard`
-		
+
 			return new Promise((resolve, reject) => {
 				axios
 					.get(path, { withCredentials: true, retry: null })
@@ -2373,7 +2373,7 @@ export async function getSmartDumbSentiment() {
 	}
 	export function getSectorTrendRelTrend(url, index) {
 		let path = `/dev/st_data/${url}?index=${index}`
-	
+
 		return new Promise((resolve, reject) => {
 			axios
 				.get(path, { withCredentials: true })
@@ -2633,26 +2633,26 @@ export async function fetchAISuplineData(vm, ticker, latest_date, frequency) {
 	let url = `/dev/ai_engine_app/get_chart_analysis?ticker=${ticker}`;
 	if (latest_date) url += `&latest_date=${latest_date}`;
 	if (frequency) url += `&frequency=${frequency}`;
-  
+
 	try {
 		stopAll = false; //reset state
 	  const getChartAnalysisRes = await axios.get(url);
-  
+
 	  if (getChartAnalysisRes.status === 200) {
 		return getChartAnalysisRes.data.data;
 	  }
-  
+
 	  if (getChartAnalysisRes.status === 202) {
 		vm.$notify.info({
 			title: 'Analysis in Progress',
 			message: 'Our AI is analyzing the chart data to identify key trends and levels. This process can take one to two minutes to complete. Thank you for your patience.',
 			duration: 5000
 		});
-		
+
 		let retries = 0;
 		const maxRetries = 120;
 		let pollingUrl = `/dev/ai_engine_app/analysis_status?chart_key=${getChartAnalysisRes?.data.chart_key}`;
-  
+
 		do {
 		  // ✅ 全局中止检查
 		  if (stopAll) {
@@ -2660,21 +2660,21 @@ export async function fetchAISuplineData(vm, ticker, latest_date, frequency) {
 			stopAll = false; // 重置开关，避免影响下次调用
 			throw new Error("Polling is interrupted by another operation");
 		  }
-  
+
 		  const analysisStatusRes = await axios.get(pollingUrl);
-  
+
 		  if (analysisStatusRes.status === 200) {
 			return analysisStatusRes.data.data;
 		  }
-  
+
 		  if ([404].includes(analysisStatusRes.status)) {
 			return;
 		  }
-  
+
 		  await new Promise(resolve => setTimeout(resolve, 1500));
 		  retries++;
 		} while (retries < maxRetries);
-  
+
 		throw new Error("Polling timeout");
 	  }
 	} catch (err) {
@@ -2723,6 +2723,127 @@ export function sendContactTicketFront(payload) {
 	};
 
 	return axios.post(url, form, { headers });
+}
+
+const SWING_AI_API = '/dev/scanner_trader/swingai'
+const SWING_AI_SUBSCRIPTION_API = `${SWING_AI_API}/subscriptions`
+
+function getSwingAiSubscriptionRequestConfig(config = {}) {
+	return Object.assign({
+		withCredentials: true,
+		retry: null,
+		validateStatus: () => true,
+	}, config)
+}
+
+export function getSwingTradingDashboard() {
+	const url = `${SWING_AI_API}/dashboard`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function getSwingTradingStrategyDetail(strategyId, params = {}) {
+	const url = `${SWING_AI_API}/strategy/${encodeURIComponent(strategyId)}`
+
+	return new Promise((resolve, reject) => {
+		axios
+			.get(url, { params, withCredentials: true })
+			.then(res => {
+				resolve(res)
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
+
+export function getSwingAiSubscription() {
+	return axios.get(
+		SWING_AI_SUBSCRIPTION_API,
+		getSwingAiSubscriptionRequestConfig({
+			headers: {
+				'Cache-Control': 'no-store',
+				Pragma: 'no-cache',
+			},
+		})
+	)
+}
+
+function buildSwingAiSubscriptionStrategiesPayload(strategies, notificationEmail = '') {
+	const fallbackNotificationEmail = String(notificationEmail || '').trim()
+	if (!Array.isArray(strategies)) return strategies
+
+	return strategies.map(strategy => {
+		if (!strategy || typeof strategy !== 'object') return strategy
+		if (strategy.notification_email || strategy.notificationEmail || !fallbackNotificationEmail) return strategy
+		return Object.assign({}, strategy, {
+			notification_email: fallbackNotificationEmail,
+		})
+	})
+}
+
+function postSwingAiSubscription(action, strategies, notificationEmail = '', configHash = '') {
+	const payload = {
+		action,
+		strategies: buildSwingAiSubscriptionStrategiesPayload(strategies, notificationEmail),
+	}
+	if (configHash) payload.config_hash = configHash
+
+	return axios.post(
+		SWING_AI_SUBSCRIPTION_API,
+		payload,
+		getSwingAiSubscriptionRequestConfig({
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+	)
+}
+
+export function previewSwingAiSubscription(strategies, notificationEmail = '') {
+	return postSwingAiSubscription('preview', strategies, notificationEmail)
+}
+
+export function confirmSwingAiSubscription(strategies, notificationEmail = '', configHash = '') {
+	return postSwingAiSubscription('confirm', strategies, notificationEmail, configHash)
+}
+
+export function deleteSwingAiSubscription() {
+	return axios.delete(
+		SWING_AI_SUBSCRIPTION_API,
+		getSwingAiSubscriptionRequestConfig()
+	)
+}
+
+export function normalizeSwingTradingAssetUrl(url) {
+	if (!url) return ''
+
+	const value = String(url)
+	if (/^https?:\/\//.test(value)) {
+		try {
+			const parsed = new URL(value)
+			if (parsed.hostname.includes('sentimentrader.com')) {
+				return `/dev${parsed.pathname}${parsed.search}`
+			}
+		} catch (error) {
+			return value
+		}
+		return value
+	}
+
+	if (value.startsWith('/dev/')) return value
+	if (value.startsWith('/scanner_trader') || value.startsWith('/st_data')) return `/dev${value}`
+	if (value.startsWith('scanner_trader') || value.startsWith('st_data')) return `/dev/${value}`
+	return value
 }
 
 export function getOptionScanner(date) {
