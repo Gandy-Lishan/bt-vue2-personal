@@ -1012,7 +1012,7 @@
 
         <label class="email-setup-confirm-check">
           <input v-model="emailSetupConfirmChecked" type="checkbox">
-          <span>I understand that once I follow this strategy, I must open the website tomorrow and return after each trading day to review the next day's buy/sell recommendations.</span>
+          <span>I understand that once I follow this strategy, I need to check the website tomorrow and log in after each trading day to review the trading actions for the next trading day.</span>
         </label>
 
         <div class="email-setup-confirm-actions">

@@ -2,6 +2,9 @@
   <div class="no-print">
     <header class="main-nav top">
       <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="35px" @click="backHome">
+      <div class="autocomplete-wrapper">
+        <autocomplete />
+      </div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <div class="btn-group" id="notifications-group">
           <a
@@ -117,9 +120,6 @@
         </el-submenu>
         </template>
       </el-menu>
-      <div class="autocomplete-wrapper">
-        <autocomplete />
-      </div>
     </header>
   </div>
 </template>
@@ -226,7 +226,7 @@ export default {
         {
           label: 'Strategies',
           keyPath: '3',
-          path: '/strategy',
+          path: '/strategy'
         },
         {
           label: 'BacktestEdge',
@@ -485,7 +485,7 @@ export default {
                   keyPath: '15-14-8',
                   path: 'https://users.sentimentrader.com/users/sector_overview/macro'
                 },
-                
+
               ]
             }
           ]
@@ -904,6 +904,21 @@ export default {
 //   font-size: 16px;
 // }
 .main-nav.top {
+  position: relative;
+  justify-content: flex-start;
+  gap: 24px;
+  padding: 0 36px;
+
+  > img {
+    flex: 0 0 auto;
+    padding-left: 0;
+  }
+
+  > .el-menu-demo {
+    flex: 0 0 auto;
+    margin-left: 0;
+  }
+
   /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
     border: 1px solid #ccc;
     height: 40px;
@@ -977,10 +992,82 @@ li.el-menu-item.tutorial-svg:hover {
 
 
 .autocomplete-wrapper {
-  margin-left: auto;
+  flex: 0 1 min(760px, 52vw);
+  width: min(760px, 52vw);
+  max-width: 760px;
+  min-width: 0;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  padding-left: 16px;
+  padding-left: 0;
+  z-index: 1;
+}
+.autocomplete-wrapper > div,
+.autocomplete-wrapper /deep/ .autocomplete-container,
+.autocomplete-wrapper /deep/ .aa-Autocomplete {
+  width: 100%;
+}
+.autocomplete-wrapper /deep/ .autocomplete-container {
+  position: relative;
+}
+.autocomplete-wrapper /deep/ .aa-Form {
+  height: 40px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f4f6;
+  box-shadow: none;
+}
+.autocomplete-wrapper /deep/ .aa-Form:focus-within {
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(91, 155, 209, 0.24);
+}
+.autocomplete-wrapper /deep/ .aa-InputWrapper {
+  order: 1;
+}
+.autocomplete-wrapper /deep/ .aa-Input {
+  height: 40px;
+  padding: 0 18px 0 24px;
+  color: #1f2933;
+  font-size: 16px;
+  line-height: 40px;
+}
+.autocomplete-wrapper /deep/ .aa-Input::placeholder {
+  color: #9aa4b2;
+  opacity: 1;
+}
+.autocomplete-wrapper /deep/ .aa-InputWrapperSuffix {
+  order: 2;
+}
+.autocomplete-wrapper /deep/ .aa-InputWrapperPrefix {
+  order: 3;
+  height: 34px;
+  margin: 3px 4px 3px 8px;
+}
+.autocomplete-wrapper /deep/ .aa-SubmitButton {
+  width: 76px;
+  height: 34px;
+  border-radius: 999px;
+  background: #5b9bd1;
+  color: #fff;
+}
+.autocomplete-wrapper /deep/ .aa-SubmitButton:hover {
+  background: #4d8cc0;
+}
+.autocomplete-wrapper /deep/ .aa-SubmitIcon {
+  color: #fff;
+}
+.autocomplete-wrapper /deep/ .autocomplete-panel,
+.autocomplete-wrapper /deep/ .autocomplete-panel.aa-Panel {
+  left: 0;
+  right: 0;
+  width: min(840px, calc(100vw - 72px)) !important;
+  min-width: min(100%, 420px);
+  max-width: calc(100vw - 72px);
+  box-sizing: border-box;
+  margin-top: 8px;
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
 }
 
 // notification
