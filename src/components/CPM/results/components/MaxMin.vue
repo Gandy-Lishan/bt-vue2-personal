@@ -27,14 +27,14 @@
 										<el-table-column label="Max Loss" align="center" class-name="redHeader" width="60px">
 											<template slot-scope="scope">
 												<p class="negative-value">
-													{{ scope.row[l]['Max Loss'] }}
+													{{ displayData(scope.row[l]['Max Loss']) }}
 												</p>
 												</template>
 										</el-table-column>
 										<el-table-column label="Max Gain" align="center" width="60px">
 											<template slot-scope="scope">
 												<p class="tableText">
-													{{ scope.row[l]['Max Gain'] }}
+													{{ displayData(scope.row[l]['Max Gain']) }}
 												</p>
 											</template>
 										</el-table-column>
@@ -103,7 +103,7 @@ export default {
 			const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 			if (numberRegex.test(data)) {
-				return parseFloat(data)
+				return parseFloat(data).toFixed(1)
 			} else if (dateRegex.test(data)) {
 				return data
 			} else if(typeof data == 'string'){

@@ -1792,7 +1792,7 @@ export default {
 			if (arr.length == 0) return NaN
 
 			let return_series = arr.map((x) => (parseFloat(x) > 0 ? 1 : 0))
-			return parseFloat(this.calculate_mean(return_series).toFixed(2))
+			return parseFloat(this.calculate_mean(return_series))
 		},
 		calculate_mean(arr) {
 			arr = arr.filter(function (x) {

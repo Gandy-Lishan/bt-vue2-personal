@@ -582,6 +582,7 @@ export default {
 			const isNullValue = (v) => (v !== null && v !== undefined && v !== '' && !Number.isNaN(v)) 
       const res = period_dict.map((val, i) => {
 			  const Positive = isNaN(positive_list[i]) ? '' : Math.round(positive_list[i] * 100)
+        const median = isNaN(median_list[i]) ? '' : median_list[i].toFixed(1)
         let AvgMaxLoss = isNullValue(new_max_loss_list[i]) ? new_max_loss_list[i].toFixed(1) : ''
         let AvgMaxGain = isNullValue(new_max_gain_list[i]) ? new_max_gain_list[i].toFixed(1) : ''
         // 如果为字符串类型，先转换为数字；注意要排除 NaN 的情况
@@ -594,7 +595,7 @@ export default {
         return {
           Period: val['timeframe'],
 					'Mean(%)': temp_mean_list[i],
-          'Median(%)': median_list[i],
+          'Median(%)': median,
           '% Positive': Positive,
           'Avg Max Loss': AvgMaxLoss,
           'Avg Max Gain': AvgMaxGain,
@@ -684,7 +685,7 @@ export default {
       if (arr.length == 0) return NaN
 
       let return_series = arr.map((x) => (x > 0 ? 1 : 0))
-      return parseFloat(this.calculate_mean(return_series).toFixed(1))
+      return parseFloat(this.calculate_mean(return_series))
     },
 		calculate_mean(arr) {
       arr = arr.filter(function (x) {

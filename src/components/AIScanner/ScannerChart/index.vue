@@ -90,9 +90,7 @@
 															!Number.isNaN(scope.row[column])
 																? typeof scope.row[column] == 'string'
 																	? scope.row[column]
-																	: parseFloat(
-																			scope.row[column]
-																		).toFixed(1)
+																	: scope.row[column]
 																: null
 														}}
 													</p>
