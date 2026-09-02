@@ -352,7 +352,7 @@
               events: {
                 legendItemClick: function (event) {
                   // 只有下面这三种情况才会在 legend 显示隐藏时做处理
-                  if(['smart_dumb', 'risk_levels'].includes(url) || type.includes('trend_reltrend')) {
+                  if(['smart_dumb', 'risk_levels'].includes(url) || type.includes('trend_reltrend') || groups === 'volatility_relvolatility') {
                     debugger
                     const allLegendNames = this.chart.legend.allItems.map(item => item.name)
                     const convertString = (inputString) => {
@@ -577,7 +577,7 @@
         let series = Object.keys(data).map(key => {
           debugger
           let name = 'SPY Optix'
-          if (!isNaN(last_value)) {
+          if (!isNaN(last_value) && groups !== 'volatility_relvolatility' && groups !== 'trend_reltrend') {
                // 处理 last_value 的值类型
                if (typeof last_value === 'string' && last_value.includes('%'))  last_value = parseFloat(last_value.replace('%', '')) / 100;
               if (typeof last_value === 'string') {
@@ -601,16 +601,16 @@
             name = key.replace('_reltrend', ' Relative Trend Score')
             name = name.replace('_trend', '  Trend Score')
           }else if(key.includes('_') && url !== 'smart_dumb' && url !== 'risk_levels' && sub_type !== 'crp_trend_reltrend' && groups !== 'volatility_relvolatility') name = chart_name
-          else if(groups === 'volatility_relvolatility' && (key === `${market_symbol}_volatility` || key === `${market_symbol}_volatility_60d`)){
-            if(key === `${market_symbol}_volatility`) name = 'Volatility d20'
-            else if(key === `${market_symbol}_volatility_60d`) name = 'Volatility d60'
+          else if(groups === 'volatility_relvolatility' && (key === `${market_symbol}_volatility` || key === `${market_symbol}_volatility_60d` || key === `${market_symbol.toLowerCase()}_volatility` || key === `${market_symbol.toLowerCase()}_volatility_60d`)){
+            if(key === `${market_symbol}_volatility` || key === `${market_symbol.toLowerCase()}_volatility`) name = 'Historical Volatility (20-Day)'
+            else if(key === `${market_symbol}_volatility_60d` || key === `${market_symbol.toLowerCase()}_volatility_60d`) name = 'Historical Volatility (60-Day)'
           }else if(key.includes('_') && key === 'model_smart_money' && url === 'smart_dumb') name = 'Smart Money'
           else if(key.includes('_') && key === 'model_dumb_money' && url === 'smart_dumb') name = 'Dumb Money'
           else if(key.includes('_') && key === 'model_risk_stocks_short' && url === 'risk_levels') name = 'Short Term Risk Levels'
           else if(key.includes('_') && key === 'model_risk_stocks_medium' && url === 'risk_levels') name = 'Intermediate Term Risk Levels'
           else name = key
           return {
-            name: `${name}${key.includes('_') && ((sub_type === 'crp_trend_reltrend' || sub_type === 'crp_stock' || sub_type === 'crypto' || groups === 'volatility_relvolatility') && key !== market_symbol) && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
+            name: `${name}${key.includes('_') && ((sub_type === 'crp_trend_reltrend' || sub_type === 'crp_stock' || sub_type === 'crypto' || groups === 'volatility_relvolatility' || groups === 'trend_reltrend') && key !== market_symbol) && last_value !== null && last_value !== undefined ? ` (Last = ${last_value})` : ''}`,
             data: data[key],
             zoneAxis: 'x',
             zones: url === 'risk_measure' ? zoonsData : []

@@ -2600,10 +2600,10 @@ export default {
           }
           const {type, groups, sub_type, chart_url} = res
           let requireUrl = ''
-          if(type === 'stock_nasdaq') {
-            requireUrl = 'ndx_100_complete_list'
-          }else if(type === 'stock_sent') {
+          if(type === 'stock_sent') {
             requireUrl = 'sp_1500_complete_list'
+          }else if(type === 'stock_nasdaq') {
+            requireUrl = 'ndx_100_complete_list'
           }else if(type === 'stock_russell') {
             requireUrl = 'russell_3000_complete_list'
           }else if(type === 'etf_opt') {
