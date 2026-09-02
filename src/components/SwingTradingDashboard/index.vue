@@ -4460,7 +4460,7 @@ export default {
       console.log('getHoldingStatusLabel row:', row)
       const status = row && row.status ? String(row.status).trim() : 'Holding'
       if (!this.isHoldingActionRequired(row) || /sell tomorrow/i.test(status)) return status
-      return `${status} (Sell Tomorrow)`    
+      return `Sell Tomorrow (${status})`    
     },
     getSellReason(position) {
       const status = this.getPositionStatus(position)
