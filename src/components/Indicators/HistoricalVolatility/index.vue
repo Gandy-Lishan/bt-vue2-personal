@@ -209,10 +209,13 @@ export default {
    },
    async enLargeTable(source_list, row, type) {
     debugger
-     const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === source_list))
+    console.log('enLargeTable source_list, row, type', source_list, row, type)
+    const str = source_list;
+    const stock = new URLSearchParams(str.split('?')[1]).get('index');
+     const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === stock))
      console.log('findTable', findTable)
      if(!findTable) return
-     const checked = findTable.options.find(ele => ele.url === source_list).value
+     const checked = findTable.options.find(ele => ele.url === stock).value
      const findRefsName = findTable?.refName
      // 应该清空缩小已放大的 table
      const clearRefName = this.tableInfoList.map(item => item.refName).filter(item => item !== findRefsName)
@@ -324,6 +327,7 @@ export default {
           }
         }
         const {type, groups, sub_type} = res
+        debugger
         let requireUrl = ''
         if(type === 'stock_nasdaq') {
           requireUrl = 'ndx_100_complete_list'
@@ -341,20 +345,39 @@ export default {
           // spx_trend spx_reltrend 没有处理
           const str = sub_type
           const match = str.match(/(.*?)_trend_reltrend/)
-          const result = match ? match[1] : 'sp1500'
+          const result = match ? match[1] : 'spx'
           requireUrl = result
         }else if(typeof groups === 'string' && groups.endsWith('_trend')) {
           // spx_trend 没有处理
           const str = sub_type
           const match = str.match(/(.*?)_trend/)
-          const result = match ? match[1] : 'sp1500'
+          const result = match ? match[1] : 'spx'
           requireUrl = result
         }else if(typeof groups === 'string' && groups.endsWith('_reltrend') && !groups.includes('_trend')) {
           // spx_reltrend 没有处理
           const str = sub_type
           const match = str.match(/(.*?)_reltrend/)
-          const result = match ? match[1] : 'sp1500'
+          const result = match ? match[1] : 'spx'
           requireUrl = result
+        }else if(groups === 'volatility_relvolatility') {
+          // spx_trend spx_reltrend 没有处理
+          const str = sub_type
+          const match = str.match(/(.*?)_volatility_20d_60d/)
+          const result = match ? match[1] : 'sp1500'
+          if(result === 'stock') requireUrl = `volatility?index=sp1500`
+          else requireUrl = `volatility?index=${result}`
+        }else if(typeof groups === 'string' && groups.endsWith('_volatility')) {
+          // spx_trend 没有处理
+          const str = sub_type
+          const match = str.match(/(.*?)_volatility_20d/)
+          if(result === 'stock') requireUrl = `volatility?index=sp1500`
+          else requireUrl = `volatility?index=${result}`
+        }else if(typeof groups === 'string' && groups.endsWith('_relvolatility') && !groups.includes('_trend')) {
+          // spx_reltrend 没有处理
+          const str = sub_type
+          const match = str.match(/(.*?)_volatility_60d/)
+          if(result === 'stock') requireUrl = `volatility?index=sp1500`
+          else requireUrl = `volatility?index=${result}`
         }else if(type === 'etf_opt') {
           requireUrl = 'etf_breadth'
         }else if(type === 'etf_fund') {

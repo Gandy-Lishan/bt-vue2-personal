@@ -386,12 +386,12 @@
                       {{ getHoldingStatusLabel(row) }}
                     </span>
                   </td>
-                  <td class="strong-cell">{{ row.symbol }}</td>
+                  <td class="strong-cell"><a :href="`/market/sec/${row.symbol}/chart`" target="_blank" rel="noopener noreferrer">{{ row.symbol }}</a></td>
                   <td class="muted-cell">{{ row.entryDate }}</td>
                   <td>{{ row.entryPrice }}</td>
                   <td>{{ row.currentPrice }}</td>
                   <td :class="{ 'negative-cell': isNegative(row.profitPct), 'positive-cell': !isNegative(row.profitPct) }">
-                    {{ row.profitPct }}
+                    {{ row.profitPct }} 
                   </td>
                   <td>{{ row.positionPct }}</td>
                   <td class="muted-cell">
@@ -4415,7 +4415,7 @@ export default {
           key: 'hv20',
           label: 'Historical Volatility (20-Day)',
           value: row.hv20,
-          // href: `/indicators?indicator=${indicatorSymbol}_volatility_20d`,
+          href: `/trend_score/historical?indicator=${indicatorSymbol}_volatility_20d_60d`,
         })
       }
       if(row && row.hv60 && row.hv60 !== '--') {
@@ -4423,7 +4423,7 @@ export default {
           key: 'hv60',
           label: 'Historical Volatility (60-Day)',
           value: row.hv60,
-          href: `/indicators?indicator=${indicatorSymbol}_volatility_60d`,
+          href: `/trend_score/historical?indicator=${indicatorSymbol}_volatility_20d_60d`,
         })
       }
 
@@ -4432,19 +4432,19 @@ export default {
           key: 'optix',
           label: 'Optix',
           value: row && row.optix ? row.optix : '--',
-          // href: `/indicators?indicator=${indicatorSymbol}_optix`,
+          href: `/indicators?indicator=${indicatorSymbol}`,
         },
         {
           key: 'trend-score',
           label: 'Trend score',
           value: row && row.trendScore ? row.trendScore : '--',
-          // href: `/trend_score/trend?indicator=${indicatorSymbol}_trend`,
+          href: `/trend_score/trend?indicator=${indicatorSymbol}_trend_reltrend`,
         },
         {
           key: 'relative-trend-score',
           label: 'Relative Trend Score',
           value: row && row.relativeTrendScore ? row.relativeTrendScore : '--',
-          // href: `/trend_score/trend?indicator=${indicatorSymbol}_reltrend`,
+          href: `/trend_score/trend?indicator=${indicatorSymbol}_trend_reltrend`,
         },
         ...HV
       ]
