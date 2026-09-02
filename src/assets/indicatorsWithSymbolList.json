@@ -159668,5 +159668,33 @@
         "market_symbol": "XLRE",
         "type": "other",
         "updated": "Daily"
+    },
+    {
+        "chart_name": "% Of Cryptocurrencies With A Positive 21-Day Rate Of Change",
+        "url": "breadth_all_crypto_positive_21d_roc",
+        "market_symbol": "crp_BTC",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Honeywell Aerospace Inc",
+        "url": "HONA",
+        "market_symbol": "HONA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Nebius Group NV",
+        "url": "NBIS",
+        "market_symbol": "NBIS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TNX Model",
+        "url": "tnx_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]
