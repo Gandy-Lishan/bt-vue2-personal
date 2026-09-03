@@ -212,6 +212,15 @@ if (process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined){
             '^/bt': ''
         }
     }))
+
+    // /v1 now goes directly to AWS ALB from the browser (AIClient baseURL)
+    // no longer proxied through Express
+    // let url4 = get_env("ai_runtime_url",'https://ecs-express-gateway-alb-e9ee2c74-302859759.us-east-2.elb.amazonaws.com')
+    // app.use('/v1', proxy({
+    //     target: url4,
+    //     ws: true,
+    //     changeOrigin: true,
+    // }))
 }
 
 

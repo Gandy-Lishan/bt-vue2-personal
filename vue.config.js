@@ -331,7 +331,7 @@ const config = {
 		proxy: {
 			'/dev': {
 				//target: "http://10.131.9.217:8000",
-				//target: 'https://devbt2api.sentimentrader.com/',
+				// target: 'https://devbt2api.sentimentrader.com/',
 				target: "https://bt2api.sentimentrader.com",
 				ws:true,
 				changeOrigin: true,
@@ -374,6 +374,14 @@ const config = {
 				pathRewrite: {
 					'^/bt': ''
 				}
+			},
+			// /v1 proxy — 开发环境走 devServer 代理，生产环境 AIClient 直连 agent.sentimentrader.com
+			// 本地调试远程服务：取消注释第一行 target，注释第二行
+			'/v1': {
+				target: 'http://localhost:8000',
+				// target: 'https://agent.sentimentrader.com',
+				ws: true,
+				changeOrigin: true,
 			}
 		}
 	}

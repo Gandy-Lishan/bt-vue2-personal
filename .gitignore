@@ -33,3 +33,10 @@ docs/agents/
 
 #ignore permission.js
 # src/router/permission.js
+
+# ChartIQ upgrade analysis documents
+docs/chartiq-upgrade-decision-memo.md
+docs/chartiq-upgrade-plan.md
+docs/chartiq-upgrade-conflict-audit.md
+docs/chartiq-new-features-list.md
+docs/chartiq-new-features-list.pdf

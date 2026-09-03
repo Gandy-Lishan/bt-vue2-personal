@@ -18,7 +18,7 @@ import analyst from "./modules/market/sec/analyst";
 import news from "./modules/market/sec/news";
 import ownership from "./modules/market/sec/ownership";
 import predict from "./modules/market/predict";
-
+import aiCopilot from './modules/aiCopilot'
 
 Vue.use(Vuex)
 // TODO 按照page细分, 并做code grouping
@@ -28,6 +28,7 @@ const store = new Vuex.Store({
     form,
     states,
     user,
+    aiCopilot,
     market: {
       namespaced: true,
       modules: {

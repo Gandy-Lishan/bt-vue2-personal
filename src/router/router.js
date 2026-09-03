@@ -567,22 +567,41 @@ const routes = [
 				redirect: '/market'
 			}
 		]
-	},	
-	{
-		path: '/404',
-		component: resolve => require(['@/components/404.vue'], resolve)
-	},
-	{
-		path: '/testpage',
-		component: resolve => require(['@/components/TestPage/index.vue'], resolve)
-	},
-	{
-		path: '/contact',
-		name: 'Contact',
-		component: resolve => 	require([
-			'@/components/backtester/components/Contact.vue'
-		], resolve)
-	}
-]
+		},
+		{
+			path: '/prototype',
+			name: 'CopilotPrototype',
+			component: resolve => require(['@/views/prototype/CopilotPrototype.vue'], resolve)
+		},
+		{ path: '/prototype/copilot', redirect: '/prototype' },
+		{
+			path: '/copilot',
+			name: 'Copilot',
+			component: resolve => require(['@/views/CopilotPage.vue'], resolve),
+			beforeEnter: (to, from, next) => {
+				// Simple access guard: requires ?access=st2026 parameter
+				if (to.query.access === 'st2026') {
+					next()
+				} else {
+					next('/404')
+				}
+			}
+		},
+		{
+			path: '/404',
+			component: resolve => require(['@/components/404.vue'], resolve)
+		},
+		{
+			path: '/testpage',
+			component: resolve => require(['@/components/TestPage/index.vue'], resolve)
+		},
+		{
+			path: '/contact',
+			name: 'Contact',
+			component: resolve => require([
+				'@/components/backtester/components/Contact.vue'
+			], resolve)
+		}
+	]
 
 export default routes
