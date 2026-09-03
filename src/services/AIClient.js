@@ -40,6 +40,7 @@ function isRetryableError(error) {
   if (msg.includes('fetch')) return true
   if (msg.includes('failed')) return true
   if (msg.includes('http 5')) return true
+  if (msg.includes('rate limit')) return true
   return false
 }
 
@@ -303,7 +304,13 @@ export class AIClient {
 
         if (!this.mock && !res.ok) {
           if (res.status === 401) {
-            throw new Error('AI 服务认证失败，请检查 API Key 配置')
+            throw new Error('Authentication failed, please check API Key configuration')
+          }
+          if (res.status === 429) {
+            const retryAfter = res.headers.get('Retry-After')
+            const seconds = retryAfter ? parseInt(retryAfter, 10) : null
+            const waitMsg = seconds ? `${seconds} seconds` : 'a moment'
+            throw new Error(`Rate limit exceeded, please retry after ${waitMsg}`)
           }
           throw new Error(`HTTP ${res.status}`)
         }
@@ -331,7 +338,9 @@ export class AIClient {
 
         const canRetry = !this.mock && isRetryableError(err) && retryCount < RECONNECT_CONFIG.maxRetries && !this.isCompleted
         if (canRetry) {
-          const delay = calculateBackoffDelay(retryCount)
+          // 429 rate limit — use server Retry-After, otherwise exponential backoff
+          const match = err.message.match(/retry after (\d+) seconds/)
+          const delay = match ? parseInt(match[1], 10) * 1000 : calculateBackoffDelay(retryCount)
           retryCount++
           await new Promise(resolve => setTimeout(resolve, delay))
           await attempt()
@@ -491,7 +500,7 @@ export class AIClient {
 
     if (!res.ok) {
       if (res.status === 401) {
-        throw new Error('AI 服务认证失败，请检查 API Key 配置')
+        throw new Error('Authentication failed, please check API Key configuration')
       }
       const data = await res.json().catch(() => ({}))
       if (res.status === 404 && data.error === 'checkpoint_expired') {
@@ -534,7 +543,7 @@ export class AIClient {
       })
 
       if (!res.ok) {
-        if (res.status === 401) throw new Error('AI 服务认证失败，请检查 API Key 配置')
+        if (res.status === 401) throw new Error('Authentication failed, please check API Key configuration')
         throw new Error(`HTTP ${res.status}`)
       }
       if (!res.body) throw new Error('No response body')
@@ -660,7 +669,7 @@ export class AIClient {
     })
 
     if (!res.ok) {
-      if (res.status === 401) throw new Error('AI 服务认证失败，请检查 API Key 配置')
+      if (res.status === 401) throw new Error('Authentication failed, please check API Key configuration')
       const data = await res.json().catch(() => ({}))
       throw new Error(data.error || `HTTP ${res.status}`)
     }
@@ -700,7 +709,7 @@ export class AIClient {
       credentials: 'include',
     })
     if (!res.ok) {
-      if (res.status === 401) throw new Error('AI 服务认证失败')
+      if (res.status === 401) throw new Error('Authentication failed')
       throw new Error(`Upload failed: HTTP ${res.status}`)
     }
     const data = await res.json()
@@ -771,7 +780,7 @@ export class AIClient {
         credentials: 'include',
       })
       if (!res.ok) {
-        if (res.status === 401) throw new Error('AI 服务认证失败')
+        if (res.status === 401) throw new Error('Authentication failed')
         throw new Error(`HTTP ${res.status}`)
       }
       const data = await res.json()
@@ -795,7 +804,7 @@ export class AIClient {
         credentials: 'include',
       })
       if (!res.ok) {
-        if (res.status === 401) throw new Error('AI 服务认证失败')
+        if (res.status === 401) throw new Error('Authentication failed')
         throw new Error(`HTTP ${res.status}`)
       }
       return true
