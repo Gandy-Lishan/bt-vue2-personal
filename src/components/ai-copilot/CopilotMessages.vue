@@ -69,15 +69,15 @@ export default {
   },
   data() {
     return {
-      // 5 个精选问题（覆盖 5 大板块）
+      // 5 recommended questions (covering 5 main sections)
       recommendedExamples: [
-        { icon: 'fa-bar-chart', text: "帮我看看今天 Smart Stock Scanner 的扫描结果，我想找几个做多的机会。" },
-        { icon: 'fa-lock', text: "我手里有一大笔闲置现金，想通过卖期权赚点稳健的时间价值，现在有什么深度价外的安全机会？" },
-        { icon: 'fa-flask', text: "帮我跑一个策略回测：过去2年，胜率>70%的做多信号，10%止盈5%止损。" },
-        { icon: 'fa-balance-scale', text: "我目前重仓了苹果（AAPL），市场上有哪个大类资产或个股最近跟它是完全反着走的？" },
-        { icon: 'fa-university', text: "美联储下周要公布利率决议了，历史上 FOMC 决策日前后 3 天 SPX 的表现规律是什么？" },
+        { icon: 'fa-bar-chart', text: "Show me today's Smart Stock Scanner results, I'm looking for long opportunities." },
+        { icon: 'fa-lock', text: "I have a lot of idle cash and want to sell options for some steady time value. What deep OTM opportunities are available right now?" },
+        { icon: 'fa-flask', text: "Run a strategy backtest for me: past 2 years, long signals with >70% win rate, 10% take-profit and 5% stop-loss." },
+        { icon: 'fa-balance-scale', text: "I'm heavily long AAPL. Which major asset or stock is moving completely opposite lately?" },
+        { icon: 'fa-university', text: "The Fed is announcing rate decisions next week. What's the historical performance of SPX around FOMC decision days?" },
       ],
-      // 按板块分组的更多问题
+      // More questions grouped by section
       moduleExamples: [
         {
           key: 'scanner',
@@ -85,9 +85,9 @@ export default {
           icon: 'fa-bar-chart',
           expanded: false,
           questions: [
-            '什么是 Smart Stock Scanner？',
-            '今天有哪些值得进一步研究的股票？',
-            '哪些股票同时具备强趋势和强相对强度？',
+            'What is the Smart Stock Scanner?',
+            'Which stocks are worth further research today?',
+            'Which stocks have both strong trend and strong relative strength?',
           ]
         },
         {
@@ -96,9 +96,9 @@ export default {
           icon: 'fa-lock',
           expanded: false,
           questions: [
-            '什么是 Smart Option Scanner？',
-            '95% POP 的 Put 靠谱吗？',
-            '我应该选高 POP 还是高 EV？',
+            'What is the Smart Option Scanner?',
+            'Is a 95% POP Put reliable?',
+            'Should I choose high POP or high EV?',
           ]
         },
         {
@@ -107,9 +107,9 @@ export default {
           icon: 'fa-flask',
           expanded: false,
           questions: [
-            '什么是 Scanner Backtest？',
-            '这个信号过去十年赚钱吗？',
-            '这个策略是不是过拟合了？',
+            'What is Scanner Backtest?',
+            'Has this signal been profitable over the past decade?',
+            'Is this strategy overfitted?',
           ]
         },
         {
@@ -118,9 +118,9 @@ export default {
           icon: 'fa-balance-scale',
           expanded: false,
           questions: [
-            '什么是 Correlation Pattern Match？',
-            '哪些股票和 NVDA 走势最同步？',
-            '有没有和 TSLA 走势完全不同的股票？',
+            'What is Correlation Pattern Match?',
+            'Which stocks move most in sync with NVDA?',
+            'Are there any stocks that move completely differently from TSLA?',
           ]
         },
         {
@@ -129,9 +129,9 @@ export default {
           icon: 'fa-university',
           expanded: false,
           questions: [
-            '什么是 Seasonality？',
-            '一年中哪个月份最强？',
-            'FOMC 前后市场通常怎么走？',
+            'What is Seasonality?',
+            'Which month is typically the strongest?',
+            'How does the market usually perform around FOMC meetings?',
           ]
         },
       ],
