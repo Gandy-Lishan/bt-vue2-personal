@@ -167,6 +167,27 @@ export default {
   created() {
     this.copilot = useAICopilot()
     this.initPage()
+    // Re-sync messages from server when user returns to this tab/page.
+    // Skip if a stream is still active — let it finish naturally.
+    this._visibilityHandler = async () => {
+      if (document.visibilityState === 'visible') {
+        const convId = this.$store.state.aiCopilot.conversationId
+        if (convId && !this.isLoading) {
+          this.isHistoryLoading = true
+          try {
+            await this.copilot.loadHistory()
+          } finally {
+            this.isHistoryLoading = false
+          }
+        }
+      }
+    }
+  },
+  mounted() {
+    document.addEventListener('visibilitychange', this._visibilityHandler)
+  },
+  beforeDestroy() {
+    document.removeEventListener('visibilitychange', this._visibilityHandler)
   },
   methods: {
     async initPage() {
