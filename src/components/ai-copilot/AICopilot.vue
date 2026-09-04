@@ -14,6 +14,12 @@
       />
     </div>
 
+    <!-- Maintenance badge — shown when copilot is under maintenance -->
+    <div v-if="!isOpen && !hideBubble && isUnderMaintenance" class="copilot-maintenance-badge">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      <span>AI Copilot is currently under maintenance</span>
+    </div>
+
     <!-- Toggle Bubble — 注释掉，只保留独立页面 /copilot 入口 -->
     <!--
     <button
@@ -160,6 +166,7 @@ export default {
       hideBubble: false,
       showHistory: false,
       conversationOffset: 0,
+      isUnderMaintenance: false,
     }
   },
   computed: {
@@ -572,6 +579,22 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+/* Maintenance badge */
+.copilot-maintenance-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #ea580c;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.15);
+  cursor: default;
 }
 
 /* Drag overlay */

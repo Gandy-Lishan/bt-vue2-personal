@@ -73,6 +73,11 @@
           </span>
         </div>
         <div class="header-actions">
+          <!-- Maintenance badge -->
+          <div v-if="isUnderMaintenance" class="maintenance-badge">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <span>AI Copilot is currently under maintenance</span>
+          </div>
         </div>
       </div>
 
@@ -133,6 +138,7 @@ export default {
       sidebarCollapsed: false,
       conversationOffset: 0,
       hoveredId: null,
+      isUnderMaintenance: false,
     }
   },
   computed: {
@@ -548,6 +554,25 @@ export default {
 .header-actions {
   display: flex;
   gap: 4px;
+  align-items: center;
+}
+
+/* Maintenance badge */
+.maintenance-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #ea580c;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.maintenance-badge i {
+  font-size: 13px;
 }
 
 .header-btn {
