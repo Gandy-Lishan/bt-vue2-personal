@@ -109,6 +109,7 @@
             <CopilotRetrieveStatus
               :statuses="activeStatuses"
               :tool-calls="activeToolCalls"
+              :latest-reasoning="latestReasoningContent"
               :is-loading="isActiveAssistantLoading"
               :is-streaming="isStreaming"
             />
@@ -193,7 +194,14 @@ export default {
     },
     activeToolCalls() {
       const blocks = this.activeAssistantMessage?.blocks || []
-      return blocks.filter(b => b.type === 'tool' && b.toolCall?.status === 'running').map(b => b.toolCall)
+      // Include pending tools so the status bar shows tool names during execution,
+      // not just while the graph node is actively running
+      return blocks.filter(b => b.type === 'tool' && b.toolCall?.status !== 'completed').map(b => b.toolCall)
+    },
+    latestReasoningContent() {
+      const chunks = this.activeAssistantMessage?.reasoning_chunks || []
+      if (!chunks.length) return ''
+      return chunks[chunks.length - 1].content || ''
     },
     isActiveAssistantLoading() {
       return Boolean(this.activeAssistantMessage && this.isLoading)

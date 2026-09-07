@@ -111,6 +111,8 @@
           <template #status>
             <CopilotRetrieveStatus
               :statuses="activeStatuses"
+              :tool-calls="activeToolCalls"
+              :latest-reasoning="latestReasoningContent"
               :is-loading="isActiveAssistantLoading"
               :is-streaming="isStreaming"
             />
@@ -165,6 +167,15 @@ export default {
     },
     activeStatuses() {
       return this.activeAssistantMessage?.retrieveStatuses || []
+    },
+    activeToolCalls() {
+      const blocks = this.activeAssistantMessage?.blocks || []
+      return blocks.filter(b => b.type === 'tool' && b.toolCall?.status !== 'completed').map(b => b.toolCall)
+    },
+    latestReasoningContent() {
+      const chunks = this.activeAssistantMessage?.reasoning_chunks || []
+      if (!chunks.length) return ''
+      return chunks[chunks.length - 1].content || ''
     },
     isActiveAssistantLoading() {
       return Boolean(this.activeAssistantMessage && this.isLoading)

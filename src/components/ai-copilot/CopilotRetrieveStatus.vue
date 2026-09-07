@@ -11,6 +11,7 @@ export default {
   props: {
     statuses: { type: Array, default: () => [] },
     toolCalls: { type: Array, default: () => [] },
+    latestReasoning: { type: String, default: '' },
     isLoading: { type: Boolean, default: false },
     isStreaming: { type: Boolean, default: false },
   },
@@ -27,10 +28,12 @@ export default {
     statusMessage() {
       // Active tool calls take priority
       if (this.toolCalls.length > 0) {
-        const tool = this.toolCalls[0]
-        const name = tool.name || ''
-        const formatted = name.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())
-        return `Running ${formatted}...`
+        const names = this.toolCalls.map(tool => {
+          const name = tool.name || ''
+          return name.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())
+        })
+        if (names.length === 1) return `Running ${names[0]}...`
+        return `Running ${names.join(', ')}...`
       }
       if (this.isStreaming || this.lastStatus?.type === 'assessing') return 'Generating response...'
       const type = this.lastStatus?.type
@@ -39,14 +42,22 @@ export default {
       if (type === 'completed') return ''
       if (type === 'error') return this.cleanMessage(this.lastStatus)
       if (type === 'insufficient') return 'Knowledge base has limited info'
-      if (this.isLoading) return 'Thinking...'
-      return ''
+      // Backend sends short natural-language status via message field
+      if (this.lastStatus?.message) return this.lastStatus.message
+      // Fallback: latest reasoning content (may be long, used as last resort)
+      if (this.latestReasoning) {
+        const text = this.latestReasoning.trim()
+        if (text) return text.length > 60 ? text.slice(0, 60) + '…' : text
+      }
+      return 'Thinking...'
     },
     statusTone() {
       if (this.toolCalls.length > 0) return 'tool-running'
       if (this.isStreaming || this.lastStatus?.type === 'assessing') return 'generating'
       if (this.lastStatus?.type === 'retrieving') return 'retrieving'
       if (this.lastStatus?.type === 'insufficient') return 'warning'
+      // Reasoning content = thinking tone
+      if (this.latestReasoning) return 'thinking'
       return 'thinking'
     },
     displayMessage() {
