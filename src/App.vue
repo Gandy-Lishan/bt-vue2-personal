@@ -13,12 +13,14 @@
 			<router-view></router-view>
 			</div>
 				<Footer></Footer>
+			<AICopilot v-if="!shouldHideCopilot" ref="aiCopilot" @register-tools="registerAITools" />
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 import { Header, NewHeader, Footer, RecentUpdate, FloatBtns, CnNotify } from "@/components/common"
+import AICopilot from "@/components/ai-copilot/AICopilot.vue"
 import { fetchCurrentNNotifications } from "@/service/service";
 
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
@@ -38,7 +40,15 @@ export default {
 		Footer,
 		RecentUpdate,
 		FloatBtns,
-		CnNotify
+		CnNotify,
+		AICopilot
+	},
+	computed: {
+		shouldHideCopilot() {
+			if (!this.$route) return false
+			const p = this.$route.path
+			return p.startsWith('/prototype') || p.startsWith('/copilot')
+		}
 	},
 	async mounted() {
 		console.time("ai timer")
@@ -222,6 +232,17 @@ export default {
 				// })
 			})
   },
+	resolveAINavigationPage(page) {
+			const routes = {
+				dashboard: '/dashboard',
+				backtester: '/backtester',
+				my_indicator: '/myindicator',
+				scanner: '/scannerai',
+				scanner_backtest: '/scannerai/backtest',
+				seasonality: '/seasonality',
+			}
+			return routes[page] || null
+		},
 		fetchCustomList(onlySymbol) {
 			console.log('🚗  update custom symbol list and indicator list')
 
@@ -236,6 +257,64 @@ export default {
 				this.$store.dispatch('chart/get_myindicator')
 			]);
 			}
+		},
+		registerAITools(registerTool) {
+		// 项目专属工具注册 — 目前为 placeholder，后续替换为真实业务逻辑
+			registerTool('navigateTo', async ({ page }) => {
+				const resolvedPath = this.resolveAINavigationPage(page)
+				if (!resolvedPath) {
+					return { success: false, action: 'navigateTo', page, error: 'unknown page' }
+				}
+
+				const resolvedRoute = this.$router.resolve(resolvedPath).route
+				if (!resolvedRoute.matched.length) {
+					return { success: false, action: 'navigateTo', page, path: resolvedPath, error: 'route not found' }
+				}
+
+				// Confirm before navigating to important operation pages
+				if (["scanner_backtest", "backtester"].includes(page)) {
+					try {
+						const pageLabels = { scanner_backtest: "Scanner Backtest", backtester: "Strategy Backtester" }
+						await this.$confirm(`是否打开 ${pageLabels[page]} 页面？`, "确认跳转", {
+							confirmButtonText: "确定",
+							cancelButtonText: "取消",
+							type: "info"
+						})
+					} catch {
+						return { success: false, action: "navigateTo", page, path: resolvedPath, error: "user cancelled" }
+					}
+				}
+
+				try {
+					if (this.$route.fullPath !== resolvedPath) {
+						await this.$router.push(resolvedPath)
+					}
+					return { success: true, action: 'navigateTo', page, path: this.$route.fullPath }
+				} catch (error) {
+					if (error && error.name === 'NavigationDuplicated') {
+						return { success: true, action: 'navigateTo', page, path: resolvedPath }
+					}
+					return { success: false, action: 'navigateTo', page, path: resolvedPath, error: error.message || String(error) }
+				}
+			})
+
+			registerTool('setStopLoss', ({ value }) => {
+				console.log('[AI Tool] setStopLoss', value)
+				// TODO: 调用 Vuex action 或 API 设置止损
+				// this.$store.dispatch('strategy/setStopLoss', value)
+				return { success: true, value }
+			})
+			registerTool('runBacktest', async ({ strategyId }) => {
+				console.log('[AI Tool] runBacktest', strategyId)
+				// TODO: 触发回测执行
+				// const result = await this.$store.dispatch('backtester/run', strategyId)
+				return { success: true, profit: 0.05, maxDrawdown: 0.02 }
+			})
+			registerTool('navigateTo', ({ path }) => {
+				console.log('[AI Tool] navigateTo', path)
+				this.$router.push(path)
+				return { success: true, path }
+			})
 		},
 	beforeDestroy() {
 		clearInterval(this.updateInterval);

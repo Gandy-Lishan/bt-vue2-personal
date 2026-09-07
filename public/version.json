@@ -1,1 +1,9 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
 {"version":"1786069903508"}
+=======
+{"version":"1783258967896"}
+>>>>>>> c5a84491 (feat(ai-copilot): replace polling with regenerate for SSE resume after page refresh)
+=======
+{"version":"1786092601651"}
+>>>>>>> 2b8e4a0e (feat: multi-session copilot UI + standalone page)
