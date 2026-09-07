@@ -393,6 +393,7 @@
                   <td :class="{ 'negative-cell': isNegative(row.profitPct), 'positive-cell': !isNegative(row.profitPct) }">
                     {{ row.profitPct }} 
                   </td>
+                  <td>{{ row.shares }}</td>
                   <td>{{ row.positionPct }}</td>
                   <td class="muted-cell">
                     <span class="signal-with-help">
@@ -734,14 +735,9 @@
                   {{ row.returnPct }}
                 </td>
                 <td>{{ row.exitReason }}</td>
-                <td class="muted-cell">
-                  <span class="signal-with-help">
-                    {{ getSignalLabel(row.signal) }}
-                    <span class="tooltip signal-tooltip">
-                      <i class="fa fa-question-circle" aria-hidden="true"></i>
-                      <span class="tooltip-text" v-html="getSignalDescription(row.signal)"></span>
-                    </span>
-                  </span>
+                <td>{{ row.shares }}</td>
+                <td :class="{ 'negative-cell': isNegative(row.realizedPnl), 'positive-cell': !isNegative(row.realizedPnl) }">
+                  {{ row.realizedPnl }}
                 </td>
               </tr>
             </tbody>
@@ -928,8 +924,8 @@
               <tr>
                 <th>Ticker</th>
                 <th>Current Price</th>
-                <th>PORTFOLIO WEIGHT</th>
                 <th>YOUR CALCULATED SHARES</th>
+                <th>Amount</th>
               </tr>
             </thead>
             <tbody>
@@ -939,8 +935,12 @@
               <tr v-for="row in shareCalculatorRows" :key="row.key">
                 <td class="strong-cell">{{ row.ticker }}</td>
                 <td>{{ row.currentPrice }}</td>
-                <td>{{ row.positionPct }}</td>
                 <td class="strong-cell">{{ row.shares }}</td>
+                <td class="strong-cell">{{ row.amount }}</td>
+              </tr>
+              <tr v-if="shareCalculatorRows.length" class="share-calculator-total-row">
+                <td colspan="3">Total Amount:</td>
+                <td class="strong-cell">{{ shareCalculatorTotalAmount }}</td>
               </tr>
             </tbody>
           </table>
@@ -1055,6 +1055,7 @@ import { getSwingSignalDescription, getSwingSignalLabel } from '@/utils/swingSig
 
 const ENABLE_SWING_TRADING_API = true
 const DEFAULT_SWING_AI_SUBSCRIPTION_ALLOCATION = '1000000.00'
+const SWING_AI_SUBSCRIPTION_ALLOCATION_STORAGE_KEY = 'swingAiSubscriptionAllocationByStrategy'
 const SWING_AI_SUBSCRIPTION_REFRESH_DELAY_MS = 5000
 const SPARKLINE_TREND_POINTS = 20
 const CHART_RANGE_DEBOUNCE_MS = 140
@@ -1082,6 +1083,7 @@ const holdingsColumns = [
   { key: 'entryPrice', label: 'Entry Price', type: 'number' },
   { key: 'currentPrice', label: 'Current Price', type: 'number' },
   { key: 'profitPct', label: 'P&L %', type: 'percent' },
+  { key: 'shares', label: 'Shares', type: 'number' },
   { key: 'positionPct', label: 'Position %', type: 'percent' },
   { key: 'signal', label: 'Signal Type', type: 'text' },
 ]
@@ -1095,7 +1097,8 @@ const historyColumns = [
   { key: 'exitPrice', label: 'Exit<br/>Price', type: 'number' },
   { key: 'returnPct', label: 'Return %', type: 'percent' },
   { key: 'exitReason', label: 'Exit Reason', type: 'text' },
-  { key: 'signal', label: 'Signal', type: 'text' },
+  { key: 'shares', label: 'Shares', type: 'number' },
+  { key: 'realizedPnl', label: 'Realized P&L', type: 'number' },
 ]
 
 const fallbackStrategies = [
@@ -1457,9 +1460,10 @@ const fallbackDetail = {
       entryPrice: '$29.54',
       exitDate: '2026-08-04',
       exitPrice: '$33.32',
+      shares: '--',
       returnPct: '+12.8%',
+      realizedPnl: '--',
       exitReason: 'Profit Target',
-      signal: 'Rounding Bottom',
     },
     {
       index: 2,
@@ -1468,9 +1472,10 @@ const fallbackDetail = {
       entryPrice: '$315.18',
       exitDate: '2026-07-29',
       exitPrice: '$336.90',
+      shares: '--',
       returnPct: '+6.9%',
+      realizedPnl: '--',
       exitReason: 'Time Out',
-      signal: 'MAGap',
     },
     {
       index: 3,
@@ -1479,9 +1484,10 @@ const fallbackDetail = {
       entryPrice: '$98.80',
       exitDate: '2026-07-09',
       exitPrice: '$91.64',
+      shares: '--',
       returnPct: '-7.2%',
+      realizedPnl: '--',
       exitReason: 'Stop Loss',
-      signal: 'MA',
     },
   ],
   charts: {
@@ -1628,6 +1634,7 @@ export default {
       guideVisible: false,
       shareCalculatorVisible: false,
       shareCalculatorCashInput: DEFAULT_SWING_AI_SUBSCRIPTION_ALLOCATION,
+      shareCalculatorCashTouched: false,
       shareCalculatorCalculatedCash: null,
       emailSetupConfirmVisible: false,
       emailSetupConfirmChecked: false,
@@ -1850,10 +1857,18 @@ export default {
 
       const cash = this.shareCalculatorCalculatedCash || 0
       return this.buildShareCalculatorRows(cash)
+        .filter(row => Number(row.sharesNumber) > 0)
         .sort((left, right) => {
           if (right.sharesNumber !== left.sharesNumber) return right.sharesNumber - left.sharesNumber
           return String(left.ticker).localeCompare(String(right.ticker))
         })
+    },
+    shareCalculatorTotalAmount() {
+      const totalAmount = this.shareCalculatorRows.reduce((sum, row) => {
+        const amount = Number(row.amountNumber)
+        return sum + (Number.isFinite(amount) ? amount : 0)
+      }, 0)
+      return this.formatMoneyValue(totalAmount, '$0')
     },
     currentStrategySubscription() {
       const strategyId = this.getCurrentStrategySubscriptionId()
@@ -1880,17 +1895,12 @@ export default {
     saveEmailSetupDisabled() {
       return this.isSavingSubscription
         || this.isPreparingEmailSetupConfirmation
-        || this.isSubscriptionEmailPending
-        || this.subscriptionSaveStatus === 'pending'
         || !this.hasShareCalculatorCash
         || !this.getCurrentStrategySubscriptionId()
-        || this.hasCurrentSubscriptionSentSameSetup
     },
     saveEmailButtonLabel() {
       if (this.isPreparingEmailSetupConfirmation) return 'Preparing...'
       if (this.isSavingSubscription) return 'Sending...'
-      if (this.isSubscriptionEmailPending || this.subscriptionSaveStatus === 'pending') return 'Sending...'
-      if (this.hasCurrentSubscriptionSentSameSetup) return 'Setup saved. Email sent.'
       return 'Confirm & Send Email'
     },
     sortedHoldingRows() {
@@ -2012,6 +2022,9 @@ export default {
       this.resetHistoryPage()
       this.resetHoldingSort()
       this.resetEmailSetupConfirmation()
+      this.shareCalculatorCashTouched = false
+      this.shareCalculatorCalculatedCash = null
+      this.syncShareCalculatorInputFromSubscription()
       this.resetPerformanceChartRange()
       this.fetchStrategyDetailData()
     },
@@ -2278,7 +2291,6 @@ export default {
       return Number.isFinite(timestamp) ? timestamp : null
     },
     async initializeDashboard() {
-      await this.fetchSwingAiSubscription()
       await this.fetchDashboardData()
       await this.fetchStrategyDetailData()
     },
@@ -2424,13 +2436,10 @@ export default {
         this.isLoadingSubscription = false
       }
     },
-    async openEmailSetupConfirm() {
+    openEmailSetupConfirm() {
       if (
         this.isSavingSubscription
         || this.isPreparingEmailSetupConfirmation
-        || this.isSubscriptionEmailPending
-        || this.subscriptionSaveStatus === 'pending'
-        || this.hasCurrentSubscriptionSentSameSetup
       ) return
 
       const strategyId = this.getCurrentStrategySubscriptionId()
@@ -2450,30 +2459,14 @@ export default {
       this.subscriptionLoadError = ''
       this.subscriptionSaveStatus = ''
       this.subscriptionEmailRetryAvailable = false
+      this.rememberShareCalculatorAllocationAmount(strategyId, allocationAmount)
 
-      try {
-        await this.fetchSwingAiSubscription({
-          silent: true,
-          notify: false,
-          skipPendingStateUpdate: true,
-        })
-        if (this.subscriptionLoadError) {
-          this.setSubscriptionSaveState('error', this.subscriptionLoadError || 'Could not verify subscription status.')
-          return
-        }
-
-        if (this.hasCurrentSubscriptionSentSameSetup) return
-
-        this.emailSetupConfirmStrategyId = strategyId
-        this.emailSetupConfirmAllocationAmount = allocationAmount
-        this.emailSetupConfirmEmailInput = this.getDefaultEmailSetupNotificationEmail()
-        this.emailSetupConfirmChecked = false
-        this.emailSetupConfirmVisible = true
-      } catch (error) {
-        this.setSubscriptionSaveState('error', this.getSubscriptionErrorMessage(error, 'Could not verify subscription status.'))
-      } finally {
-        this.isPreparingEmailSetupConfirmation = false
-      }
+      this.emailSetupConfirmStrategyId = strategyId
+      this.emailSetupConfirmAllocationAmount = allocationAmount
+      this.emailSetupConfirmEmailInput = this.getDefaultEmailSetupNotificationEmail()
+      this.emailSetupConfirmChecked = false
+      this.emailSetupConfirmVisible = true
+      this.isPreparingEmailSetupConfirmation = false
     },
     async confirmEmailSetupAndSend() {
       if (!this.canConfirmEmailSetup) return
@@ -2493,8 +2486,6 @@ export default {
       if (
         this.isSavingSubscription
         || this.isPreparingEmailSetupConfirmation
-        || this.isSubscriptionEmailPending
-        || this.subscriptionSaveStatus === 'pending'
       ) return
 
       if (!Array.isArray(strategies) || !strategies.length) {
@@ -2542,13 +2533,11 @@ export default {
 
       if (httpStatus === 409) {
         this.setSubscriptionSaveState('info', this.getSubscriptionResponseMessage(body, 'Subscription changed. Please confirm again.'))
-        await this.fetchSwingAiSubscription({ silent: true })
         return
       }
 
       if (httpStatus === 202 || lastEmailStatus === 'pending') {
         this.setSubscriptionSaveState('pending', this.getSubscriptionResponseMessage(body, 'Email is sending.'))
-        this.scheduleSubscriptionRefresh()
         return
       }
 
@@ -2676,16 +2665,17 @@ export default {
       return Number.isInteger(strategyId) && strategyId > 0 ? strategyId : ''
     },
     getSubscriptionAllocationAmount(subscriptionStrategy, fallback = DEFAULT_SWING_AI_SUBSCRIPTION_ALLOCATION) {
+      const allocationAmount = this.getFirstDefined(subscriptionStrategy, ['allocation_amount', 'allocationAmount'])
       if (
         !subscriptionStrategy
-        || subscriptionStrategy.allocation_amount === undefined
-        || subscriptionStrategy.allocation_amount === null
-        || subscriptionStrategy.allocation_amount === ''
+        || allocationAmount === undefined
+        || allocationAmount === null
+        || allocationAmount === ''
       ) {
         return this.formatSubscriptionAllocationInput(fallback)
       }
 
-      return this.formatSubscriptionAllocationInput(subscriptionStrategy.allocation_amount)
+      return this.formatSubscriptionAllocationInput(allocationAmount)
     },
     getDefaultEmailSetupNotificationEmail() {
       const subscriptionEmail = this.getSubscriptionStrategyNotificationEmail(this.currentStrategySubscription)
@@ -2787,15 +2777,84 @@ export default {
     },
     applySwingAiSubscriptionData(data) {
       this.subscriptionData = data && typeof data === 'object' ? data : null
+      this.rememberSubscriptionAllocationAmounts(this.subscriptionData)
       this.syncShareCalculatorInputFromSubscription()
     },
     syncShareCalculatorInputFromSubscription() {
       if (!this.shareCalculatorVisible) return
       if (this.shareCalculatorHasResults) return
+      if (this.shareCalculatorCashTouched && String(this.shareCalculatorCashInput || '').trim()) return
 
-      this.shareCalculatorCashInput = this.currentStrategySubscriptionAllocation
+      this.shareCalculatorCashInput = this.getRememberedShareCalculatorAllocationAmount()
+        || this.currentStrategySubscriptionAllocation
         || this.shareCalculatorCashInput
         || DEFAULT_SWING_AI_SUBSCRIPTION_ALLOCATION
+    },
+    rememberSubscriptionAllocationAmounts(subscription) {
+      const strategies = subscription && Array.isArray(subscription.strategies) ? subscription.strategies : []
+      strategies.forEach(strategy => {
+        const strategyId = this.getSubscriptionStrategyId(strategy)
+        const allocationAmount = this.getSubscriptionAllocationAmount(strategy, '')
+        this.rememberShareCalculatorAllocationAmount(strategyId, allocationAmount)
+      })
+    },
+    rememberShareCalculatorAllocationAmount(strategyId = this.getCurrentStrategySubscriptionId(), allocationAmount = this.getShareCalculatorAllocationAmount()) {
+      if (!strategyId) return
+
+      const formattedAmount = this.formatSubscriptionAllocationInput(allocationAmount)
+      if (!formattedAmount) return
+
+      const allocations = this.getShareCalculatorAllocationStorage()
+      allocations[String(strategyId)] = formattedAmount
+      this.setShareCalculatorAllocationStorage(allocations)
+    },
+    getRememberedShareCalculatorAllocationAmount(strategyId = this.getCurrentStrategySubscriptionId()) {
+      if (!strategyId) return ''
+
+      const allocations = this.getShareCalculatorAllocationStorage()
+      return this.formatSubscriptionAllocationInput(allocations[String(strategyId)])
+    },
+    getShareCalculatorAllocationStorage() {
+      if (typeof window === 'undefined' || !window.localStorage) return {}
+
+      try {
+        const rawValue = window.localStorage.getItem(this.getShareCalculatorAllocationStorageKey())
+        const parsedValue = rawValue ? JSON.parse(rawValue) : {}
+        return parsedValue && typeof parsedValue === 'object' && !Array.isArray(parsedValue) ? parsedValue : {}
+      } catch (error) {
+        return {}
+      }
+    },
+    setShareCalculatorAllocationStorage(allocations) {
+      if (typeof window === 'undefined' || !window.localStorage) return
+
+      try {
+        window.localStorage.setItem(this.getShareCalculatorAllocationStorageKey(), JSON.stringify(allocations || {}))
+      } catch (error) {
+        // Local storage is only a convenience for restoring the last entered amount.
+      }
+    },
+    getShareCalculatorAllocationStorageKey() {
+      const userKey = this.normalizeStorageKeyPart(
+        this.getCookieUserEmail()
+          || this.getStoreUserEmail()
+          || this.getLocalStorageValue('backtest_user')
+      )
+      return userKey
+        ? `${SWING_AI_SUBSCRIPTION_ALLOCATION_STORAGE_KEY}:${userKey}`
+        : SWING_AI_SUBSCRIPTION_ALLOCATION_STORAGE_KEY
+    },
+    getLocalStorageValue(key) {
+      if (typeof window === 'undefined' || !window.localStorage) return ''
+
+      try {
+        return window.localStorage.getItem(key) || ''
+      } catch (error) {
+        return ''
+      }
+    },
+    normalizeStorageKeyPart(value) {
+      return String(value || '').trim().toLowerCase().replace(/[^a-z0-9@._-]/g, '_')
     },
     getSubscriptionResponseBody(response) {
       return response && response.data !== undefined ? response.data : response || {}
@@ -2867,7 +2926,6 @@ export default {
 
       if (lastEmailStatus === 'pending') {
         this.setSubscriptionSaveState('pending', 'Email is still sending.', { notify: false })
-        this.scheduleSubscriptionRefresh()
         return
       }
 
@@ -2962,17 +3020,19 @@ export default {
       this.shareCalculatorCalculatedCash = null
       this.subscriptionSaveStatus = ''
       this.subscriptionEmailRetryAvailable = false
-      if (this.subscriptionLoadError) this.showSubscriptionPopup('error', this.subscriptionLoadError)
-      if (this.isSubscriptionEmailPending) this.showSubscriptionPopup('pending', 'Email is sending.')
+      this.subscriptionLoadError = ''
       this.$nextTick(() => {
         this.syncShareCalculatorInputFromSubscription()
       })
     },
     calculateShareAllocation() {
       if (!this.hasShareCalculatorCash) return
+      this.rememberShareCalculatorAllocationAmount()
       this.shareCalculatorCalculatedCash = this.shareCalculatorCash
     },
     resetShareCalculatorResults() {
+      this.shareCalculatorCashTouched = true
+      this.rememberShareCalculatorAllocationAmount()
       this.shareCalculatorCalculatedCash = null
       this.subscriptionSaveStatus = ''
       this.subscriptionEmailRetryAvailable = false
@@ -3006,6 +3066,7 @@ export default {
           const allocationRate = this.getShareCalculatorRate(row.rawPositionPct !== undefined ? row.rawPositionPct : row.positionPct)
           const currentPriceNumber = this.getNumberValue(row.rawCurrentPrice !== undefined ? row.rawCurrentPrice : row.currentPrice)
           const shares = this.calculateWholeShares(cash, allocationRate, currentPriceNumber)
+          const amountNumber = this.calculateShareCalculatorAmount(currentPriceNumber, shares)
 
           return {
             key: `share-calculator-holding-${row.symbol || '--'}-${index}`,
@@ -3014,6 +3075,8 @@ export default {
             positionPct: row.positionPct || '--',
             sharesNumber: shares,
             shares: shares.toLocaleString('en-US'),
+            amountNumber,
+            amount: this.formatMoneyValue(amountNumber, '$0'),
           }
         })
     },
@@ -3030,16 +3093,19 @@ export default {
         const allocationRate = cashRate !== null && cashRatio !== null ? cashRate * cashRatio : null
         const currentPriceNumber = this.getNumberValue(signal.rawPrice !== undefined ? signal.rawPrice : signal.price)
         const shares = this.calculateWholeShares(cash, allocationRate, currentPriceNumber)
+        const amountNumber = this.calculateShareCalculatorAmount(currentPriceNumber, shares)
 
         return {
           key: `share-calculator-signal-${signal.symbol || '--'}-${index}`,
           ticker: signal.symbol || '--',
           currentPrice: signal.price || '--',
           positionPct: this.formatShareCalculatorRate(allocationRate),
-            sharesNumber: shares,
-            shares: shares.toLocaleString('en-US'),
-          }
-        })
+          sharesNumber: shares,
+          shares: shares.toLocaleString('en-US'),
+          amountNumber,
+          amount: this.formatMoneyValue(amountNumber, '$0'),
+        }
+      })
     },
     getShareCalculatorRate(value) {
       if (value === undefined || value === null || value === '' || value === '--') return null
@@ -3054,6 +3120,12 @@ export default {
 
       const rawShares = cash * allocationRate / currentPrice
       return rawShares > 0 ? Math.floor(rawShares) : 0
+    },
+    calculateShareCalculatorAmount(currentPrice, shares) {
+      const price = Number(currentPrice)
+      const shareCount = Number(shares)
+      if (!Number.isFinite(price) || !Number.isFinite(shareCount)) return 0
+      return price * shareCount
     },
     formatShareCalculatorRate(rate) {
       if (rate === null || !Number.isFinite(rate)) return '--'
@@ -3417,7 +3489,8 @@ export default {
           currentPrice: this.formatMoneyValue(rawCurrentPrice, '--'),
           rawCurrentPrice,
           profitPct: this.formatPercentValue(this.getFirstDefined(position, ['profit_pct', 'profitPct']), true, '--'),
-                    positionPct: this.formatPercentValue(rawPositionPct, false, '--'),
+          shares: this.formatIntegerValue(this.getFirstDefined(position, ['shares', 'share_count', 'shareCount', 'quantity', 'qty']), '--'),
+          positionPct: this.formatPercentValue(rawPositionPct, false, '--'),
           rawPositionPct,
           signal: this.getFirstDefined(position, ['signal', 'signal_name']) || '--',
           status: positionStatus || (this.shouldSellPosition(position) ? 'Sell Tomorrow' : 'Holding'),
@@ -3447,9 +3520,10 @@ export default {
             entryPrice: this.formatMoneyValue(this.getFirstDefined(trade, ['entry_price', 'entryPrice']), '--'),
             exitDate: this.getFirstDefined(trade, ['exit_date', 'exitDate']) || '--',
             exitPrice: this.formatMoneyValue(this.getFirstDefined(trade, ['exit_price', 'exitPrice']), '--'),
+            shares: this.formatIntegerValue(this.getFirstDefined(trade, ['shares', 'share_count', 'shareCount', 'quantity', 'qty']), '--'),
             returnPct: this.formatPercentValue(profitPct, true, '--'),
-                        exitReason: this.mapExitReason(this.getFirstDefined(trade, ['exit_reason', 'exitReason'])),
-            signal: this.getFirstDefined(trade, ['signal', 'signal_name']) || '--',
+            realizedPnl: this.formatMoneyValue(this.getFirstDefined(trade, ['float_profit', 'floatProfit']), '--'),
+            exitReason: this.mapExitReason(this.getFirstDefined(trade, ['exit_reason', 'exitReason'])),
           }
         })
     },
@@ -7410,6 +7484,16 @@ export default {
   text-align: right;
 }
 
+.share-calculator-total-row td {
+  background: #f8fafc;
+  border-top: 1px solid #cbd5e1;
+  font-weight: 800;
+}
+
+.share-calculator-total-row td:first-child {
+  text-align: right;
+}
+
 .guide-header {
   display: flex;
   align-items: center;
@@ -7908,7 +7992,7 @@ details[open] .faq-question::before {
 .history-table td:nth-child(3),
 .history-table th:nth-child(5),
 .history-table td:nth-child(5) {
-  width: 11%;
+  width: 10%;
 }
 
 .history-table th:nth-child(4),
@@ -7930,7 +8014,14 @@ details[open] .faq-question::before {
 
 .history-table th:nth-child(9),
 .history-table td:nth-child(9) {
-  width: 19%;
+}
+
+.history-table th:nth-child(10),
+.history-table td:nth-child(10) {
+  width: 10%;
+  min-width: 120px;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .holdings-table td {
