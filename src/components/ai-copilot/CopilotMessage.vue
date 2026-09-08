@@ -43,12 +43,14 @@
         <template v-else>
           <!-- Duration header + toggle chevron -->
           <div
-            v-if="durationText || hasThinkingBlocks"
+            v-if="durationText || hasThinkingBlocks || _streamStatusText || message.status === 'pending' || message.status === 'streaming'"
             class="duration-label"
             :class="{ 'has-toggle': hasThinkingBlocks }"
             @click="hasThinkingBlocks && toggleThoughts()"
           >
-            <span v-if="durationText">{{ durationText }}</span>
+            <!-- 流状态文本：始终渲染，RAF 直接控制内容和显隐，绕过 Vue 异步刷新 -->
+            <span ref="streamingStatusSpan" class="streaming-status">{{ _streamStatusText }}</span>
+            <span v-if="!_streamStatusText && durationText">{{ durationText }}</span>
             <i
               v-if="hasThinkingBlocks"
               :class="thoughtsOpen ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"
@@ -186,7 +188,7 @@ export default {
   props: {
     message: { type: Object, required: true },
     isLastUserMessage: { type: Boolean, default: false },
-    isLastAssistantMessage: { type: Boolean, default: false }
+    isLastAssistantMessage: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -195,12 +197,29 @@ export default {
       editContent: '',
       feedback: null,
       expandedMap: {},
-      thoughtsManualOpen: null, // null=auto, true=手动展开, false=手动折叠
+      thoughtsManualOpen: null,
+      _streamStartedAt: 0,
+      _streamRafId: null,
+      _streamStatusText: '',
     }
   },
   mounted() {
-    // Restore feedback state from message
     this.feedback = this.message.user_feedback || null
+    if (this.message.status === 'pending' || this.message.status === 'streaming') {
+      this._startStreamTimer()
+    }
+  },
+  beforeDestroy() {
+    this._stopStreamTimer()
+  },
+  watch: {
+    'message.status'(newStatus) {
+      if (newStatus === 'pending' || newStatus === 'streaming') {
+        this._startStreamTimer()
+      } else if (newStatus === 'done' || newStatus === 'error') {
+        this._stopStreamTimer()
+      }
+    },
   },
   computed: {
     /** Auto-collapse when done, expand when streaming. User can override via toggle. */
@@ -279,6 +298,67 @@ export default {
     }
   },
   methods: {
+    _startStreamTimer() {
+      this._stopStreamTimer()
+      this._streamStartedAt = Date.now()
+      this._streamLoop()
+    },
+    _stopStreamTimer() {
+      if (this._streamRafId) {
+        cancelAnimationFrame(this._streamRafId)
+        this._streamRafId = null
+      }
+      this._streamStatusText = ''
+      const el = this.$refs.streamingStatusSpan
+      if (el) el.style.display = 'none'
+    },
+    _streamLoop() {
+      this._updateStreamDisplay()
+      this._streamRafId = requestAnimationFrame(this._streamLoop.bind(this))
+    },
+    _updateStreamDisplay() {
+      const elapsed = Date.now() - this._streamStartedAt
+      const s = Math.floor(elapsed / 1000)
+      const ms = Math.floor((elapsed % 1000) / 100)
+      const timeStr = `(${s}.${ms}s)`
+
+      const toolCalls = (this.message.blocks || [])
+        .filter(b => b.type === 'tool' && b.toolCall?.status !== 'completed')
+        .map(b => b.toolCall)
+
+      if (toolCalls.length > 0) {
+        const names = toolCalls.map(t => (t.name || '').replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase()))
+        this._streamStatusText = `Running ${names.length === 1 ? names[0] : names.join(', ')}... ${timeStr}`
+      } else if (this.message.status === 'streaming') {
+        this._streamStatusText = `Generating response... ${timeStr}`
+      } else {
+        const statuses = this.message.retrieveStatuses || []
+        const last = statuses[statuses.length - 1] || null
+        const type = last?.type
+        if (type === 'initial') this._streamStatusText = `Analyzing request... ${timeStr}`
+        else if (type === 'retrieving') this._streamStatusText = `Searching knowledge base... ${timeStr}`
+        else if (type === 'completed') this._streamStatusText = ''
+        else if (type === 'error') this._streamStatusText = `${last.message || ''} ${timeStr}`
+        else if (type === 'insufficient') this._streamStatusText = `Knowledge base has limited info ${timeStr}`
+        else if (last?.message) this._streamStatusText = `${last.message} ${timeStr}`
+        else {
+          const chunks = this.message.reasoning_chunks || []
+          const reasoning = chunks.length ? chunks[chunks.length - 1].content : ''
+          if (reasoning?.trim()) {
+            const t = reasoning.trim()
+            this._streamStatusText = `${t.length > 60 ? t.slice(0, 60) + '…' : t} ${timeStr}`
+          } else {
+            this._streamStatusText = `Thinking... ${timeStr}`
+          }
+        }
+      }
+
+      const el = this.$refs.streamingStatusSpan
+      if (el) {
+        el.textContent = this._streamStatusText
+        el.style.display = this._streamStatusText ? '' : 'none'
+      }
+    },
     toggleThoughts() {
       this.thoughtsManualOpen = !this.thoughtsOpen
     },
@@ -780,6 +860,10 @@ export default {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+.streaming-status:empty {
+  display: none;
 }
 
 .duration-label.has-toggle {

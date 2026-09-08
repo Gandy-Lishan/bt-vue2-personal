@@ -107,32 +107,21 @@
           @send="handleSend"
           @cancel="handleCancel"
           @error="handleInputError"
-        >
-          <template #status>
-            <CopilotRetrieveStatus
-              :statuses="activeStatuses"
-              :tool-calls="activeToolCalls"
-              :latest-reasoning="latestReasoningContent"
-              :is-loading="isActiveAssistantLoading"
-              :is-streaming="isStreaming"
-            />
-          </template>
-        </CopilotInput>
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { useAICopilot } from '@/composables/useAICopilot'
 import CopilotMessages from '@/components/ai-copilot/CopilotMessages.vue'
 import CopilotInput from '@/components/ai-copilot/CopilotInput.vue'
-import CopilotRetrieveStatus from '@/components/ai-copilot/CopilotRetrieveStatus.vue'
 
 export default {
   name: 'CopilotPage',
-  components: { CopilotMessages, CopilotInput, CopilotRetrieveStatus },
+  components: { CopilotMessages, CopilotInput },
   data() {
     return {
       copilot: null,
@@ -146,7 +135,6 @@ export default {
   },
   computed: {
     ...mapState('aiCopilot', ['messages', 'isLoading', 'isStreaming', 'error', 'conversations', 'conversationsLoading', 'conversationsHasMore']),
-    ...mapGetters('aiCopilot', ['lastAssistantMessage']),
     headerTitle() {
       const id = this.$store.state.aiCopilot.conversationId
       if (!id) return 'AI Copilot'
@@ -160,26 +148,6 @@ export default {
     },
     currentConversationId() {
       return this.$store.state.aiCopilot.conversationId
-    },
-    activeAssistantMessage() {
-      const last = this.lastAssistantMessage
-      if (!last || last.status === 'done' || last.status === 'error') return null
-      return last
-    },
-    activeStatuses() {
-      return this.activeAssistantMessage?.retrieveStatuses || []
-    },
-    activeToolCalls() {
-      const blocks = this.activeAssistantMessage?.blocks || []
-      return blocks.filter(b => b.type === 'tool' && b.toolCall?.status !== 'completed').map(b => b.toolCall)
-    },
-    latestReasoningContent() {
-      const chunks = this.activeAssistantMessage?.reasoning_chunks || []
-      if (!chunks.length) return ''
-      return chunks[chunks.length - 1].content || ''
-    },
-    isActiveAssistantLoading() {
-      return Boolean(this.activeAssistantMessage && this.isLoading)
     },
   },
   created() {
@@ -245,7 +213,6 @@ export default {
       await this.copilot.createNewConversation()
     },
     async handleDeleteConversation(conversationId) {
-      // Confirmation is handled in CopilotHistoryPanel
       await this.copilot.deleteConversation(conversationId)
     },
     async handleLoadMoreConversations() {

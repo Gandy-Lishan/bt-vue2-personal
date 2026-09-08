@@ -388,7 +388,10 @@ export class AIClient {
           break
         case 'error':
           this.isCompleted = true
-          if (callbacks.onError) callbacks.onError(new Error(chunk.error || 'Generation failed'))
+          if (callbacks.onError) {
+            const errMsg = chunk.detail || chunk.error || 'Generation failed'
+            callbacks.onError(new Error(errMsg))
+          }
           break
         case 'text':
           if (chunk.content && aiMessageId) {
