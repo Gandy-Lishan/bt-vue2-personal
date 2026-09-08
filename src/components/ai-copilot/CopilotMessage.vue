@@ -59,7 +59,7 @@
           <!-- Collapsible thinking area: all non-final-content blocks (reasoning + tool + intermediate content) -->
           <div v-show="thoughtsOpen" class="thoughts-body" v-if="hasThinkingBlocks">
             <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="bi !== lastContentIndex">
-              <details v-if="block.type === 'reasoning'" class="thought-block">
+              <details v-if="block.type === 'reasoning'" class="thought-block" :open="isReasoningOpen(bi)">
                 <summary class="thought-header">
                   <span class="thought-label">Thought</span>
                   <i class="fa fa-chevron-down thought-chevron" aria-hidden="true"></i>
@@ -193,6 +193,14 @@ export default {
     // Restore feedback state from message
     this.feedback = this.message.user_feedback || null
   },
+  watch: {
+    'message.status'(newStatus) {
+      // Auto-collapse thoughts when stream finishes
+      if (newStatus === 'done' || newStatus === 'error') {
+        this.thoughtsOpen = false
+      }
+    },
+  },
   computed: {
     isUser() {
       return this.message.role === 'user'
@@ -324,6 +332,18 @@ export default {
     },
     toggleItem(key) {
       this.$set(this.expandedMap, key, !this.expandedMap[key])
+    },
+    /** Reasoning block is open only while it's the last non-content block. */
+    isReasoningOpen(bi) {
+      const blocks = this.message.blocks || []
+      // Find if there's any non-reasoning block after this one (excluding final content)
+      for (let i = bi + 1; i < blocks.length; i++) {
+        if (i === this.lastContentIndex) continue
+        if (blocks[i].type !== 'reasoning') return false
+      }
+      // Also check if the stream is still active — if last block is this reasoning, keep open
+      const isLastBlock = bi === blocks.length - 1
+      return isLastBlock || blocks[bi + 1]?.type === 'reasoning'
     },
   }
 }
