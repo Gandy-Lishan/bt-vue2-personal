@@ -319,6 +319,7 @@ export default {
   display: flex;
   flex-direction: column;
   min-width: 260px;
+  min-height: 0;
 }
 
 .sidebar-top {
@@ -371,6 +372,7 @@ export default {
 .sidebar-list {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
 }
 
 .sidebar-item {
