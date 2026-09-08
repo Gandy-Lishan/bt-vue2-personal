@@ -74,11 +74,10 @@ export function useAICopilot() {
 
     const handler = localTools[toolCall.name]
     if (!handler) {
-      // 服务端工具：只更新徽章状态
-      store.commit('aiCopilot/UPDATE_MESSAGE_TOOL_CALL', {
-        messageId,
-        toolCall: { ...toolCall, status: 'completed' },
-      })
+      // Server-side tool: keep status as 'running' — the tool_result SSE event
+      // will update it to completed/error when the backend finishes execution.
+      // Don't preemptively set completed here, or isReasoningOpen will think
+      // this reasoning round is already in the past.
       return
     }
 
@@ -191,6 +190,13 @@ export function useAICopilot() {
         store.commit('aiCopilot/UPDATE_MESSAGE_RETRIEVE_STATUSES', {
           messageId,
           status,
+        })
+      },
+
+      onReasoningChunk: (messageId, chunkContent) => {
+        store.commit('aiCopilot/APPEND_REASONING_CHUNK', {
+          messageId,
+          chunk: chunkContent,
         })
       },
 

@@ -266,6 +266,10 @@ export class AIClient {
     this.buffer = new DoubleBufferQueue()
     if (callbacks.onChunk) {
       this.buffer.setCallback(callbacks.onChunk)
+      this._onChunkDirect = callbacks.onChunk
+    }
+    if (callbacks.onReasoningChunk) {
+      this._onReasoningChunkDirect = callbacks.onReasoningChunk
     }
 
     const body = {
@@ -374,8 +378,12 @@ export class AIClient {
           if (callbacks.onDone) callbacks.onDone(chunk.conversation_id || conversationId, chunk.assistant_message_id, doneSources, doneLatency)
           break
         case 'reasoning':
-          if (chunk.content && callbacks.onReasoning) {
-            callbacks.onReasoning({ content: chunk.content, seq: chunk.seq }, aiMessageId)
+          if (chunk.content && aiMessageId) {
+            if (callbacks.onReasoningChunk) {
+              await this._writeReasoningChunk(aiMessageId, chunk.content)
+            } else if (callbacks.onReasoning) {
+              callbacks.onReasoning({ content: chunk.content, seq: chunk.seq }, aiMessageId)
+            }
           }
           break
         case 'error':
@@ -418,19 +426,47 @@ export class AIClient {
     }
   }
 
+  async _writeReasoningChunk(messageId, content) {
+    if (!content || !messageId) return
+    // Reasoning content from LLM is typically short-to-medium length.
+    // Use the same fake-typing treatment as text for visual consistency.
+    if (this._onReasoningChunkDirect) {
+      const parts = content.match(/\S+\s*/g) || [content]
+      for (const part of parts) {
+        if (this.abortController?.signal.aborted || this.isCompleted) break
+        this._onReasoningChunkDirect(messageId, part)
+        await new Promise(resolve => setTimeout(resolve, 24))
+      }
+    }
+  }
+
   async _writeTextChunk(messageId, content) {
     if (!content || !messageId) return
-    const shouldFake = content.length > 80 && !this.isCompleted
-    if (!shouldFake) {
+    // For short content, write directly through buffer (RAF-timed)
+    if (content.length <= 80 || this.isCompleted) {
       this.buffer.write(messageId, content)
       return
     }
 
-    const parts = content.match(/\S+\s*/g) || [content]
-    for (const part of parts) {
-      if (this.abortController?.signal.aborted || this.isCompleted) break
-      this.buffer.write(messageId, part)
-      await new Promise(resolve => setTimeout(resolve, 24))
+    // For long content, bypass RAF and call onChunk directly
+    // so content block is created before any subsequent tool events.
+    // We still do the fake-typing animation for visual effect,
+    // but the block is created synchronously.
+    if (this._onChunkDirect) {
+      const parts = content.match(/\S+\s*/g) || [content]
+      for (const part of parts) {
+        if (this.abortController?.signal.aborted || this.isCompleted) break
+        this._onChunkDirect(messageId, part)
+        await new Promise(resolve => setTimeout(resolve, 24))
+      }
+    } else {
+      // Fallback: use buffer
+      const parts = content.match(/\S+\s*/g) || [content]
+      for (const part of parts) {
+        if (this.abortController?.signal.aborted || this.isCompleted) break
+        this.buffer.write(messageId, part)
+        await new Promise(resolve => setTimeout(resolve, 24))
+      }
     }
   }
 
@@ -526,6 +562,10 @@ export class AIClient {
     this.buffer = new DoubleBufferQueue()
     if (callbacks.onChunk) {
       this.buffer.setCallback(callbacks.onChunk)
+      this._onChunkDirect = callbacks.onChunk
+    }
+    if (callbacks.onReasoningChunk) {
+      this._onReasoningChunkDirect = callbacks.onReasoningChunk
     }
 
     this.abortController = new AbortController()

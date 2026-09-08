@@ -46,7 +46,7 @@
             v-if="durationText || hasThinkingBlocks"
             class="duration-label"
             :class="{ 'has-toggle': hasThinkingBlocks }"
-            @click="hasThinkingBlocks && (thoughtsOpen = !thoughtsOpen)"
+            @click="hasThinkingBlocks && toggleThoughts()"
           >
             <span v-if="durationText">{{ durationText }}</span>
             <i
@@ -189,21 +189,25 @@ export default {
     isLastAssistantMessage: { type: Boolean, default: false }
   },
   data() {
-    return { copied: false, isEditing: false, editContent: '', feedback: null, expandedMap: {}, thoughtsOpen: true }
+    return {
+      copied: false,
+      isEditing: false,
+      editContent: '',
+      feedback: null,
+      expandedMap: {},
+      thoughtsManualOpen: null, // null=auto, true=手动展开, false=手动折叠
+    }
   },
   mounted() {
     // Restore feedback state from message
     this.feedback = this.message.user_feedback || null
   },
-  watch: {
-    'message.status'(newStatus) {
-      // Auto-collapse thoughts when stream finishes
-      if (newStatus === 'done' || newStatus === 'error') {
-        this.thoughtsOpen = false
-      }
-    },
-  },
   computed: {
+    /** Auto-collapse when done, expand when streaming. User can override via toggle. */
+    thoughtsOpen() {
+      if (this.thoughtsManualOpen !== null) return this.thoughtsManualOpen
+      return this.message.status === 'streaming' || this.message.status === 'pending'
+    },
     isUser() {
       return this.message.role === 'user'
     },
@@ -275,6 +279,9 @@ export default {
     }
   },
   methods: {
+    toggleThoughts() {
+      this.thoughtsManualOpen = !this.thoughtsOpen
+    },
     formatTime(ts) {
       const d = new Date(ts)
       return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
@@ -343,15 +350,23 @@ export default {
     isFinalAnswer(bi) {
       return this.message.status === 'done' && bi === this.lastContentIndex
     },
-    /** Reasoning block is open only while it's the active (last) reasoning block. */
+    /** Thought block open state.
+     *  During streaming: open if the following tool blocks haven't completed yet
+     *    (status is pending or running) — meaning this is the current thinking round.
+     *  After done: all collapsed. */
     isReasoningOpen(bi) {
       const blocks = this.message.blocks || []
-      // Find if there's any non-reasoning block after this one
+      if (this.message.status !== 'pending' && this.message.status !== 'streaming') return false
       for (let i = bi + 1; i < blocks.length; i++) {
-        if (blocks[i].type !== 'reasoning') return false
+        if (blocks[i].type === 'tool') {
+          const tc = blocks[i].toolCall
+          // If the tool is still pending/running, this reasoning is current → keep open
+          if (tc && (tc.status === 'pending' || tc.status === 'running')) return true
+          // Tool completed → this reasoning is past → collapse
+          return false
+        }
       }
-      // Keep open if this is the last block (still streaming) or followed by more reasoning
-      return bi === blocks.length - 1 || blocks[bi + 1]?.type === 'reasoning'
+      return true
     },
   }
 }

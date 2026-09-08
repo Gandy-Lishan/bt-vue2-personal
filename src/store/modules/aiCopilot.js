@@ -69,7 +69,6 @@ const mutations = {
     const newContent = typeof msg.content === 'string'
       ? msg.content + chunk
       : chunk
-    // Interleave content chunks as blocks so they render between reasoning/tool events
     const blocks = (msg.blocks || []).slice()
     const lastBlock = blocks[blocks.length - 1]
     if (lastBlock && lastBlock.type === 'content') {
@@ -246,6 +245,19 @@ const mutations = {
     const msg = state.messages[idx]
     const blocks = (msg.blocks || []).slice()
     blocks.push({ type: 'reasoning', seq: chunk.seq, content: chunk.content })
+    state.messages.splice(idx, 1, { ...msg, blocks })
+  },
+  APPEND_REASONING_CHUNK(state, { messageId, chunk }) {
+    const idx = state.messages.findIndex(m => m.id === messageId)
+    if (idx === -1) return
+    const msg = state.messages[idx]
+    const blocks = (msg.blocks || []).slice()
+    const lastBlock = blocks[blocks.length - 1]
+    if (lastBlock && lastBlock.type === 'reasoning') {
+      blocks[blocks.length - 1] = { ...lastBlock, content: lastBlock.content + chunk }
+    } else {
+      blocks.push({ type: 'reasoning', content: chunk })
+    }
     state.messages.splice(idx, 1, { ...msg, blocks })
   },
 }
