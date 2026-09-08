@@ -56,9 +56,9 @@
             ></i>
           </div>
 
-          <!-- Collapsible thinking area: all non-final-content blocks (reasoning + tool + intermediate content) -->
+          <!-- Collapsible thinking area: all blocks (reasoning + tool + content) interleaved in stream order -->
           <div v-show="thoughtsOpen" class="thoughts-body" v-if="hasThinkingBlocks">
-            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="bi !== lastContentIndex">
+            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi">
               <details v-if="block.type === 'reasoning'" class="thought-block" :open="isReasoningOpen(bi)">
                 <summary class="thought-header">
                   <span class="thought-label">Thought</span>
@@ -82,16 +82,6 @@
               />
             </div>
           </div>
-
-          <!-- Final answer: the last content block (always visible) -->
-          <CopilotMarkdown
-            v-if="lastContentIndex >= 0"
-            class="inline-content final-answer"
-            :content="message.blocks[lastContentIndex].content"
-            :status="message.status"
-            :error="message.error"
-            :has-activity="false"
-          />
 
           <!-- Fallback: legacy messages without content blocks render content at the bottom -->
           <CopilotMarkdown
@@ -218,14 +208,6 @@ export default {
     hasContentBlocks() {
       return (this.message.blocks || []).some(b => b.type === 'content')
     },
-    /** Index of the last content block. Everything before it is "thinking". */
-    lastContentIndex() {
-      const blocks = this.message.blocks || []
-      for (let i = blocks.length - 1; i >= 0; i--) {
-        if (blocks[i].type === 'content') return i
-      }
-      return -1
-    },
     /** True if there are thinking blocks (reasoning or tool blocks). */
     hasThinkingBlocks() {
       return (this.message.blocks || []).some(b => b.type === 'reasoning' || b.type === 'tool')
@@ -333,17 +315,15 @@ export default {
     toggleItem(key) {
       this.$set(this.expandedMap, key, !this.expandedMap[key])
     },
-    /** Reasoning block is open only while it's the last non-content block. */
+    /** Reasoning block is open only while it's the active (last) reasoning block. */
     isReasoningOpen(bi) {
       const blocks = this.message.blocks || []
-      // Find if there's any non-reasoning block after this one (excluding final content)
+      // Find if there's any non-reasoning block after this one
       for (let i = bi + 1; i < blocks.length; i++) {
-        if (i === this.lastContentIndex) continue
         if (blocks[i].type !== 'reasoning') return false
       }
-      // Also check if the stream is still active — if last block is this reasoning, keep open
-      const isLastBlock = bi === blocks.length - 1
-      return isLastBlock || blocks[bi + 1]?.type === 'reasoning'
+      // Keep open if this is the last block (still streaming) or followed by more reasoning
+      return bi === blocks.length - 1 || blocks[bi + 1]?.type === 'reasoning'
     },
   }
 }
