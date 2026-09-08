@@ -36,6 +36,8 @@ export default {
         return `Running ${names.join(', ')}...`
       }
       if (this.isStreaming || this.lastStatus?.type === 'assessing') return 'Generating response...'
+      // Hide status when stream is done and no active loading
+      if (!this.isLoading && !this.isStreaming) return ''
       const type = this.lastStatus?.type
       if (type === 'initial') return 'Analyzing request...'
       if (type === 'retrieving') return 'Searching knowledge base...'
