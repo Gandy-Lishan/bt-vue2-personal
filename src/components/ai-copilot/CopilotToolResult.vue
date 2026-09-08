@@ -35,7 +35,7 @@
 
 <script>
 const STATUS_ICONS = {
-  pending: 'fa fa-circle-o-notch',
+  pending: 'fa fa-circle-o-notch fa-spin',
   running: 'fa fa-circle-o-notch fa-spin',
   calling: 'fa fa-circle-o-notch fa-spin',
   completed: 'fa fa-check',
