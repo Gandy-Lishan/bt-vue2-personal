@@ -56,9 +56,10 @@
             ></i>
           </div>
 
-          <!-- Collapsible thinking area: all blocks (reasoning + tool + content) interleaved in stream order -->
+          <!-- Collapsible thinking area: blocks in stream order -->
+          <!-- When done, the last content block is extracted as final answer (see below) -->
           <div v-show="thoughtsOpen" class="thoughts-body" v-if="hasThinkingBlocks">
-            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi">
+            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="!isFinalAnswer(bi)">
               <details v-if="block.type === 'reasoning'" class="thought-block" :open="isReasoningOpen(bi)">
                 <summary class="thought-header">
                   <span class="thought-label">Thought</span>
@@ -81,6 +82,17 @@
                 :has-activity="false"
               />
             </div>
+          </div>
+
+          <!-- Final answer: extracted from blocks after stream completes -->
+          <div v-if="hasFinalAnswer" class="final-answer-wrapper">
+            <CopilotMarkdown
+              class="final-answer"
+              :content="message.blocks[lastContentIndex].content"
+              :status="message.status"
+              :error="message.error"
+              :has-activity="false"
+            />
           </div>
 
           <!-- Fallback: legacy messages without content blocks render content at the bottom -->
@@ -208,6 +220,18 @@ export default {
     hasContentBlocks() {
       return (this.message.blocks || []).some(b => b.type === 'content')
     },
+    /** Index of the last content block — only meaningful after stream completes. */
+    lastContentIndex() {
+      const blocks = this.message.blocks || []
+      for (let i = blocks.length - 1; i >= 0; i--) {
+        if (blocks[i].type === 'content') return i
+      }
+      return -1
+    },
+    /** True when stream finished and there's a content block to extract as final answer. */
+    hasFinalAnswer() {
+      return this.message.status === 'done' && this.lastContentIndex >= 0
+    },
     /** True if there are thinking blocks (reasoning or tool blocks). */
     hasThinkingBlocks() {
       return (this.message.blocks || []).some(b => b.type === 'reasoning' || b.type === 'tool')
@@ -314,6 +338,10 @@ export default {
     },
     toggleItem(key) {
       this.$set(this.expandedMap, key, !this.expandedMap[key])
+    },
+    /** Whether this block index is the final answer content block (only when done). */
+    isFinalAnswer(bi) {
+      return this.message.status === 'done' && bi === this.lastContentIndex
     },
     /** Reasoning block is open only while it's the active (last) reasoning block. */
     isReasoningOpen(bi) {
@@ -825,5 +853,10 @@ export default {
   color: #111827;
   font-size: 14px;
   margin: 8px 0;
+}
+
+/* Final answer wrapper — visually separated from thinking area */
+.final-answer-wrapper {
+  margin-top: 16px;
 }
 </style>
