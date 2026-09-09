@@ -9,10 +9,27 @@
             <i class="fa fa-search" aria-hidden="true"></i>
             <span>Search...</span>
           </div>
-          <button class="new-chat-btn" @click="handleNewChat">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-            <span>New chat</span>
-          </button>
+          <div v-if="!selectionMode" class="top-actions">
+            <button class="new-chat-btn" @click="handleNewChat" :disabled="atConversationLimit" :title="atConversationLimit ? 'Conversation limit reached (50/50)' : ''">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+              <span>New chat</span>
+            </button>
+            <button class="select-btn" @click="enterSelectionMode" title="Select multiple">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <rect x="2.5" y="3" width="3" height="3" rx="0.6" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="7" y="3.8" width="6.5" height="1.4" rx="0.4"/>
+                <rect x="2.5" y="8" width="3" height="3" rx="0.6" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="7" y="8.8" width="6.5" height="1.4" rx="0.4"/>
+              </svg>
+            </button>
+          </div>
+          <!-- Selection toolbar replaces New chat row -->
+          <div v-if="selectionMode" class="top-actions">
+            <button class="toolbar-btn cancel" @click="exitSelectionMode">取消</button>
+            <button class="toolbar-btn delete" @click="confirmBatchDelete" :disabled="selectedIds.size === 0">
+              删除({{ selectedIds.size }})
+            </button>
+          </div>
         </div>
 
         <!-- Conversation List -->
@@ -21,10 +38,13 @@
             v-for="conv in conversations"
             :key="conv.id"
             :class="['sidebar-item', { active: conv.id === currentConversationId }]"
-            @click="handleSelectConversation(conv.id)"
+            @click="selectionMode ? toggleSelect(conv.id) : handleSelectConversation(conv.id)"
             @mouseenter="hoveredId = conv.id"
             @mouseleave="hoveredId = null"
           >
+            <label v-if="selectionMode" class="item-checkbox" @click.stop>
+              <input type="checkbox" :checked="selectedIds.has(conv.id)" @change="toggleSelect(conv.id)">
+            </label>
             <div class="item-icon">
               <i class="fa fa-align-left" aria-hidden="true"></i>
             </div>
@@ -33,6 +53,7 @@
               <div class="item-time">{{ formatTime(conv.updated_at || conv.created_at) }}</div>
             </div>
             <el-popconfirm
+              v-if="!selectionMode"
               v-show="hoveredId === conv.id"
               title="Delete this conversation?"
               confirm-button-text="Delete"
@@ -131,6 +152,9 @@ export default {
       hoveredId: null,
       isUnderMaintenance: false,
       _lastHiddenAt: 0,
+      selectionMode: false,
+      selectedIds: new Set(),
+      conversationCount: 0,
     }
   },
   computed: {
@@ -148,6 +172,9 @@ export default {
     },
     currentConversationId() {
       return this.$store.state.aiCopilot.conversationId
+    },
+    atConversationLimit() {
+      return this.conversationCount >= 50
     },
   },
   created() {
@@ -186,6 +213,14 @@ export default {
         }
       }
       this.loadConversations()
+      this.refreshConversationCount()
+    },
+    async refreshConversationCount() {
+      try {
+        this.conversationCount = await this.copilot.fetchConversationCount()
+      } catch {
+        // Silent failure
+      }
     },
     async _syncHistoryOnReturn() {
       // Silent background re-sync — don't block UI or show loading spinner.
@@ -210,10 +245,43 @@ export default {
       }
     },
     async handleNewChat() {
+      if (this.atConversationLimit) return
       await this.copilot.createNewConversation()
+      this.refreshConversationCount()
     },
     async handleDeleteConversation(conversationId) {
       await this.copilot.deleteConversation(conversationId)
+      this.refreshConversationCount()
+    },
+    enterSelectionMode() {
+      this.selectionMode = true
+      this.selectedIds = new Set()
+    },
+    exitSelectionMode() {
+      this.selectionMode = false
+      this.selectedIds = new Set()
+    },
+    toggleSelect(id) {
+      if (this.selectedIds.has(id)) {
+        this.selectedIds.delete(id)
+      } else {
+        this.selectedIds.add(id)
+      }
+      // Force reactivity update
+      this.selectedIds = new Set(this.selectedIds)
+    },
+    async confirmBatchDelete() {
+      if (this.selectedIds.size === 0) return
+      const ids = Array.from(this.selectedIds)
+      const deletedCurrent = ids.includes(this.currentConversationId)
+      const result = await this.copilot.deleteConversations(ids)
+      this.exitSelectionMode()
+      this.refreshConversationCount()
+      // If we deleted the current conversation, create a new one
+      if (deletedCurrent) {
+        await this.copilot.createNewConversation()
+        this.refreshConversationCount()
+      }
     },
     async handleLoadMoreConversations() {
       if (this.conversationsLoading || !this.conversationsHasMore) return
@@ -350,9 +418,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 10px;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 999px;
   border: 1px solid #e5e7eb;
   background: #fff;
   color: #374151;
@@ -360,12 +428,89 @@ export default {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+  flex: 1;
 }
 
 .new-chat-btn:hover {
   border-color: #2563eb;
   background: #f0f7ff;
   color: #2563eb;
+}
+
+.new-chat-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.new-chat-btn:disabled:hover {
+  border-color: #e5e7eb;
+  background: #fff;
+  color: #374151;
+}
+
+.top-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.select-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.select-btn:hover {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Toolbar buttons (used in selection mode) */
+.toolbar-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.toolbar-btn.cancel {
+  background: #fff;
+  color: #6b7280;
+}
+
+.toolbar-btn.cancel:hover {
+  background: #f3f4f6;
+}
+
+.toolbar-btn.delete {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+.toolbar-btn.delete:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.toolbar-btn.delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Sidebar List */
@@ -387,6 +532,21 @@ export default {
 
 .sidebar-item:hover {
   background: #f3f4f6;
+}
+
+.item-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.item-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #2563eb;
 }
 
 .item-icon {

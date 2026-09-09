@@ -451,6 +451,34 @@ export function useAICopilot() {
   }
 
   /**
+   * 批量删除会话
+   */
+  async function deleteConversations(ids) {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return { deleted: [], failed: ids || [] }
+    }
+    const result = await aiClient.deleteConversations(ids)
+    if (result.deleted && result.deleted.length) {
+      for (const id of result.deleted) {
+        store.commit('aiCopilot/DELETE_CONVERSATION', id)
+      }
+      const currentId = store.state.aiCopilot.conversationId
+      if (currentId && result.deleted.includes(currentId)) {
+        store.commit('aiCopilot/SET_CONVERSATION_ID', null)
+        store.commit('aiCopilot/CLEAR_MESSAGES')
+      }
+    }
+    return result
+  }
+
+  /**
+   * 获取当前用户会话总数
+   */
+  async function fetchConversationCount() {
+    return aiClient.fetchConversationCount()
+  }
+
+  /**
    * 加载历史消息
    */
   async function loadHistory() {
@@ -711,6 +739,8 @@ export function useAICopilot() {
     switchConversation,
     createNewConversation,
     deleteConversation,
+    deleteConversations,
+    fetchConversationCount,
   }
 }
 

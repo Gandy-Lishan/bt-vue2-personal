@@ -659,6 +659,52 @@ export class AIClient {
   }
 
   /**
+   * 批量删除对话
+   */
+  async deleteConversations(ids) {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return { deleted: [], failed: [] }
+    }
+
+    try {
+      const res = await fetch(`${this.baseURL}/v1/conversations/batch`, {
+        method: 'DELETE',
+        headers: this._getHeaders(),
+        credentials: 'include',
+        body: JSON.stringify({ ids }),
+      })
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+      return await res.json()
+    } catch (err) {
+      console.error('[AIClient] deleteConversations failed:', err)
+      return { deleted: [], failed: ids }
+    }
+  }
+
+  /**
+   * 获取当前用户会话总数
+   */
+  async fetchConversationCount() {
+    try {
+      const res = await fetch(`${this.baseURL}/v1/conversations/count`, {
+        method: 'GET',
+        headers: this._getHeaders(),
+        credentials: 'include',
+      })
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
+      }
+      const data = await res.json()
+      return data.count || 0
+    } catch (err) {
+      console.error('[AIClient] fetchConversationCount failed:', err)
+      return 0
+    }
+  }
+
+  /**
    * 删除单条消息
    */
   async deleteMessage(conversationId, messageId) {
