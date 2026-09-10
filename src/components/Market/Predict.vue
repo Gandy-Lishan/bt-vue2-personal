@@ -9,9 +9,21 @@
          <p style="font-weight: 400; font-size: 14px;">
           The Market Prediction summarizes the market's leading analysts' forecasts for the target price of a particular Ticker for the next three months. Based on analysts' professional interpretation of the current market conditions and latest data, we have compiled these informative estimates of future price movements for you, helping you to gain a better insight into potential market opportunities.
          </p>
-         <h3 class="table-title">Market Prediction Summary</h3>
+         <div class="summary-toolbar">
+          <h3 class="table-title">Market Prediction Summary</h3>
+         </div>
+         <div class="tabel-input">
+            <el-input
+              v-model.trim="searchKeyword"
+              class="summary-search"
+              placeholder="Search"
+              prefix-icon="el-icon-search"
+              size="small"
+              clearable
+            />
+         </div>
         <base-table
-          :tableData="tableData"
+          :tableData="filteredTableData"
           :columns="columns"
           :loading="loading"
           tip-text=""
@@ -40,6 +52,7 @@ export default {
       loading: false,
       tableData: [],
       columns: [],
+      searchKeyword: '',
     };
   },
   computed: {
@@ -50,6 +63,20 @@ export default {
     ]),
     symbol() {
       return this.$route.params.symbolname;
+    },
+    filteredTableData() {
+      const rows = Array.isArray(this.tableData) ? this.tableData : [];
+      const keyword = String(this.searchKeyword || '').trim().toLowerCase();
+      if (!keyword) return rows;
+
+      const columns = Array.isArray(this.columns) ? this.columns : [];
+      return rows.filter(row => {
+        const values = columns.length
+          ? columns.map(column => row && row[column.prop])
+          : Object.values(row || {});
+
+        return values.some(value => String(value || '').toLowerCase().includes(keyword));
+      });
     },
   },
   mounted() {
@@ -68,8 +95,8 @@ export default {
             PredictData,
             PredictDataColumns
           } = newVal;
-          this.tableData = PredictData;
-          this.columns = PredictDataColumns;
+          this.tableData = Array.isArray(PredictData) ? PredictData : [];
+          this.columns = Array.isArray(PredictDataColumns) ? PredictDataColumns : [];
         }
       },
     }
@@ -104,5 +131,38 @@ export default {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
   }
+
+  .summary-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .summary-toolbar .table-title {
+    margin: 0;
+  }
+
+  .summary-search {
+    width: min(320px, 100%);
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .summary-toolbar {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .summary-search {
+      width: 100%;
+    }
+  }
+}
+.tabel-input {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 5px;
 }
 </style>

@@ -332,9 +332,8 @@
     tableData: {
       immediate: true,
       handler(newVal) {
-        if(newVal.length){
-          this.localTableData = cloneDeep(newVal);
-        }
+        this.localTableData = Array.isArray(newVal) ? cloneDeep(newVal) : [];
+        this.currentPage = 1;
       }
     }
   },
