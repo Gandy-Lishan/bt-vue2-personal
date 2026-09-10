@@ -308,15 +308,18 @@ export class AIClient {
 
         if (!this.mock && !res.ok) {
           if (res.status === 401) {
-            throw new Error('Authentication failed, please check API Key configuration')
+            throw new Error('AI service authentication failed. Please check your API key configuration.')
           }
-          if (res.status === 429) {
-            const retryAfter = res.headers.get('Retry-After')
-            const seconds = retryAfter ? parseInt(retryAfter, 10) : null
-            const waitMsg = seconds ? `${seconds} seconds` : 'a moment'
-            throw new Error(`Rate limit exceeded, please retry after ${waitMsg}`)
-          }
-          throw new Error(`HTTP ${res.status}`)
+          // Try to parse error body for user-friendly messages
+          let detail = null
+          try {
+            const errBody = await res.clone().json()
+            if (errBody?.error === 'chat_rate_limit_exceeded') {
+              const secs = errBody.retry_after || 30
+              detail = `Message limit reached. Please try again in ${secs} seconds.`
+            }
+          } catch {}
+          throw new Error(detail || `HTTP ${res.status}`)
         }
         if (!res.body) {
           throw new Error('No response body')
@@ -420,6 +423,13 @@ export class AIClient {
           if (callbacks.onAbort) callbacks.onAbort()
           break
         default:
+          // Handle SSE payloads that carry an error field but no recognized type
+          // (e.g. service_busy from concurrency guard)
+          if (chunk.error && callbacks.onError && !this.isCompleted) {
+            this.isCompleted = true
+            const msg = chunk.detail || chunk.error || 'An unexpected error occurred.'
+            callbacks.onError(new Error(msg))
+          }
           break
       }
     } catch (callbackErr) {
