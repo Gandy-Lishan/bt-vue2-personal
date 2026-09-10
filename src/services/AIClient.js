@@ -413,6 +413,12 @@ export class AIClient {
             callbacks.onRetrieveStatus(chunk.status || chunk.retrieveStatus, aiMessageId)
           }
           break
+        case 'abort':
+          if (this.abortController) {
+            this.abortController.abort()
+          }
+          if (callbacks.onAbort) callbacks.onAbort()
+          break
         default:
           break
       }

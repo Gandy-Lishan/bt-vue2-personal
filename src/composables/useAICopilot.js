@@ -193,6 +193,12 @@ export function useAICopilot() {
         })
       },
 
+      onAbort: () => {
+        store.commit('aiCopilot/SET_STREAMING', false)
+        store.commit('aiCopilot/SET_LOADING', false)
+        store.commit('aiCopilot/SET_CONVERSATION_ABORTED', conversationId)
+      },
+
       onReasoningChunk: (messageId, chunkContent) => {
         store.commit('aiCopilot/APPEND_REASONING_CHUNK', {
           messageId,
@@ -331,6 +337,11 @@ export function useAICopilot() {
           status,
         })
       },
+      onAbort: () => {
+        store.commit('aiCopilot/SET_STREAMING', false)
+        store.commit('aiCopilot/SET_LOADING', false)
+        store.commit('aiCopilot/SET_CONVERSATION_ABORTED', aiClient.currentConversationId)
+      },
       onReasoning: (chunk, messageId) => {
         store.commit('aiCopilot/SET_MESSAGE_REASONING_CHUNK', { messageId, chunk })
         store.commit('aiCopilot/ADD_REASONING_BLOCK', { messageId, chunk })
@@ -427,6 +438,7 @@ export function useAICopilot() {
    * 新建会话
    */
   async function createNewConversation() {
+    store.commit('aiCopilot/SET_CONVERSATION_ID', null)
     store.commit('aiCopilot/CLEAR_MESSAGES')
     store.commit('aiCopilot/SET_ERROR', null)
     store.commit('aiCopilot/CLEAR_ABORTED_CONVERSATIONS')
