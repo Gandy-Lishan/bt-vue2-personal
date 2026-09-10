@@ -44,13 +44,13 @@
           <h2>Select Trading Strategy</h2>
         </div>
         <div class="panel-actions">
-          <!-- <button
+          <button
             type="button"
             class="utility-button"
             @click="openStrategyTutorialVideo"
           >
             <span>Tutorial Video</span>
-          </button> -->
+          </button>
           <button type="button" class="utility-button" @click="compareExpanded = !compareExpanded">
             <span>Compare Strategies</span>
             <i
@@ -3000,7 +3000,7 @@ export default {
       }
     },
     openStrategyTutorialVideo() {
-      const url = this.currentStrategy.tutorialVideoUrl
+      const url = 'https://youtu.be/6DW9P_gOaxk'
       if (url) {
         window.open(url, '_blank', 'noopener,noreferrer')
       }
