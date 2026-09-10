@@ -111,6 +111,8 @@
           <template #status>
             <CopilotRetrieveStatus
               :statuses="activeStatuses"
+              :tool-calls="activeToolCalls"
+              :latest-reasoning="latestReasoningContent"
               :is-loading="isActiveAssistantLoading"
               :is-streaming="isStreaming"
             />
@@ -139,6 +141,7 @@ export default {
       conversationOffset: 0,
       hoveredId: null,
       isUnderMaintenance: false,
+      _lastHiddenAt: 0,
     }
   },
   computed: {
@@ -166,6 +169,15 @@ export default {
     activeStatuses() {
       return this.activeAssistantMessage?.retrieveStatuses || []
     },
+    activeToolCalls() {
+      const blocks = this.activeAssistantMessage?.blocks || []
+      return blocks.filter(b => b.type === 'tool' && b.toolCall?.status !== 'completed').map(b => b.toolCall)
+    },
+    latestReasoningContent() {
+      const chunks = this.activeAssistantMessage?.reasoning_chunks || []
+      if (!chunks.length) return ''
+      return chunks[chunks.length - 1].content || ''
+    },
     isActiveAssistantLoading() {
       return Boolean(this.activeAssistantMessage && this.isLoading)
     },
@@ -174,18 +186,17 @@ export default {
     this.copilot = useAICopilot()
     this.initPage()
     // Re-sync messages from server when user returns to this tab/page.
-    // Skip if a stream is still active — let it finish naturally.
-    this._visibilityHandler = async () => {
+    // Only reload if user was away > 30s and no stream is active.
+    // Prevents unnecessary refresh on quick app switches.
+    this._visibilityHandler = () => {
       if (document.visibilityState === 'visible') {
+        const awayMs = Date.now() - this._lastHiddenAt
         const convId = this.$store.state.aiCopilot.conversationId
-        if (convId && !this.isLoading) {
-          this.isHistoryLoading = true
-          try {
-            await this.copilot.loadHistory()
-          } finally {
-            this.isHistoryLoading = false
-          }
+        if (convId && awayMs > 30000 && !this.isLoading && !this.isStreaming) {
+          this._syncHistoryOnReturn()
         }
+      } else {
+        this._lastHiddenAt = Date.now()
       }
     }
   },
@@ -207,6 +218,16 @@ export default {
         }
       }
       this.loadConversations()
+    },
+    async _syncHistoryOnReturn() {
+      // Silent background re-sync — don't block UI or show loading spinner.
+      const convId = this.$store.state.aiCopilot.conversationId
+      if (!convId) return
+      try {
+        await this.copilot.loadHistory()
+      } catch {
+        // Silent failure — user can manually refresh if needed
+      }
     },
     async loadConversations() {
       this.conversationOffset = 0

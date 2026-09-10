@@ -56,9 +56,9 @@
             ></i>
           </div>
 
-          <!-- Collapsible thinking area: all blocks before the last content -->
+          <!-- Collapsible thinking area: all non-final-content blocks (reasoning + tool + intermediate content) -->
           <div v-show="thoughtsOpen" class="thoughts-body" v-if="hasThinkingBlocks">
-            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="lastContentIndex < 0 || bi < lastContentIndex">
+            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="bi !== lastContentIndex">
               <details v-if="block.type === 'reasoning'" class="thought-block">
                 <summary class="thought-header">
                   <span class="thought-label">Thought</span>
