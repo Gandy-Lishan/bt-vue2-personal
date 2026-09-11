@@ -25,9 +25,9 @@
           </div>
           <!-- Selection toolbar replaces New chat row -->
           <div v-if="selectionMode" class="top-actions">
-            <button class="toolbar-btn cancel" @click="exitSelectionMode">取消</button>
+            <button class="toolbar-btn cancel" @click="exitSelectionMode">Cancel</button>
             <button class="toolbar-btn delete" @click="confirmBatchDelete" :disabled="selectedIds.size === 0">
-              删除({{ selectedIds.size }})
+              Delete({{ selectedIds.size }})
             </button>
           </div>
         </div>

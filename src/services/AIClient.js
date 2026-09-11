@@ -262,6 +262,7 @@ export class AIClient {
    */
   async send(options, callbacks, aiMessageId) {
     this.isCompleted = false
+    this.currentConversationId = null
     this.buffer.destroy()
     this.buffer = new DoubleBufferQueue()
     if (callbacks.onChunk) {
