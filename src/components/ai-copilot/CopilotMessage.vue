@@ -171,7 +171,7 @@
                 </div>
               </div>
             </template>
-            <button class="action-btn sources-btn">
+            <button class="action-btn sources-btn" disabled>
               <i class="fa fa-book" aria-hidden="true"></i>
               <span class="source-badge">{{ message.sources.length }}</span>
             </button>
@@ -638,6 +638,11 @@ export default {
 /* 参考来源 — action bar 按钮 */
 .sources-btn {
   position: relative;
+}
+.sources-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .source-badge {
