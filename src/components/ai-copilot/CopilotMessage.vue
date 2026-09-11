@@ -97,6 +97,15 @@
             />
           </div>
 
+          <!-- Error state: show error even for empty placeholder messages -->
+          <CopilotMarkdown
+            v-if="!isUser && message.status === 'error' && message.error && !contentText && !hasContentBlocks"
+            :content="message.error"
+            :status="message.status"
+            :error="message.error"
+            :has-activity="false"
+          />
+
           <!-- Fallback: legacy messages without content blocks render content at the bottom -->
           <CopilotMarkdown
             v-if="contentText && !hasContentBlocks"
