@@ -44,6 +44,11 @@ function parseMessageContent(content) {
 export function useAICopilot() {
   const aiClient = getClient()
 
+  // AbortController for in-flight fetchHistory requests.
+  // Switched/deleted conversations should cancel the pending load so stale
+  // messages are not written to the store.
+  let historyAbortController = null
+
   /**
    * 注册前端工具
    * @param {string} name — 工具名（与 available_tools 对应）
@@ -425,6 +430,13 @@ export function useAICopilot() {
       abort()
     }
 
+    // Cancel any pending history fetch for the previous conversation so it
+    // cannot overwrite messages after we switch.
+    if (historyAbortController) {
+      historyAbortController.abort()
+      historyAbortController = null
+    }
+
     // Always reset loading/streaming state when switching conversations
     store.commit('aiCopilot/SET_LOADING', false)
     store.commit('aiCopilot/SET_STREAMING', false)
@@ -450,6 +462,15 @@ export function useAICopilot() {
    */
   async function deleteConversation(conversationId) {
     if (!isValidConversationId(conversationId)) return false
+
+    // Cancel any pending history fetch for this conversation before deleting.
+    // Otherwise the stale response could arrive after deletion and render
+    // messages for a conversation that no longer exists.
+    if (store.state.aiCopilot.conversationId === conversationId && historyAbortController) {
+      historyAbortController.abort()
+      historyAbortController = null
+    }
+
     const deleted = await aiClient.deleteConversation(conversationId)
     if (deleted) {
       store.commit('aiCopilot/DELETE_CONVERSATION', conversationId)
@@ -469,6 +490,14 @@ export function useAICopilot() {
     if (!Array.isArray(ids) || ids.length === 0) {
       return { deleted: [], failed: ids || [] }
     }
+
+    // Cancel any pending history fetch if the current conversation is being deleted.
+    const currentId = store.state.aiCopilot.conversationId
+    if (currentId && ids.includes(currentId) && historyAbortController) {
+      historyAbortController.abort()
+      historyAbortController = null
+    }
+
     const result = await aiClient.deleteConversations(ids)
     if (result.deleted && result.deleted.length) {
       for (const id of result.deleted) {
@@ -498,8 +527,16 @@ export function useAICopilot() {
     if (!conversationId) return
 
     console.log('[loadHistory] conversationId:', conversationId, 'existing messages:', store.state.aiCopilot.messages.length)
+
+    // Cancel any previous history fetch and create a new controller for this one.
+    if (historyAbortController) {
+      historyAbortController.abort()
+    }
+    historyAbortController = new AbortController()
+    const controller = historyAbortController
+
     try {
-      const messages = await aiClient.fetchHistory(conversationId)
+      const messages = await aiClient.fetchHistory(conversationId, controller.signal)
       if (messages === null) {
         console.log('[loadHistory] no conversation found, clearing')
         store.dispatch('aiCopilot/clearConversation')
@@ -570,8 +607,22 @@ export function useAICopilot() {
         }
       }
 
-      store.commit('aiCopilot/SET_MESSAGES', normalized)
+      // Guard against stale responses: the conversation may have been switched
+      // or deleted while the fetch was in flight. If it is no longer the
+      // current conversation, or it no longer exists in the conversations list,
+      // do not render its messages.
+      const isStillCurrent = store.state.aiCopilot.conversationId === conversationId
+      const stillExists = store.state.aiCopilot.conversations.some(c => c.id === conversationId)
+      if (isStillCurrent && stillExists) {
+        store.commit('aiCopilot/SET_MESSAGES', normalized)
+      } else {
+        console.log('[loadHistory] conversation switched or deleted while loading, discarding stale messages')
+      }
     } catch (err) {
+      if (err.name === 'AbortError') {
+        console.log('[loadHistory] aborted')
+        return
+      }
       console.error('[loadHistory] failed:', err)
     }
   }

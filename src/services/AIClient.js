@@ -922,8 +922,9 @@ export class AIClient {
 
   /**
    * 拉取历史消息
+   * @param {AbortSignal} [signal] — 可选的取消信号
    */
-  async fetchHistory(conversationId) {
+  async fetchHistory(conversationId, signal) {
     if (!isValidConversationId(conversationId)) {
       return null
     }
@@ -933,6 +934,7 @@ export class AIClient {
       const res = await fetch(`${this.baseURL}/v1/conversations/${conversationId}/messages`, {
         headers: this._getHeaders(),
         credentials: 'include',
+        signal,
       })
       const elapsed = Date.now() - t0
       if (!res.ok) {
@@ -946,6 +948,10 @@ export class AIClient {
       return data.messages || []
     } catch (err) {
       const elapsed = Date.now() - t0
+      if (err.name === 'AbortError') {
+        console.log('[fetchHistory] aborted,', elapsed + 'ms')
+        throw err
+      }
       console.error('[fetchHistory] failed,', elapsed + 'ms:', err)
       return []
     }

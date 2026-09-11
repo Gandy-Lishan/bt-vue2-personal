@@ -69,13 +69,11 @@ export default {
   },
   data() {
     return {
-      // 5 recommended questions (covering 5 main sections)
+      // 3 recommended questions
       recommendedExamples: [
-        { icon: 'fa-bar-chart', text: "Show me today's Smart Stock Scanner results, I'm looking for long opportunities." },
-        { icon: 'fa-lock', text: "I have a lot of idle cash and want to sell options for some steady time value. What deep OTM opportunities are available right now?" },
-        { icon: 'fa-flask', text: "Run a strategy backtest for me: past 2 years, long signals with >70% win rate, 10% take-profit and 5% stop-loss." },
-        { icon: 'fa-balance-scale', text: "I'm heavily long AAPL. Which major asset or stock is moving completely opposite lately?" },
-        { icon: 'fa-university', text: "The Fed is announcing rate decisions next week. What's the historical performance of SPX around FOMC decision days?" },
+        { icon: 'fa-bolt', text: "What indicators are best suited for short-term trading?" },
+        { icon: 'fa-exclamation-triangle', text: "Are there any indicators that warn of risk? How exactly should I use them?" },
+        { icon: 'fa-calendar', text: "How has SPX performed this month over the past 20 years?" },
       ],
       // More questions grouped by section
       moduleExamples: [
