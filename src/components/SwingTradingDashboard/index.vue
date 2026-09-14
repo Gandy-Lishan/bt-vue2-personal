@@ -699,6 +699,17 @@
       </div>
 
       <div v-else-if="activeTab === 'history'" class="tab-content">
+        <div class="history-toolbar">
+          <button
+            type="button"
+            class="history-download-button"
+            :disabled="!historyRows.length"
+            @click="downloadTradeHistory"
+          >
+            <i class="fa fa-download" aria-hidden="true"></i>
+            <span>Download Trade History</span>
+          </button>
+        </div>
         <div class="table-wrap">
           <table class="data-table history-table">
             <thead>
@@ -2158,6 +2169,53 @@ export default {
     resetHistoryPage() {
       this.historyPage = 1
       this.historyPageInput = ''
+    },
+    downloadTradeHistory() {
+      const rows = Array.isArray(this.sortedHistoryRows) ? this.sortedHistoryRows : []
+      if (!rows.length) return
+
+      const headers = this.historyColumns.map(column => this.getCsvColumnLabel(column))
+      const csvRows = rows.map(row => this.historyColumns.map(column => this.formatCsvCell(row && row[column.key])).join(','))
+      const csvContent = [headers.map(header => this.escapeCsvCell(header)).join(','), ...csvRows].join('\r\n')
+      const blob = new Blob([`\ufeff${csvContent}`], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const url = URL.createObjectURL(blob)
+
+      link.href = url
+      link.download = this.getTradeHistoryFileName()
+      link.style.display = 'none'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    },
+    getCsvColumnLabel(column) {
+      return String(column && column.label ? column.label : '')
+        .replace(/<br\s*\/?>/gi, ' ')
+        .replace(/<[^>]+>/g, '')
+        .trim()
+    },
+    formatCsvCell(value) {
+      if (value === undefined || value === null) return ''
+      return this.escapeCsvCell(value)
+    },
+    escapeCsvCell(value) {
+      const text = String(value)
+      return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
+    },
+    getTradeHistoryFileName() {
+      const strategyName = this.currentStrategy && (this.currentStrategy.fullName || this.currentStrategy.name)
+      const safeStrategyName = String(strategyName || 'swing-trading')
+        .trim()
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase()
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+
+      return `${safeStrategyName || 'swing-trading'}-trade-history-${year}${month}${day}.csv`
     },
     resetHoldingSort() {
       this.holdingSort = {
@@ -7231,6 +7289,42 @@ export default {
   background: #fff;
   color: #334155;
   font-weight: 700;
+}
+
+.history-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.history-download-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid #2563eb;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.history-download-button:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+  transform: translateY(-1px);
+}
+
+.history-download-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 .pagination-row button:disabled {
