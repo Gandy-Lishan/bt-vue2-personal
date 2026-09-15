@@ -1,5 +1,5 @@
 <template>
-  <div class="message-row" :class="message.role">
+  <div class="message-row" :class="message.role" :data-message-id="message.id">
     <!-- Avatar -->
     <div class="message-avatar">
       <img v-if="!isUser" src="/assets/avatar-sentimen.png" alt="AI Copilot" />

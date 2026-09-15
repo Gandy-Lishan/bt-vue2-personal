@@ -877,6 +877,30 @@ export class AIClient {
   }
 
   /**
+   * 搜索会话内容
+   */
+  async searchConversations(query) {
+    if (!query || !query.trim()) return { results: [], total: 0 }
+    try {
+      const res = await fetch(
+        `${this.baseURL}/v1/conversations/search?q=${encodeURIComponent(query.trim())}`,
+        {
+          headers: this._getHeaders(),
+          credentials: 'include',
+        }
+      )
+      if (!res.ok) {
+        if (res.status === 401) throw new Error('Authentication failed')
+        throw new Error(`HTTP ${res.status}`)
+      }
+      return await res.json()
+    } catch (err) {
+      console.error('[AIClient] searchConversations failed:', err)
+      return { results: [], total: 0 }
+    }
+  }
+
+  /**
    * 获取会话列表
    */
   async fetchConversations({ limit = 20, offset = 0 } = {}) {

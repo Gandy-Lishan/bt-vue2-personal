@@ -787,6 +787,13 @@ export function useAICopilot() {
     }
   }
 
+  /**
+   * 搜索会话内容
+   */
+  async function searchConversations(query) {
+    return aiClient.searchConversations(query)
+  }
+
   return {
     client: aiClient,
     send,
@@ -804,6 +811,7 @@ export function useAICopilot() {
     deleteConversation,
     deleteConversations,
     fetchConversationCount,
+    searchConversations,
   }
 }
 
