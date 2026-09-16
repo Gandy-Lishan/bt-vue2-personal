@@ -213,7 +213,7 @@
           </el-table-column>
           <template v-for="l in columns">
             <el-table-column
-              :key="l.value"
+              :key="`${checkedType}-${condition || 'default'}-${l.value}`"
               :prop="l.value"
               show-overflow-tooltip
               :min-width="l.minWidth"
@@ -3481,14 +3481,12 @@ export default {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     },
     async addCondition(type) {
-      // this.condition = type
-      debugger
       if(this.condition !== type) {this.condition = type}
       else if(this.condition === type && this.condition !== '') {this.condition = ''}
       console.log('this.condition', this.condition)
       // clear filter and sort
       this.searchInput = ''
-      this.$refs[`${this.refName}Table`].clearSort()
+      this.$refs[`${this.refName}Table`]?.clearSort?.()
       // .el-table--scrollable-x .el-table__body-wrapper
       const urlMap = {
         stock: 'stock_complete_list',
@@ -3524,19 +3522,24 @@ export default {
         cstScreen: 'commod_optix_trend',
         CHMinMax: 'cot_max_min',
         TSCRP: 'crp',
+        RTSCRP: 'crp&rel_trend=1',
         SectorTrendRelTrend: 'sector_trend_reltrend',
         macroeconomic: 'macro_indicator_list'
       }
       let url = urlMap[this.checkedType]
-      if(this.condition === 'relative') url = `${url}&rel_trend=1`
-      if(url = 'sector_trend_reltrend' && this.$route.query.index) url = `sector_trend_reltrend?index=${this.$route.query.index}${this.condition === 'relative' ? `&rel_trend=1` : ''}`
-      debugger
+      if(!url) {
+        console.warn('Missing indicator url for condition', this.checkedType, this.condition)
+      }else if(this.checkedType === 'SectorTrendRelTrend' && this.$route.query.index) {
+        url = `sector_trend_reltrend?index=${this.$route.query.index}${this.condition === 'relative' ? `&rel_trend=1` : ''}`
+      }else if(this.condition === 'relative' && !url.includes('rel_trend=1')) {
+        url = `${url}&rel_trend=1`
+      }
       this.$store.commit('chart/SET_INDICATORS_PAGE_LIST_DATA', {url, data: ''})
       await this.$nextTick(async () => {
-        const element = document.querySelector('.el-table__body-wrapper')
-        console.log('element', element.clientHeight)
-        const height = element.clientHeight
-        this.dynamicHeight = `${height}px`;
+        const tableRef = this.$refs[`${this.refName}Table`]
+        tableRef?.doLayout?.()
+        const element = tableRef?.$el?.querySelector?.('.el-table__body-wrapper')
+        if(element) this.dynamicHeight = `${element.clientHeight}px`;
         this.$emit('forceUpdateTable', this.checkedType, this.condition)
       });
     },
