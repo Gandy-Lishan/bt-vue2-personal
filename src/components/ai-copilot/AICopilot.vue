@@ -20,10 +20,9 @@
       <span>AI Copilot is currently under maintenance</span>
     </div>
 
-    <!-- Toggle Bubble — 注释掉，只保留独立页面 /copilot 入口 -->
-    <!--
+    <!-- Toggle Bubble -->
     <button
-      v-if="!isOpen && !hideBubble"
+      v-if="!isOpen && !hideBubble && showBubble"
       class="copilot-bubble"
       @click="open"
     >
@@ -31,7 +30,6 @@
       <span class="bubble-text">{{ bubbleText }}</span>
       <span v-if="hasUnread" class="bubble-badge" />
     </button>
-    -->
 
     <!-- Chat Window -->
     <Transition name="slide-up">
@@ -98,6 +96,7 @@
           ref="copilotInput"
           :is-loading="isLoading"
           :disabled="isLoading || isHistoryLoading"
+          :show-screenshot="false"
           :upload-image="uploadImage"
           :delete-image="deleteImage"
           @send="handleSend"
@@ -124,12 +123,73 @@
           :current-conversation-id="$store.state.aiCopilot.conversationId"
           :loading="conversationsLoading"
           :has-more="conversationsHasMore"
+          :selection-mode="selectionMode"
+          :selected-ids="selectedIds"
           @close="showHistory = false"
           @select="handleSelectConversation"
           @new-chat="handleNewChatFromHistory"
           @delete="handleDeleteConversation"
           @load-more="handleLoadMoreConversations"
+          @enter-selection="enterSelectionMode"
+          @exit-selection="exitSelectionMode"
+          @toggle-select="toggleSelect"
+          @batch-delete="confirmBatchDelete"
+          @search="openSearch"
         />
+
+        <!-- Search Modal -->
+        <div v-if="searchOpen" class="search-overlay" @click.self="closeSearch">
+          <div class="search-modal">
+            <div class="search-modal-input-row">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              <input
+                ref="searchInput"
+                v-model="searchQuery"
+                class="search-modal-input"
+                type="text"
+                placeholder="Search conversations..."
+                @input="onSearchInput"
+              />
+              <button class="search-modal-close" @click="closeSearch" title="Close">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div v-if="searchLoading" class="search-results">
+              <div v-for="i in 4" :key="i" class="search-skeleton-item">
+                <div class="skeleton-avatar" />
+                <div class="skeleton-lines">
+                  <div class="skeleton-line short" />
+                  <div class="skeleton-line" />
+                </div>
+              </div>
+            </div>
+
+            <div v-else-if="searchQuery && searchResults.length === 0" class="search-results search-empty">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              <span>No results found</span>
+            </div>
+
+            <div v-else-if="searchQuery" class="search-results">
+              <div
+                v-for="(result, idx) in searchResults"
+                :key="result.message_id"
+                class="search-result-item"
+                :class="{ active: activeResultIdx === idx }"
+                @click="handleSelectSearchResult(result)"
+              >
+                <div class="result-avatar">
+                  <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                </div>
+                <div class="result-content">
+                  <div class="result-title">{{ result.conversation_title || 'Untitled' }}</div>
+                  <div class="result-snippet" v-html="highlightSnippet(result.snippet)"></div>
+                </div>
+                <div class="result-date">{{ formatDate(result.created_at) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </Transition>
   </div>
@@ -138,6 +198,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { useAICopilot } from '@/composables/useAICopilot'
+import EventBus from '@/event-bus'
 import CopilotMessages from './CopilotMessages.vue'
 import CopilotInput from './CopilotInput.vue'
 import CopilotRetrieveStatus from './CopilotRetrieveStatus.vue'
@@ -150,6 +211,7 @@ export default {
     bubbleIcon: { type: String, default: 'fa-commenting' },
     bubbleText: { type: String, default: 'AI Copilot' },
     layout: { type: String, default: 'default' },
+    showBubble: { type: Boolean, default: true },
   },
   data() {
     return {
@@ -168,6 +230,20 @@ export default {
       showHistory: false,
       conversationOffset: 0,
       isUnderMaintenance: false,
+      // Search
+      searchOpen: false,
+      searchQuery: '',
+      searchResults: [],
+      searchLoading: false,
+      activeResultIdx: -1,
+      _searchTimer: null,
+      // Selection mode
+      selectionMode: false,
+      selectedIds: new Set(),
+      conversationCount: 0,
+      // Visibility sync
+      _lastHiddenAt: 0,
+      _visibilityHandler: null,
     }
   },
   computed: {
@@ -213,6 +289,9 @@ export default {
       }
       return this.conversations.length
     },
+    atConversationLimit() {
+      return this.conversationCount >= 50
+    },
     hasUnread() {
       const last = this.lastAssistantMessage
       return last && last.status === 'done' && !this.isOpen
@@ -253,15 +332,77 @@ export default {
     this.copilot = useAICopilot()
     // 注册项目专属工具（实际 handler 由父组件或初始化代码注入）
     this.$emit('register-tools', this.copilot.registerTool)
+    // Header entry button toggles the panel via EventBus
+    this._toggleHandler = () => {
+      if (this.isOpen) {
+        this.close()
+      } else {
+        this.open()
+      }
+    }
+    EventBus.on('ai-copilot:toggle', this._toggleHandler)
+    // Visibility change handler for tab-sync
+    this._visibilityHandler = () => {
+      if (document.visibilityState === 'visible' && this.isOpen) {
+        const awayMs = Date.now() - this._lastHiddenAt
+        const convId = this.$store.state.aiCopilot.conversationId
+        if (convId && awayMs > 30000 && !this.isLoading && !this.isStreaming) {
+          this._syncHistoryOnReturn()
+        }
+      } else {
+        this._lastHiddenAt = Date.now()
+      }
+    }
+    // Keyboard shortcut handler (Cmd+K for search, Escape for screenshot)
+    this._keydownHandler = (e) => {
+      // Cmd+K / Ctrl+K to open search (only when copilot is open)
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k' && this.isOpen) {
+        e.preventDefault()
+        if (this.searchOpen) {
+          this.closeSearch()
+        } else {
+          this.openSearch()
+        }
+        return
+      }
+      // Escape to close search
+      if (e.key === 'Escape' && this.searchOpen) {
+        this.closeSearch()
+        return
+      }
+      // Arrow navigation in search results
+      if (this.searchOpen && !this.searchLoading && this.searchResults.length > 0) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault()
+          this.activeResultIdx = Math.min(this.activeResultIdx + 1, this.searchResults.length - 1)
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault()
+          this.activeResultIdx = Math.max(this.activeResultIdx - 1, 0)
+        } else if (e.key === 'Enter' && this.activeResultIdx >= 0) {
+          e.preventDefault()
+          this.handleSelectSearchResult(this.searchResults[this.activeResultIdx])
+        }
+      }
+    }
+  },
+  mounted() {
+    document.addEventListener('visibilitychange', this._visibilityHandler)
+    document.addEventListener('keydown', this._keydownHandler)
   },
   beforeDestroy() {
     this.stopResize()
+    document.removeEventListener('visibilitychange', this._visibilityHandler)
+    document.removeEventListener('keydown', this._keydownHandler)
+    if (this._toggleHandler) {
+      EventBus.off('ai-copilot:toggle', this._toggleHandler)
+    }
   },
   methods: {
     async open() {
       this.applyLayoutSize()
       this.isOpen = true
       this.showHistory = false
+      EventBus.emit('ai-copilot:opened')
       console.log('[AICopilot] open, messages:', this.messages.length, 'convId:', this.$store.state.aiCopilot.conversationId?.slice(0, 8))
       // 首次打开尝试加载历史
       if (this.messages.length === 0) {
@@ -278,6 +419,7 @@ export default {
     close() {
       this.isOpen = false
       this.showHistory = false
+      EventBus.emit('ai-copilot:closed')
     },
     openStandalone() {
       this.close()
@@ -337,6 +479,11 @@ export default {
       this.showHistory = false
       await this.copilot.createNewConversation()
     },
+    async handleNewChat() {
+      if (this.atConversationLimit) return
+      await this.copilot.createNewConversation()
+      this.refreshConversationCount()
+    },
     async handleDeleteConversation(conversationId) {
       await this.copilot.deleteConversation(conversationId)
     },
@@ -344,6 +491,112 @@ export default {
       if (this.conversationsLoading || !this.conversationsHasMore) return
       this.conversationOffset += 20
       await this.copilot.loadConversations({ limit: 20, offset: this.conversationOffset, append: true })
+    },
+    async refreshConversationCount() {
+      try {
+        this.conversationCount = await this.copilot.fetchConversationCount()
+      } catch {
+        // Silent failure
+      }
+    },
+    async _syncHistoryOnReturn() {
+      const convId = this.$store.state.aiCopilot.conversationId
+      if (!convId) return
+      try {
+        await this.copilot.loadHistory()
+      } catch {
+        // Silent failure
+      }
+    },
+    // Search
+    openSearch() {
+      this.searchOpen = true
+      this.searchQuery = ''
+      this.searchResults = []
+      this.activeResultIdx = -1
+      this.$nextTick(() => {
+        this.$refs.searchInput?.focus()
+      })
+    },
+    closeSearch() {
+      this.searchOpen = false
+      this.searchQuery = ''
+      this.searchResults = []
+      this.searchLoading = false
+      if (this._searchTimer) {
+        clearTimeout(this._searchTimer)
+        this._searchTimer = null
+      }
+    },
+    onSearchInput() {
+      if (this._searchTimer) clearTimeout(this._searchTimer)
+      if (!this.searchQuery.trim()) {
+        this.searchResults = []
+        this.searchLoading = false
+        return
+      }
+      this.searchLoading = true
+      this._searchTimer = setTimeout(async () => {
+        const data = await this.copilot.searchConversations(this.searchQuery)
+        this.searchResults = data.results || []
+        this.searchLoading = false
+      }, 300)
+    },
+    handleSelectSearchResult(result) {
+      this.closeSearch()
+      this.handleSelectConversation(result.conversation_id)
+      this.$nextTick(() => {
+        const el = document.querySelector(`[data-message-id="${result.message_id}"]`)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          el.classList.add('search-highlight-pulse')
+          setTimeout(() => el.classList.remove('search-highlight-pulse'), 2000)
+        }
+      })
+    },
+    highlightSnippet(snippet) {
+      if (!snippet) return ''
+      return snippet.replace(/\*\*(.*?)\*\*/g, '<mark>$1</mark>')
+    },
+    formatDate(iso) {
+      if (!iso) return ''
+      const d = new Date(iso.endsWith('Z') ? iso : iso + 'Z')
+      const now = new Date()
+      const diffMs = now - d
+      const diffDays = Math.floor(diffMs / 86400000)
+      if (diffDays === 0) return 'Today'
+      if (diffDays === 1) return 'Yesterday'
+      if (diffDays < 7) return `${diffDays}d ago`
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    },
+    // Selection mode
+    enterSelectionMode() {
+      this.selectionMode = true
+      this.selectedIds = new Set()
+    },
+    exitSelectionMode() {
+      this.selectionMode = false
+      this.selectedIds = new Set()
+    },
+    toggleSelect(id) {
+      if (this.selectedIds.has(id)) {
+        this.selectedIds.delete(id)
+      } else {
+        this.selectedIds.add(id)
+      }
+      this.selectedIds = new Set(this.selectedIds)
+    },
+    async confirmBatchDelete() {
+      if (this.selectedIds.size === 0) return
+      const ids = Array.from(this.selectedIds)
+      const deletedCurrent = ids.includes(this.$store.state.aiCopilot.conversationId)
+      const result = await this.copilot.deleteConversations(ids)
+      this.exitSelectionMode()
+      this.refreshConversationCount()
+      if (deletedCurrent) {
+        await this.copilot.createNewConversation()
+        this.refreshConversationCount()
+      }
     },
     applyLayoutSize() {
       if (this.layout === 'bottom') {
@@ -805,5 +1058,275 @@ export default {
   background: rgba(37, 99, 235, 0.12);
   pointer-events: none;
   z-index: 2001;
+}
+
+/* ── Search overlay / modal ── */
+.search-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  border-radius: 18px;
+}
+
+.search-modal {
+  width: 440px;
+  max-width: 90%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.search-modal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.search-modal-input-row .fa-search {
+  color: #9ca3af;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.search-modal-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #1f2937;
+  background: transparent;
+}
+
+.search-modal-input::placeholder {
+  color: #9ca3af;
+}
+
+.search-modal-close {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: all 0.15s;
+}
+
+.search-modal-close:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.search-results {
+  max-height: 40vh;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.search-skeleton-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px;
+  align-items: flex-start;
+}
+
+.skeleton-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  flex-shrink: 0;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.skeleton-line {
+  height: 10px;
+  border-radius: 4px;
+  background: #e5e7eb;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line.short {
+  width: 40%;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1 }
+  50% { opacity: 0.5 }
+}
+
+.search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 14px;
+  color: #9ca3af;
+}
+
+.search-empty .fa-search {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.search-result-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+  align-items: flex-start;
+}
+
+.search-result-item:hover,
+.search-result-item.active {
+  background: #f3f4f6;
+}
+
+.result-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.result-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.result-snippet {
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result-snippet mark {
+  background: #fef08a;
+  color: #1f2937;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.result-date {
+  font-size: 10px;
+  color: #9ca3af;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Search highlight pulse */
+.search-highlight-pulse {
+  animation: highlight-pulse 2s ease-out;
+}
+
+@keyframes highlight-pulse {
+  0% { background: #fef08a }
+  100% { background: transparent }
+}
+
+/* History panel selection mode overrides */
+.history-panel .toolbar-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.history-panel .toolbar-btn.cancel {
+  background: #fff;
+  color: #6b7280;
+}
+
+.history-panel .toolbar-btn.cancel:hover {
+  background: #f3f4f6;
+}
+
+.history-panel .toolbar-btn.delete {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+.history-panel .toolbar-btn.delete:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.history-panel .toolbar-btn.delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.history-panel .select-btn {
+  width: auto;
+  padding: 4px;
+}
+
+.history-panel .search-btn {
+  width: auto !important;
+  padding: 4px !important;
+}
+
+.history-panel .item-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.history-panel .item-checkbox input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: #2563eb;
 }
 </style>

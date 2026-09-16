@@ -2,8 +2,21 @@
   <div class="no-print">
     <header class="main-nav top">
       <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="35px" @click="backHome">
-      <div class="autocomplete-wrapper">
-        <autocomplete />
+      <div class="header-search-group">
+        <div class="autocomplete-wrapper">
+          <autocomplete />
+        </div>
+        <button
+          v-if="showAICopilotButton"
+          class="ai-copilot-header-btn"
+          :class="{ active: isCopilotOpen }"
+          type="button"
+          @click="toggleAICopilot"
+          title="AI Copilot"
+        >
+          <i class="fa fa-magic" aria-hidden="true"></i>
+          <span>AI Copilot</span>
+        </button>
       </div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <div class="btn-group" id="notifications-group">
@@ -128,6 +141,7 @@
 
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 import autocomplete from "./component/AlgoliaAutocomplete.vue";
+import EventBus from "@/event-bus";
 import { checkEmail } from "@/service/service";
 import { LocalStorageUtil } from '@/utils'
 
@@ -509,7 +523,16 @@ export default {
         'Market Prediction': [ 'everything', 'premium', 'research', 'datalite'],
         'Portfolio': ['everything', 'premium', 'research', 'datalite'],
         'AI Trading': ['ai-admin'] // 下面单独处理 email
-      }
+      },
+      isCopilotOpen: false
+    }
+  },
+  computed: {
+    showAICopilotButton() {
+      if (!this.$route) return false
+      const p = this.$route.path
+      if (p.startsWith('/prototype') || p.startsWith('/copilot')) return false
+      return this.$route.query.access === 'st2026'
     }
   },
   watch: {
@@ -613,8 +636,27 @@ export default {
         ]
       }
     }
+    this._copilotOpenHandler = () => {
+      this.isCopilotOpen = true
+    }
+    this._copilotCloseHandler = () => {
+      this.isCopilotOpen = false
+    }
+    EventBus.on('ai-copilot:opened', this._copilotOpenHandler)
+    EventBus.on('ai-copilot:closed', this._copilotCloseHandler)
+  },
+  beforeDestroy() {
+    if (this._copilotOpenHandler) {
+      EventBus.off('ai-copilot:opened', this._copilotOpenHandler)
+    }
+    if (this._copilotCloseHandler) {
+      EventBus.off('ai-copilot:closed', this._copilotCloseHandler)
+    }
   },
   methods: {
+    toggleAICopilot() {
+      EventBus.emit('ai-copilot:toggle')
+    },
     handleSubmenuClick(item) {
       if (Array.isArray(item.subMenu) && item.subMenu.length > 0) {
         const firstSubItem = item.subMenu[0];
@@ -991,12 +1033,20 @@ li.el-menu-item.tutorial-svg:hover {
 }
 
 
-.autocomplete-wrapper {
-  flex: 0 1 min(760px, 52vw);
-  width: min(760px, 52vw);
-  max-width: 760px;
+.header-search-group {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   min-width: 0;
-  margin: 0 auto;
+}
+
+.autocomplete-wrapper {
+  flex: 0 1 min(520px, 40vw);
+  width: min(520px, 40vw);
+  max-width: 520px;
+  min-width: 0;
   display: flex;
   align-items: center;
   padding-left: 0;
@@ -1107,5 +1157,53 @@ li.el-menu-item.tutorial-svg:hover {
 }
 #notification-icon {
   color: grey; //default color
+}
+
+.ai-copilot-header-btn {
+  flex: 0 0 auto;
+  height: 40px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Open Sans", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.ai-copilot-header-btn:hover,
+.ai-copilot-header-btn.active {
+  background: #5b9bd1;
+  border-color: #5b9bd1;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+}
+
+.ai-copilot-header-btn:active {
+  background: #4d8cc0;
+  border-color: #4d8cc0;
+}
+
+.ai-copilot-header-btn .fa-magic {
+  font-size: 15px;
+}
+
+@media (max-width: 768px) {
+  .ai-copilot-header-btn span {
+    display: none;
+  }
+  .ai-copilot-header-btn {
+    width: 40px;
+    padding: 0;
+  }
 }
 </style>

@@ -35,7 +35,7 @@
           <button class="toolbar-btn" title="Coming soon" :disabled="true" @click="triggerFileInput">
             <i class="fa fa-folder-open" aria-hidden="true"></i>
           </button>
-          <button v-if="showScreenshot" class="toolbar-btn" title="Screenshot" @click="handleScreenshot">
+          <button class="toolbar-btn" title="Screenshot" :disabled="!showScreenshot" @click="handleScreenshot">
             <i class="fa fa-scissors" aria-hidden="true"></i>
           </button>
         </div>

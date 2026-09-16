@@ -8,12 +8,30 @@
         </button>
         <span class="header-title">History</span>
         <div class="header-actions">
-          <button class="header-btn new-chat" @click="handleNewChat" title="New chat">
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-          </button>
-          <button class="header-btn close" @click="$emit('close')" title="Close">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </button>
+          <!-- Selection toolbar -->
+          <template v-if="selectionMode">
+            <button class="toolbar-btn cancel" @click="$emit('exit-selection')">Cancel</button>
+            <button class="toolbar-btn delete" @click="$emit('batch-delete')" :disabled="selectedIds.size === 0">
+              Delete({{ selectedIds.size }})
+            </button>
+          </template>
+          <!-- Normal actions -->
+          <template v-else>
+            <button class="header-btn search-btn" @click="$emit('search')" title="Search conversations">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+            <button class="header-btn new-chat" @click="$emit('new-chat')" title="New chat">
+              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            </button>
+            <button class="header-btn select-btn" @click="$emit('enter-selection')" title="Select multiple">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                <rect x="2.5" y="3" width="3" height="3" rx="0.6" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="7" y="3.8" width="6.5" height="1.4" rx="0.4"/>
+                <rect x="2.5" y="8" width="3" height="3" rx="0.6" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                <rect x="7" y="8.8" width="6.5" height="1.4" rx="0.4"/>
+              </svg>
+            </button>
+          </template>
         </div>
       </div>
 
@@ -30,10 +48,13 @@
           :key="conv.id"
           class="history-item"
           :class="{ active: conv.id === currentConversationId }"
-          @click="handleSelect(conv.id)"
+          @click="selectionMode ? $emit('toggle-select', conv.id) : handleSelect(conv.id)"
           @mouseenter="hoveredId = conv.id"
           @mouseleave="hoveredId = null"
         >
+          <label v-if="selectionMode" class="item-checkbox" @click.stop>
+            <input type="checkbox" :checked="selectedIds.has(conv.id)" @change="$emit('toggle-select', conv.id)">
+          </label>
           <div class="item-icon">
             <i class="fa fa-align-left" aria-hidden="true"></i>
           </div>
@@ -42,6 +63,7 @@
             <div class="item-time">{{ formatTime(conv.updated_at || conv.created_at) }}</div>
           </div>
           <el-popconfirm
+            v-if="!selectionMode"
             v-show="hoveredId === conv.id"
             title="Delete this conversation?"
             confirm-button-text="Delete"
@@ -80,6 +102,8 @@ export default {
     loading: { type: Boolean, default: false },
     hasMore: { type: Boolean, default: true },
     totalCount: { type: Number, default: 0 },
+    selectionMode: { type: Boolean, default: false },
+    selectedIds: { type: Set, default: () => new Set() },
   },
   computed: {
     conversationCount() {
@@ -288,6 +312,64 @@ export default {
 .item-delete:hover {
   background: #fee2e2;
   color: #ef4444;
+}
+
+/* Selection mode */
+.item-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.item-checkbox input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+/* Toolbar buttons in header */
+.toolbar-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.toolbar-btn.cancel {
+  background: #fff;
+  color: #6b7280;
+}
+
+.toolbar-btn.cancel:hover {
+  background: #f3f4f6;
+}
+
+.toolbar-btn.delete {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+.toolbar-btn.delete:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.toolbar-btn.delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.select-btn {
+  width: auto !important;
+  padding: 4px !important;
 }
 
 /* Loading */

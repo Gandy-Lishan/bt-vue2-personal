@@ -13,7 +13,7 @@
 			<router-view></router-view>
 			</div>
 				<Footer></Footer>
-			<AICopilot v-if="!shouldHideCopilot" ref="aiCopilot" @register-tools="registerAITools" />
+			<AICopilot v-if="!shouldHideCopilot" ref="aiCopilot" :show-bubble="false" @register-tools="registerAITools" />
 			</div>
 		</div>
 	</div>
@@ -47,7 +47,8 @@ export default {
 		shouldHideCopilot() {
 			if (!this.$route) return false
 			const p = this.$route.path
-			return p.startsWith('/prototype') || p.startsWith('/copilot')
+			if (p.startsWith('/prototype') || p.startsWith('/copilot')) return true
+			return this.$route.query.access !== 'st2026'
 		}
 	},
 	async mounted() {
