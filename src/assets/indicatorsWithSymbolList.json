@@ -91882,13 +91882,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Compass Inc",
-        "url": "COMP",
-        "market_symbol": "COMP",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Costamare Bulkers Holdings Ltd",
         "url": "CMDB",
         "market_symbol": "CMDB",
@@ -130676,20 +130669,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "NASDAQ Composite Historical Volatility (20-Day)",
-        "url": "COMP_volatility",
-        "market_symbol": "COMP",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "NASDAQ Composite Historical Volatility (60-Day)",
-        "url": "COMP_volatility_60d",
-        "market_symbol": "COMP",
-        "type": "other",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Traeger Inc Historical Volatility (20-Day)",
         "url": "COOK_volatility",
         "market_symbol": "COOK",
@@ -156499,6 +156478,20 @@
         "updated": "Daily"
     },
     {
+        "chart_name": "NASDAQ Composite Historical Volatility (20-Day)",
+        "url": "COMP_volatility",
+        "market_symbol": "COMP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "NASDAQ Composite Historical Volatility (60-Day)",
+        "url": "COMP_volatility_60d",
+        "market_symbol": "COMP",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
         "chart_name": "Invesco India ETF (IMVP) Historical Volatility (20-Day)",
         "url": "IMVP_volatility",
         "market_symbol": "IMVP",
@@ -156580,13 +156573,6 @@
         "url": "etf_ihi",
         "market_symbol": "IHI",
         "type": "optix",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "IHI Historical Volatility (20-Day)",
-        "url": "IHI_volatility",
-        "market_symbol": "IHI",
-        "type": "other",
         "updated": "Daily"
     },
     {
@@ -157381,13 +157367,6 @@
         "updated": "Monthly"
     },
     {
-        "chart_name": "Bitcoin",
-        "url": "CRP_BTC",
-        "market_symbol": "crp_BTC",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Bitcoin Historical Volatility (20-Day)",
         "url": "CRP_BTC_volatility",
         "market_symbol": "crp_BTC",
@@ -157399,13 +157378,6 @@
         "url": "CRP_BTC_volatility_60d",
         "market_symbol": "crp_BTC",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ethereum",
-        "url": "CRP_ETH",
-        "market_symbol": "crp_ETH",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157423,13 +157395,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Binance Coin",
-        "url": "CRP_BNB",
-        "market_symbol": "crp_BNB",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Binance Coin Historical Volatility (20-Day)",
         "url": "CRP_BNB_volatility",
         "market_symbol": "crp_BNB",
@@ -157441,13 +157406,6 @@
         "url": "CRP_BNB_volatility_60d",
         "market_symbol": "crp_BNB",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ripple",
-        "url": "CRP_XRP",
-        "market_symbol": "crp_XRP",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157465,13 +157423,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Cardano",
-        "url": "CRP_ADA",
-        "market_symbol": "crp_ADA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Cardano Historical Volatility (20-Day)",
         "url": "CRP_ADA_volatility",
         "market_symbol": "crp_ADA",
@@ -157483,13 +157434,6 @@
         "url": "CRP_ADA_volatility_60d",
         "market_symbol": "crp_ADA",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Solana",
-        "url": "CRP_SOL",
-        "market_symbol": "crp_SOL",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157507,13 +157451,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Dogecoin",
-        "url": "CRP_DOGE",
-        "market_symbol": "crp_DOGE",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Dogecoin Historical Volatility (20-Day)",
         "url": "CRP_DOGE_volatility",
         "market_symbol": "crp_DOGE",
@@ -157525,13 +157462,6 @@
         "url": "CRP_DOGE_volatility_60d",
         "market_symbol": "crp_DOGE",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Polkadot",
-        "url": "CRP_DOT",
-        "market_symbol": "crp_DOT",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157549,13 +157479,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "TRON",
-        "url": "CRP_TRX",
-        "market_symbol": "crp_TRX",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "TRON Historical Volatility (20-Day)",
         "url": "CRP_TRX_volatility",
         "market_symbol": "crp_TRX",
@@ -157567,13 +157490,6 @@
         "url": "CRP_TRX_volatility_60d",
         "market_symbol": "crp_TRX",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Avalanche",
-        "url": "CRP_AVAX",
-        "market_symbol": "crp_AVAX",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157591,13 +157507,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Chainlink",
-        "url": "CRP_LINK",
-        "market_symbol": "crp_LINK",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Chainlink Historical Volatility (20-Day)",
         "url": "CRP_LINK_volatility",
         "market_symbol": "crp_LINK",
@@ -157609,13 +157518,6 @@
         "url": "CRP_LINK_volatility_60d",
         "market_symbol": "crp_LINK",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Stellar",
-        "url": "CRP_XLM",
-        "market_symbol": "crp_XLM",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157633,13 +157535,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Monero",
-        "url": "CRP_XMR",
-        "market_symbol": "crp_XMR",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Monero Historical Volatility (20-Day)",
         "url": "CRP_XMR_volatility",
         "market_symbol": "crp_XMR",
@@ -157651,13 +157546,6 @@
         "url": "CRP_XMR_volatility_60d",
         "market_symbol": "crp_XMR",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Algorand",
-        "url": "CRP_ALGO",
-        "market_symbol": "crp_ALGO",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157675,13 +157563,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Internet Computer",
-        "url": "CRP_ICP",
-        "market_symbol": "crp_ICP",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Internet Computer Historical Volatility (20-Day)",
         "url": "CRP_ICP_volatility",
         "market_symbol": "crp_ICP",
@@ -157693,13 +157574,6 @@
         "url": "CRP_ICP_volatility_60d",
         "market_symbol": "crp_ICP",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Filecoin",
-        "url": "CRP_FIL",
-        "market_symbol": "crp_FIL",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157717,13 +157591,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Near Protocol",
-        "url": "CRP_NEAR",
-        "market_symbol": "crp_NEAR",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Near Protocol Historical Volatility (20-Day)",
         "url": "CRP_NEAR_volatility",
         "market_symbol": "crp_NEAR",
@@ -157735,13 +157602,6 @@
         "url": "CRP_NEAR_volatility_60d",
         "market_symbol": "crp_NEAR",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "EOS",
-        "url": "CRP_EOS",
-        "market_symbol": "crp_EOS",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157759,13 +157619,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Hedera",
-        "url": "CRP_HBAR",
-        "market_symbol": "crp_HBAR",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Hedera Historical Volatility (20-Day)",
         "url": "CRP_HBAR_volatility",
         "market_symbol": "crp_HBAR",
@@ -157777,13 +157630,6 @@
         "url": "CRP_HBAR_volatility_60d",
         "market_symbol": "crp_HBAR",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Flow",
-        "url": "CRP_FLOW",
-        "market_symbol": "crp_FLOW",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157801,13 +157647,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Aave",
-        "url": "CRP_AAVE",
-        "market_symbol": "crp_AAVE",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Aave Historical Volatility (20-Day)",
         "url": "CRP_AAVE_volatility",
         "market_symbol": "crp_AAVE",
@@ -157819,13 +157658,6 @@
         "url": "CRP_AAVE_volatility_60d",
         "market_symbol": "crp_AAVE",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Quant",
-        "url": "CRP_QNT",
-        "market_symbol": "crp_QNT",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157843,13 +157675,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "MultiversX (Elrond)",
-        "url": "CRP_EGLD",
-        "market_symbol": "crp_EGLD",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "MultiversX (Elrond) Historical Volatility (20-Day)",
         "url": "CRP_EGLD_volatility",
         "market_symbol": "crp_EGLD",
@@ -157861,13 +157686,6 @@
         "url": "CRP_EGLD_volatility_60d",
         "market_symbol": "crp_EGLD",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "VeChain",
-        "url": "CRP_VET",
-        "market_symbol": "crp_VET",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157885,13 +157703,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Chiliz",
-        "url": "CRP_CHZ",
-        "market_symbol": "crp_CHZ",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Chiliz Historical Volatility (20-Day)",
         "url": "CRP_CHZ_volatility",
         "market_symbol": "crp_CHZ",
@@ -157903,13 +157714,6 @@
         "url": "CRP_CHZ_volatility_60d",
         "market_symbol": "crp_CHZ",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "The Sandbox",
-        "url": "CRP_SAND",
-        "market_symbol": "crp_SAND",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157927,13 +157731,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Theta Network",
-        "url": "CRP_THETA",
-        "market_symbol": "crp_THETA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Theta Network Historical Volatility (20-Day)",
         "url": "CRP_THETA_volatility",
         "market_symbol": "crp_THETA",
@@ -157945,13 +157742,6 @@
         "url": "CRP_THETA_volatility_60d",
         "market_symbol": "crp_THETA",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Tezos",
-        "url": "CRP_XTZ",
-        "market_symbol": "crp_XTZ",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -157969,13 +157759,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Kava",
-        "url": "CRP_KAVA",
-        "market_symbol": "crp_KAVA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Kava Historical Volatility (20-Day)",
         "url": "CRP_KAVA_volatility",
         "market_symbol": "crp_KAVA",
@@ -157987,13 +157770,6 @@
         "url": "CRP_KAVA_volatility_60d",
         "market_symbol": "crp_KAVA",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Curve DAO Token",
-        "url": "CRP_CRV",
-        "market_symbol": "crp_CRV",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158011,13 +157787,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Enjin Coin",
-        "url": "CRP_ENJ",
-        "market_symbol": "crp_ENJ",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Enjin Coin Historical Volatility (20-Day)",
         "url": "CRP_ENJ_volatility",
         "market_symbol": "crp_ENJ",
@@ -158029,13 +157798,6 @@
         "url": "CRP_ENJ_volatility_60d",
         "market_symbol": "crp_ENJ",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Zcash",
-        "url": "CRP_ZEC",
-        "market_symbol": "crp_ZEC",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158053,13 +157815,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Basic Attention Token",
-        "url": "CRP_BAT",
-        "market_symbol": "crp_BAT",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Basic Attention Token Historical Volatility (20-Day)",
         "url": "CRP_BAT_volatility",
         "market_symbol": "crp_BAT",
@@ -158071,13 +157826,6 @@
         "url": "CRP_BAT_volatility_60d",
         "market_symbol": "crp_BAT",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Loopring",
-        "url": "CRP_LRC",
-        "market_symbol": "crp_LRC",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158095,13 +157843,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "1inch",
-        "url": "CRP_1INCH",
-        "market_symbol": "crp_1INCH",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "1inch Historical Volatility (20-Day)",
         "url": "CRP_1INCH_volatility",
         "market_symbol": "crp_1INCH",
@@ -158113,13 +157854,6 @@
         "url": "CRP_1INCH_volatility_60d",
         "market_symbol": "crp_1INCH",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Celsius Network",
-        "url": "CRP_CEL",
-        "market_symbol": "crp_CEL",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158137,13 +157871,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Oasis Network",
-        "url": "CRP_ROSE",
-        "market_symbol": "crp_ROSE",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Oasis Network Historical Volatility (20-Day)",
         "url": "CRP_ROSE_volatility",
         "market_symbol": "crp_ROSE",
@@ -158155,13 +157882,6 @@
         "url": "CRP_ROSE_volatility_60d",
         "market_symbol": "crp_ROSE",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Cronos",
-        "url": "CRP_CRO",
-        "market_symbol": "crp_CRO",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158179,13 +157899,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Waves",
-        "url": "CRP_WAVES",
-        "market_symbol": "crp_WAVES",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Waves Historical Volatility (20-Day)",
         "url": "CRP_WAVES_volatility",
         "market_symbol": "crp_WAVES",
@@ -158197,13 +157910,6 @@
         "url": "CRP_WAVES_volatility_60d",
         "market_symbol": "crp_WAVES",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "dYdX",
-        "url": "CRP_DYDX",
-        "market_symbol": "crp_DYDX",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158221,13 +157927,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Gala",
-        "url": "CRP_GALA",
-        "market_symbol": "crp_GALA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Gala Historical Volatility (20-Day)",
         "url": "CRP_GALA_volatility",
         "market_symbol": "crp_GALA",
@@ -158239,13 +157938,6 @@
         "url": "CRP_GALA_volatility_60d",
         "market_symbol": "crp_GALA",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Immutable X",
-        "url": "CRP_IMX10603",
-        "market_symbol": "crp_IMX10603",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158263,13 +157955,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Mina Protocol",
-        "url": "CRP_MINA",
-        "market_symbol": "crp_MINA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Mina Protocol Historical Volatility (20-Day)",
         "url": "CRP_MINA_volatility",
         "market_symbol": "crp_MINA",
@@ -158281,13 +157966,6 @@
         "url": "CRP_MINA_volatility_60d",
         "market_symbol": "crp_MINA",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "THORChain",
-        "url": "CRP_RUNE",
-        "market_symbol": "crp_RUNE",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158305,13 +157983,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Kusama",
-        "url": "CRP_KSM",
-        "market_symbol": "crp_KSM",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Kusama Historical Volatility (20-Day)",
         "url": "CRP_KSM_volatility",
         "market_symbol": "crp_KSM",
@@ -158323,13 +157994,6 @@
         "url": "CRP_KSM_volatility_60d",
         "market_symbol": "crp_KSM",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ren",
-        "url": "CRP_REN",
-        "market_symbol": "crp_REN",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158347,13 +158011,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "UMA",
-        "url": "CRP_UMA",
-        "market_symbol": "crp_UMA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "UMA Historical Volatility (20-Day)",
         "url": "CRP_UMA_volatility",
         "market_symbol": "crp_UMA",
@@ -158365,13 +158022,6 @@
         "url": "CRP_UMA_volatility_60d",
         "market_symbol": "crp_UMA",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Zilliqa",
-        "url": "CRP_ZIL",
-        "market_symbol": "crp_ZIL",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158389,13 +158039,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Ankr",
-        "url": "CRP_ANKR",
-        "market_symbol": "crp_ANKR",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Ankr Historical Volatility (20-Day)",
         "url": "CRP_ANKR_volatility",
         "market_symbol": "crp_ANKR",
@@ -158407,13 +158050,6 @@
         "url": "CRP_ANKR_volatility_60d",
         "market_symbol": "crp_ANKR",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Helium",
-        "url": "CRP_HNT",
-        "market_symbol": "crp_HNT",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158431,13 +158067,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Storj",
-        "url": "CRP_STORJ",
-        "market_symbol": "crp_STORJ",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Storj Historical Volatility (20-Day)",
         "url": "CRP_STORJ_volatility",
         "market_symbol": "crp_STORJ",
@@ -158449,13 +158078,6 @@
         "url": "CRP_STORJ_volatility_60d",
         "market_symbol": "crp_STORJ",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "ICON",
-        "url": "CRP_ICX",
-        "market_symbol": "crp_ICX",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158473,13 +158095,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Ontology",
-        "url": "CRP_ONT",
-        "market_symbol": "crp_ONT",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Ontology Historical Volatility (20-Day)",
         "url": "CRP_ONT_volatility",
         "market_symbol": "crp_ONT",
@@ -158491,13 +158106,6 @@
         "url": "CRP_ONT_volatility_60d",
         "market_symbol": "crp_ONT",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ravencoin",
-        "url": "CRP_RVN",
-        "market_symbol": "crp_RVN",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158515,13 +158123,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Celer Network",
-        "url": "CRP_CELR",
-        "market_symbol": "crp_CELR",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Celer Network Historical Volatility (20-Day)",
         "url": "CRP_CELR_volatility",
         "market_symbol": "crp_CELR",
@@ -158533,13 +158134,6 @@
         "url": "CRP_CELR_volatility_60d",
         "market_symbol": "crp_CELR",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Trust Wallet Token",
-        "url": "CRP_TWT",
-        "market_symbol": "crp_TWT",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158557,13 +158151,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Secret Network",
-        "url": "CRP_SCRT",
-        "market_symbol": "crp_SCRT",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Secret Network Historical Volatility (20-Day)",
         "url": "CRP_SCRT_volatility",
         "market_symbol": "crp_SCRT",
@@ -158575,13 +158162,6 @@
         "url": "CRP_SCRT_volatility_60d",
         "market_symbol": "crp_SCRT",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "SushiSwap",
-        "url": "CRP_SUSHI",
-        "market_symbol": "crp_SUSHI",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158599,13 +158179,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "SKALE Network",
-        "url": "CRP_SKL",
-        "market_symbol": "crp_SKL",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "SKALE Network Historical Volatility (20-Day)",
         "url": "CRP_SKL_volatility",
         "market_symbol": "crp_SKL",
@@ -158617,13 +158190,6 @@
         "url": "CRP_SKL_volatility_60d",
         "market_symbol": "crp_SKL",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Injective",
-        "url": "CRP_INJ",
-        "market_symbol": "crp_INJ",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158641,13 +158207,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Bancor",
-        "url": "CRP_BNT",
-        "market_symbol": "crp_BNT",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Bancor Historical Volatility (20-Day)",
         "url": "CRP_BNT_volatility",
         "market_symbol": "crp_BNT",
@@ -158659,13 +158218,6 @@
         "url": "CRP_BNT_volatility_60d",
         "market_symbol": "crp_BNT",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Ocean Protocol",
-        "url": "CRP_OCEAN",
-        "market_symbol": "crp_OCEAN",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158683,13 +158235,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Bella Protocol",
-        "url": "CRP_BEL",
-        "market_symbol": "crp_BEL",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Bella Protocol Historical Volatility (20-Day)",
         "url": "CRP_BEL_volatility",
         "market_symbol": "crp_BEL",
@@ -158701,13 +158246,6 @@
         "url": "CRP_BEL_volatility_60d",
         "market_symbol": "crp_BEL",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "COTI",
-        "url": "CRP_COTI",
-        "market_symbol": "crp_COTI",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158725,13 +158263,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Cartesi",
-        "url": "CRP_CTSI",
-        "market_symbol": "crp_CTSI",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Cartesi Historical Volatility (20-Day)",
         "url": "CRP_CTSI_volatility",
         "market_symbol": "crp_CTSI",
@@ -158743,13 +158274,6 @@
         "url": "CRP_CTSI_volatility_60d",
         "market_symbol": "crp_CTSI",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "PAX Gold",
-        "url": "CRP_PAXG",
-        "market_symbol": "crp_PAXG",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158767,13 +158291,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Request",
-        "url": "CRP_REQ",
-        "market_symbol": "crp_REQ",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Request Historical Volatility (20-Day)",
         "url": "CRP_REQ_volatility",
         "market_symbol": "crp_REQ",
@@ -158785,13 +158302,6 @@
         "url": "CRP_REQ_volatility_60d",
         "market_symbol": "crp_REQ",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Moonbeam",
-        "url": "CRP_GLMR",
-        "market_symbol": "crp_GLMR",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158809,13 +158319,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Moonriver",
-        "url": "CRP_MOVR",
-        "market_symbol": "crp_MOVR",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Moonriver Historical Volatility (20-Day)",
         "url": "CRP_MOVR_volatility",
         "market_symbol": "crp_MOVR",
@@ -158827,13 +158330,6 @@
         "url": "CRP_MOVR_volatility_60d",
         "market_symbol": "crp_MOVR",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Syscoin",
-        "url": "CRP_SYS",
-        "market_symbol": "crp_SYS",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158851,13 +158347,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Perpetual Protocol",
-        "url": "CRP_PERP",
-        "market_symbol": "crp_PERP",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Perpetual Protocol Historical Volatility (20-Day)",
         "url": "CRP_PERP_volatility",
         "market_symbol": "crp_PERP",
@@ -158869,13 +158358,6 @@
         "url": "CRP_PERP_volatility_60d",
         "market_symbol": "crp_PERP",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Akash Network",
-        "url": "CRP_AKT",
-        "market_symbol": "crp_AKT",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158893,13 +158375,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Klaytn",
-        "url": "CRP_KLAY",
-        "market_symbol": "crp_KLAY",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Klaytn Historical Volatility (20-Day)",
         "url": "CRP_KLAY_volatility",
         "market_symbol": "crp_KLAY",
@@ -158911,13 +158386,6 @@
         "url": "CRP_KLAY_volatility_60d",
         "market_symbol": "crp_KLAY",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Reserve Rights",
-        "url": "CRP_RSR",
-        "market_symbol": "crp_RSR",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158935,13 +158403,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Ultra",
-        "url": "CRP_UOS",
-        "market_symbol": "crp_UOS",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Ultra Historical Volatility (20-Day)",
         "url": "CRP_UOS_volatility",
         "market_symbol": "crp_UOS",
@@ -158953,13 +158414,6 @@
         "url": "CRP_UOS_volatility_60d",
         "market_symbol": "crp_UOS",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Creditcoin",
-        "url": "CRP_CTC",
-        "market_symbol": "crp_CTC",
-        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -158977,13 +158431,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Grayscale Decentraland",
-        "url": "CRP_MANA",
-        "market_symbol": "crp_MANA",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Grayscale Decentraland Historical Volatility (20-Day)",
         "url": "CRP_MANA_volatility",
         "market_symbol": "crp_MANA",
@@ -158998,13 +158445,6 @@
         "updated": "Daily"
     },
     {
-        "chart_name": "Litecoin",
-        "url": "CRP_LTC",
-        "market_symbol": "crp_LTC",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
         "chart_name": "Litecoin Historical Volatility (20-Day)",
         "url": "CRP_LTC_volatility",
         "market_symbol": "crp_LTC",
@@ -159016,27 +158456,6 @@
         "url": "CRP_LTC_volatility_60d",
         "market_symbol": "crp_LTC",
         "type": "other",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hyperliquid",
-        "url": "CRP_HYPE32196",
-        "market_symbol": "crp_HYPE32196",
-        "type": "optix",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hyperliquid Trend Score",
-        "url": "CRP_HYPE32196_trend",
-        "market_symbol": "crp_HYPE32196",
-        "type": "trend",
-        "updated": "Daily"
-    },
-    {
-        "chart_name": "Hyperliquid RelTrend Score",
-        "url": "CRP_HYPE32196_reltrend",
-        "market_symbol": "crp_HYPE32196",
-        "type": "reltrend",
         "updated": "Daily"
     },
     {
@@ -159057,7 +158476,7 @@
         "chart_name": "TSEM Optix",
         "url": "etf_tsem",
         "market_symbol": "tsem",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159092,7 +158511,7 @@
         "chart_name": "FTXL Optix",
         "url": "etf_ftxl",
         "market_symbol": "FTXL",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159127,7 +158546,7 @@
         "chart_name": "XSD Optix",
         "url": "etf_xsd",
         "market_symbol": "XSD",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159169,7 +158588,7 @@
         "chart_name": "PDBC Optix",
         "url": "etf_pdbc",
         "market_symbol": "PDBC",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159204,7 +158623,7 @@
         "chart_name": "VGT Optix",
         "url": "etf_vgt",
         "market_symbol": "VGT",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159239,7 +158658,7 @@
         "chart_name": "ITA Optix",
         "url": "etf_ita",
         "market_symbol": "ITA",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159274,7 +158693,7 @@
         "chart_name": "PICK Optix",
         "url": "etf_pick",
         "market_symbol": "PICK",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159309,7 +158728,7 @@
         "chart_name": "SIL Optix",
         "url": "etf_sil",
         "market_symbol": "SIL",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159344,7 +158763,7 @@
         "chart_name": "VUG Optix",
         "url": "etf_vug",
         "market_symbol": "VUG",
-        "type": "other",
+        "type": "optix",
         "updated": "Daily"
     },
     {
@@ -159380,6 +158799,34 @@
         "url": "SPCX",
         "market_symbol": "SPCX",
         "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Space Exploration Technologies Corp. Trend Score",
+        "url": "SPCX_trend",
+        "market_symbol": "SPCX",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Space Exploration Technologies Corp. RelTrend Score",
+        "url": "SPCX_reltrend",
+        "market_symbol": "SPCX",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Space Exploration Technologies Corp. Historical Volatility (20-Day)",
+        "url": "SPCX_volatility",
+        "market_symbol": "SPCX",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Space Exploration Technologies Corp. Historical Volatility (60-Day)",
+        "url": "SPCX_volatility_60d",
+        "market_symbol": "SPCX",
+        "type": "other",
         "updated": "Daily"
     },
     {
@@ -159693,6 +159140,1098 @@
     {
         "chart_name": "TNX Model",
         "url": "tnx_model",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "ADI Global Distribution Inc",
+        "url": "ADIG",
+        "market_symbol": "ADIG",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Del Monte Corp",
+        "url": "DMC",
+        "market_symbol": "DMC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "EchoStar Corp",
+        "url": "ECHO",
+        "market_symbol": "ECHO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Mobility Global Inc",
+        "url": "MBGL",
+        "market_symbol": "MBGL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Midera Food Processing Inc",
+        "url": "MFP",
+        "market_symbol": "MFP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "People Inc",
+        "url": "PPLI",
+        "market_symbol": "PPLI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vivmark Residential",
+        "url": "VMRK",
+        "market_symbol": "VMRK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Victorias Secret & Co",
+        "url": "VSXY",
+        "market_symbol": "VSXY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Almonty Industries Inc",
+        "url": "ALM",
+        "market_symbol": "ALM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alamar Biosciences Inc",
+        "url": "ALMR",
+        "market_symbol": "ALMR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "REalloys Inc",
+        "url": "ALOY",
+        "market_symbol": "ALOY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Alto Ingredients Inc",
+        "url": "ALTO",
+        "market_symbol": "ALTO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AN2 Therapeutics Inc",
+        "url": "ANTX",
+        "market_symbol": "ANTX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ampco-Pittsburgh Corp",
+        "url": "AP",
+        "market_symbol": "AP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ARKO Petroleum Corp",
+        "url": "APC",
+        "market_symbol": "APC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "American Resources Corp",
+        "url": "AREC",
+        "market_symbol": "AREC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Armata Pharmaceuticals Inc",
+        "url": "ARMP",
+        "market_symbol": "ARMP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Accelerant Holdings",
+        "url": "ARX",
+        "market_symbol": "ARX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Assembly Biosciences Inc",
+        "url": "ASMB",
+        "market_symbol": "ASMB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ascendis Pharma A/S",
+        "url": "ASND",
+        "market_symbol": "ASND",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Amtech Systems Inc",
+        "url": "ASYS",
+        "market_symbol": "ASYS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AtaiBeckley Inc",
+        "url": "ATAI",
+        "market_symbol": "ATAI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aura Minerals Inc",
+        "url": "AUGO",
+        "market_symbol": "AUGO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avidia Bancorp Inc",
+        "url": "AVBC",
+        "market_symbol": "AVBC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Aevex Corp",
+        "url": "AVEX",
+        "market_symbol": "AVEX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avalyn Pharma Inc",
+        "url": "AVLN",
+        "market_symbol": "AVLN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Avalo Therapeutics Inc",
+        "url": "AVTX",
+        "market_symbol": "AVTX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "AXT Inc",
+        "url": "AXTI",
+        "market_symbol": "AXTI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Biglari Holdings Inc",
+        "url": "BH_A",
+        "market_symbol": "BH_A",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Brand Engagement Network Inc",
+        "url": "BNAI",
+        "market_symbol": "BNAI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Bobs Discount Furniture Inc",
+        "url": "BOBS",
+        "market_symbol": "BOBS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Crescent Biopharma Inc",
+        "url": "CBIO",
+        "market_symbol": "CBIO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Comstock Holding Cos Inc",
+        "url": "CHCI",
+        "market_symbol": "CHCI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Chime Financial Inc",
+        "url": "CHYM",
+        "market_symbol": "CHYM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Community Bancorp/VT",
+        "url": "CMTV",
+        "market_symbol": "CMTV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Connect Biopharma Holdings Ltd",
+        "url": "CNTB",
+        "market_symbol": "CNTB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Canton Strategic Holdings Inc",
+        "url": "CNTN",
+        "market_symbol": "CNTN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Context Therapeutics Inc",
+        "url": "CNTX",
+        "market_symbol": "CNTX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Compass Inc",
+        "url": "COMP",
+        "market_symbol": "COMP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Canadian Solar Inc",
+        "url": "CSIQ",
+        "market_symbol": "CSIQ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "CytomX Therapeutics Inc",
+        "url": "CTMX",
+        "market_symbol": "CTMX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Civeo Corp",
+        "url": "CVEO",
+        "market_symbol": "CVEO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Dlocal Ltd/Uruguay",
+        "url": "DLO",
+        "market_symbol": "DLO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Damora Therapeutics Inc",
+        "url": "DMRA",
+        "market_symbol": "DMRA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Precision BioSciences Inc",
+        "url": "DTIL",
+        "market_symbol": "DTIL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Duos Technologies Group Inc",
+        "url": "DUOT",
+        "market_symbol": "DUOT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Eikon Therapeutics Inc",
+        "url": "EIKN",
+        "market_symbol": "EIKN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Elemental Royalty Corp",
+        "url": "ELE",
+        "market_symbol": "ELE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Elmet Group Co/The",
+        "url": "ELMT",
+        "market_symbol": "ELMT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Elicio Therapeutics Inc",
+        "url": "ELTX",
+        "market_symbol": "ELTX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Espey Mfg. & Electronics Corp",
+        "url": "ESP",
+        "market_symbol": "ESP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Establishment Labs Holdings In",
+        "url": "ESTA",
+        "market_symbol": "ESTA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Starfighters Space Inc",
+        "url": "FJET",
+        "market_symbol": "FJET",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "First Northern Community Banco",
+        "url": "FNRN",
+        "market_symbol": "FNRN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Forgent Power Solutions Inc",
+        "url": "FPS",
+        "market_symbol": "FPS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JFrog Ltd",
+        "url": "FROG",
+        "market_symbol": "FROG",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Forward Industries Inc",
+        "url": "FWDI",
+        "market_symbol": "FWDI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GD Culture Group Ltd",
+        "url": "GDC",
+        "market_symbol": "GDC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Gemini Space Station Inc",
+        "url": "GEMI",
+        "market_symbol": "GEMI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Generate Biomedicines Inc",
+        "url": "GENB",
+        "market_symbol": "GENB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GFL Environmental Inc",
+        "url": "GFL",
+        "market_symbol": "GFL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Galaxy Digital Inc",
+        "url": "GLXY",
+        "market_symbol": "GLXY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "GSI Technology Inc",
+        "url": "GSIT",
+        "market_symbol": "GSIT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Happen Inc",
+        "url": "HAPN",
+        "market_symbol": "HAPN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "HMH Holding Inc",
+        "url": "HMH",
+        "market_symbol": "HMH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hinge Health Inc",
+        "url": "HNGE",
+        "market_symbol": "HNGE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hycroft Mining Holding Corp",
+        "url": "HYMC",
+        "market_symbol": "HYMC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hyperfine Inc",
+        "url": "HYPR",
+        "market_symbol": "HYPR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Innovative Solutions and Suppo",
+        "url": "IA",
+        "market_symbol": "IA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Intellicheck Inc",
+        "url": "IDN",
+        "market_symbol": "IDN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Immix Biopharma Inc",
+        "url": "IMMX",
+        "market_symbol": "IMMX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Infleqtion Inc",
+        "url": "INFQ",
+        "market_symbol": "INFQ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Opus Genetics Inc",
+        "url": "IRD",
+        "market_symbol": "IRD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Isabella Bank Corp",
+        "url": "ISBA",
+        "market_symbol": "ISBA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Janus Living Inc",
+        "url": "JAN",
+        "market_symbol": "JAN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JBS NV",
+        "url": "JBS",
+        "market_symbol": "JBS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Keel Infrastructure Corp",
+        "url": "KEEL",
+        "market_symbol": "KEEL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Kailera Therapeutics Inc",
+        "url": "KLRA",
+        "market_symbol": "KLRA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Klaviyo Inc",
+        "url": "KVYO",
+        "market_symbol": "KVYO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lee Enterprises Inc",
+        "url": "LEE",
+        "market_symbol": "LEE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Comstock Inc",
+        "url": "LODE",
+        "market_symbol": "LODE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "LightPath Technologies Inc",
+        "url": "LPTH",
+        "market_symbol": "LPTH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Lantronix Inc",
+        "url": "LTRX",
+        "market_symbol": "LTRX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "VeraDermics Inc",
+        "url": "MANE",
+        "market_symbol": "MANE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MiniMed Group Inc",
+        "url": "MMED",
+        "market_symbol": "MMED",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "MNTN Inc",
+        "url": "MNTN",
+        "market_symbol": "MNTN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "McEwen Inc",
+        "url": "MUX",
+        "market_symbol": "MUX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Solv Energy Inc",
+        "url": "MWH",
+        "market_symbol": "MWH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Minerva Neurosciences Inc",
+        "url": "NERV",
+        "market_symbol": "NERV",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "National Healthcare Properties",
+        "url": "NHP",
+        "market_symbol": "NHP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neptune Insurance Holdings Inc",
+        "url": "NP",
+        "market_symbol": "NP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "New Era Energy & Digital Inc",
+        "url": "NUAI",
+        "market_symbol": "NUAI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Neighborhood Intelligence Inc",
+        "url": "NXH",
+        "market_symbol": "NXH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oddity Tech Ltd",
+        "url": "ODD",
+        "market_symbol": "ODD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Once Upon a Farm PBC",
+        "url": "OFRM",
+        "market_symbol": "OFRM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "OnKure Therapeutics Inc",
+        "url": "OKUR",
+        "market_symbol": "OKUR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Ondas Inc",
+        "url": "ONDS",
+        "market_symbol": "ONDS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Syntec Optics Holdings Inc",
+        "url": "OPTX",
+        "market_symbol": "OPTX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Oramed Pharmaceuticals Inc",
+        "url": "ORMP",
+        "market_symbol": "ORMP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "One Stop Systems Inc",
+        "url": "OSS",
+        "market_symbol": "OSS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Palisade Bio Inc",
+        "url": "PALI",
+        "market_symbol": "PALI",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Paymentus Holdings Inc",
+        "url": "PAY",
+        "market_symbol": "PAY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "PEDEVCO Corp",
+        "url": "PED",
+        "market_symbol": "PED",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Playboy Inc",
+        "url": "PLBY",
+        "market_symbol": "PLBY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pelagos Insurance Capital Ltd",
+        "url": "PLGO",
+        "market_symbol": "PLGO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Perma-Pipe International Holdi",
+        "url": "PPIH",
+        "market_symbol": "PPIH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Pattern Group Inc",
+        "url": "PTRN",
+        "market_symbol": "PTRN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Hyperliquid Strategies Inc",
+        "url": "PURR",
+        "market_symbol": "PURR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "FreightCar America Inc",
+        "url": "RAIL",
+        "market_symbol": "RAIL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RideNow Group Inc",
+        "url": "RDNW",
+        "market_symbol": "RDNW",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "RF Industries Ltd",
+        "url": "RFIL",
+        "market_symbol": "RFIL",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Republic Airways Holdings Inc",
+        "url": "RJET",
+        "market_symbol": "RJET",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Relmada Therapeutics Inc",
+        "url": "RLMD",
+        "market_symbol": "RLMD",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SAB Biotherapeutics Inc",
+        "url": "SABS",
+        "market_symbol": "SABS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Silver Bow Mining Corp",
+        "url": "SBMT",
+        "market_symbol": "SBMT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Senseonics Holdings Inc",
+        "url": "SENS",
+        "market_symbol": "SENS",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SpyGlass Pharma Inc",
+        "url": "SGP",
+        "market_symbol": "SGP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "SharonAI Holdings Inc",
+        "url": "SHAZ",
+        "market_symbol": "SHAZ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shimmick Corp",
+        "url": "SHIM",
+        "market_symbol": "SHIM",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Shoe Station Group Inc",
+        "url": "SHOE",
+        "market_symbol": "SHOE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sidus Space Inc",
+        "url": "SIDU",
+        "market_symbol": "SIDU",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Soluna Holdings Inc",
+        "url": "SLNH",
+        "market_symbol": "SLNH",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Smart Sand Inc",
+        "url": "SND",
+        "market_symbol": "SND",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Spruce Biosciences Inc",
+        "url": "SPRB",
+        "market_symbol": "SPRB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Surrozen Inc",
+        "url": "SRZN",
+        "market_symbol": "SRZN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Starling Oncology Inc",
+        "url": "STLN",
+        "market_symbol": "STLN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Stubhub Holdings Inc",
+        "url": "STUB",
+        "market_symbol": "STUB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Sunbelt Rentals Holdings Inc",
+        "url": "SUNB",
+        "market_symbol": "SUNB",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Swarmer Inc",
+        "url": "SWMR",
+        "market_symbol": "SWMR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "TAT Technologies Ltd",
+        "url": "TATT",
+        "market_symbol": "TATT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Taboola.com Ltd",
+        "url": "TBLA",
+        "market_symbol": "TBLA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tenax Therapeutics Inc",
+        "url": "TENX",
+        "market_symbol": "TENX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Toyo Co Ltd",
+        "url": "TOYO",
+        "market_symbol": "TOYO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tron Inc",
+        "url": "TRON",
+        "market_symbol": "TRON",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ServiceTitan Inc",
+        "url": "TTAN",
+        "market_symbol": "TTAN",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Tigo Energy Inc",
+        "url": "TYGO",
+        "market_symbol": "TYGO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Unusual Machines Inc /US",
+        "url": "UMAC",
+        "market_symbol": "UMAC",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Unicycive Therapeutics Inc",
+        "url": "UNCY",
+        "market_symbol": "UNCY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Velo3D Inc",
+        "url": "VELO",
+        "market_symbol": "VELO",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Venu Holding Corp",
+        "url": "VENU",
+        "market_symbol": "VENU",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Vista Gold Corp",
+        "url": "VGZ",
+        "market_symbol": "VGZ",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Energous Corp",
+        "url": "WATT",
+        "market_symbol": "WATT",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Whitehawk Therapeutics Inc",
+        "url": "WHWK",
+        "market_symbol": "WHWK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "WeShop Holdings Ltd",
+        "url": "WSHP",
+        "market_symbol": "WSHP",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "X-Energy Inc",
+        "url": "XE",
+        "market_symbol": "XE",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "XMAX Inc",
+        "url": "XMAX",
+        "market_symbol": "XMAX",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Yesway Inc",
+        "url": "YSWY",
+        "market_symbol": "YSWY",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "ZenaTech Inc",
+        "url": "ZENA",
+        "market_symbol": "ZENA",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Z Squared Inc",
+        "url": "ZSQR",
+        "market_symbol": "ZSQR",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Corporate Insider Buys - XLC",
+        "url": "insider_buys_xlc",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "Corporate Insider Buy/Sell Ratio - XLC",
+        "url": "insider_ratio_xlc",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "Corporate Insider Sells - XLC",
+        "url": "insider_sells_xlc",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "Corporate Insider Velocity - XLC",
+        "url": "insider_ratio_velocity_xlc",
+        "market_symbol": "XLC",
+        "type": "other",
+        "updated": "Weekly"
+    },
+    {
+        "chart_name": "SPY % Members Near 52W High",
+        "url": "breadth_sector_spy_nearhigh5",
+        "market_symbol": "SPY",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "JK M2 Stock Market Model",
+        "url": "jk_m2_stock_market_model_value",
+        "market_symbol": "SPX",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK M2 Stock Market Model Status",
+        "url": "jk_m2_stock_market_model_status",
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Monthly"
