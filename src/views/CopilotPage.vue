@@ -5,9 +5,10 @@
       <div class="sidebar-inner">
         <!-- Top: Search + New Chat -->
         <div class="sidebar-top">
-          <div class="search-placeholder">
+          <div class="search-trigger" @click="openSearch">
             <i class="fa fa-search" aria-hidden="true"></i>
             <span>Search...</span>
+            <kbd>⌘K</kbd>
           </div>
           <div v-if="!selectionMode" class="top-actions">
             <button class="new-chat-btn" @click="handleNewChat" :disabled="atConversationLimit" :title="atConversationLimit ? 'Conversation limit reached (50/50)' : ''">
@@ -74,6 +75,60 @@
 
           <div v-if="!conversationsLoading && conversations.length === 0" class="list-empty">
             No conversations
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div v-if="searchOpen" class="search-overlay" @click.self="closeSearch">
+      <div class="search-modal">
+        <div class="search-modal-input-row">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input
+            ref="searchInput"
+            v-model="searchQuery"
+            class="search-modal-input"
+            type="text"
+            placeholder="Search conversations..."
+            @input="onSearchInput"
+          />
+          <button class="search-modal-close" @click="closeSearch" title="Close">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div v-if="searchLoading" class="search-results">
+          <div v-for="i in 4" :key="i" class="search-skeleton-item">
+            <div class="skeleton-avatar" />
+            <div class="skeleton-lines">
+              <div class="skeleton-line short" />
+              <div class="skeleton-line" />
+            </div>
+          </div>
+        </div>
+
+        <div v-else-if="searchQuery && searchResults.length === 0" class="search-results search-empty">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <span>No results found</span>
+        </div>
+
+        <div v-else-if="searchQuery" class="search-results">
+          <div
+            v-for="(result, idx) in searchResults"
+            :key="result.message_id"
+            class="search-result-item"
+            :class="{ active: activeResultIdx === idx }"
+            @click="handleSelectSearchResult(result)"
+          >
+            <div class="result-avatar">
+              <i class="fa fa-commenting-o" aria-hidden="true"></i>
+            </div>
+            <div class="result-content">
+              <div class="result-title">{{ result.conversation_title || 'Untitled' }}</div>
+              <div class="result-snippet" v-html="highlightSnippet(result.snippet)"></div>
+            </div>
+            <div class="result-date">{{ formatDate(result.created_at) }}</div>
           </div>
         </div>
       </div>
@@ -155,6 +210,12 @@ export default {
       selectionMode: false,
       selectedIds: new Set(),
       conversationCount: 0,
+      searchOpen: false,
+      searchQuery: '',
+      searchResults: [],
+      searchLoading: false,
+      activeResultIdx: -1,
+      _searchTimer: null,
     }
   },
   computed: {
@@ -197,9 +258,11 @@ export default {
   },
   mounted() {
     document.addEventListener('visibilitychange', this._visibilityHandler)
+    document.addEventListener('keydown', this.handleKeydown)
   },
   beforeDestroy() {
     document.removeEventListener('visibilitychange', this._visibilityHandler)
+    document.removeEventListener('keydown', this.handleKeydown)
   },
   methods: {
     async initPage() {
@@ -344,6 +407,97 @@ export default {
       if (diffHours < 24) return `${diffHours}h ago`
       if (diffDays < 7) return `${diffDays}d ago`
 
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    },
+    openSearch() {
+      this.searchOpen = true
+      this.searchQuery = ''
+      this.searchResults = []
+      this.activeResultIdx = -1
+      this.$nextTick(() => {
+        this.$refs.searchInput?.focus()
+      })
+    },
+    closeSearch() {
+      this.searchOpen = false
+      this.searchQuery = ''
+      this.searchResults = []
+      this.searchLoading = false
+      if (this._searchTimer) {
+        clearTimeout(this._searchTimer)
+        this._searchTimer = null
+      }
+    },
+    onSearchInput() {
+      if (this._searchTimer) clearTimeout(this._searchTimer)
+      if (!this.searchQuery.trim()) {
+        this.searchResults = []
+        this.searchLoading = false
+        return
+      }
+      this.searchLoading = true
+      this._searchTimer = setTimeout(async () => {
+        const data = await this.copilot.searchConversations(this.searchQuery)
+        this.searchResults = data.results || []
+        this.searchLoading = false
+      }, 300)
+    },
+    handleKeydown(e) {
+      // Cmd+K / Ctrl+K to open search
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        if (this.searchOpen) {
+          this.closeSearch()
+        } else {
+          this.openSearch()
+        }
+        return
+      }
+      // Escape to close search
+      if (e.key === 'Escape' && this.searchOpen) {
+        this.closeSearch()
+        return
+      }
+      // Arrow navigation in results
+      if (!this.searchOpen || this.searchLoading || this.searchResults.length === 0) return
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        this.activeResultIdx = Math.min(this.activeResultIdx + 1, this.searchResults.length - 1)
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        this.activeResultIdx = Math.max(this.activeResultIdx - 1, 0)
+      } else if (e.key === 'Enter' && this.activeResultIdx >= 0) {
+        e.preventDefault()
+        this.handleSelectSearchResult(this.searchResults[this.activeResultIdx])
+      }
+    },
+    handleSelectSearchResult(result) {
+      this.closeSearch()
+      this.handleSelectConversation(result.conversation_id)
+      // After switching conversation, scroll to the matched message
+      this.$nextTick(() => {
+        const el = document.querySelector(`[data-message-id="${result.message_id}"]`)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          el.classList.add('search-highlight-pulse')
+          setTimeout(() => el.classList.remove('search-highlight-pulse'), 2000)
+        }
+      })
+    },
+    highlightSnippet(snippet) {
+      if (!snippet) return ''
+      // Replace **keyword** with <mark>keyword</mark>
+      return snippet.replace(/\*\*(.*?)\*\*/g, '<mark>$1</mark>')
+    },
+    formatDate(iso) {
+      if (!iso) return ''
+      const d = new Date(iso)
+      const now = new Date()
+      const diffMs = now - d
+      const diffDays = Math.floor(diffMs / 86400000)
+      if (diffDays === 0) return 'Today'
+      if (diffDays === 1) return 'Yesterday'
+      if (diffDays < 7) return `${diffDays}d ago`
       return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
     },
   },
@@ -757,5 +911,244 @@ export default {
   flex-shrink: 0;
   padding-bottom: 12px;
   background: #fff;
+}
+
+/* ── Search trigger in sidebar ── */
+.search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin: 0 12px 8px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #9ca3af;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.search-trigger:hover {
+  border-color: #d1d5db;
+  background: #fff;
+  color: #6b7280;
+}
+
+.search-trigger kbd {
+  margin-left: auto;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-family: inherit;
+  background: #e5e7eb;
+  border-radius: 4px;
+  color: #6b7280;
+}
+
+/* ── Search overlay / modal ── */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+}
+
+.search-modal {
+  width: 560px;
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.search-modal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.search-modal-input-row .fa-search {
+  color: #9ca3af;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.search-modal-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: #1f2937;
+  background: transparent;
+}
+
+.search-modal-input::placeholder {
+  color: #9ca3af;
+}
+
+.search-modal-close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+
+.search-modal-close:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.search-results {
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.search-skeleton-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 18px;
+  align-items: flex-start;
+}
+
+.skeleton-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  flex-shrink: 0;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 4px;
+  background: #e5e7eb;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line.short {
+  width: 40%;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1 }
+  50% { opacity: 0.5 }
+}
+
+.search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 18px;
+  color: #9ca3af;
+}
+
+.search-empty .fa-search {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.search-result-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: background 0.1s;
+  align-items: flex-start;
+}
+
+.search-result-item:hover,
+.search-result-item.active {
+  background: #f3f4f6;
+}
+
+.result-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.result-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.result-snippet {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result-snippet mark {
+  background: #fef08a;
+  color: #1f2937;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.result-date {
+  font-size: 11px;
+  color: #9ca3af;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Search highlight pulse on matched message */
+.search-highlight-pulse {
+  animation: highlight-pulse 2s ease-out;
+}
+
+@keyframes highlight-pulse {
+  0% { background: #fef08a }
+  100% { background: transparent }
 }
 </style>

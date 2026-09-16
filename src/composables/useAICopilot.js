@@ -609,14 +609,14 @@ export function useAICopilot() {
 
       // Guard against stale responses: the conversation may have been switched
       // or deleted while the fetch was in flight. If it is no longer the
-      // current conversation, or it no longer exists in the conversations list,
-      // do not render its messages.
-      const isStillCurrent = store.state.aiCopilot.conversationId === conversationId
-      const stillExists = store.state.aiCopilot.conversations.some(c => c.id === conversationId)
-      if (isStillCurrent && stillExists) {
+      // current conversation, do not render its messages.
+      // Note: we intentionally do NOT check whether the conversation still
+      // exists in the conversations list — on page refresh loadConversations
+      // runs concurrently and the list may not be populated yet.
+      if (store.state.aiCopilot.conversationId === conversationId) {
         store.commit('aiCopilot/SET_MESSAGES', normalized)
       } else {
-        console.log('[loadHistory] conversation switched or deleted while loading, discarding stale messages')
+        console.log('[loadHistory] conversation switched while loading, discarding stale messages')
       }
     } catch (err) {
       if (err.name === 'AbortError') {
@@ -787,6 +787,13 @@ export function useAICopilot() {
     }
   }
 
+  /**
+   * 搜索会话内容
+   */
+  async function searchConversations(query) {
+    return aiClient.searchConversations(query)
+  }
+
   return {
     client: aiClient,
     send,
@@ -804,6 +811,7 @@ export function useAICopilot() {
     deleteConversation,
     deleteConversations,
     fetchConversationCount,
+    searchConversations,
   }
 }
 
