@@ -816,7 +816,7 @@
                               <span slot="content"
                                 >Input a value of bars to stay in market after entry.<br />Exit
                                 position when the specified Time In Market is reached.
-                                (default: 20)<br
+                                (default: 21)<br
                               /></span>
                               <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
                           ></el-checkbox>
