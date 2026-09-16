@@ -531,7 +531,7 @@ export default {
   width: 2px;
   height: 18px;
   background: currentColor;
-  animation: blink 1s infinite;
+  animation: blink 0.5s infinite;
 }
 
 @keyframes blink {
