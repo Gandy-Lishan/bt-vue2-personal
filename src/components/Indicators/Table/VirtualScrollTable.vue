@@ -104,10 +104,10 @@
       <el-col :span="24">
         <el-row>
           <div class="btns">
-            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" @click="() => addCondition('trend')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
-            <el-button v-if="(isStockTrend|| isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" @click="() => addCondition('relative')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
-            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" @click="() => addCondition('consecutive')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
-            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" @click="() => addCondition('rangeRank')"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Strength Ratio Range Rank</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" :type="condition === 'trend' ? 'primary' : ''" @click="addCondition('trend', $event)"><i class="el-icon-refresh" style="margin-right: 5px"></i>Trend Conditions</el-button>
+            <el-button v-if="(isStockTrend|| isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" :type="condition === 'relative' ? 'primary' : ''" @click="addCondition('relative', $event)"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Trend Conditions</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" :type="condition === 'consecutive' ? 'primary' : ''" @click="addCondition('consecutive', $event)"><i class="el-icon-refresh" style="margin-right: 5px"></i>Other Trend Indicators</el-button>
+            <el-button v-if="(isStockTrend || isCRPTrend) && enlarged && !isHistoricalStockTrend" size="small" :type="condition === 'rangeRank' ? 'primary' : ''" @click="addCondition('rangeRank', $event)"><i class="el-icon-refresh" style="margin-right: 5px"></i>Relative Strength Ratio Range Rank</el-button>
             <div class="select-option" v-show="Array.isArray(groupsOptions) && groupsOptions.length !== 0">
               <span>Group</span>
               <el-select v-model="groupsFilter" size="mini" placeholder="Please Select" label="Test" @change="handleQuery">
@@ -3480,9 +3480,10 @@ export default {
     escapeRegExp(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     },
-    async addCondition(type) {
+    async addCondition(type, event) {
       if(this.condition !== type) {this.condition = type}
       else if(this.condition === type && this.condition !== '') {this.condition = ''}
+      event?.currentTarget?.blur?.()
       console.log('this.condition', this.condition)
       // clear filter and sort
       this.searchInput = ''
