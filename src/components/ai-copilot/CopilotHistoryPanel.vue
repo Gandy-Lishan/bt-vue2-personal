@@ -21,7 +21,7 @@
               <i class="fa fa-search" aria-hidden="true"></i>
             </button>
             <button class="header-btn new-chat" @click="$emit('new-chat')" title="New chat">
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              <i :class="'fa ' + newChatIcon" aria-hidden="true"></i>
             </button>
             <button class="header-btn select-btn" @click="$emit('enter-selection')" title="Select multiple">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -104,6 +104,7 @@ export default {
     totalCount: { type: Number, default: 0 },
     selectionMode: { type: Boolean, default: false },
     selectedIds: { type: Set, default: () => new Set() },
+    newChatIcon: { type: String, default: 'fa-pencil-square-o' },
   },
   computed: {
     conversationCount() {

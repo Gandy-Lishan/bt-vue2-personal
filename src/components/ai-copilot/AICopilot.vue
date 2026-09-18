@@ -70,6 +70,9 @@
             </div>
           </div>
           <div class="header-actions">
+            <button class="header-btn" @click="handleNewChat" :disabled="atConversationLimit" title="New chat">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
             <button class="header-btn" @click="openStandalone" title="Open in full page">
               <i class="fa fa-external-link" aria-hidden="true"></i>
             </button>
@@ -125,6 +128,7 @@
           :has-more="conversationsHasMore"
           :selection-mode="selectionMode"
           :selected-ids="selectedIds"
+          new-chat-icon="fa-plus"
           @close="showHistory = false"
           @select="handleSelectConversation"
           @new-chat="handleNewChatFromHistory"
@@ -788,7 +792,7 @@ export default {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 1000;
+  z-index: 10001;
 }
 
 .copilot-bubble {
@@ -1033,7 +1037,7 @@ export default {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.18);
-  z-index: 2000;
+  z-index: 10002;
   cursor: crosshair;
 }
 
@@ -1048,7 +1052,7 @@ export default {
   border-radius: 10px;
   font-size: 14px;
   pointer-events: none;
-  z-index: 2001;
+  z-index: 10003;
   white-space: nowrap;
 }
 
@@ -1057,7 +1061,7 @@ export default {
   border: 2px solid #2563eb;
   background: rgba(37, 99, 235, 0.12);
   pointer-events: none;
-  z-index: 2001;
+  z-index: 10003;
 }
 
 /* ── Search overlay / modal ── */
