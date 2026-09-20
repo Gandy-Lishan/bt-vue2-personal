@@ -213,6 +213,7 @@ export default {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   padding: 40px 20px;
   min-height: 0;
   border-radius: inherit;

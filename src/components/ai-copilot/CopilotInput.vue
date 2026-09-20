@@ -32,8 +32,8 @@
       <!-- Bottom toolbar: tool buttons left, send button right -->
       <div class="input-toolbar">
         <div class="toolbar-left">
-          <button class="toolbar-btn" title="Coming soon" :disabled="true" @click="triggerFileInput">
-            <i class="fa fa-folder-open" aria-hidden="true"></i>
+          <button class="toolbar-btn" title="Upload image" @click="triggerFileInput">
+            <i class="fa fa-image" aria-hidden="true"></i>
           </button>
           <button class="toolbar-btn" title="Screenshot" :disabled="!showScreenshot" @click="handleScreenshot">
             <i class="fa fa-scissors" aria-hidden="true"></i>
@@ -144,20 +144,19 @@ export default {
       }
     },
     async handlePaste(e) {
-      // TODO: enable when model supports images
-      // const items = e.clipboardData?.items
-      // if (!items) return
-      // const imageFiles = []
-      // for (const item of items) {
-      //   if (item.type.startsWith('image/')) {
-      //     const file = item.getAsFile()
-      //     if (file) imageFiles.push(file)
-      //   }
-      // }
-      // if (imageFiles.length > 0) {
-      //   e.preventDefault()
-      //   await this.handleFiles(imageFiles)
-      // }
+      const items = e.clipboardData?.items
+      if (!items) return
+      const imageFiles = []
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile()
+          if (file) imageFiles.push(file)
+        }
+      }
+      if (imageFiles.length > 0) {
+        e.preventDefault()
+        await this.handleFiles(imageFiles)
+      }
     },
     async processImageFile(file) {
       if (file.size > 5 * 1024 * 1024) {

@@ -62,20 +62,15 @@
             <div class="item-title">{{ conv.title || 'New Chat' }}</div>
             <div class="item-time">{{ formatTime(conv.updated_at || conv.created_at) }}</div>
           </div>
-          <el-popconfirm
+          <button
             v-if="!selectionMode"
             v-show="hoveredId === conv.id"
-            title="Delete this conversation?"
-            confirm-button-text="Delete"
-            cancel-button-text="Cancel"
-            icon="el-icon-warning"
-            icon-color="#ef4444"
-            @confirm="$emit('delete', conv.id)"
+            class="item-delete"
+            title="Delete"
+            @click.stop="handleDelete(conv.id)"
           >
-            <button slot="reference" class="item-delete" title="Delete">
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
-            </button>
-          </el-popconfirm>
+            <i class="fa fa-trash-o" aria-hidden="true"></i>
+          </button>
         </div>
 
         <!-- Loading -->
@@ -127,6 +122,9 @@ export default {
     },
   },
   methods: {
+    handleDelete(conversationId) {
+      this.$emit('delete', conversationId)
+    },
     handleSelect(conversationId) {
       this.$emit('select', conversationId)
     },

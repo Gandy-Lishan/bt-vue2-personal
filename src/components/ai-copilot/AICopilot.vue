@@ -826,6 +826,7 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 /* Maintenance badge */
