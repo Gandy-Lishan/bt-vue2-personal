@@ -1,5 +1,5 @@
 <template>
-  <div class="ai-copilot">
+  <div>
     <!-- Screenshot overlay -->
     <div
       v-if="isScreenshotMode"
@@ -13,23 +13,6 @@
         :style="screenshotSelectionStyle"
       />
     </div>
-
-    <!-- Maintenance badge — shown when copilot is under maintenance -->
-    <div v-if="!isOpen && !hideBubble && isUnderMaintenance" class="copilot-maintenance-badge">
-      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-      <span>AI Copilot is currently under maintenance</span>
-    </div>
-
-    <!-- Toggle Bubble -->
-    <button
-      v-if="!isOpen && !hideBubble && showBubble"
-      class="copilot-bubble"
-      @click="open"
-    >
-      <i :class="'fa ' + bubbleIcon + ' bubble-icon'" aria-hidden="true"></i>
-      <span class="bubble-text">{{ bubbleText }}</span>
-      <span v-if="hasUnread" class="bubble-badge" />
-    </button>
 
     <!-- Chat Window -->
     <Transition name="slide-up">
@@ -53,9 +36,14 @@
 
         <span v-if="canResizeHeight" class="resize-handle resize-handle-top" @mousedown="startResize($event, 'top')"></span>
         <span v-if="canResizeWidth" class="resize-handle resize-handle-left" @mousedown="startResize($event, 'left')"></span>
-        <span v-if="canResizeBoth" class="resize-handle resize-handle-corner" @mousedown="startResize($event, 'top-left')"></span>
+        <span v-if="canResizeWidth" class="resize-handle resize-handle-right" @mousedown="startResize($event, 'right')"></span>
+        <span v-if="canResizeHeight" class="resize-handle resize-handle-bottom" @mousedown="startResize($event, 'bottom')"></span>
+        <span v-if="canResizeBoth" class="resize-handle resize-handle-corner resize-handle-top-left" @mousedown="startResize($event, 'top-left')"></span>
+        <span v-if="canResizeBoth" class="resize-handle resize-handle-corner resize-handle-top-right" @mousedown="startResize($event, 'top-right')"></span>
+        <span v-if="canResizeBoth" class="resize-handle resize-handle-corner resize-handle-bottom-left" @mousedown="startResize($event, 'bottom-left')"></span>
+        <span v-if="canResizeBoth" class="resize-handle resize-handle-corner resize-handle-bottom-right" @mousedown="startResize($event, 'bottom-right')"></span>
         <!-- Header -->
-        <div class="copilot-header">
+        <div class="copilot-header" @mousedown="startDrag">
           <div class="header-left">
             <button class="header-btn menu-btn" @click="toggleHistory" title="History">
               <i class="fa fa-bars" aria-hidden="true"></i>
@@ -76,8 +64,8 @@
             <button class="header-btn" @click="openStandalone" title="Open in full page">
               <i class="fa fa-external-link" aria-hidden="true"></i>
             </button>
-            <button class="header-btn" @click="close" title="Close">
-              <i class="fa fa-times" aria-hidden="true"></i>
+            <button class="header-btn" @click="close" title="Minimize">
+              <i class="fa fa-minus" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -99,7 +87,7 @@
           ref="copilotInput"
           :is-loading="isLoading"
           :disabled="isLoading || isHistoryLoading"
-          :show-screenshot="false"
+          :show-screenshot="true"
           :upload-image="uploadImage"
           :delete-image="deleteImage"
           @send="handleSend"
@@ -212,10 +200,7 @@ export default {
   name: 'AICopilot',
   components: { CopilotMessages, CopilotInput, CopilotRetrieveStatus, CopilotHistoryPanel },
   props: {
-    bubbleIcon: { type: String, default: 'fa-commenting' },
-    bubbleText: { type: String, default: 'AI Copilot' },
     layout: { type: String, default: 'default' },
-    showBubble: { type: Boolean, default: true },
   },
   data() {
     return {
@@ -224,13 +209,15 @@ export default {
       isHistoryLoading: false,
       windowWidth: 480,
       windowHeight: 600,
+      windowLeft: null,
+      windowTop: null,
       resizeState: null,
+      dragState: null,
       isDragging: false,
       dragCounter: 0,
       isScreenshotMode: false,
       screenshotSelection: null,
       isSelecting: false,
-      hideBubble: false,
       showHistory: false,
       conversationOffset: 0,
       isUnderMaintenance: false,
@@ -296,16 +283,14 @@ export default {
     atConversationLimit() {
       return this.conversationCount >= 50
     },
-    hasUnread() {
-      const last = this.lastAssistantMessage
-      return last && last.status === 'done' && !this.isOpen
-    },
     windowStyle() {
       if (this.layout === 'bottom') return { height: `${this.windowHeight}px` }
       if (this.layout === 'side') return { width: `${this.windowWidth}px` }
       return {
         width: `${this.windowWidth}px`,
         height: `${this.windowHeight}px`,
+        left: this.windowLeft !== null ? `${this.windowLeft}px` : undefined,
+        top: this.windowTop !== null ? `${this.windowTop}px` : undefined,
       }
     },
     canResizeWidth() {
@@ -611,34 +596,77 @@ export default {
     },
     startResize(event, direction) {
       event.preventDefault()
+      const rect = this.$refs.copilotWindow.getBoundingClientRect()
       this.resizeState = {
         direction,
         startX: event.clientX,
         startY: event.clientY,
         startWidth: this.windowWidth,
         startHeight: this.windowHeight,
+        startLeft: rect.left,
+        startTop: rect.top,
       }
       window.addEventListener('mousemove', this.handleResize)
       window.addEventListener('mouseup', this.stopResize)
     },
     handleResize(event) {
       if (!this.resizeState) return
-      const { direction, startX, startY, startWidth, startHeight } = this.resizeState
+      const { direction, startX, startY, startWidth, startHeight, startLeft, startTop } = this.resizeState
       const minWidth = 480
       const minHeight = 420
-      const maxWidth = Math.max(minWidth, window.innerWidth - 48)
-      const maxHeight = Math.max(minHeight, window.innerHeight - 130)
-      const nextWidth = direction.includes('left') ? startWidth + startX - event.clientX : startWidth
-      const nextHeight = direction.includes('top') ? startHeight + startY - event.clientY : startHeight
+      const dx = event.clientX - startX
+      const dy = event.clientY - startY
 
-      if (this.canResizeWidth) this.windowWidth = Math.min(Math.max(nextWidth, minWidth), maxWidth)
-      if (this.canResizeHeight) this.windowHeight = Math.min(Math.max(nextHeight, minHeight), maxHeight)
+      if (direction.includes('left')) {
+        const nextWidth = Math.min(Math.max(startWidth - dx, minWidth), window.innerWidth - 48)
+        this.windowWidth = nextWidth
+        this.windowLeft = startLeft + dx
+      }
+      if (direction.includes('right')) {
+        const nextWidth = Math.min(Math.max(startWidth + dx, minWidth), window.innerWidth - 48)
+        this.windowWidth = nextWidth
+      }
+      if (direction.includes('top')) {
+        const nextHeight = Math.min(Math.max(startHeight - dy, minHeight), window.innerHeight - 130)
+        this.windowHeight = nextHeight
+        this.windowTop = startTop + dy
+      }
+      if (direction.includes('bottom')) {
+        const nextHeight = Math.min(Math.max(startHeight + dy, minHeight), window.innerHeight - 130)
+        this.windowHeight = nextHeight
+      }
     },
     stopResize() {
       if (!this.resizeState) return
       window.removeEventListener('mousemove', this.handleResize)
       window.removeEventListener('mouseup', this.stopResize)
       this.resizeState = null
+    },
+    startDrag(event) {
+      if (event.target.closest('button')) return
+      event.preventDefault()
+      const rect = this.$refs.copilotWindow.getBoundingClientRect()
+      this.dragState = {
+        startX: event.clientX,
+        startY: event.clientY,
+        startLeft: rect.left,
+        startTop: rect.top,
+      }
+      window.addEventListener('mousemove', this.handleDrag)
+      window.addEventListener('mouseup', this.stopDrag)
+    },
+    handleDrag(event) {
+      if (!this.dragState) return
+      const dx = event.clientX - this.dragState.startX
+      const dy = event.clientY - this.dragState.startY
+      this.windowLeft = Math.max(0, Math.min(window.innerWidth - this.windowWidth, this.dragState.startLeft + dx))
+      this.windowTop = Math.max(0, Math.min(window.innerHeight - this.windowHeight, this.dragState.startTop + dy))
+    },
+    stopDrag() {
+      if (!this.dragState) return
+      window.removeEventListener('mousemove', this.handleDrag)
+      window.removeEventListener('mouseup', this.stopDrag)
+      this.dragState = null
     },
     // Drag & drop handling
     handleDragOver(e) {
@@ -666,7 +694,6 @@ export default {
     },
     // Screenshot handling
     handleStartScreenshotMode() {
-      this.hideBubble = true
       this.isOpen = false
       this.$nextTick(() => {
         this.isScreenshotMode = true
@@ -721,6 +748,8 @@ export default {
     },
     async captureSelection(rect) {
       this.isScreenshotMode = false
+      this.screenshotSelection = null
+      this.isSelecting = false
       window.removeEventListener('keydown', this.handleScreenshotKeydown)
       document.body.style.overflow = ''
 
@@ -756,7 +785,6 @@ export default {
 
         const base64 = cropCanvas.toDataURL('image/png')
 
-        this.hideBubble = false
         this.isOpen = true
         this.$nextTick(() => {
           this.$refs.copilotInput?.addImageFromBase64(base64, 'screenshot.png')
@@ -764,7 +792,6 @@ export default {
         })
       } catch (err) {
         console.error('[AICopilot] screenshot capture failed:', err)
-        this.hideBubble = false
         this.isOpen = true
       }
     },
@@ -772,7 +799,6 @@ export default {
       this.isScreenshotMode = false
       this.screenshotSelection = null
       this.isSelecting = false
-      this.hideBubble = false
       document.body.style.overflow = ''
       window.removeEventListener('keydown', this.handleScreenshotKeydown)
       if (this._onScreenshotMouseMove) {
@@ -788,55 +814,11 @@ export default {
 </script>
 
 <style scoped>
-.ai-copilot {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 10001;
-}
-
-.copilot-bubble {
-  width: 62px;
-  height: 62px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 52%, #1d4ed8 100%);
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.24);
-  transition: all 0.22s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  position: relative;
-  color: #fff;
-}
-
-.copilot-bubble:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 38px rgba(37, 99, 235, 0.32);
-}
-
-.bubble-text {
-  display: none;
-}
-
-.bubble-badge {
-  position: absolute;
-  top: -3px;
-  right: -3px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: #ef4444;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
-}
 
 .copilot-window {
-  position: absolute;
-  bottom: 82px;
-  right: 0;
+  position: fixed;
+  top: 100px;
+  right: 24px;
   background: #fff;
   border: 1px solid #dbeafe;
   border-radius: 18px;
@@ -931,6 +913,46 @@ export default {
   cursor: nwse-resize;
 }
 
+.resize-handle-top-right {
+  top: 0;
+  left: auto;
+  right: 4px;
+  cursor: nesw-resize;
+}
+
+.resize-handle-bottom-left {
+  top: auto;
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+}
+
+.resize-handle-bottom-right {
+  top: auto;
+  bottom: 0;
+  left: auto;
+  right: 4px;
+  cursor: nwse-resize;
+}
+
+.resize-handle-right {
+  top: 12px;
+  bottom: 12px;
+  left: auto;
+  right: -6px;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.resize-handle-bottom {
+  top: auto;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 8px;
+  cursor: ns-resize;
+}
+
 .slide-up-enter-active,
 .slide-up-leave-active {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -950,6 +972,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  cursor: move;
 }
 
 .header-left {

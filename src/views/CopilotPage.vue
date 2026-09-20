@@ -177,7 +177,7 @@
           ref="copilotInput"
           :is-loading="isLoading"
           :disabled="isLoading || isHistoryLoading"
-          :show-screenshot="false"
+          :show-screenshot="true"
           :upload-image="uploadImage"
           :delete-image="deleteImage"
           @send="handleSend"

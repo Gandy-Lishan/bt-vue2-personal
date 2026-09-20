@@ -1179,18 +1179,17 @@ li.el-menu-item.tutorial-svg:hover {
   white-space: nowrap;
 }
 
-.ai-copilot-header-btn:hover,
+.ai-copilot-header-btn:hover {
+  background: #f1f4f6;
+}
+
 .ai-copilot-header-btn.active {
-  background: #5b9bd1;
-  border-color: #5b9bd1;
-  color: #fff;
-  box-shadow: none;
-  outline: none;
+  background: #f1f4f6;
+  box-shadow: 0 0 0 2px rgba(91, 155, 209, 0.24);
 }
 
 .ai-copilot-header-btn:active {
-  background: #4d8cc0;
-  border-color: #4d8cc0;
+  background: #f1f4f6;
 }
 
 .ai-copilot-header-btn .fa-magic {
