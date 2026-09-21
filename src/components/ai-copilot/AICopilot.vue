@@ -404,6 +404,8 @@ export default {
           console.log('[AICopilot] history loaded, messages:', this.messages.length)
         }
       }
+      // Load conversation list so header title shows the actual conversation title
+      await this.copilot.loadConversations({ limit: 20, offset: 0 })
     },
     close() {
       this.isOpen = false
@@ -827,7 +829,7 @@ export default {
   flex-direction: column;
   overflow: hidden;
   overscroll-behavior: contain;
-  z-index: 1;
+  z-index: 9999;
 }
 
 /* Maintenance badge */

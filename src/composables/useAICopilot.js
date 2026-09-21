@@ -148,18 +148,12 @@ export function useAICopilot() {
       onStart: (newConversationId, userMessageId) => {
         if (newConversationId && newConversationId !== conversationId && isValidConversationId(newConversationId)) {
           store.commit('aiCopilot/SET_CONVERSATION_ID', newConversationId)
-          // Optimistically prepend new conversation to the list so sidebar/history reflects it immediately
-          let titleText = ''
-          if (typeof content === 'string') {
-            titleText = content
-          } else if (Array.isArray(content)) {
-            for (const part of content) {
-              if (part && part.type === 'text') titleText += part.text || ''
-            }
-          }
+          // Optimistically prepend new conversation to the list so sidebar/history reflects it immediately.
+          // Title is always "New Chat" — matches backend's create_conversation(title="New Chat").
+          // Real title is generated asynchronously after the loop completes.
           store.commit('aiCopilot/PREPEND_CONVERSATION', {
             id: newConversationId,
-            title: (titleText.trim().slice(0, 50)) || 'New Chat',
+            title: 'New Chat',
             updated_at: new Date().toISOString(),
             created_at: new Date().toISOString(),
           })
@@ -239,6 +233,19 @@ export function useAICopilot() {
         }
         if (newConversationId && newConversationId !== conversationId && isValidConversationId(newConversationId)) {
           store.commit('aiCopilot/SET_CONVERSATION_ID', newConversationId)
+        }
+        // Refresh conversation list after a short delay so the async title
+        // generation on the backend has time to write the new title to DB.
+        if (newConversationId || !conversationId) {
+          setTimeout(async () => {
+            try {
+              const conversations = await aiClient.fetchConversations({ limit: 20, offset: 0 })
+              store.commit('aiCopilot/SET_CONVERSATIONS', conversations)
+              store.commit('aiCopilot/SET_CONVERSATIONS_HAS_MORE', conversations.length >= 20)
+            } catch {
+              // Silent failure — title refresh is best-effort
+            }
+          }, 800)
         }
       },
 
