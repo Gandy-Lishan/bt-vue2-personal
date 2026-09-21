@@ -390,6 +390,8 @@
                   <td class="muted-cell">{{ row.entryDate }}</td>
                   <td>{{ row.entryPrice }}</td>
                   <td>{{ row.currentPrice }}</td>
+                  <td>{{ row.profitTargetPrice }}</td>
+                  <td>{{ row.stopLossPrice }}</td>
                   <td :class="{ 'negative-cell': isNegative(row.profitPct), 'positive-cell': !isNegative(row.profitPct) }">
                     {{ row.profitPct }} 
                   </td>
@@ -1093,6 +1095,8 @@ const holdingsColumns = [
   { key: 'entryDate', label: 'Entry Date', type: 'date' },
   { key: 'entryPrice', label: 'Entry Price', type: 'number' },
   { key: 'currentPrice', label: 'Current Price', type: 'number' },
+  { key: 'profitTargetPrice', label: 'Profit Target Price', type: 'number' },
+  { key: 'stopLossPrice', label: 'Stop Loss Price', type: 'number' },
   { key: 'profitPct', label: 'P&L %', type: 'percent' },
   { key: 'shares', label: 'Shares', type: 'number' },
   { key: 'positionPct', label: 'Position %', type: 'percent' },
@@ -3545,6 +3549,14 @@ export default {
           entryDate: this.getFirstDefined(position, ['entry_date', 'entryDate']) || '--',
           entryPrice: this.formatMoneyValue(this.getFirstDefined(position, ['entry_price', 'entryPrice']), '--'),
           currentPrice: this.formatMoneyValue(rawCurrentPrice, '--'),
+          profitTargetPrice: this.formatMoneyValue(
+            this.getFirstDefined(position, ['profit_target_price', 'profitTargetPrice', 'ProfitTargetPrice']),
+            '--'
+          ),
+          stopLossPrice: this.formatMoneyValue(
+            this.getFirstDefined(position, ['stop_loss_price', 'stopLossPrice', 'StopLossPrice']),
+            '--'
+          ),
           rawCurrentPrice,
           profitPct: this.formatPercentValue(this.getFirstDefined(position, ['profit_pct', 'profitPct']), true, '--'),
           shares: this.formatIntegerValue(this.getFirstDefined(position, ['shares', 'share_count', 'shareCount', 'quantity', 'qty']), '--'),
@@ -8118,9 +8130,104 @@ details[open] .faq-question::before {
   white-space: nowrap;
 }
 
+.holdings-table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.holdings-table th,
 .holdings-table td {
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding: 10px 8px;
+  font-size: 12px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.holdings-table th {
+  white-space: normal;
+}
+
+.holdings-table .table-sort-button {
+  align-items: flex-start;
+  gap: 4px;
+  line-height: 1.2;
+}
+
+.holdings-table .table-sort-button i {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.holdings-table .holding-status-cell {
+  padding-left: 6px;
+  white-space: nowrap;
+}
+
+.holdings-table .expand-row-button {
+  width: 22px;
+  height: 22px;
+  margin-right: 3px;
+}
+
+.holdings-table .status-chip {
+  max-width: calc(100% - 28px);
+  padding: 3px 7px;
+  font-size: 11px;
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.holdings-table .signal-with-help {
+  gap: 4px;
+}
+
+.holdings-table th:nth-child(1),
+.holdings-table td:nth-child(1) {
+  width: 16%;
+}
+
+.holdings-table th:nth-child(2),
+.holdings-table td:nth-child(2) {
+  width: 8%;
+}
+
+.holdings-table th:nth-child(3),
+.holdings-table td:nth-child(3) {
+  width: 9%;
+}
+
+.holdings-table th:nth-child(4),
+.holdings-table td:nth-child(4),
+.holdings-table th:nth-child(5),
+.holdings-table td:nth-child(5) {
+  width: 7.5%;
+}
+
+.holdings-table th:nth-child(6),
+.holdings-table td:nth-child(6),
+.holdings-table th:nth-child(7),
+.holdings-table td:nth-child(7) {
+  width: 9.5%;
+}
+
+.holdings-table th:nth-child(8),
+.holdings-table td:nth-child(8),
+.holdings-table th:nth-child(9),
+.holdings-table td:nth-child(9) {
+  width: 6.5%;
+}
+
+.holdings-table th:nth-child(10),
+.holdings-table td:nth-child(10) {
+  width: 7%;
+}
+
+.holdings-table th:nth-child(11),
+.holdings-table td:nth-child(11) {
+  width: 13%;
 }
 
 .compare-table tr.highlighted {
