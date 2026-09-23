@@ -20,7 +20,7 @@
         <template v-if="isUser">
           <div v-if="message.attachments && message.attachments.length" class="attachments">
             <div v-for="att in message.attachments" :key="att.id" class="attachment">
-              <img v-if="att.type === 'image'" :src="att.url" :alt="att.name" />
+              <img v-if="att.type === 'image'" :src="att.url" :alt="att.name" class="clickable-preview" @click="openPreview(att.url)" />
               <div v-else class="attachment-file"><i class="fa fa-paperclip" aria-hidden="true"></i> {{ att.name }}</div>
             </div>
           </div>
@@ -32,7 +32,7 @@
           <template v-else>
             <div v-if="contentImages.length" class="attachments">
               <div v-for="(img, idx) in contentImages" :key="'img-' + idx" class="attachment">
-                <img :src="img.url" alt="uploaded image" />
+                <img :src="img.url" alt="uploaded image" class="clickable-preview" @click="openPreview(img.url)" />
               </div>
             </div>
             <p class="user-text">{{ contentText }}</p>
@@ -184,16 +184,24 @@
         </el-tooltip>
       </div>
     </div>
+
+    <!-- Image preview modal -->
+    <ImagePreview
+      :visible="previewVisible"
+      :src="previewUrl"
+      @close="previewVisible = false"
+    />
   </div>
 </template>
 
 <script>
 import CopilotToolResult from './CopilotToolResult.vue'
 import CopilotMarkdown from './CopilotMarkdown.vue'
+import ImagePreview from '../common/ImagePreview.vue'
 
 export default {
   name: 'CopilotMessage',
-  components: { CopilotToolResult, CopilotMarkdown },
+  components: { CopilotToolResult, CopilotMarkdown, ImagePreview },
   props: {
     message: { type: Object, required: true },
     isLastUserMessage: { type: Boolean, default: false },
@@ -210,6 +218,8 @@ export default {
       _streamStartedAt: 0,
       _streamRafId: null,
       _streamStatusText: '',
+      previewVisible: false,
+      previewUrl: '',
     }
   },
   mounted() {
@@ -456,6 +466,10 @@ export default {
         }
       }
       return true
+    },
+    openPreview(url) {
+      this.previewUrl = url
+      this.previewVisible = true
     },
   }
 }
@@ -813,6 +827,10 @@ export default {
   max-height: 150px;
   border-radius: 8px;
   object-fit: cover;
+}
+
+.attachment img.clickable-preview {
+  cursor: pointer;
 }
 
 .attachment-file {

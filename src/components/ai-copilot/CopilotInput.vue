@@ -7,7 +7,7 @@
       <!-- Image previews above textarea -->
       <div v-if="attachedImages.length" class="image-previews">
         <div v-for="img in attachedImages" :key="img.id" class="image-preview">
-          <img :src="img.base64" :alt="img.name" />
+          <img :src="img.base64" :alt="img.name" class="clickable-preview" @click="openPreview(img)" />
           <div v-if="img.uploading" class="upload-overlay">
             <div class="upload-spinner" />
           </div>
@@ -16,6 +16,13 @@
           </button>
         </div>
       </div>
+
+      <!-- Image preview modal -->
+      <ImagePreview
+        :visible="previewVisible"
+        :src="previewUrl"
+        @close="previewVisible = false"
+      />
 
       <!-- Textarea -->
       <textarea
@@ -73,8 +80,11 @@
 </template>
 
 <script>
+import ImagePreview from '../common/ImagePreview.vue'
+
 export default {
   name: 'CopilotInput',
+  components: { ImagePreview },
   props: {
     isLoading: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
@@ -87,7 +97,9 @@ export default {
   data() {
     return {
       inputContent: '',
-      attachedImages: []
+      attachedImages: [],
+      previewVisible: false,
+      previewUrl: '',
     }
   },
   computed: {
@@ -258,7 +270,11 @@ export default {
       const blob = new Blob([ab], { type: mimeString })
       const file = new File([blob], filename, { type: mimeString })
       this.processImageFile(file)
-    }
+    },
+    openPreview(img) {
+      this.previewUrl = img.url || img.base64
+      this.previewVisible = true
+    },
   }
 }
 </script>
@@ -338,6 +354,10 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.image-preview img.clickable-preview {
+  cursor: pointer;
 }
 
 .remove-image {
