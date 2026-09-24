@@ -1,5 +1,14 @@
 <template>
   <div class="no-print">
+    <!-- Response-ready toast notification -->
+    <Transition name="toast">
+      <div v-if="showResponseReadyToast" class="response-ready-toast" @click="dismissResponseReady">
+        <i class="fa fa-check-circle" aria-hidden="true"></i>
+        <span>AI response is ready</span>
+        <span class="toast-open" @click.stop="openCopilotAndDismiss">Open</span>
+      </div>
+    </Transition>
+
     <header class="main-nav top">
       <img src="https://cdn.prod.website-files.com/650486dd4239644e595569c1/650486dd4239644e59556a01_ST%20Logo.png" alt="logo image" width="175px" height="35px" @click="backHome">
       <div class="header-search-group">
@@ -9,7 +18,7 @@
         <button
           v-if="showAICopilotButton"
           class="ai-copilot-header-btn"
-          :class="{ active: isCopilotOpen }"
+          :class="{ active: isCopilotOpen, highlight: copilotButtonHighlight }"
           type="button"
           @click="toggleAICopilot"
           title="AI Copilot"
@@ -116,15 +125,15 @@
             <i class="fa fa-angle-down" aria-hidden="true" style="margin-left: 3px;"></i>
           </template>
           <template  v-for="(subItem, subIndex) in item.subMenu">
-            <el-menu-item v-if="!Array.isArray(subItem.subMenuItem)" :index="subItem.keyPath" :key="subIndex">
+            <el-menu-item v-if="!Array.isArray(subItem.subMenuItem)" :index="subItem.keyPath" :key="`${item.keyPath}-${subIndex}`">
               {{subItem.label}}
             </el-menu-item>
             <template v-if="Array.isArray(subItem.subMenuItem) && subItem.subMenuItem.length > 0">
-            <el-divider :key="subIndex"></el-divider>
+            <el-divider :key="`divider-${item.keyPath}-${subIndex}`"></el-divider>
             <el-menu-item
               v-for="(child, childIndex) in subItem.subMenuItem"
               :index="child.keyPath"
-              :key="childIndex"
+              :key="`${item.keyPath}-${subIndex}-${childIndex}`"
             >
               {{ child.label }}
             </el-menu-item>
@@ -524,7 +533,9 @@ export default {
         'Portfolio': ['everything', 'premium', 'research', 'datalite'],
         'AI Trading': ['ai-admin'] // 下面单独处理 email
       },
-      isCopilotOpen: false
+      isCopilotOpen: false,
+      showResponseReadyToast: false,
+      copilotButtonHighlight: false,
     }
   },
   computed: {
@@ -642,8 +653,18 @@ export default {
     this._copilotCloseHandler = () => {
       this.isCopilotOpen = false
     }
+    this._responseReadyHandler = () => {
+      this.copilotButtonHighlight = true
+      this.showResponseReadyToast = true
+      // Auto-dismiss after 8 seconds
+      setTimeout(() => {
+        this.copilotButtonHighlight = false
+        this.showResponseReadyToast = false
+      }, 8000)
+    }
     EventBus.on('ai-copilot:opened', this._copilotOpenHandler)
     EventBus.on('ai-copilot:closed', this._copilotCloseHandler)
+    EventBus.on('ai-copilot:response-ready', this._responseReadyHandler)
   },
   beforeDestroy() {
     if (this._copilotOpenHandler) {
@@ -652,10 +673,27 @@ export default {
     if (this._copilotCloseHandler) {
       EventBus.off('ai-copilot:closed', this._copilotCloseHandler)
     }
+    if (this._responseReadyHandler) {
+      EventBus.off('ai-copilot:response-ready', this._responseReadyHandler)
+    }
   },
   methods: {
     toggleAICopilot() {
       EventBus.emit('ai-copilot:toggle')
+      // If toast is showing, dismiss it when user opens copilot
+      if (this.showResponseReadyToast) {
+        this.showResponseReadyToast = false
+        this.copilotButtonHighlight = false
+      }
+    },
+    dismissResponseReady() {
+      this.showResponseReadyToast = false
+      this.copilotButtonHighlight = false
+    },
+    openCopilotAndDismiss() {
+      EventBus.emit('ai-copilot:toggle')
+      this.showResponseReadyToast = false
+      this.copilotButtonHighlight = false
     },
     handleSubmenuClick(item) {
       if (Array.isArray(item.subMenu) && item.subMenu.length > 0) {
@@ -1188,6 +1226,11 @@ li.el-menu-item.tutorial-svg:hover {
   box-shadow: 0 0 0 2px rgba(91, 155, 209, 0.24);
 }
 
+.ai-copilot-header-btn.highlight {
+  background: #f1f4f6;
+  box-shadow: 0 0 0 2px rgba(91, 155, 209, 0.4);
+}
+
 .ai-copilot-header-btn:active {
   background: #f1f4f6;
 }
@@ -1203,6 +1246,82 @@ li.el-menu-item.tutorial-svg:hover {
   .ai-copilot-header-btn {
     width: 40px;
     padding: 0;
+  }
+}
+
+/* Response-ready toast notification */
+.response-ready-toast {
+  position: fixed;
+  top: 80px;
+  right: 36px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #bbdefb;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(59, 130, 246, 0.1);
+  color: #5b9bd1;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.response-ready-toast:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.response-ready-toast .fa-check-circle {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.response-ready-toast .toast-open {
+  padding: 4px 14px;
+  border-radius: 6px;
+  background: #5b9bd1;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 8px;
+  transition: background 0.15s;
+}
+
+.response-ready-toast .toast-open:hover {
+  background: #4d8cc0;
+}
+
+.toast-enter-active {
+  animation: toast-slide-in 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast-leave-active {
+  animation: toast-slide-out 0.25s ease-in;
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
   }
 }
 </style>

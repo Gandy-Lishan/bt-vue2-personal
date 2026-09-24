@@ -43,14 +43,14 @@
         <template v-else>
           <!-- Duration header + toggle chevron -->
           <div
-            v-if="durationText || hasThinkingBlocks || _streamStatusText || message.status === 'pending' || message.status === 'streaming'"
+            v-if="durationText || hasThinkingBlocks || streamStatusText || message.status === 'pending' || message.status === 'streaming'"
             class="duration-label"
             :class="{ 'has-toggle': hasThinkingBlocks }"
             @click="hasThinkingBlocks && toggleThoughts()"
           >
             <!-- 流状态文本：始终渲染，RAF 直接控制内容和显隐，绕过 Vue 异步刷新 -->
-            <span ref="streamingStatusSpan" class="streaming-status">{{ _streamStatusText }}</span>
-            <span v-if="!_streamStatusText && durationText">{{ durationText }}</span>
+            <span ref="streamingStatusSpan" class="streaming-status">{{ streamStatusText }}</span>
+            <span v-if="!streamStatusText && durationText">{{ durationText }}</span>
             <i
               v-if="hasThinkingBlocks"
               :class="thoughtsOpen ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"
@@ -217,7 +217,7 @@ export default {
       thoughtsManualOpen: null,
       _streamStartedAt: 0,
       _streamRafId: null,
-      _streamStatusText: '',
+      streamStatusText: '',
       previewVisible: false,
       previewUrl: '',
     }
@@ -327,7 +327,7 @@ export default {
         cancelAnimationFrame(this._streamRafId)
         this._streamRafId = null
       }
-      this._streamStatusText = ''
+      this.streamStatusText = ''
       const el = this.$refs.streamingStatusSpan
       if (el) el.style.display = 'none'
     },
@@ -347,35 +347,35 @@ export default {
 
       if (toolCalls.length > 0) {
         const names = toolCalls.map(t => (t.name || '').replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase()))
-        this._streamStatusText = `Running ${names.length === 1 ? names[0] : names.join(', ')}... ${timeStr}`
+        this.streamStatusText = `Running ${names.length === 1 ? names[0] : names.join(', ')}... ${timeStr}`
       } else if (this.message.status === 'streaming') {
-        this._streamStatusText = `Generating response... ${timeStr}`
+        this.streamStatusText = `Generating response... ${timeStr}`
       } else {
         const statuses = this.message.retrieveStatuses || []
         const last = statuses[statuses.length - 1] || null
         const type = last?.type
-        if (type === 'initial') this._streamStatusText = `Analyzing request... ${timeStr}`
-        else if (type === 'retrieving') this._streamStatusText = `Searching knowledge base... ${timeStr}`
-        else if (type === 'completed') this._streamStatusText = ''
-        else if (type === 'error') this._streamStatusText = `${last.message || ''} ${timeStr}`
-        else if (type === 'insufficient') this._streamStatusText = `Knowledge base has limited info ${timeStr}`
-        else if (last?.message) this._streamStatusText = `${last.message} ${timeStr}`
+        if (type === 'initial') this.streamStatusText = `Analyzing request... ${timeStr}`
+        else if (type === 'retrieving') this.streamStatusText = `Searching knowledge base... ${timeStr}`
+        else if (type === 'completed') this.streamStatusText = ''
+        else if (type === 'error') this.streamStatusText = `${last.message || ''} ${timeStr}`
+        else if (type === 'insufficient') this.streamStatusText = `Knowledge base has limited info ${timeStr}`
+        else if (last?.message) this.streamStatusText = `${last.message} ${timeStr}`
         else {
           const chunks = this.message.reasoning_chunks || []
           const reasoning = chunks.length ? chunks[chunks.length - 1].content : ''
           if (reasoning?.trim()) {
             const t = reasoning.trim()
-            this._streamStatusText = `${t.length > 60 ? t.slice(0, 60) + '…' : t} ${timeStr}`
+            this.streamStatusText = `${t.length > 60 ? t.slice(0, 60) + '…' : t} ${timeStr}`
           } else {
-            this._streamStatusText = `Thinking... ${timeStr}`
+            this.streamStatusText = `Thinking... ${timeStr}`
           }
         }
       }
 
       const el = this.$refs.streamingStatusSpan
       if (el) {
-        el.textContent = this._streamStatusText
-        el.style.display = this._streamStatusText ? '' : 'none'
+        el.textContent = this.streamStatusText
+        el.style.display = this.streamStatusText ? '' : 'none'
       }
     },
     toggleThoughts() {
