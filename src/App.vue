@@ -9,6 +9,7 @@
 					@click="changeSvg"
 			></RecentUpdate>
 			<FloatBtns></FloatBtns>
+			<LightDataApiAd></LightDataApiAd>
 			<div class="content-wrapper">
 			<router-view></router-view>
 			</div>
@@ -21,6 +22,7 @@
 <script>
 import { Header, NewHeader, Footer, RecentUpdate, FloatBtns, CnNotify } from "@/components/common"
 import AICopilot from "@/components/ai-copilot/AICopilot.vue"
+import LightDataApiAd from "@/components/common/LightDataApiAd.vue"
 import { fetchCurrentNNotifications } from "@/service/service";
 
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
@@ -41,7 +43,8 @@ export default {
 		RecentUpdate,
 		FloatBtns,
 		CnNotify,
-		AICopilot
+		AICopilot,
+		LightDataApiAd
 	},
 	computed: {
 		shouldHideCopilot() {
