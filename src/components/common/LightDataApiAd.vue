@@ -1,5 +1,5 @@
 <template>
-  <section class="light-data-ad" :style="adStyle" aria-label="Light Data API promotion">
+  <section v-if="shouldShowAd" class="light-data-ad" :style="adStyle" aria-label="Light Data API promotion">
     <div class="light-data-ad__content">
       <div class="light-data-ad__icon" aria-hidden="true">
         <i class="fa fa-database"></i>
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { getCookieData } from '@/utils/cryptoUtils/cookie'
+
 const CONTENT_WIDTH_SELECTORS = [
   '.container',
   '.strategy-container',
@@ -36,11 +38,13 @@ const CONTENT_WIDTH_SELECTORS = [
   '.page-content'
 ]
 const STRATEGY_CONTENT_WIDTH = 1170
+const HIDDEN_AD_ACCESS_LEVELS = ['premium-data-yearly', 'light-data-yearly']
 
 export default {
   name: 'LightDataApiAd',
   data() {
     return {
+      shouldShowAd: true,
       contentWidth: null,
       contentResizeObserver: null,
       contentMutationObserver: null,
@@ -68,10 +72,13 @@ export default {
   },
   watch: {
     $route() {
-      this.scheduleContentWidthRefresh()
+      this.refreshAdVisibility()
     }
   },
   mounted() {
+    this.refreshAdVisibility()
+    if (!this.shouldShowAd) return
+
     this.observeContentWrapper()
     this.scheduleContentWidthRefresh()
     window.addEventListener('resize', this.scheduleContentWidthRefresh)
@@ -84,7 +91,36 @@ export default {
     this.disconnectContentMutationObserver()
   },
   methods: {
+    refreshAdVisibility() {
+      this.shouldShowAd = !this.hasHiddenAdAccessLevel()
+
+      if (!this.shouldShowAd) {
+        this.contentWidth = null
+        clearTimeout(this.refreshTimer)
+        clearTimeout(this.delayedRefreshTimer)
+        this.disconnectContentObserver()
+        this.disconnectContentMutationObserver()
+        return
+      }
+
+      this.scheduleContentWidthRefresh()
+    },
+    hasHiddenAdAccessLevel() {
+      let accessLevel = []
+
+      try {
+        accessLevel = getCookieData()?.access_level || []
+      } catch {
+        return false
+      }
+
+      if (!Array.isArray(accessLevel)) return false
+
+      return accessLevel.some(level => HIDDEN_AD_ACCESS_LEVELS.includes(String(level)))
+    },
     scheduleContentWidthRefresh() {
+      if (!this.shouldShowAd) return
+
       clearTimeout(this.refreshTimer)
       clearTimeout(this.delayedRefreshTimer)
       this.refreshTimer = setTimeout(this.updateContentWidth, 0)
