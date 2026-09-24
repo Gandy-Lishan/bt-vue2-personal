@@ -237,6 +237,24 @@ export default {
       _visibilityHandler: null,
     }
   },
+  watch: {
+    // When a response finishes while the copilot was minimized, emit a
+    // notification event so the header can alert the user.
+    isLoading(newVal) {
+      if (
+        !newVal &&
+        !this.isStreaming &&
+        this.$store.state.aiCopilot.minimizedWhileStreaming
+      ) {
+        this.$store.commit('aiCopilot/SET_MINIMIZED_WHILE_STREAMING', false)
+        // Only notify on successful completion (not on error)
+        const lastMsg = this.lastAssistantMessage
+        if (lastMsg && (lastMsg.status === 'done' || lastMsg.status === 'pending' || !lastMsg.status)) {
+          EventBus.emit('ai-copilot:response-ready')
+        }
+      }
+    },
+  },
   computed: {
     ...mapState('aiCopilot', ['messages', 'isLoading', 'isStreaming', 'error', 'conversations', 'conversationsLoading', 'conversationsHasMore']),
     ...mapGetters('aiCopilot', ['lastAssistantMessage']),
@@ -391,6 +409,8 @@ export default {
       this.applyLayoutSize()
       this.isOpen = true
       this.showHistory = false
+      // Clear the minimized-while-streaming flag — user is back
+      this.$store.commit('aiCopilot/SET_MINIMIZED_WHILE_STREAMING', false)
       EventBus.emit('ai-copilot:opened')
       console.log('[AICopilot] open, messages:', this.messages.length, 'convId:', this.$store.state.aiCopilot.conversationId?.slice(0, 8))
       // 首次打开尝试加载历史
@@ -408,6 +428,10 @@ export default {
       await this.copilot.loadConversations({ limit: 20, offset: 0 })
     },
     close() {
+      // Track if user minimizes while response is still generating
+      if (this.isLoading || this.isStreaming) {
+        this.$store.commit('aiCopilot/SET_MINIMIZED_WHILE_STREAMING', true)
+      }
       this.isOpen = false
       this.showHistory = false
       EventBus.emit('ai-copilot:closed')
