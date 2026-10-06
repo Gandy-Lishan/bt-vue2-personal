@@ -7,12 +7,31 @@ import store from '../store'
 import { uniqWith, isEqual } from "lodash"
 import { getCookieData } from "@/utils/cryptoUtils/cookie";
 
+const legacyPremiumMRPath = /^\/MR\/premium(?=\/|$)/i
+
+function getLegacyPremiumMRRedirect(to) {
+	const path = to.path.replace(legacyPremiumMRPath, '/MR/blog')
+	if (path === to.path) return null
+
+	return {
+		path,
+		query: to.query,
+		hash: to.hash,
+		replace: true
+	}
+}
+
 export function setRouterPermission(router) { 
 	router.beforeEach(async (to, from, next) => {
 		// 如果跳入404，则直接进入跳转外链的待定阶段，没有其他cookie或者验证判断(准备弃用，因为登录后或者购买后404应该重新验证并跳转)
 		//if(to.path == "/404") next()
 
 		CIQ.store = store
+		const legacyPremiumMRRedirect = getLegacyPremiumMRRedirect(to)
+		if (legacyPremiumMRRedirect) {
+			next(legacyPremiumMRRedirect)
+			return
+		}
 		//  开发环境无法判断环境变量
 		// if(process.env.ST_ENV === "dev" || process.env.ST_ENV === undefined) loginUrl = 'https://sentdevsite.com/login'
 		// 先判断有无 sentimen_session
