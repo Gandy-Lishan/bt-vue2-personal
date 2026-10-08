@@ -385,19 +385,12 @@
                     <el-checkbox v-model="isExcludeOO" @change="changeExcludeOO"
                       >{{ bdFormLabel['exclude_oo'] }}
                       <el-tooltip effect="dark" placement="top">
-                        <span slot="content"
-                          >Select this box if you want to exclude dates that are
-                          clustered together.<br />
-                          By selecting this option, the test will only allow one
-                          trade at a time. <br />
-                          For example, if you chose '10 days' in the Observation
-                          Period,
-                          <br />
-                          then once the Indicator meets the Indicator Level you
-                          specify,
-                          <br />
-                          the test will not allow another trade for the next 10
-                          days.<br />
+                        <span slot="content">
+                          Select this box to enforce a post-exit cool-down period and exclude clustered trades. <br/>
+                          System-wide, only one single position is allowed at a time, so any entry signals during an active trade are naturally ignored. <br/>
+                          When this option is enabled, the restriction extends beyond exit: if set to 20, <br/>
+                          any new entry signals occurring within 20 bars after position closure will be suppressed.<br/>
+                           (Note: This post-exit restriction logic differs from BTV1.)
                         </span>
                         <i class="fa fa-question-circle right" aria-hidden="true"></i> </el-tooltip
                     ></el-checkbox>
