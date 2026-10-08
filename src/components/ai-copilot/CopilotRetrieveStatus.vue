@@ -1,7 +1,7 @@
 <template>
-  <div v-if="displayMessage" class="retrieve-status" :class="statusTone">
+  <div v-if="statusText" class="retrieve-status" :class="statusTone">
     <span class="status-dot" />
-    <span class="status-label">{{ displayMessage }}</span>
+    <span class="status-label">{{ statusText }} {{ isActive ? elapsedDisplay : '' }}</span>
   </div>
 </template>
 
@@ -19,14 +19,20 @@ export default {
     return {
       elapsedMs: 0,
       timerId: null,
+      _startedAt: 0,
+      _visibilityHandler: null,
     }
   },
   computed: {
     lastStatus() {
       return this.statuses[this.statuses.length - 1] || null
     },
-    statusMessage() {
-      // Active tool calls take priority
+    isActive() {
+      return this.isLoading || this.isStreaming || Boolean(this.lastStatus && this.lastStatus.type !== 'completed')
+    },
+    statusText() {
+      if (!this.isActive) return ''
+
       if (this.toolCalls.length > 0) {
         const names = this.toolCalls.map(tool => {
           const name = tool.name || ''
@@ -36,17 +42,16 @@ export default {
         return `Running ${names.join(', ')}...`
       }
       if (this.isStreaming || this.lastStatus?.type === 'assessing') return 'Generating response...'
-      // Hide status when stream is done and no active loading
-      if (!this.isLoading && !this.isStreaming) return ''
+      if (!this.isLoading && !this.isStreaming && (!this.lastStatus || this.lastStatus.type === 'completed')) return ''
+
       const type = this.lastStatus?.type
       if (type === 'initial') return 'Analyzing request...'
       if (type === 'retrieving') return 'Searching knowledge base...'
       if (type === 'completed') return ''
-      if (type === 'error') return this.cleanMessage(this.lastStatus)
+      if (type === 'error') return this.lastStatus.message || ''
       if (type === 'insufficient') return 'Knowledge base has limited info'
-      // Backend sends short natural-language status via message field
       if (this.lastStatus?.message) return this.lastStatus.message
-      // Fallback: latest reasoning content (may be long, used as last resort)
+
       if (this.latestReasoning) {
         const text = this.latestReasoning.trim()
         if (text) return text.length > 60 ? text.slice(0, 60) + '…' : text
@@ -55,44 +60,45 @@ export default {
     },
     statusTone() {
       if (this.toolCalls.length > 0) return 'tool-running'
-      if (this.isStreaming || this.lastStatus?.type === 'assessing') return 'generating'
+      if (!this.isActive) return ''
+      if (this.lastStatus?.type === 'assessing') return 'generating'
       if (this.lastStatus?.type === 'retrieving') return 'retrieving'
       if (this.lastStatus?.type === 'insufficient') return 'warning'
-      // Reasoning content = thinking tone
       if (this.latestReasoning) return 'thinking'
       return 'thinking'
     },
-    displayMessage() {
-      if (!this.statusMessage) return ''
+    elapsedDisplay() {
       const s = Math.floor(this.elapsedMs / 1000)
       const ms = Math.floor((this.elapsedMs % 1000) / 100)
-      return `${this.statusMessage} (${s}.${ms}s)`
-    },
-    isActive() {
-      return this.isLoading || this.isStreaming || Boolean(this.lastStatus && this.lastStatus.type !== 'completed')
+      return `(${s}.${ms}s)`
     },
   },
   watch: {
     isActive(val, oldVal) {
-      if (val && !oldVal) {
-        this.startTimer()
-      } else if (!val) {
-        this.stopTimer()
-      }
+      if (val && !oldVal) this.startTimer()
+      else if (!val) this.stopTimer()
     },
   },
   mounted() {
     if (this.isActive) this.startTimer()
+    this._visibilityHandler = () => {
+      if (document.visibilityState === 'visible' && this._startedAt) {
+        this.elapsedMs = Date.now() - this._startedAt
+      }
+    }
+    document.addEventListener('visibilitychange', this._visibilityHandler)
   },
   beforeDestroy() {
     this.stopTimer()
+    document.removeEventListener('visibilitychange', this._visibilityHandler)
   },
   methods: {
     startTimer() {
       this.elapsedMs = 0
+      this._startedAt = Date.now()
       this.stopTimer()
       this.timerId = setInterval(() => {
-        this.elapsedMs += 100
+        this.elapsedMs = Date.now() - this._startedAt
       }, 100)
     },
     stopTimer() {
@@ -101,10 +107,7 @@ export default {
         this.timerId = null
       }
     },
-    cleanMessage(status) {
-      return status.message || ''
-    }
-  }
+  },
 }
 </script>
 
@@ -117,7 +120,6 @@ export default {
   padding: 2px 0 4px;
   font-size: 12px;
   color: #64748b;
-  /* border-top and background removed — status now lives inside the input container */
 }
 
 .status-dot {

@@ -309,6 +309,9 @@ export default {
     },
     async handleNewChat() {
       if (this.atConversationLimit) return
+      // Abort any active stream and clear input state
+      this.copilot.abort()
+      this.$refs.copilotInput?.clear()
       await this.copilot.createNewConversation()
       this.refreshConversationCount()
     },

@@ -275,6 +275,11 @@ export default {
       this.previewUrl = img.url || img.base64
       this.previewVisible = true
     },
+    clear() {
+      this.inputContent = ''
+      this.attachedImages = []
+      this.$nextTick(() => this.autoResize())
+    },
   }
 }
 </script>

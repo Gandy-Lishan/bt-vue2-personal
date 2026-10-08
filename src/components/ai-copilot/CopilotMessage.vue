@@ -48,7 +48,7 @@
             :class="{ 'has-toggle': hasThinkingBlocks }"
             @click="hasThinkingBlocks && toggleThoughts()"
           >
-            <!-- 流状态文本：始终渲染，RAF 直接控制内容和显隐，绕过 Vue 异步刷新 -->
+            <!-- 流状态文本：RAF 直写 DOM -->
             <span ref="streamingStatusSpan" class="streaming-status">{{ streamStatusText }}</span>
             <span v-if="!streamStatusText && durationText">{{ durationText }}</span>
             <i
@@ -58,8 +58,7 @@
             ></i>
           </div>
 
-          <!-- Collapsible thinking area: blocks in stream order -->
-          <!-- When done, the last content block is extracted as final answer (see below) -->
+          <!-- Thought + Tool + Content blocks in stream order -->
           <div v-show="thoughtsOpen" class="thoughts-body" v-if="hasThinkingBlocks">
             <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="!isFinalAnswer(bi)">
               <details v-if="block.type === 'reasoning'" class="thought-block" :open="isReasoningOpen(bi)">
@@ -218,6 +217,7 @@ export default {
       _streamStartedAt: 0,
       _streamRafId: null,
       streamStatusText: '',
+      _visibilityHandler: null,
       previewVisible: false,
       previewUrl: '',
     }
@@ -227,9 +227,16 @@ export default {
     if (this.message.status === 'pending' || this.message.status === 'streaming') {
       this._startStreamTimer()
     }
+    this._visibilityHandler = () => {
+      if (document.visibilityState === 'visible' && this._streamRafId) {
+        this._updateStreamDisplay()
+      }
+    }
+    document.addEventListener('visibilitychange', this._visibilityHandler)
   },
   beforeDestroy() {
     this._stopStreamTimer()
+    document.removeEventListener('visibilitychange', this._visibilityHandler)
   },
   watch: {
     'message.status'(newStatus) {
@@ -241,10 +248,9 @@ export default {
     },
   },
   computed: {
-    /** Auto-collapse when done, expand when streaming. User can override via toggle. */
     thoughtsOpen() {
       if (this.thoughtsManualOpen !== null) return this.thoughtsManualOpen
-      return this.message.status === 'streaming' || this.message.status === 'pending'
+      return true
     },
     isUser() {
       return this.message.role === 'user'
@@ -449,23 +455,10 @@ export default {
     isFinalAnswer(bi) {
       return this.message.status === 'done' && bi === this.lastContentIndex
     },
-    /** Thought block open state.
-     *  During streaming: open if the following tool blocks haven't completed yet
-     *    (status is pending or running) — meaning this is the current thinking round.
-     *  After done: all collapsed. */
+    /** Thought blocks are always collapsed by default.
+     *  User can expand manually via the chevron toggle. */
     isReasoningOpen(bi) {
-      const blocks = this.message.blocks || []
-      if (this.message.status !== 'pending' && this.message.status !== 'streaming') return false
-      for (let i = bi + 1; i < blocks.length; i++) {
-        if (blocks[i].type === 'tool') {
-          const tc = blocks[i].toolCall
-          // If the tool is still pending/running, this reasoning is current → keep open
-          if (tc && (tc.status === 'pending' || tc.status === 'running')) return true
-          // Tool completed → this reasoning is past → collapse
-          return false
-        }
-      }
-      return true
+      return false
     },
     openPreview(url) {
       this.previewUrl = url
