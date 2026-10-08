@@ -49,7 +49,7 @@
             @click="hasThinkingBlocks && toggleThoughts()"
           >
             <!-- 流状态文本：RAF 直写 DOM -->
-            <span ref="streamingStatusSpan" class="streaming-status">{{ streamStatusText }}</span>
+            <span ref="streamingStatusSpan" :class="['streaming-status', { shimmer: message.status === 'pending' || message.status === 'streaming' }]">{{ streamStatusText }}</span>
             <span v-if="!streamStatusText && durationText">{{ durationText }}</span>
             <i
               v-if="hasThinkingBlocks"
@@ -63,7 +63,7 @@
             <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="!isFinalAnswer(bi)">
               <details v-if="block.type === 'reasoning'" class="thought-block" :open="isReasoningOpen(bi)">
                 <summary class="thought-header">
-                  <span class="thought-label">Thought</span>
+                  <span :class="['thought-label', { shimmer: isReasoningActive(bi) }]">Thought</span>
                   <i class="fa fa-chevron-down thought-chevron" aria-hidden="true"></i>
                 </summary>
                 <div class="thought-content">
@@ -454,6 +454,21 @@ export default {
     /** Whether this block index is the final answer content block (only when done). */
     isFinalAnswer(bi) {
       return this.message.status === 'done' && bi === this.lastContentIndex
+    },
+    /** Whether this reasoning block is still actively streaming.
+     *  Same logic as the original isReasoningOpen — checks if the tool
+     *  after this reasoning is still pending/running. */
+    isReasoningActive(bi) {
+      if (this.message.status !== 'pending' && this.message.status !== 'streaming') return false
+      const blocks = this.message.blocks || []
+      for (let i = bi + 1; i < blocks.length; i++) {
+        if (blocks[i].type === 'tool') {
+          const tc = blocks[i].toolCall
+          if (tc && (tc.status === 'pending' || tc.status === 'running')) return true
+          return false
+        }
+      }
+      return true
     },
     /** Thought blocks are always collapsed by default.
      *  User can expand manually via the chevron toggle. */
@@ -887,8 +902,32 @@ export default {
   gap: 6px;
 }
 
+.streaming-status {
+  display: inline-block;
+}
+
 .streaming-status:empty {
   display: none;
+}
+
+.streaming-status.shimmer {
+  background-image: linear-gradient(
+    90deg,
+    #94a3b8 35%,
+    #475569 50%,
+    #94a3b8 65%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer-sweep 2s linear infinite;
+}
+
+@keyframes shimmer-sweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .duration-label.has-toggle {
@@ -945,6 +984,22 @@ export default {
 
 .thought-header:hover {
   color: #374151;
+}
+
+.thought-label.shimmer {
+  background-image: linear-gradient(
+    90deg,
+    #94a3b8 35%,
+    #475569 50%,
+    #94a3b8 65%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer-sweep 2s linear infinite;
+  display: inline-block;
 }
 
 .thought-chevron {
