@@ -2,9 +2,10 @@
  * AIClient — SSE 流式聊天客户端
  * 适配 ai-runtime HTTP/SSE 协议
  *
- * 特性：
+ * 架构：
+ * - values 模式（当前）：SSE chunk → 直接回调 + setTimeout 逐词渲染
+ * - token 模式（预留）：SSE chunk → DoubleBufferQueue → RAF 批量 flush
  * - SSE 自动重连（最多3次，指数退避）
- * - DoubleBufferQueue RAF 批量更新（16ms 节流）
  * - 工具调用续传循环（前端工具本地执行 → POST tool-result）
  * - AbortController 取消支持
  */
@@ -462,16 +463,8 @@ export class AIClient {
 
   async _writeTextChunk(messageId, content) {
     if (!content || !messageId) return
-    // For short content, write directly through buffer (RAF-timed)
-    if (content.length <= 80 || this.isCompleted) {
-      this.buffer.write(messageId, content)
-      return
-    }
-
-    // For long content, bypass RAF and call onChunk directly
-    // so content block is created before any subsequent tool events.
-    // We still do the fake-typing animation for visual effect,
-    // but the block is created synchronously.
+    // values mode: direct callback with word-by-word typing animation.
+    // DoubleBufferQueue + RAF is kept for future token-mode streaming.
     if (this._onChunkDirect) {
       const parts = content.match(/\S+\s*/g) || [content]
       for (const part of parts) {
@@ -480,13 +473,8 @@ export class AIClient {
         await new Promise(resolve => setTimeout(resolve, 24))
       }
     } else {
-      // Fallback: use buffer
-      const parts = content.match(/\S+\s*/g) || [content]
-      for (const part of parts) {
-        if (this.abortController?.signal.aborted || this.isCompleted) break
-        this.buffer.write(messageId, part)
-        await new Promise(resolve => setTimeout(resolve, 24))
-      }
+      // Fallback: write through buffer (token-mode path)
+      this.buffer.write(messageId, content)
     }
   }
 
