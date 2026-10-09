@@ -60,7 +60,7 @@
 
           <!-- Thought + Tool + Content blocks in stream order -->
           <div v-show="thoughtsOpen" class="thoughts-body" v-if="hasThinkingBlocks">
-            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="!isFinalAnswer(bi)">
+            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="!isFinalAnswer(bi) && block.type !== 'ui_element'">
               <details v-if="block.type === 'reasoning'" class="thought-block" :open="isReasoningOpen(bi)">
                 <summary class="thought-header">
                   <span :class="['thought-label', { shimmer: isReasoningActive(bi) }]">Thought</span>
@@ -94,6 +94,14 @@
               :error="message.error"
               :has-activity="false"
             />
+          </div>
+
+          <!-- Navigation buttons: rendered at the end of the response -->
+          <div v-if="navButtons.length" class="nav-buttons-wrapper">
+            <button v-for="(btn, ni) in navButtons" :key="'nav_' + ni" class="nav-button" @click="navigateTo(btn.page)">
+              {{ btn.label }}
+              <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </button>
           </div>
 
           <!-- Error state: show error even for empty placeholder messages -->
@@ -279,6 +287,10 @@ export default {
     /** True when stream finished and there's a content block to extract as final answer. */
     hasFinalAnswer() {
       return this.message.status === 'done' && this.lastContentIndex >= 0
+    },
+    /** Navigation buttons extracted from blocks. */
+    navButtons() {
+      return (this.message.blocks || []).filter(b => b.type === 'ui_element' && b.subtype === 'navigate')
     },
     /** True if there are thinking blocks (reasoning or tool blocks). */
     hasThinkingBlocks() {
@@ -478,6 +490,25 @@ export default {
     openPreview(url) {
       this.previewUrl = url
       this.previewVisible = true
+    },
+    navigateTo(page) {
+      const routeMap = {
+        dashboard: '/dashboard',
+        backtester: '/backtester',
+        indicator: '/myindicator',
+        scanner: '/scannerai',
+        option_scanner: '/scannerai/option',
+        seasonality: '/seasonality',
+        correlation: '/cpm',
+        reports: '/reports',
+        screens: '/my_screen',
+        account: '/notifications',
+        settings: '/contact',
+      }
+      const route = routeMap[page]
+      if (route) {
+        this.$router.push(route)
+      }
     },
   }
 }
@@ -1032,6 +1063,44 @@ export default {
   color: #111827;
   font-size: 14px;
   margin: 8px 0;
+}
+
+/* Navigation button — suggested page link rendered at the end of the response */
+.nav-buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+
+.nav-button:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.nav-button i {
+  font-size: 10px;
+  transition: transform 0.15s;
+}
+
+.nav-button:hover i {
+  transform: translateX(2px);
 }
 
 /* Final answer wrapper — visually separated from thinking area */

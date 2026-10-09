@@ -181,12 +181,7 @@ function buildMockResponse(options) {
     chunks.push(`data: ${JSON.stringify({ type: 'tool_call', toolCall })}
 \n\n`)
   } else if (lower.includes('navigate') || lower.includes('go to')) {
-    const toolCall = {
-      id: 'mock_tool_' + Date.now(),
-      name: 'navigateTo',
-      input: { path: '/backtester/sr' },
-    }
-    chunks.push(`data: ${JSON.stringify({ type: 'tool_call', toolCall })}
+    chunks.push(`data: ${JSON.stringify({ type: 'ui_element', subtype: 'navigate', page: 'backtester', label: '打开回测引擎' })}
 \n\n`)
   }
 
@@ -423,6 +418,11 @@ export class AIClient {
             this.abortController.abort()
           }
           if (callbacks.onAbort) callbacks.onAbort()
+          break
+        case 'ui_element':
+          if (callbacks.onUIElement) {
+            callbacks.onUIElement(chunk, aiMessageId)
+          }
           break
         default:
           // Handle SSE payloads that carry an error field but no recognized type

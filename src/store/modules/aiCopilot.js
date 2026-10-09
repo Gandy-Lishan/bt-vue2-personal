@@ -264,6 +264,14 @@ const mutations = {
     }
     state.messages.splice(idx, 1, { ...msg, blocks })
   },
+  ADD_UI_ELEMENT_BLOCK(state, { messageId, block }) {
+    const idx = state.messages.findIndex(m => m.id === messageId)
+    if (idx === -1) return
+    const msg = state.messages[idx]
+    const blocks = (msg.blocks || []).slice()
+    blocks.push({ type: 'ui_element', subtype: block.subtype, page: block.page, label: block.label })
+    state.messages.splice(idx, 1, { ...msg, blocks })
+  },
 }
 
 const actions = {
