@@ -351,16 +351,9 @@ export default {
     // Visibility change handler for tab-sync
     this._visibilityHandler = () => {
       if (document.visibilityState === 'visible' && this.isOpen) {
+        const awayMs = Date.now() - this._lastHiddenAt
         const convId = this.$store.state.aiCopilot.conversationId
-        // If there's a streaming message, always sync on return — the SSE
-        // stream may have completed while the tab was hidden (RAF pauses,
-        // but the server-side stream finishes). Force a reload to catch up.
-        const hasStreamingMsg = (this.$store.state.aiCopilot.messages || []).some(
-          m => m.status === 'streaming' || m.status === 'pending'
-        )
-        if (convId && hasStreamingMsg) {
-          this._syncHistoryOnReturn()
-        } else if (convId && Date.now() - this._lastHiddenAt > 30000 && !this.isLoading && !this.isStreaming) {
+        if (convId && awayMs > 30000 && !this.isLoading && !this.isStreaming) {
           this._syncHistoryOnReturn()
         }
       } else {
