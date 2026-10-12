@@ -454,7 +454,7 @@ export class AIClient {
     if (this._onReasoningChunkDirect) {
       const parts = content.match(/\S+\s*/g) || [content]
       for (const part of parts) {
-        if (this.abortController?.signal.aborted || this.isCompleted) break
+        if (this.abortController?.signal.aborted) break
         this._onReasoningChunkDirect(messageId, part)
         await new Promise(resolve => setTimeout(resolve, 24))
       }
@@ -468,7 +468,7 @@ export class AIClient {
     if (this._onChunkDirect) {
       const parts = content.match(/\S+\s*/g) || [content]
       for (const part of parts) {
-        if (this.abortController?.signal.aborted || this.isCompleted) break
+        if (this.abortController?.signal.aborted) break
         this._onChunkDirect(messageId, part)
         await new Promise(resolve => setTimeout(resolve, 24))
       }
