@@ -48,8 +48,8 @@
             :class="{ 'has-toggle': hasThinkingBlocks }"
             @click="hasThinkingBlocks && toggleThoughts()"
           >
-            <!-- 流状态文本：始终渲染，RAF 直接控制内容和显隐，绕过 Vue 异步刷新 -->
-            <span ref="streamingStatusSpan" class="streaming-status">{{ streamStatusText }}</span>
+            <!-- 流状态文本：RAF 直写 DOM -->
+            <span ref="streamingStatusSpan" :class="['streaming-status', { shimmer: message.status === 'pending' || message.status === 'streaming' }]">{{ streamStatusText }}</span>
             <span v-if="!streamStatusText && durationText">{{ durationText }}</span>
             <i
               v-if="hasThinkingBlocks"
@@ -58,13 +58,12 @@
             ></i>
           </div>
 
-          <!-- Collapsible thinking area: blocks in stream order -->
-          <!-- When done, the last content block is extracted as final answer (see below) -->
+          <!-- Thought + Tool + Content blocks in stream order -->
           <div v-show="thoughtsOpen" class="thoughts-body" v-if="hasThinkingBlocks">
-            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="!isFinalAnswer(bi)">
+            <div v-for="(block, bi) in message.blocks || []" :key="'t_' + bi" v-if="!isFinalAnswer(bi) && block.type !== 'ui_element'">
               <details v-if="block.type === 'reasoning'" class="thought-block" :open="isReasoningOpen(bi)">
                 <summary class="thought-header">
-                  <span class="thought-label">Thought</span>
+                  <span :class="['thought-label', { shimmer: isReasoningActive(bi) }]">Thought</span>
                   <i class="fa fa-chevron-down thought-chevron" aria-hidden="true"></i>
                 </summary>
                 <div class="thought-content">
@@ -95,6 +94,14 @@
               :error="message.error"
               :has-activity="false"
             />
+          </div>
+
+          <!-- Navigation buttons: rendered at the end of the response -->
+          <div v-if="navButtons.length" class="nav-buttons-wrapper">
+            <button v-for="(btn, ni) in navButtons" :key="'nav_' + ni" class="nav-button" @click="navigateTo(btn.page)">
+              {{ btn.label }}
+              <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </button>
           </div>
 
           <!-- Error state: show error even for empty placeholder messages -->
@@ -218,6 +225,7 @@ export default {
       _streamStartedAt: 0,
       _streamRafId: null,
       streamStatusText: '',
+      _visibilityHandler: null,
       previewVisible: false,
       previewUrl: '',
     }
@@ -227,9 +235,16 @@ export default {
     if (this.message.status === 'pending' || this.message.status === 'streaming') {
       this._startStreamTimer()
     }
+    this._visibilityHandler = () => {
+      if (document.visibilityState === 'visible' && this._streamRafId) {
+        this._updateStreamDisplay()
+      }
+    }
+    document.addEventListener('visibilitychange', this._visibilityHandler)
   },
   beforeDestroy() {
     this._stopStreamTimer()
+    document.removeEventListener('visibilitychange', this._visibilityHandler)
   },
   watch: {
     'message.status'(newStatus) {
@@ -241,10 +256,9 @@ export default {
     },
   },
   computed: {
-    /** Auto-collapse when done, expand when streaming. User can override via toggle. */
     thoughtsOpen() {
       if (this.thoughtsManualOpen !== null) return this.thoughtsManualOpen
-      return this.message.status === 'streaming' || this.message.status === 'pending'
+      return true
     },
     isUser() {
       return this.message.role === 'user'
@@ -273,6 +287,10 @@ export default {
     /** True when stream finished and there's a content block to extract as final answer. */
     hasFinalAnswer() {
       return this.message.status === 'done' && this.lastContentIndex >= 0
+    },
+    /** Navigation buttons extracted from blocks. */
+    navButtons() {
+      return (this.message.blocks || []).filter(b => b.type === 'ui_element' && b.subtype === 'navigate')
     },
     /** True if there are thinking blocks (reasoning or tool blocks). */
     hasThinkingBlocks() {
@@ -449,27 +467,48 @@ export default {
     isFinalAnswer(bi) {
       return this.message.status === 'done' && bi === this.lastContentIndex
     },
-    /** Thought block open state.
-     *  During streaming: open if the following tool blocks haven't completed yet
-     *    (status is pending or running) — meaning this is the current thinking round.
-     *  After done: all collapsed. */
-    isReasoningOpen(bi) {
-      const blocks = this.message.blocks || []
+    /** Whether this reasoning block is still actively streaming.
+     *  Same logic as the original isReasoningOpen — checks if the tool
+     *  after this reasoning is still pending/running. */
+    isReasoningActive(bi) {
       if (this.message.status !== 'pending' && this.message.status !== 'streaming') return false
+      const blocks = this.message.blocks || []
       for (let i = bi + 1; i < blocks.length; i++) {
         if (blocks[i].type === 'tool') {
           const tc = blocks[i].toolCall
-          // If the tool is still pending/running, this reasoning is current → keep open
           if (tc && (tc.status === 'pending' || tc.status === 'running')) return true
-          // Tool completed → this reasoning is past → collapse
           return false
         }
       }
       return true
     },
+    /** Thought blocks are always collapsed by default.
+     *  User can expand manually via the chevron toggle. */
+    isReasoningOpen(bi) {
+      return false
+    },
     openPreview(url) {
       this.previewUrl = url
       this.previewVisible = true
+    },
+    navigateTo(page) {
+      const routeMap = {
+        dashboard: '/dashboard',
+        backtester: '/backtester',
+        indicator: '/myindicator',
+        scanner: '/scannerai',
+        option_scanner: '/scannerai/option',
+        seasonality: '/seasonality',
+        correlation: '/cpm',
+        reports: '/reports',
+        screens: '/my_screen',
+        account: '/notifications',
+        settings: '/contact',
+      }
+      const route = routeMap[page]
+      if (route) {
+        this.$router.push(route)
+      }
     },
   }
 }
@@ -894,8 +933,32 @@ export default {
   gap: 6px;
 }
 
+.streaming-status {
+  display: inline-block;
+}
+
 .streaming-status:empty {
   display: none;
+}
+
+.streaming-status.shimmer {
+  background-image: linear-gradient(
+    90deg,
+    #94a3b8 35%,
+    #475569 50%,
+    #94a3b8 65%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer-sweep 2s linear infinite;
+}
+
+@keyframes shimmer-sweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .duration-label.has-toggle {
@@ -954,6 +1017,22 @@ export default {
   color: #374151;
 }
 
+.thought-label.shimmer {
+  background-image: linear-gradient(
+    90deg,
+    #94a3b8 35%,
+    #475569 50%,
+    #94a3b8 65%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer-sweep 2s linear infinite;
+  display: inline-block;
+}
+
 .thought-chevron {
   font-size: 10px;
   color: #94a3b8;
@@ -984,6 +1063,44 @@ export default {
   color: #111827;
   font-size: 14px;
   margin: 8px 0;
+}
+
+/* Navigation button — suggested page link rendered at the end of the response */
+.nav-buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+
+.nav-button:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.nav-button i {
+  font-size: 10px;
+  transition: transform 0.15s;
+}
+
+.nav-button:hover i {
+  transform: translateX(2px);
 }
 
 /* Final answer wrapper — visually separated from thinking area */

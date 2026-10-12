@@ -160235,5 +160235,19 @@
         "market_symbol": "SPX",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK M2 Gold Model",
+        "url": "jk_m2_gold_model_value",
+        "market_symbol": "gold",
+        "type": "other",
+        "updated": "Monthly"
+    },
+    {
+        "chart_name": "JK M2 Gold Model Status",
+        "url": "jk_m2_gold_model_status",
+        "market_symbol": "gold",
+        "type": "other",
+        "updated": "Monthly"
     }
 ]

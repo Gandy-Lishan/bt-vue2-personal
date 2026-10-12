@@ -210,6 +210,10 @@ export function useAICopilot() {
         store.commit('aiCopilot/ADD_REASONING_BLOCK', { messageId, chunk })
       },
 
+      onUIElement: (chunk, messageId) => {
+        store.commit('aiCopilot/ADD_UI_ELEMENT_BLOCK', { messageId, block: chunk })
+      },
+
       onDone: (newConversationId, assistantMessageId, sources, totalLatencyMs) => {
         store.commit('aiCopilot/SET_LOADING', false)
         store.commit('aiCopilot/SET_STREAMING', false)
@@ -357,6 +361,9 @@ export function useAICopilot() {
       onReasoning: (chunk, messageId) => {
         store.commit('aiCopilot/SET_MESSAGE_REASONING_CHUNK', { messageId, chunk })
         store.commit('aiCopilot/ADD_REASONING_BLOCK', { messageId, chunk })
+      },
+      onUIElement: (chunk, messageId) => {
+        store.commit('aiCopilot/ADD_UI_ELEMENT_BLOCK', { messageId, block: chunk })
       },
       onDone: (newConversationId, assistantMessageId, sources, totalLatencyMs) => {
         store.commit('aiCopilot/SET_LOADING', false)
@@ -753,6 +760,9 @@ export function useAICopilot() {
           },
           onReasoning: (chunk, messageId) => {
             store.commit('aiCopilot/SET_MESSAGE_REASONING_CHUNK', { messageId, chunk })
+          },
+          onUIElement: (chunk, messageId) => {
+            store.commit('aiCopilot/ADD_UI_ELEMENT_BLOCK', { messageId, block: chunk })
           },
           onDone: (newConversationId, assistantMessageId, sources, totalLatencyMs) => {
             store.commit('aiCopilot/SET_LOADING', false)
