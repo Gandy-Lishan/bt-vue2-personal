@@ -263,6 +263,14 @@ export function useAICopilot() {
         // Detect call_budget_exceeded 429 from route-layer guardrail
         if (error.retryAfter != null) {
           store.commit('aiCopilot/SET_RATE_LIMIT_RETRY_AFTER', error.retryAfter)
+          // Don't set message error status — the toast replaces the red error
+          // Remove the optimistic user + assistant messages since the request never reached the server
+          store.commit('aiCopilot/DELETE_MESSAGE', assistantMessage.id)
+          const lastUser = store.getters['aiCopilot/lastUserMessage']
+          if (lastUser && lastUser.timestamp >= Date.now() - 5000) {
+            store.commit('aiCopilot/DELETE_MESSAGE', lastUser.id)
+          }
+          return
         }
         store.commit('aiCopilot/SET_MESSAGE_STATUS', {
           id: assistantMessage.id,
