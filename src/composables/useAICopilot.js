@@ -142,6 +142,7 @@ export function useAICopilot() {
     store.commit('aiCopilot/SET_LOADING', true)
     store.commit('aiCopilot/SET_STREAMING', false)
     store.commit('aiCopilot/SET_ERROR', null)
+    store.commit('aiCopilot/SET_RATE_LIMIT_RETRY_AFTER', null)
 
     // 2. 启动 SSE
     const callbacks = {
@@ -258,6 +259,10 @@ export function useAICopilot() {
         store.commit('aiCopilot/SET_STREAMING', false)
         if (error.message === 'conversation_not_found') {
           store.commit('aiCopilot/SET_CONVERSATION_ID', null)
+        }
+        // Detect call_budget_exceeded 429 from route-layer guardrail
+        if (error.retryAfter != null) {
+          store.commit('aiCopilot/SET_RATE_LIMIT_RETRY_AFTER', error.retryAfter)
         }
         store.commit('aiCopilot/SET_MESSAGE_STATUS', {
           id: assistantMessage.id,

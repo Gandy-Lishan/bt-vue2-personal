@@ -309,14 +309,20 @@ export class AIClient {
           }
           // Try to parse error body for user-friendly messages
           let detail = null
+          let retryAfter = null
           try {
             const errBody = await res.clone().json()
             if (errBody?.error === 'chat_rate_limit_exceeded') {
               const secs = errBody.retry_after || 30
               detail = `Message limit reached. Please try again in ${secs} seconds.`
+            } else if (errBody?.error === 'call_budget_exceeded') {
+              retryAfter = errBody.retry_after || 30
+              detail = `call_budget_exceeded`
             }
           } catch {}
-          throw new Error(detail || `HTTP ${res.status}`)
+          const err = new Error(detail || `HTTP ${res.status}`)
+          if (retryAfter) err.retryAfter = retryAfter
+          throw err
         }
         if (!res.body) {
           throw new Error('No response body')

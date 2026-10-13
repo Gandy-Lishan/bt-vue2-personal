@@ -82,6 +82,12 @@
           @update-feedback="handleUpdateFeedback"
         />
 
+        <!-- Rate limit toast -->
+        <div v-if="rateLimitSeconds !== null" class="rate-limit-toast">
+          <i class="fa fa-warning" aria-hidden="true"></i>
+          <span>Call limit reached. Try again in <strong>{{ rateLimitSeconds }}s</strong>.</span>
+        </div>
+
         <!-- Input -->
         <CopilotInput
           ref="copilotInput"
@@ -235,6 +241,9 @@ export default {
       // Visibility sync
       _lastHiddenAt: 0,
       _visibilityHandler: null,
+      // Rate limit countdown
+      rateLimitSeconds: null,
+      _rateLimitTimer: null,
     }
   },
   watch: {
@@ -254,9 +263,31 @@ export default {
         }
       }
     },
+    // Rate limit countdown from store
+    rateLimitRetryAfter(newVal) {
+      if (this._rateLimitTimer) {
+        clearInterval(this._rateLimitTimer)
+        this._rateLimitTimer = null
+      }
+      if (newVal != null && newVal > 0) {
+        this.rateLimitSeconds = Math.ceil(newVal)
+        this._rateLimitTimer = setInterval(() => {
+          if (this.rateLimitSeconds <= 1) {
+            clearInterval(this._rateLimitTimer)
+            this._rateLimitTimer = null
+            this.rateLimitSeconds = null
+            this.$store.commit('aiCopilot/SET_RATE_LIMIT_RETRY_AFTER', null)
+          } else {
+            this.rateLimitSeconds--
+          }
+        }, 1000)
+      } else {
+        this.rateLimitSeconds = null
+      }
+    },
   },
   computed: {
-    ...mapState('aiCopilot', ['messages', 'isLoading', 'isStreaming', 'error', 'conversations', 'conversationsLoading', 'conversationsHasMore']),
+    ...mapState('aiCopilot', ['messages', 'isLoading', 'isStreaming', 'error', 'conversations', 'conversationsLoading', 'conversationsHasMore', 'rateLimitRetryAfter']),
     ...mapGetters('aiCopilot', ['lastAssistantMessage']),
     headerTitle() {
       const id = this.$store.state.aiCopilot.conversationId
@@ -398,6 +429,10 @@ export default {
   },
   beforeDestroy() {
     this.stopResize()
+    if (this._rateLimitTimer) {
+      clearInterval(this._rateLimitTimer)
+      this._rateLimitTimer = null
+    }
     document.removeEventListener('visibilitychange', this._visibilityHandler)
     document.removeEventListener('keydown', this._keydownHandler)
     if (this._toggleHandler) {
@@ -870,6 +905,33 @@ export default {
   font-weight: 500;
   box-shadow: 0 4px 16px rgba(234, 88, 12, 0.15);
   cursor: default;
+}
+
+/* Rate limit toast */
+.rate-limit-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  margin: 0 6px 14px;
+  border-radius: 10px;
+  background: #fef9c3;
+  border: 1px solid #fde047;
+  color: #a16207;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(161, 98, 7, 0.1);
+}
+
+.rate-limit-toast .fa-warning {
+  font-size: 14px;
+  color: #ca8a04;
+  flex-shrink: 0;
+}
+
+.rate-limit-toast strong {
+  font-weight: 700;
+  color: #854d0e;
 }
 
 /* Drag overlay */
