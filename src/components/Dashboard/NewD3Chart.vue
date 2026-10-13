@@ -100,6 +100,8 @@ export default {
    renderChart() {
     console.log('lishan this.chartData', this.chartData)
      if (!this.chartData.length) return;
+     const getValue = d => parseFloat(d.value);
+     const isZeroValue = d => getValue(d) === 0;
 
      // 清空 SVG
      d3.select(this.$refs.chartSvg).selectAll("*").remove();
@@ -122,8 +124,8 @@ export default {
      const y = d3.scaleLinear()
        .range([200, width])
        .domain([
-         Math.min(0, d3.min(this.chartData, d => d.value)),
-         Math.max(100, d3.max(this.chartData, d => d.value))
+         Math.min(0, d3.min(this.chartData, d => getValue(d))),
+         Math.max(100, d3.max(this.chartData, d => getValue(d)))
        ]);
 
      // 创建 SVG
@@ -189,10 +191,10 @@ export default {
        .append("text")
        .attr("class", "value-text")
        .attr("y", d => x(d.name))
-       .attr("x", d => d.value < this.middleValue ? y(d.value) - 5 : y(d.value) + 5)
-       .style("text-anchor", d => d.value < this.middleValue ? "end" : "start")
+       .attr("x", d => getValue(d) < this.middleValue ? y(getValue(d)) - 5 : y(getValue(d)) + 5)
+       .style("text-anchor", d => getValue(d) < this.middleValue ? "end" : "start")
        .attr("dy", ".35em")
-       .text(d => Math.round(parseFloat(d.value)));
+       .text(d => Math.round(getValue(d)));
 
      // 中间分隔线
      svg.append("line")
@@ -209,10 +211,10 @@ export default {
        .enter()
        .append("rect")
        .attr("class", "bar")
-       .attr("fill", d => d.value < this.middleValue ? "#63be7b" : "#da8a8a")
+       .attr("fill", d => isZeroValue(d) ? "none" : getValue(d) < this.middleValue ? "#63be7b" : "#da8a8a")
        .attr("y", d => x(d.name) - 8)
-       .attr("x", d => d.value < this.middleValue ? y(d.value) : y(this.middleValue))
-       .attr("width", d => Math.abs(y(d.value) - y(this.middleValue)))
+       .attr("x", d => getValue(d) < this.middleValue ? y(getValue(d)) : y(this.middleValue))
+       .attr("width", d => isZeroValue(d) ? 0 : Math.abs(y(getValue(d)) - y(this.middleValue)))
        .attr("height", x.bandwidth());
    },
    debouncedResize() {
