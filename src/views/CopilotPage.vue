@@ -143,6 +143,7 @@
         </button>
         <div class="header-center">
           <span class="header-title">{{ headerTitle }}</span>
+          <span class="beta-badge" title="Beta — this feature is still being improved">Beta</span>
           <span class="header-status">
             <span class="status-dot" />
             {{ statusText }}
@@ -843,6 +844,17 @@ export default {
   color: #111827;
 }
 
+.beta-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #eef2ff;
+  color: #6366f1;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  cursor: help;
+}
 .header-status {
   font-size: 12px;
   color: #6b7280;

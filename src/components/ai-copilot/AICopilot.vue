@@ -51,6 +51,7 @@
             <!-- <span class="header-avatar"><i class="fa fa-commenting" aria-hidden="true"></i></span> -->
             <div class="header-info">
               <span class="header-title">{{ headerTitle }}</span>
+              <span class="beta-badge" title="Beta — this feature is still being improved">Beta</span>
               <span class="header-status">
                 <span class="status-dot" />
                 {{ statusText }}
@@ -1099,6 +1100,17 @@ export default {
   max-width: 200px;
 }
 
+.beta-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #eef2ff;
+  color: #6366f1;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  cursor: help;
+}
 .header-status {
   font-size: 12px;
   opacity: 0.8;
