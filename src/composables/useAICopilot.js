@@ -229,11 +229,11 @@ export function useAICopilot() {
         if (totalLatencyMs) {
           store.commit('aiCopilot/SET_MESSAGE_LATENCY', { messageId: targetId, totalLatencyMs })
         }
-        // Use the assistant message's own startedAt plus the server-reported
-        // wall-clock latency. Date.now() would include time spent while the tab
-        // was in the background, inflating "Worked for X" on return.
+        // The backend now always returns total_latency_ms (real processing time).
+        // Use startedAt + totalLatencyMs so "Worked for X" reflects actual work,
+        // not wall-clock time spent while the tab was in the background.
         const startedAt = assistantMessage?.startedAt || Date.now()
-        const completedAt = totalLatencyMs ? startedAt + totalLatencyMs : Date.now()
+        const completedAt = startedAt + (totalLatencyMs || 0)
         store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt })
         if (sources && sources.length > 0) {
           store.commit('aiCopilot/SET_MESSAGE_SOURCES', {
@@ -397,9 +397,8 @@ export function useAICopilot() {
         if (totalLatencyMs) {
           store.commit('aiCopilot/SET_MESSAGE_LATENCY', { messageId: targetId, totalLatencyMs })
         }
-        // Avoid inflating duration with background-tab wall-clock time.
         const startedAt = aiMsg?.startedAt || Date.now()
-        const completedAt = totalLatencyMs ? startedAt + totalLatencyMs : Date.now()
+        const completedAt = startedAt + (totalLatencyMs || 0)
         store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt })
         if (sources && sources.length > 0) {
           store.commit('aiCopilot/SET_MESSAGE_SOURCES', {
