@@ -144,10 +144,6 @@
         <div class="header-center">
           <span class="header-title">{{ headerTitle }}</span>
           <span class="beta-badge" title="Beta — this feature is still being improved">Beta</span>
-          <span class="header-status">
-            <span class="status-dot" />
-            {{ statusText }}
-          </span>
         </div>
         <div class="header-actions">
           <!-- Maintenance badge -->
@@ -226,11 +222,6 @@ export default {
       if (!id) return 'AI Copilot'
       const conv = this.conversations.find(c => c.id === id)
       return conv?.title || 'AI Copilot'
-    },
-    statusText() {
-      if (this.isStreaming) return 'Typing...'
-      if (this.isLoading) return 'Thinking...'
-      return 'Online'
     },
     currentConversationId() {
       return this.$store.state.aiCopilot.conversationId
@@ -855,21 +846,6 @@ export default {
   flex-shrink: 0;
   cursor: help;
 }
-.header-status {
-  font-size: 12px;
-  color: #6b7280;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #22c55e;
-}
-
 .header-actions {
   display: flex;
   gap: 4px;
