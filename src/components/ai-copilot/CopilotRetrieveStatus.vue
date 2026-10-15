@@ -20,6 +20,8 @@ export default {
       elapsedMs: 0,
       timerId: null,
       _startedAt: 0,
+      _hiddenAt: 0,
+      _backgroundMs: 0,
       _visibilityHandler: null,
     }
   },
@@ -82,8 +84,16 @@ export default {
   mounted() {
     if (this.isActive) this.startTimer()
     this._visibilityHandler = () => {
-      if (document.visibilityState === 'visible' && this._startedAt) {
-        this.elapsedMs = Date.now() - this._startedAt
+      if (document.visibilityState === 'visible') {
+        if (this._hiddenAt) {
+          this._backgroundMs += Date.now() - this._hiddenAt
+          this._hiddenAt = 0
+        }
+        if (this._startedAt) {
+          this._tickElapsed()
+        }
+      } else {
+        this._hiddenAt = Date.now()
       }
     }
     document.addEventListener('visibilitychange', this._visibilityHandler)
@@ -96,9 +106,11 @@ export default {
     startTimer() {
       this.elapsedMs = 0
       this._startedAt = Date.now()
+      this._hiddenAt = 0
+      this._backgroundMs = 0
       this.stopTimer()
       this.timerId = setInterval(() => {
-        this.elapsedMs = Date.now() - this._startedAt
+        this._tickElapsed()
       }, 100)
     },
     stopTimer() {
@@ -106,6 +118,13 @@ export default {
         clearInterval(this.timerId)
         this.timerId = null
       }
+      this._hiddenAt = 0
+      this._backgroundMs = 0
+    },
+    _tickElapsed() {
+      const now = Date.now()
+      const currentBackgroundMs = this._hiddenAt ? now - this._hiddenAt : 0
+      this.elapsedMs = now - this._startedAt - this._backgroundMs - currentBackgroundMs
     },
   },
 }
