@@ -229,7 +229,12 @@ export function useAICopilot() {
         if (totalLatencyMs) {
           store.commit('aiCopilot/SET_MESSAGE_LATENCY', { messageId: targetId, totalLatencyMs })
         }
-        store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt: Date.now() })
+        // Use the assistant message's own startedAt plus the server-reported
+        // wall-clock latency. Date.now() would include time spent while the tab
+        // was in the background, inflating "Worked for X" on return.
+        const startedAt = assistantMessage?.startedAt || Date.now()
+        const completedAt = totalLatencyMs ? startedAt + totalLatencyMs : Date.now()
+        store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt })
         if (sources && sources.length > 0) {
           store.commit('aiCopilot/SET_MESSAGE_SOURCES', {
             messageId: targetId,
@@ -392,7 +397,10 @@ export function useAICopilot() {
         if (totalLatencyMs) {
           store.commit('aiCopilot/SET_MESSAGE_LATENCY', { messageId: targetId, totalLatencyMs })
         }
-        store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt: Date.now() })
+        // Avoid inflating duration with background-tab wall-clock time.
+        const startedAt = aiMsg?.startedAt || Date.now()
+        const completedAt = totalLatencyMs ? startedAt + totalLatencyMs : Date.now()
+        store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt })
         if (sources && sources.length > 0) {
           store.commit('aiCopilot/SET_MESSAGE_SOURCES', {
             messageId: targetId,
@@ -788,7 +796,10 @@ export function useAICopilot() {
             if (totalLatencyMs) {
               store.commit('aiCopilot/SET_MESSAGE_LATENCY', { messageId: targetId, totalLatencyMs })
             }
-            store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt: Date.now() })
+            // Avoid inflating duration with background-tab wall-clock time.
+            const startedAt = aiMsg?.startedAt || Date.now()
+            const completedAt = totalLatencyMs ? startedAt + totalLatencyMs : Date.now()
+            store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt })
             if (sources && sources.length > 0) {
               store.commit('aiCopilot/SET_MESSAGE_SOURCES', {
                 messageId: targetId,

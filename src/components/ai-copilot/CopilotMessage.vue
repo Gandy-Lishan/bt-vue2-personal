@@ -226,6 +226,8 @@ export default {
       _streamRafId: null,
       streamStatusText: '',
       _visibilityHandler: null,
+      _hiddenAt: 0,
+      _backgroundMs: 0,
       previewVisible: false,
       previewUrl: '',
     }
@@ -236,8 +238,16 @@ export default {
       this._startStreamTimer()
     }
     this._visibilityHandler = () => {
-      if (document.visibilityState === 'visible' && this._streamRafId) {
-        this._updateStreamDisplay()
+      if (document.visibilityState === 'visible') {
+        if (this._hiddenAt) {
+          this._backgroundMs += Date.now() - this._hiddenAt
+          this._hiddenAt = 0
+        }
+        if (this._streamRafId) {
+          this._updateStreamDisplay()
+        }
+      } else {
+        this._hiddenAt = Date.now()
       }
     }
     document.addEventListener('visibilitychange', this._visibilityHandler)
@@ -338,6 +348,8 @@ export default {
     _startStreamTimer() {
       this._stopStreamTimer()
       this._streamStartedAt = Date.now()
+      this._hiddenAt = 0
+      this._backgroundMs = 0
       this._streamLoop()
     },
     _stopStreamTimer() {
@@ -346,6 +358,8 @@ export default {
         this._streamRafId = null
       }
       this.streamStatusText = ''
+      this._hiddenAt = 0
+      this._backgroundMs = 0
       const el = this.$refs.streamingStatusSpan
       if (el) el.style.display = 'none'
     },
@@ -354,7 +368,9 @@ export default {
       this._streamRafId = requestAnimationFrame(this._streamLoop.bind(this))
     },
     _updateStreamDisplay() {
-      const elapsed = Date.now() - this._streamStartedAt
+      const now = Date.now()
+      const currentBackgroundMs = this._hiddenAt ? now - this._hiddenAt : 0
+      const elapsed = now - this._streamStartedAt - this._backgroundMs - currentBackgroundMs
       const s = Math.floor(elapsed / 1000)
       const ms = Math.floor((elapsed % 1000) / 100)
       const timeStr = `(${s}.${ms}s)`
