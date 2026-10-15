@@ -370,7 +370,13 @@ export default {
     _updateStreamDisplay() {
       const now = Date.now()
       const currentBackgroundMs = this._hiddenAt ? now - this._hiddenAt : 0
-      const elapsed = now - this._streamStartedAt - this._backgroundMs - currentBackgroundMs
+      const localElapsed = now - this._streamStartedAt - this._backgroundMs - currentBackgroundMs
+      // Use server-provided elapsedMs when available (accounts for background time).
+      // Math.max ensures that after visibility changes, the larger value wins:
+      // - During streaming: server value advances, local may be stale → pick server
+      // - After returning from background: local continues growing → pick local
+      const serverElapsed = this.message.elapsedMs
+      const elapsed = serverElapsed != null ? Math.max(serverElapsed, localElapsed) : localElapsed
       const s = Math.floor(elapsed / 1000)
       const ms = Math.floor((elapsed % 1000) / 100)
       const timeStr = `(${s}.${ms}s)`

@@ -206,6 +206,12 @@ const mutations = {
       state.messages.splice(idx, 1, { ...state.messages[idx], totalLatencyMs })
     }
   },
+  SET_MESSAGE_ELAPSED_MS(state, { messageId, elapsedMs }) {
+    const idx = state.messages.findIndex(m => m.id === messageId)
+    if (idx !== -1) {
+      state.messages.splice(idx, 1, { ...state.messages[idx], elapsedMs })
+    }
+  },
   SET_MESSAGE_SOURCES(state, { messageId, sources }) {
     const idx = state.messages.findIndex(m => m.id === messageId)
     if (idx !== -1) {

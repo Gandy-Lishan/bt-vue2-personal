@@ -215,6 +215,10 @@ export function useAICopilot() {
         store.commit('aiCopilot/ADD_UI_ELEMENT_BLOCK', { messageId, block: chunk })
       },
 
+      onElapsed: (elapsedMs, messageId) => {
+        store.commit('aiCopilot/SET_MESSAGE_ELAPSED_MS', { messageId, elapsedMs })
+      },
+
       onDone: (newConversationId, assistantMessageId, sources, totalLatencyMs) => {
         store.commit('aiCopilot/SET_LOADING', false)
         store.commit('aiCopilot/SET_STREAMING', false)
@@ -382,6 +386,9 @@ export function useAICopilot() {
       },
       onUIElement: (chunk, messageId) => {
         store.commit('aiCopilot/ADD_UI_ELEMENT_BLOCK', { messageId, block: chunk })
+      },
+      onElapsed: (elapsedMs, messageId) => {
+        store.commit('aiCopilot/SET_MESSAGE_ELAPSED_MS', { messageId, elapsedMs })
       },
       onDone: (newConversationId, assistantMessageId, sources, totalLatencyMs) => {
         store.commit('aiCopilot/SET_LOADING', false)
@@ -768,6 +775,7 @@ export function useAICopilot() {
               onToolResult: (tc, mid) => { store.commit('aiCopilot/UPDATE_MESSAGE_TOOL_CALL', { messageId: mid, toolCall: tc }) },
               onRetrieveStatus: (status, mid) => { store.commit('aiCopilot/UPDATE_MESSAGE_RETRIEVE_STATUSES', { messageId: mid, status }) },
               onReasoning: (chunk, mid) => { store.commit('aiCopilot/SET_MESSAGE_REASONING_CHUNK', { messageId: mid, chunk }) },
+              onElapsed: (elapsedMs, mid) => { store.commit('aiCopilot/SET_MESSAGE_ELAPSED_MS', { messageId: mid, elapsedMs }) },
               onDone: () => {},
               onError: () => {},
             })
@@ -783,6 +791,9 @@ export function useAICopilot() {
           },
           onUIElement: (chunk, messageId) => {
             store.commit('aiCopilot/ADD_UI_ELEMENT_BLOCK', { messageId, block: chunk })
+          },
+          onElapsed: (elapsedMs, messageId) => {
+            store.commit('aiCopilot/SET_MESSAGE_ELAPSED_MS', { messageId, elapsedMs })
           },
           onDone: (newConversationId, assistantMessageId, sources, totalLatencyMs) => {
             store.commit('aiCopilot/SET_LOADING', false)

@@ -197,14 +197,17 @@ function buildMockResponse(options) {
     "\n\nWould you like me to run a backtest with these parameters?",
   ]
 
+  let mockElapsed = 0
   const fullText = responses.join('')
   const words = fullText.split(/(?<=\s)/)
   for (const word of words) {
-    chunks.push(`data: ${JSON.stringify({ type: 'text', content: word })}
+    mockElapsed += 60
+    chunks.push(`data: ${JSON.stringify({ type: 'text', content: word, elapsed_ms: mockElapsed })}
 \n\n`)
   }
 
-  chunks.push(`data: ${JSON.stringify({ type: 'done', conversation_id: cid })}
+  mockElapsed += 100
+  chunks.push(`data: ${JSON.stringify({ type: 'done', conversation_id: cid, total_latency_ms: mockElapsed, elapsed_ms: mockElapsed })}
 \n\n`)
 
   return {
@@ -376,6 +379,7 @@ export class AIClient {
             this.currentConversationId = chunk.conversation_id
             if (callbacks.onStart) callbacks.onStart(chunk.conversation_id, chunk.user_message_id)
           }
+          if (chunk.elapsed_ms != null && callbacks.onElapsed) callbacks.onElapsed(chunk.elapsed_ms, aiMessageId)
           break
         case 'done':
           this.isCompleted = true
@@ -439,6 +443,10 @@ export class AIClient {
             callbacks.onError(new Error(msg))
           }
           break
+      }
+      // Update elapsed time from any chunk (most SSE events carry elapsed_ms)
+      if (chunk.elapsed_ms != null && callbacks.onElapsed) {
+        callbacks.onElapsed(chunk.elapsed_ms, aiMessageId)
       }
     } catch (callbackErr) {
       if (callbacks.onError && !this.isCompleted) {

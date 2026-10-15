@@ -105,6 +105,7 @@
               :latest-reasoning="latestReasoningContent"
               :is-loading="isActiveAssistantLoading"
               :is-streaming="isStreaming"
+              :elapsed-ms="activeElapsedMs"
             />
           </template>
         </CopilotInput>
@@ -313,6 +314,9 @@ export default {
     },
     isActiveAssistantLoading() {
       return Boolean(this.activeAssistantMessage && this.isLoading)
+    },
+    activeElapsedMs() {
+      return this.activeAssistantMessage?.elapsedMs || null
     },
     estimatedTotalConversations() {
       // If there are more pages, estimate based on pagination
