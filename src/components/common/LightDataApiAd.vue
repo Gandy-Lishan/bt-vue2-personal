@@ -7,6 +7,26 @@
       <span class="light-data-ad__badge">NEW</span>
       <div class="light-data-ad__copy">
         <strong class="light-data-ad__title">Use SentimenTrader data in your own system with Light Data API</strong>
+        <div class="light-data-ad__links" aria-label="Light Data API integrations">
+          <span>Now supports</span>
+          <a
+            href="https://workspace.google.com/marketplace/app/sentimentrader_data_api/1021022009777?flow_type=2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Google Sheets</a>
+          <span class="light-data-ad__separator" aria-hidden="true">|</span>
+          <a
+            href="https://chromewebstore.google.com/detail/sentimentrader-for-tradin/fjeabmieblgncgokjcpmmappdnjicfam?utm_source=ext_app_menu"
+            target="_blank"
+            rel="noopener noreferrer"
+          >TradingView</a>
+          <span class="light-data-ad__separator" aria-hidden="true">|</span>
+          <a
+            href="https://st-tools.sentimentrader.com/mcp-server"
+            target="_blank"
+            rel="noopener noreferrer"
+          >MCP</a>
+        </div>
       </div>
       <a
         class="light-data-ad__cta"
@@ -268,9 +288,10 @@ export default {
   flex: 1 1 auto;
   min-width: 220px;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 14px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3px;
   text-align: left;
 }
 
@@ -280,6 +301,33 @@ export default {
   font-size: 14px;
   line-height: 1.25;
   font-weight: 700;
+}
+
+.light-data-ad__links {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: #1264bd;
+  font-size: 13px;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.light-data-ad__links a {
+  color: #0759aa;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.light-data-ad__links a:hover,
+.light-data-ad__links a:focus {
+  color: #00458a;
+  text-decoration: underline;
+}
+
+.light-data-ad__separator {
+  color: #567392;
+  font-weight: 400;
 }
 
 .light-data-ad__cta {
@@ -320,7 +368,16 @@ export default {
   }
 
   .light-data-ad__title {
-    font-size: 14px;
+    font-size: 17px;
+  }
+
+  .light-data-ad__copy {
+    gap: 3px;
+  }
+
+  .light-data-ad__links {
+    gap: 10px;
+    font-size: 12px;
   }
 
   .light-data-ad__cta {
@@ -375,6 +432,14 @@ export default {
   .light-data-ad__title {
     display: block;
     font-size: 14px;
+  }
+
+  .light-data-ad__links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 8px;
+    font-size: 11px;
+    white-space: normal;
   }
 
   .light-data-ad__cta {
