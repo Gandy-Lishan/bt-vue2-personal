@@ -12,6 +12,18 @@
 <script>
 import * as d3 from "d3";
 import { isJson } from "@/utils";
+const {
+  BAR_LABEL_FILL,
+  BAR_LABEL_FONT_SIZE,
+  VALUE_TEXT_FILL,
+  VALUE_TEXT_FONT_SIZE,
+  getBarAttributes,
+  getChartValue,
+  getRankChartRows,
+  getRowKey,
+  getRowCenter,
+  getValueTextAttributes
+} = require("./rankChartLayout");
 
 export default {
  name: 'NewD3Chart',
@@ -22,13 +34,16 @@ export default {
    },
    dataUrl: {
      type: String,
-     required: true
+     default: ''
    },
    middleValue: {
      type: Number,
      default: 50
    },
-   data: String
+   data: {
+     type: [String, Array],
+     default: () => []
+   }
  },
  data() {
    return {
@@ -51,11 +66,12 @@ export default {
  watch: {
    // 当 dataUrl 变化时，重新加载数据
    dataUrl: "loadChart",
+   data: "loadChart",
  },
  computed: {
   chartData() {
    const data = isJson(this.data) ? JSON.parse(this.data) : this.data
-   return data
+   return Array.isArray(data) ? data : []
   }
  },
  mounted() {
@@ -68,7 +84,6 @@ export default {
  methods: {
    async loadChart() {
      try {
-      if(!this.dataUrl) return
       // const fetchData = async (url) => {
       //   try {
       //     const response = await fetch(url, {
@@ -98,13 +113,13 @@ export default {
      }
    },
    renderChart() {
-    console.log('lishan this.chartData', this.chartData)
-     if (!this.chartData.length) return;
-     const getValue = d => parseFloat(d.value);
-     const isZeroValue = d => getValue(d) === 0;
+     if (!this.$refs.chartSvg) return;
+     const chartData = getRankChartRows(this.chartData);
 
      // 清空 SVG
-     d3.select(this.$refs.chartSvg).selectAll("*").remove();
+     const svgRoot = d3.select(this.$refs.chartSvg);
+     svgRoot.selectAll("*").remove();
+     if (!chartData.length) return;
 
      // 计算 SVG 宽高
      let max_width = window.innerWidth;
@@ -113,23 +128,23 @@ export default {
 
      const margin = { top: 0, right: 75, bottom: 0, left: 40 };
      const width = max_width - margin.left - margin.right;
-     const height = this.chartData.length * 22 - margin.top - margin.bottom;
+     const height = chartData.length * 22 - margin.top - margin.bottom;
 
      // x 和 y 轴
      const x = d3.scaleBand()
        .range([0, height])
-       .domain(this.chartData.map(d => d.name))
+       .domain(chartData.map(d => getRowKey(d)))
        .padding(0.3);
 
      const y = d3.scaleLinear()
        .range([200, width])
        .domain([
-         Math.min(0, d3.min(this.chartData, d => getValue(d))),
-         Math.max(100, d3.max(this.chartData, d => getValue(d)))
+         Math.min(0, d3.min(chartData, d => getChartValue(d))),
+         Math.max(100, d3.max(chartData, d => getChartValue(d)))
        ]);
 
      // 创建 SVG
-     const svg = d3.select(this.$refs.chartSvg)
+     const svg = svgRoot
        .attr("width", width + margin.left + margin.right)
        .attr("height", height + margin.top + margin.bottom)
        .append("g")
@@ -138,30 +153,34 @@ export default {
      // 指标名称
      if(['short_indicators', 'int_indicators'].includes(this.chartClass)) {
       svg.selectAll(".bar-label")
-       .data(this.chartData)
+       .data(chartData)
        .enter()
        .append("text")
        .attr("class", "bar-label")
-       .attr("y", d => x(d.name))
+       .attr("y", d => getRowCenter(x, d))
        .attr("x", 120)
        .style("text-anchor", "end")
+       .style("font-size", BAR_LABEL_FONT_SIZE)
+       .style("fill", BAR_LABEL_FILL)
        .attr("dy", ".35em")
        .text(d => d.name);
      }else {
       svg.selectAll('.bar-label')
-        .data(this.chartData)
+        .data(chartData)
         .enter()
         .append('a')
-        .attr('class', 'bar-label')
+        .attr('class', 'bar-label-link')
         .attr('xlink:href', d => `/backtester/sr/setup?index=${'Unknown'}&indicator=${d.url}`)
         .append('text')
-        .attr('y', d => x(d.name) + x.bandwidth() / 2)
+        .attr('class', 'bar-label')
+        .attr('y', d => getRowCenter(x, d))
         .attr('x', 120)
         .style('text-anchor', 'end')
+        .style("font-size", BAR_LABEL_FONT_SIZE)
+        .style("fill", BAR_LABEL_FILL)
         .attr('dy', '.35em')
         .text(d => d.name)
         .on('mouseover', (event, d) => {
-          console.log('lishan 触发 event', event, d.url)
           this.hoveredImageUrl = `https://d1wrgh3h32hjn2.cloudfront.net/${d.url}_250.png`; // 生成图片 URL
           this.imagePosition = { 
             top: event.clientY + 30, // 鼠标位置 +10 像素，防止遮挡
@@ -171,30 +190,8 @@ export default {
         .on('mouseout', () => {
           this.hoveredImageUrl = "";
         });
-      // svg.selectAll(".bar-label")
-      //  .data(this.chartData)
-      //  .enter()
-      //  .append("text")
-      //  .attr("class", "bar-label")
-      //  .attr("y", d => x(d.name))
-      //  .attr("x", 120)
-      //  .style("text-anchor", "end")
-      //  .attr("dy", ".35em")
-      //  .text(d => d.name);
      }
 
-
-     // 数值
-     svg.selectAll(".value-text")
-       .data(this.chartData)
-       .enter()
-       .append("text")
-       .attr("class", "value-text")
-       .attr("y", d => x(d.name))
-       .attr("x", d => getValue(d) < this.middleValue ? y(getValue(d)) - 5 : y(getValue(d)) + 5)
-       .style("text-anchor", d => getValue(d) < this.middleValue ? "end" : "start")
-       .attr("dy", ".35em")
-       .text(d => Math.round(getValue(d)));
 
      // 中间分隔线
      svg.append("line")
@@ -207,15 +204,31 @@ export default {
 
      // 柱状条
      svg.selectAll(".bar")
-       .data(this.chartData)
+       .data(chartData)
        .enter()
        .append("rect")
        .attr("class", "bar")
-       .attr("fill", d => isZeroValue(d) ? "none" : getValue(d) < this.middleValue ? "#63be7b" : "#da8a8a")
-       .attr("y", d => x(d.name) - 8)
-       .attr("x", d => getValue(d) < this.middleValue ? y(getValue(d)) : y(this.middleValue))
-       .attr("width", d => isZeroValue(d) ? 0 : Math.abs(y(getValue(d)) - y(this.middleValue)))
-       .attr("height", x.bandwidth());
+       .attr("fill", d => getBarAttributes(d, x, y, this.middleValue).fill)
+       .attr("y", d => getBarAttributes(d, x, y, this.middleValue).y)
+       .attr("x", d => getBarAttributes(d, x, y, this.middleValue).x)
+       .attr("width", d => getBarAttributes(d, x, y, this.middleValue).width)
+       .attr("height", d => getBarAttributes(d, x, y, this.middleValue).height)
+       .attr("stroke", "#fff")
+       .attr("stroke-width", 0.5);
+
+     // 数值
+     svg.selectAll(".value-text")
+       .data(chartData)
+       .enter()
+       .append("text")
+       .attr("class", "value-text")
+       .attr("y", d => getValueTextAttributes(d, x, y, this.middleValue).y)
+       .attr("x", d => getValueTextAttributes(d, x, y, this.middleValue).x)
+       .style("text-anchor", d => getValueTextAttributes(d, x, y, this.middleValue).textAnchor)
+       .style("font-size", VALUE_TEXT_FONT_SIZE)
+       .style("fill", VALUE_TEXT_FILL)
+       .attr("dy", ".35em")
+       .text(d => getValueTextAttributes(d, x, y, this.middleValue).text);
    },
    debouncedResize() {
      this.renderChart();
