@@ -142,6 +142,7 @@ export function useAICopilot() {
     store.commit('aiCopilot/SET_LOADING', true)
     store.commit('aiCopilot/SET_STREAMING', false)
     store.commit('aiCopilot/SET_ERROR', null)
+    store.commit('aiCopilot/SET_RATE_LIMIT_RETRY_AFTER', null)
 
     // 2. 启动 SSE
     const callbacks = {
@@ -228,7 +229,12 @@ export function useAICopilot() {
         if (totalLatencyMs) {
           store.commit('aiCopilot/SET_MESSAGE_LATENCY', { messageId: targetId, totalLatencyMs })
         }
-        store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt: Date.now() })
+        // The backend now always returns total_latency_ms (real processing time).
+        // Use startedAt + totalLatencyMs so "Worked for X" reflects actual work,
+        // not wall-clock time spent while the tab was in the background.
+        const startedAt = assistantMessage?.startedAt || Date.now()
+        const completedAt = startedAt + (totalLatencyMs || 0)
+        store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt })
         if (sources && sources.length > 0) {
           store.commit('aiCopilot/SET_MESSAGE_SOURCES', {
             messageId: targetId,
@@ -258,6 +264,18 @@ export function useAICopilot() {
         store.commit('aiCopilot/SET_STREAMING', false)
         if (error.message === 'conversation_not_found') {
           store.commit('aiCopilot/SET_CONVERSATION_ID', null)
+        }
+        // Detect call_budget_exceeded 429 from route-layer guardrail
+        if (error.retryAfter != null) {
+          store.commit('aiCopilot/SET_RATE_LIMIT_RETRY_AFTER', error.retryAfter)
+          // Don't set message error status — the toast replaces the red error
+          // Remove the optimistic user + assistant messages since the request never reached the server
+          store.commit('aiCopilot/DELETE_MESSAGE', assistantMessage.id)
+          const lastUser = store.getters['aiCopilot/lastUserMessage']
+          if (lastUser && lastUser.timestamp >= Date.now() - 5000) {
+            store.commit('aiCopilot/DELETE_MESSAGE', lastUser.id)
+          }
+          return
         }
         store.commit('aiCopilot/SET_MESSAGE_STATUS', {
           id: assistantMessage.id,
@@ -379,7 +397,9 @@ export function useAICopilot() {
         if (totalLatencyMs) {
           store.commit('aiCopilot/SET_MESSAGE_LATENCY', { messageId: targetId, totalLatencyMs })
         }
-        store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt: Date.now() })
+        const startedAt = aiMsg?.startedAt || Date.now()
+        const completedAt = startedAt + (totalLatencyMs || 0)
+        store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt })
         if (sources && sources.length > 0) {
           store.commit('aiCopilot/SET_MESSAGE_SOURCES', {
             messageId: targetId,
@@ -775,7 +795,10 @@ export function useAICopilot() {
             if (totalLatencyMs) {
               store.commit('aiCopilot/SET_MESSAGE_LATENCY', { messageId: targetId, totalLatencyMs })
             }
-            store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt: Date.now() })
+            // Avoid inflating duration with background-tab wall-clock time.
+            const startedAt = aiMsg?.startedAt || Date.now()
+            const completedAt = totalLatencyMs ? startedAt + totalLatencyMs : Date.now()
+            store.commit('aiCopilot/SET_MESSAGE_COMPLETED_AT', { id: targetId, completedAt })
             if (sources && sources.length > 0) {
               store.commit('aiCopilot/SET_MESSAGE_SOURCES', {
                 messageId: targetId,

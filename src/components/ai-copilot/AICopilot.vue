@@ -51,10 +51,7 @@
             <!-- <span class="header-avatar"><i class="fa fa-commenting" aria-hidden="true"></i></span> -->
             <div class="header-info">
               <span class="header-title">{{ headerTitle }}</span>
-              <span class="header-status">
-                <span class="status-dot" />
-                {{ statusText }}
-              </span>
+              <span class="beta-badge" title="Beta — this feature is still being improved">Beta</span>
             </div>
           </div>
           <div class="header-actions">
@@ -81,6 +78,12 @@
           @edit-message="handleEditMessage"
           @update-feedback="handleUpdateFeedback"
         />
+
+        <!-- Rate limit toast -->
+        <div v-if="rateLimitSeconds !== null" class="rate-limit-toast">
+          <i class="fa fa-warning" aria-hidden="true"></i>
+          <span>Call limit reached. Try again in <strong>{{ rateLimitSeconds }}s</strong>.</span>
+        </div>
 
         <!-- Input -->
         <CopilotInput
@@ -235,6 +238,9 @@ export default {
       // Visibility sync
       _lastHiddenAt: 0,
       _visibilityHandler: null,
+      // Rate limit countdown
+      rateLimitSeconds: null,
+      _rateLimitTimer: null,
     }
   },
   watch: {
@@ -254,20 +260,37 @@ export default {
         }
       }
     },
+    // Rate limit countdown from store
+    rateLimitRetryAfter(newVal) {
+      if (this._rateLimitTimer) {
+        clearInterval(this._rateLimitTimer)
+        this._rateLimitTimer = null
+      }
+      if (newVal != null && newVal > 0) {
+        this.rateLimitSeconds = Math.ceil(newVal)
+        this._rateLimitTimer = setInterval(() => {
+          if (this.rateLimitSeconds <= 1) {
+            clearInterval(this._rateLimitTimer)
+            this._rateLimitTimer = null
+            this.rateLimitSeconds = null
+            this.$store.commit('aiCopilot/SET_RATE_LIMIT_RETRY_AFTER', null)
+          } else {
+            this.rateLimitSeconds--
+          }
+        }, 1000)
+      } else {
+        this.rateLimitSeconds = null
+      }
+    },
   },
   computed: {
-    ...mapState('aiCopilot', ['messages', 'isLoading', 'isStreaming', 'error', 'conversations', 'conversationsLoading', 'conversationsHasMore']),
+    ...mapState('aiCopilot', ['messages', 'isLoading', 'isStreaming', 'error', 'conversations', 'conversationsLoading', 'conversationsHasMore', 'rateLimitRetryAfter']),
     ...mapGetters('aiCopilot', ['lastAssistantMessage']),
     headerTitle() {
       const id = this.$store.state.aiCopilot.conversationId
       if (!id) return 'AI Copilot'
       const conv = this.conversations.find(c => c.id === id)
       return conv?.title || 'AI Copilot'
-    },
-    statusText() {
-      if (this.isStreaming) return 'Typing...'
-      if (this.isLoading) return 'Thinking...'
-      return 'Online'
     },
     activeAssistantMessage() {
       const last = this.lastAssistantMessage
@@ -398,6 +421,10 @@ export default {
   },
   beforeDestroy() {
     this.stopResize()
+    if (this._rateLimitTimer) {
+      clearInterval(this._rateLimitTimer)
+      this._rateLimitTimer = null
+    }
     document.removeEventListener('visibilitychange', this._visibilityHandler)
     document.removeEventListener('keydown', this._keydownHandler)
     if (this._toggleHandler) {
@@ -872,6 +899,33 @@ export default {
   cursor: default;
 }
 
+/* Rate limit toast */
+.rate-limit-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  margin: 0 6px 14px;
+  border-radius: 10px;
+  background: #fef9c3;
+  border: 1px solid #fde047;
+  color: #a16207;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(161, 98, 7, 0.1);
+}
+
+.rate-limit-toast .fa-warning {
+  font-size: 14px;
+  color: #ca8a04;
+  flex-shrink: 0;
+}
+
+.rate-limit-toast strong {
+  font-weight: 700;
+  color: #854d0e;
+}
+
 /* Drag overlay */
 .drag-overlay {
   position: absolute;
@@ -1037,23 +1091,17 @@ export default {
   max-width: 200px;
 }
 
-.header-status {
-  font-size: 12px;
-  opacity: 0.8;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.beta-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #eef2ff;
+  color: #6366f1;
+  letter-spacing: 0.04em;
   flex-shrink: 0;
+  cursor: help;
 }
-
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #6ee7b7;
-  box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.45);
-}
-
 .header-actions {
   display: flex;
   gap: 4px;

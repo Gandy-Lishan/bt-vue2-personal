@@ -48,6 +48,7 @@ const state = {
   conversationsHasMore: true,
   abortedConversations: new Set(), // 用户主动 abort 的会话 ID
   minimizedWhileStreaming: false, // 用户最小化 copilot 时是否正在流式输出
+  rateLimitRetryAfter: null, // seconds remaining for call_budget_exceeded 429
 }
 
 const mutations = {
@@ -213,6 +214,9 @@ const mutations = {
   },
   SET_MINIMIZED_WHILE_STREAMING(state, val) {
     state.minimizedWhileStreaming = val
+  },
+  SET_RATE_LIMIT_RETRY_AFTER(state, seconds) {
+    state.rateLimitRetryAfter = seconds
   },
   SET_MESSAGE_REASONING_CHUNK(state, { messageId, chunk }) {
     const idx = state.messages.findIndex(m => m.id === messageId)
