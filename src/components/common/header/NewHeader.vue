@@ -25,6 +25,7 @@
         >
           <i class="fa fa-magic" aria-hidden="true"></i>
           <span>AI Copilot</span>
+          <span class="ai-copilot-beta-badge" title="Beta — this feature is still being improved">Beta</span>
         </button>
       </div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -1240,6 +1241,19 @@ li.el-menu-item.tutorial-svg:hover {
   font-size: 15px;
 }
 
+.ai-copilot-beta-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #eef2ff;
+  color: #6366f1;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  cursor: help;
+  line-height: 1;
+}
+
 @media (max-width: 768px) {
   .ai-copilot-header-btn span {
     display: none;
@@ -1247,6 +1261,9 @@ li.el-menu-item.tutorial-svg:hover {
   .ai-copilot-header-btn {
     width: 40px;
     padding: 0;
+  }
+  .ai-copilot-header-btn .ai-copilot-beta-badge {
+    display: none;
   }
 }
 
