@@ -621,19 +621,14 @@ export function useAICopilot() {
         }
       })
 
-      // 第二轮：用 DB 的 total_latency_ms 计算 startedAt/completedAt
-      // assistant 消息：startedAt = timestamp - total_latency_ms, completedAt = timestamp
-      // 这样 "Worked for" 显示的是实际处理耗时，而不是消息间的时间间隔
+      // 第二轮：设置 startedAt/completedAt
+      // DB 不存储 total_latency_ms，所以历史消息用 created_at 作为基准
+      // startedAt = completedAt = timestamp，durationText 显示为空（无精确数据）
+      // 未来如需精确显示，需要在 DB 添加 total_latency_ms 字段
       for (let i = 0; i < normalized.length; i++) {
         const msg = normalized[i]
-        if (msg.role === 'assistant') {
-          const latency = msg.total_latency_ms || 0
-          msg.startedAt = msg.timestamp - latency
-          msg.completedAt = msg.timestamp
-        } else if (msg.role === 'user') {
-          msg.startedAt = msg.timestamp
-          msg.completedAt = msg.timestamp
-        }
+        msg.startedAt = msg.timestamp
+        msg.completedAt = msg.timestamp
       }
 
       // Guard against stale responses: the conversation may have been switched
