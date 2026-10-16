@@ -56,10 +56,10 @@
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >Indicators</el-menu-item
         >
-        <el-menu-item class="home-link" index="14"
+        <!-- <el-menu-item class="home-link" index="14"
         v-if="getTokenRole() != 0 && getTokenRole() != 'None'"
           >AI Copilot</el-menu-item
-        >
+        > -->
         <el-submenu class="help-title help-link" index="4" :class="{'help-link-active': activeIndex == '4'}">
           <template slot="title">
             <span>Help</span>
@@ -139,9 +139,9 @@ export default {
         this.activeIndex = '12'
       }else if(to.path.includes('/indicators') || to.name == 'Indicators'){
         this.activeIndex = '13'
-      }else if(to.path.includes('/copilot') || to.name == 'Copilot'){
-        this.activeIndex = '14'
-      }
+      }// else if(to.path.includes('/copilot') || to.name == 'Copilot'){
+      //   this.activeIndex = '14'
+      // }
       // const currentDomain = window.location.hostname;
     // 如果当前域名是 devbt2.sentimentrader.com 或 localhost，则将 isButtonVisible 设置为 true
     // if (currentDomain == 'devbt2.sentimentrader.com' || currentDomain == 'localhost') this.isButtonVisible = true
@@ -221,13 +221,13 @@ export default {
           path: '/indicators'
         }).href
         this.$router.push(path)
-      }else if(key == '14') {
-        path = this.$router.resolve({
-          path: '/copilot',
-          query: { access: 'st2026' }
-        }).href
-        this.$router.push(path)
-      }
+      }// else if(key == '14') {
+      //   path = this.$router.resolve({
+      //     path: '/copilot',
+      //     query: { access: 'st2026' }
+      //   }).href
+      //   this.$router.push(path)
+      // }
     },
   }
 }
