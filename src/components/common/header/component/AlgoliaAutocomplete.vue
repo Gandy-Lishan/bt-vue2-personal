@@ -125,15 +125,20 @@
                         return html`<div>📝 Blog Posts</div>`;
                     },
                     item({ item, html }) {
-                        const validCategories = ["quantedge", "kaeppelscorner", "SentimentEdge", "ModelEdge", "TradingEdge", "impactedge"];
-                        let href = "";
+                        let href = '';
 
-                        if (validCategories.includes(item.category)) {
-                            href = `/MR/${item.category}/${item.url.split('/').pop()}`;
+                        const category = item.category?.toLowerCase();
+                        const slug = item.url?.split('/').pop();
+
+                        if (
+                            ['quantedge', 'kaeppelscorner', 'sentimentedge', 'modeledge', 'tradingedge', 'impactedge']
+                            .includes(category) &&
+                            slug
+                        ) {
+                            href = `/MR/${category}/${slug}`;
                         } else {
-                            // 提取 /blog/ 及其后面的部分
-                            const match = item.url.match(/\/blog\/.*/);
-                            href = `/MR${match}` ? `/MR${match[0]}` : item.url; // 如果没有匹配到，兜底用原始链接
+                            const match = item.url?.match(/\/blog\/.*/);
+                            href = match ? `/MR${match[0]}` : item.url || '#';
                         }
 
                         return html`
