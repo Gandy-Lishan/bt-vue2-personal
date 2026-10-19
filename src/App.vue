@@ -51,7 +51,8 @@ export default {
 			if (!this.$route) return false
 			const p = this.$route.path
 			if (p.startsWith('/prototype') || p.startsWith('/copilot')) return true
-			return this.$route.query.access !== 'st2026'
+			// return this.$route.query.access !== 'st2026'
+			return false
 		}
 	},
 	async mounted() {

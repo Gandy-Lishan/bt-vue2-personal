@@ -58,9 +58,9 @@
             <button class="header-btn" @click="handleNewChat" :disabled="atConversationLimit" title="New chat">
               <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
-            <button class="header-btn" @click="openStandalone" title="Open in full page">
+            <!-- <button class="header-btn" @click="openStandalone" title="Open in full page">
               <i class="fa fa-external-link" aria-hidden="true"></i>
-            </button>
+            </button> -->
             <button class="header-btn" @click="close" title="Minimize">
               <i class="fa fa-minus" aria-hidden="true"></i>
             </button>
@@ -463,10 +463,10 @@ export default {
       this.showHistory = false
       EventBus.emit('ai-copilot:closed')
     },
-    openStandalone() {
-      this.close()
-      this.$router.push('/copilot?access=st2026')
-    },
+    // openStandalone() {
+    //   this.close()
+    //   this.$router.push('/copilot?access=st2026')
+    // },
     uploadImage(base64, filename) {
       return this.copilot.client.uploadImage(base64, filename)
     },

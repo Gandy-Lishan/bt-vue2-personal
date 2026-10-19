@@ -1,7 +1,7 @@
 <template>
   <div v-if="statusText" class="retrieve-status" :class="statusTone">
     <span class="status-dot" />
-    <span class="status-label">{{ statusText }} {{ isActive ? elapsedDisplay : '' }}</span>
+    <span class="status-label">{{ statusText }}</span>
   </div>
 </template>
 
@@ -14,16 +14,6 @@ export default {
     latestReasoning: { type: String, default: '' },
     isLoading: { type: Boolean, default: false },
     isStreaming: { type: Boolean, default: false },
-  },
-  data() {
-    return {
-      elapsedMs: 0,
-      timerId: null,
-      _startedAt: 0,
-      _hiddenAt: 0,
-      _backgroundMs: 0,
-      _visibilityHandler: null,
-    }
   },
   computed: {
     lastStatus() {
@@ -68,63 +58,6 @@ export default {
       if (this.lastStatus?.type === 'insufficient') return 'warning'
       if (this.latestReasoning) return 'thinking'
       return 'thinking'
-    },
-    elapsedDisplay() {
-      const s = Math.floor(this.elapsedMs / 1000)
-      const ms = Math.floor((this.elapsedMs % 1000) / 100)
-      return `(${s}.${ms}s)`
-    },
-  },
-  watch: {
-    isActive(val, oldVal) {
-      if (val && !oldVal) this.startTimer()
-      else if (!val) this.stopTimer()
-    },
-  },
-  mounted() {
-    if (this.isActive) this.startTimer()
-    this._visibilityHandler = () => {
-      if (document.visibilityState === 'visible') {
-        if (this._hiddenAt) {
-          this._backgroundMs += Date.now() - this._hiddenAt
-          this._hiddenAt = 0
-        }
-        if (this._startedAt) {
-          this._tickElapsed()
-        }
-      } else {
-        this._hiddenAt = Date.now()
-      }
-    }
-    document.addEventListener('visibilitychange', this._visibilityHandler)
-  },
-  beforeDestroy() {
-    this.stopTimer()
-    document.removeEventListener('visibilitychange', this._visibilityHandler)
-  },
-  methods: {
-    startTimer() {
-      this.elapsedMs = 0
-      this._startedAt = Date.now()
-      this._hiddenAt = 0
-      this._backgroundMs = 0
-      this.stopTimer()
-      this.timerId = setInterval(() => {
-        this._tickElapsed()
-      }, 100)
-    },
-    stopTimer() {
-      if (this.timerId) {
-        clearInterval(this.timerId)
-        this.timerId = null
-      }
-      this._hiddenAt = 0
-      this._backgroundMs = 0
-    },
-    _tickElapsed() {
-      const now = Date.now()
-      const currentBackgroundMs = this._hiddenAt ? now - this._hiddenAt : 0
-      this.elapsedMs = now - this._startedAt - this._backgroundMs - currentBackgroundMs
     },
   },
 }

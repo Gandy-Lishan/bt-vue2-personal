@@ -395,7 +395,8 @@ export class AIClient {
         case 'error':
           this.isCompleted = true
           if (callbacks.onError) {
-            const errMsg = chunk.detail || chunk.error || 'Generation failed'
+            // Prefer user-facing message over raw detail
+            const errMsg = chunk.message || chunk.detail || chunk.error || 'Something went wrong. Please try again.'
             callbacks.onError(new Error(errMsg))
           }
           break
@@ -435,7 +436,7 @@ export class AIClient {
           // (e.g. service_busy from concurrency guard)
           if (chunk.error && callbacks.onError && !this.isCompleted) {
             this.isCompleted = true
-            const msg = chunk.detail || chunk.error || 'An unexpected error occurred.'
+            const msg = chunk.message || chunk.detail || chunk.error || 'An unexpected error occurred.'
             callbacks.onError(new Error(msg))
           }
           break

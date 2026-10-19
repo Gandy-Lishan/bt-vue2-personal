@@ -621,23 +621,15 @@ export function useAICopilot() {
         }
       })
 
-      // 第二轮：用相邻消息时间差计算 startedAt/completedAt
-      // assistant 消息：startedAt = 上一条 user 消息的 timestamp，completedAt = 自己的 timestamp
+      // 第二轮：用 DB 的 total_latency_ms 计算 startedAt/completedAt
+      // startedAt = timestamp - total_latency_ms, completedAt = timestamp
+      // 这样 "Worked for" 显示的是实际 API 调用耗时
       for (let i = 0; i < normalized.length; i++) {
         const msg = normalized[i]
-        if (msg.role === 'assistant') {
-          // startedAt: 往前找最近的 user 消息
-          for (let j = i - 1; j >= 0; j--) {
-            if (normalized[j].role === 'user') {
-              msg.startedAt = normalized[j].timestamp
-              break
-            }
-          }
-          if (!msg.startedAt) msg.startedAt = msg.timestamp
-          msg.completedAt = msg.timestamp
-        } else if (msg.role === 'user') {
-          msg.startedAt = msg.timestamp
-          msg.completedAt = msg.timestamp
+        msg.startedAt = msg.timestamp
+        msg.completedAt = msg.timestamp
+        if (msg.role === 'assistant' && msg.total_latency_ms) {
+          msg.startedAt = msg.timestamp - msg.total_latency_ms
         }
       }
 

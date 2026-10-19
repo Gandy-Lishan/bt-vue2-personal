@@ -43,14 +43,12 @@
         <template v-else>
           <!-- Duration header + toggle chevron -->
           <div
-            v-if="durationText || hasThinkingBlocks || streamStatusText || message.status === 'pending' || message.status === 'streaming'"
+            v-if="durationText || hasThinkingBlocks"
             class="duration-label"
             :class="{ 'has-toggle': hasThinkingBlocks }"
             @click="hasThinkingBlocks && toggleThoughts()"
           >
-            <!-- 流状态文本：RAF 直写 DOM -->
-            <span ref="streamingStatusSpan" :class="['streaming-status', { shimmer: message.status === 'pending' || message.status === 'streaming' }]">{{ streamStatusText }}</span>
-            <span v-if="!streamStatusText && durationText">{{ durationText }}</span>
+            <span v-if="durationText">{{ durationText }}</span>
             <i
               v-if="hasThinkingBlocks"
               :class="thoughtsOpen ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"
@@ -222,48 +220,14 @@ export default {
       feedback: null,
       expandedMap: {},
       thoughtsManualOpen: null,
-      _streamStartedAt: 0,
-      _streamRafId: null,
-      streamStatusText: '',
-      _visibilityHandler: null,
-      _hiddenAt: 0,
-      _backgroundMs: 0,
       previewVisible: false,
       previewUrl: '',
     }
   },
   mounted() {
     this.feedback = this.message.user_feedback || null
-    if (this.message.status === 'pending' || this.message.status === 'streaming') {
-      this._startStreamTimer()
-    }
-    this._visibilityHandler = () => {
-      if (document.visibilityState === 'visible') {
-        if (this._hiddenAt) {
-          this._backgroundMs += Date.now() - this._hiddenAt
-          this._hiddenAt = 0
-        }
-        if (this._streamRafId) {
-          this._updateStreamDisplay()
-        }
-      } else {
-        this._hiddenAt = Date.now()
-      }
-    }
-    document.addEventListener('visibilitychange', this._visibilityHandler)
   },
   beforeDestroy() {
-    this._stopStreamTimer()
-    document.removeEventListener('visibilitychange', this._visibilityHandler)
-  },
-  watch: {
-    'message.status'(newStatus) {
-      if (newStatus === 'pending' || newStatus === 'streaming') {
-        this._startStreamTimer()
-      } else if (newStatus === 'done' || newStatus === 'error') {
-        this._stopStreamTimer()
-      }
-    },
   },
   computed: {
     thoughtsOpen() {
@@ -345,73 +309,6 @@ export default {
     }
   },
   methods: {
-    _startStreamTimer() {
-      this._stopStreamTimer()
-      this._streamStartedAt = Date.now()
-      this._hiddenAt = 0
-      this._backgroundMs = 0
-      this._streamLoop()
-    },
-    _stopStreamTimer() {
-      if (this._streamRafId) {
-        cancelAnimationFrame(this._streamRafId)
-        this._streamRafId = null
-      }
-      this.streamStatusText = ''
-      this._hiddenAt = 0
-      this._backgroundMs = 0
-      const el = this.$refs.streamingStatusSpan
-      if (el) el.style.display = 'none'
-    },
-    _streamLoop() {
-      this._updateStreamDisplay()
-      this._streamRafId = requestAnimationFrame(this._streamLoop.bind(this))
-    },
-    _updateStreamDisplay() {
-      const now = Date.now()
-      const currentBackgroundMs = this._hiddenAt ? now - this._hiddenAt : 0
-      const elapsed = now - this._streamStartedAt - this._backgroundMs - currentBackgroundMs
-      const s = Math.floor(elapsed / 1000)
-      const ms = Math.floor((elapsed % 1000) / 100)
-      const timeStr = `(${s}.${ms}s)`
-
-      const toolCalls = (this.message.blocks || [])
-        .filter(b => b.type === 'tool' && b.toolCall?.status !== 'completed')
-        .map(b => b.toolCall)
-
-      if (toolCalls.length > 0) {
-        const names = toolCalls.map(t => (t.name || '').replace(/([A-Z])/g, ' $1').replace(/^./, c => c.toUpperCase()))
-        this.streamStatusText = `Running ${names.length === 1 ? names[0] : names.join(', ')}... ${timeStr}`
-      } else if (this.message.status === 'streaming') {
-        this.streamStatusText = `Generating response... ${timeStr}`
-      } else {
-        const statuses = this.message.retrieveStatuses || []
-        const last = statuses[statuses.length - 1] || null
-        const type = last?.type
-        if (type === 'initial') this.streamStatusText = `Analyzing request... ${timeStr}`
-        else if (type === 'retrieving') this.streamStatusText = `Searching knowledge base... ${timeStr}`
-        else if (type === 'completed') this.streamStatusText = ''
-        else if (type === 'error') this.streamStatusText = `${last.message || ''} ${timeStr}`
-        else if (type === 'insufficient') this.streamStatusText = `Knowledge base has limited info ${timeStr}`
-        else if (last?.message) this.streamStatusText = `${last.message} ${timeStr}`
-        else {
-          const chunks = this.message.reasoning_chunks || []
-          const reasoning = chunks.length ? chunks[chunks.length - 1].content : ''
-          if (reasoning?.trim()) {
-            const t = reasoning.trim()
-            this.streamStatusText = `${t.length > 60 ? t.slice(0, 60) + '…' : t} ${timeStr}`
-          } else {
-            this.streamStatusText = `Thinking... ${timeStr}`
-          }
-        }
-      }
-
-      const el = this.$refs.streamingStatusSpan
-      if (el) {
-        el.textContent = this.streamStatusText
-        el.style.display = this.streamStatusText ? '' : 'none'
-      }
-    },
     toggleThoughts() {
       this.thoughtsManualOpen = !this.thoughtsOpen
     },
