@@ -1116,6 +1116,7 @@ li.el-menu-item.tutorial-svg:hover {
   order: 1;
 }
 .autocomplete-wrapper /deep/ .aa-Input {
+  box-sizing: border-box;
   height: 40px;
   padding: 0 18px 0 24px;
   color: #1f2933;
@@ -1128,6 +1129,9 @@ li.el-menu-item.tutorial-svg:hover {
 }
 .autocomplete-wrapper /deep/ .aa-InputWrapperSuffix {
   order: 2;
+}
+.autocomplete-wrapper /deep/ .aa-ClearButton {
+  padding: 0 2px 0 12px;
 }
 .autocomplete-wrapper /deep/ .aa-InputWrapperPrefix {
   order: 3;
