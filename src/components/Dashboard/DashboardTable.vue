@@ -167,8 +167,8 @@ export default {
       end: 25,
       currentPage: 1,
       perPage: 25,
-      currentSortColumn: '',
-      currentSortDirection: '',
+      currentSortColumn: 'sub_type',
+      currentSortDirection: 'descending',
       searchInput: '',
       imagePosition: { top: 0, left: 0 }, // 图片位置,
       hoveredImageUrl: ''
@@ -191,7 +191,8 @@ export default {
     },
   },
   mounted() {
-    this.filterData = this.extreme
+    this.filterData = [...this.extreme]
+    this.applyCurrentSort()
   },
   methods: {
     timeframeStr(chart) {
@@ -262,18 +263,24 @@ export default {
       // 判断是否需要排序
       if (!this.currentSortColumn) return
       console.log('currentSortColumn', this.currentSortColumn)
+      this.applyCurrentSort();
+    },
+    applyCurrentSort() {
       this.filterData.sort((a, b) => {
         const key = this.currentSortColumn;
         const isAsc = this.currentSortDirection === 'descending';
+        const aValue = a[key] ?? '';
+        const bValue = b[key] ?? '';
 
-        if (a[key] < b[key]) return isAsc ? -1 : 1;
-        if (a[key] > b[key]) return isAsc ? 1 : -1;
+        if (aValue < bValue) return isAsc ? -1 : 1;
+        if (aValue > bValue) return isAsc ? 1 : -1;
         return 0;
       });
     },
     handleQuery: debounce(function () { this._filterData() }, 500),
     _filterData(){
-		  this.filterData = this.getSearchResult()
+      this.filterData = [...this.getSearchResult()]
+      this.applyCurrentSort()
       
       if(this.currentPage != 1) this.currentPage = 1
     },
