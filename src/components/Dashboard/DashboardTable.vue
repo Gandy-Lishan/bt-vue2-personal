@@ -60,7 +60,7 @@
                 </td>
 
                 <td>
-                  <center>{{ forecast.timeframe }}</center>
+                  <center>{{ timeframeStr(forecast) }}</center>
                 </td>
 
                 <td>
@@ -194,6 +194,23 @@ export default {
     this.filterData = this.extreme
   },
   methods: {
+    timeframeStr(chart) {
+      if ([
+        'Short to Intermediate',
+        'Intermediate to Long',
+        'Intermediate',
+        'Medium-Term',
+      ].includes(chart.timeframe)) {
+        return 'Medium';
+      }
+      if (['Short', 'Short-Term'].includes(chart.timeframe)) {
+        return 'Short';
+      }
+      if (['Long', 'Long-Term'].includes(chart.timeframe)) {
+        return 'Long';
+      }
+      return chart.timeframe;
+    },
     formatDate(date) {
       // Formatting the date to 'Month Day, Year' format (like 'January 01, 2025')
       return new Intl.DateTimeFormat('en-US', {
