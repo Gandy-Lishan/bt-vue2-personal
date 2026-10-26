@@ -252,6 +252,46 @@
           exporting: {
             enabled: true,
             buttons: {
+              logScaleButton: {
+                text: 'Price Log Scale',
+                title: 'Toggle logarithmic scale for the price chart',
+                onclick: function (event) {
+                  const priceAxis = this.get('top-axis');
+                  if (!priceAxis) return;
+
+                  const useLogScale = priceAxis.options.type !== 'logarithmic';
+                  const hasNonPositiveValue = priceAxis.series.some(currentSeries =>
+                    currentSeries.options.data.some(point => {
+                      const value = Array.isArray(point) ? point[1] : point && point.y;
+                      const numericValue = Number(value);
+                      return value !== null && value !== '' && Number.isFinite(numericValue) && numericValue <= 0;
+                    })
+                  );
+
+                  if (useLogScale && hasNonPositiveValue) {
+                    _this.popUpMsgBox('Price Log scale is unavailable because the price chart contains zero or negative values.');
+                    return;
+                  }
+
+                  priceAxis.update({
+                    type: useLogScale ? 'logarithmic' : 'linear',
+                    min: null,
+                    max: null
+                  }, false);
+                  priceAxis.setExtremes(null, null, false);
+                  this.redraw();
+
+                  const logScaleButton = event && event.currentTarget
+                    ? this.exportSVGElements.find(element => element.element === event.currentTarget)
+                    : null;
+                  if (logScaleButton) {
+                    logScaleButton.setState(useLogScale ? 2 : 0);
+                    logScaleButton.attr({
+                      title: useLogScale ? 'Switch the price chart to linear scale' : 'Switch the price chart to logarithmic scale'
+                    });
+                  }
+                }
+              },
               contextButton: {
                 menuItems: [
                   'printChart',
