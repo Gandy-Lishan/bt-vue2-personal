@@ -543,77 +543,63 @@ export default {
 					// 请在主站的收藏夹中移除
 			}
 		},
-    changeTableSort(column){
-			var sortingOrder = column.order
-			var colName = column.prop
-			  // 数字字符串转数字类型排序
-        if (['last_value', 'last_change', 'z_score', 'win_rate', 'avg_return', 'avg_net_return', 'sentiment'].indexOf(colName) !== -1) {
-            if (sortingOrder == 'ascending') {
-                this.filterData.sort((a, b) => {
-                    let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
-                    let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
-                    _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
-                    _a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
-                    return _b - _a
-                })
-            } else if (sortingOrder == 'descending') {
-                this.filterData.sort((a, b) => {
-                    let _b = b[colName].match(/-?\d+([\/.]\d+)?/g)
-                    let _a = a[colName].match(/-?\d+([\/.]\d+)?/g)
-                    _b = _b ? _b.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
-                    _a = _a ? _a.reduce((pre, cur) => { return Number(pre) + Number(cur) }) : 0
-                    return _a - _b
-                })
-            }
-        }
-			// 日期类型排序
-			if(['last_update'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.filterData.sort((a,b) => {
-						return new Date(b[colName]) - new Date(a[colName])
-					})
-				}else if(sortingOrder == 'descending'){
-					this.filterData.sort((a,b) => {
-						return new Date(a[colName]) - new Date(b[colName])
-					})
-				}else{
-				}
-			}
-      if (['last_update'].indexOf(colName) !== -1) {
-        // 处理日期字符串
-        const isValidDate = date => !isNaN(Date.parse(date));
-        const sortedData = this.filterData.sort((a, b) => {
-        const dateA = new Date(a[colName])
-        const dateB = new Date(b[colName])
-        const isDateAValid = isValidDate(a[colName])
-        const isDateBValid = isValidDate(b[colName])
-        // 都是无效日期，保持原顺序
-        if (!isDateAValid && !isDateBValid) return 0
+    changeTableSort(column) {
+      const sortingOrder = column.order
+      const colName = column.prop
 
-        //a 是无效日期，排到最后 
-        if (!isDateAValid) return 1;
+      // Element UI 第三次点击会取消排序，恢复当前筛选条件下的原始顺序
+      if (!sortingOrder || !colName) {
+        this._filterData()
+        this.filterData = [...this.filterData]
+        return
+      }
 
-        // b 是无效日期，排到最后
-        if (!isDateBValid) return -1
+      const numericColumns = ['last_value', 'last_change', 'sentiment']
+      const dateColumns = ['last_update']
+      const isEmpty = value => value === null || value === undefined || value === ''
+      const parseNumber = value => {
+        if (typeof value === 'number') return Number.isNaN(value) ? null : value
+        const match = String(value).replace(/,/g, '').match(/-?\d+(?:\.\d+)?/)
+        return match ? Number(match[0]) : null
+      }
+      const parseDate = value => {
+        const timestamp = Date.parse(value)
+        return Number.isNaN(timestamp) ? null : timestamp
+      }
+      const compareValues = (a, b) => {
+        const aValue = a[colName]
+        const bValue = b[colName]
+        let normalizedA = aValue
+        let normalizedB = bValue
 
-        // 都是有效日期，按日期排序
-        if (sortingOrder === 'ascending') {
-        return dateB - dateA;
-        } else if (sortingOrder === 'descending') {
-        return dateA - dateB;
+        if (numericColumns.includes(colName)) {
+          normalizedA = parseNumber(aValue)
+          normalizedB = parseNumber(bValue)
+        } else if (dateColumns.includes(colName)) {
+          normalizedA = parseDate(aValue)
+          normalizedB = parseDate(bValue)
         }
-        return 0
-        })
-        this.filterData = sortedData
+
+        const aIsEmpty = isEmpty(normalizedA)
+        const bIsEmpty = isEmpty(normalizedB)
+        if (aIsEmpty && bIsEmpty) return 0
+        if (aIsEmpty) return 1
+        if (bIsEmpty) return -1
+
+        let result
+        if (typeof normalizedA === 'number' && typeof normalizedB === 'number') {
+          result = normalizedA - normalizedB
+        } else {
+          result = String(normalizedA).localeCompare(String(normalizedB), 'en', {
+            sensitivity: 'base',
+            numeric: true
+          })
         }
-			// 字符串类型排序
-			if(['chart_name','groups','timeframe','url', 'underlying_name'].indexOf(colName) !== -1){
-				if(sortingOrder == 'ascending'){
-					this.filterData.sort((a, b) => a[colName].localeCompare(b[colName], 'en', { sensitivity: 'base' }));
-				}else if(sortingOrder == 'descending'){
-					this.filterData.sort((a, b) => b[colName].localeCompare(a[colName], 'en', { sensitivity: 'base' }));
-				}
-			}
+        return sortingOrder === 'ascending' ? result : -result
+      }
+
+      // 新数组引用可确保虚拟滚动组件立即刷新，也避免改动 tableData 原始顺序
+      this.filterData = [...this.filterData].sort(compareValues)
 		},
     async downloadCSV() {
       // 访问组件示例数据
