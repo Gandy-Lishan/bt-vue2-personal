@@ -255,6 +255,21 @@
               logScaleButton: {
                 text: 'Price Log Scale',
                 title: 'Toggle logarithmic scale for the price chart',
+                align: 'right',
+                verticalAlign: 'top',
+                y: 100,
+                theme: {
+                  fill: '#eef4fb',
+                  stroke: '#b8c7d9',
+                  states: {
+                    hover: {
+                      fill: '#dce9f7'
+                    },
+                    select: {
+                      fill: '#b9d5f2'
+                    }
+                  }
+                },
                 onclick: function (event) {
                   const priceAxis = this.get('top-axis');
                   if (!priceAxis) return;
