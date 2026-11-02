@@ -22924,5 +22924,11 @@
       "name": "Space Exploration Technologies Corp.",
       "category": "Stock",
       "inception": "2026/06/12"
+  },
+  {
+      "stock": "NTSK",
+      "name": "Netskope, Inc.",
+      "category": "Stock",
+      "inception": "2025/09/18"
   }
 ]

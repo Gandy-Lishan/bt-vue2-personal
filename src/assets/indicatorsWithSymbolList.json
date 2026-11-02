@@ -160249,5 +160249,40 @@
         "market_symbol": "gold",
         "type": "other",
         "updated": "Monthly"
+    },
+    {
+        "chart_name": "NTSK Optix",
+        "url": "NTSK",
+        "market_symbol": "NTSK",
+        "type": "optix",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Netskope, Inc. Trend Score",
+        "url": "NTSK_trend",
+        "market_symbol": "NTSK",
+        "type": "trend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Netskope, Inc. RelTrend Score",
+        "url": "NTSK_reltrend",
+        "market_symbol": "NTSK",
+        "type": "reltrend",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Netskope, Inc. Historical Volatility (20-Day)",
+        "url": "NTSK_volatility",
+        "market_symbol": "NTSK",
+        "type": "other",
+        "updated": "Daily"
+    },
+    {
+        "chart_name": "Netskope, Inc. Historical Volatility (60-Day)",
+        "url": "NTSK_volatility_60d",
+        "market_symbol": "NTSK",
+        "type": "other",
+        "updated": "Daily"
     }
 ]
