@@ -9,6 +9,15 @@
  import Exporting from 'highcharts/modules/exporting';
  import ExportData from 'highcharts/modules/export-data';
  import axios from "@/axios";
+
+ const getTickDecimals = tickInterval => {
+  if (!Number.isFinite(tickInterval) || tickInterval <= 0) return 0;
+  for (let decimals = 0; decimals <= 10; decimals++) {
+    const scaledInterval = tickInterval * Math.pow(10, decimals);
+    if (Math.abs(scaledInterval - Math.round(scaledInterval)) < 1e-8) return decimals;
+  }
+  return 10;
+ };
  
  export default {
   name: 'Chart',
@@ -105,18 +114,9 @@
         const { sub_type, source_list, url } = row;
         const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list';
         let sharedYAxisIndex = -1;
-        let minYAxis, maxYAxis;
 
         return series.map((serie, i) => {
           const isOptPess = serie?.name === 'opt' || serie?.name === 'pess';
-
-          if (i === 1 || i === 2) {
-            const data = series.slice(1).flatMap(s => s.data.map(d => d[1]));
-            const minDataValue = Math.min(...data);
-            const maxDataValue = Math.max(...data);
-            minYAxis = Math.min(minDataValue, pess || minDataValue, opt || minDataValue);
-            maxYAxis = Math.max(maxDataValue, opt || maxDataValue, pess || maxDataValue);
-          }
           let titleColor = i === 0 ? '#434348' : (i === 2 ? 'rgb(142, 35, 35)' : '#2f7ed8')
           if(sub_type && typeof sub_type === 'string' && sub_type.includes('trend_reltrend')) {
             if(serie?.name.includes('Relative')) {titleColor = 'rgb(142, 35, 35)'}
@@ -139,9 +139,16 @@
             lineWidth: 0,
             gridLineWidth: 1,
             opposite: true,
-            labels: { enabled: i === 0 || i === 1, x: 25, style: { fontSize: '10px' } },
-            min: (i === 1 || i === 2) ? minYAxis : null,
-            max: (i === 1 || i === 2) ? maxYAxis : null,
+            labels: {
+              enabled: i === 0 || i === 1,
+              x: 25,
+              style: { fontSize: '10px' },
+              formatter: i === 0 ? undefined : function () {
+                const decimals = getTickDecimals(this.axis.tickInterval);
+                return Highcharts.numberFormat(this.value, decimals);
+              }
+            },
+            getExtremesFromAll: false,
             plotLines: i >= 1 && i === series.length - 1 && !isCot ? [
               {
                 value: pess || null,
