@@ -7,7 +7,22 @@
           <p class="page-title" v-else>Table Description and Optimism/Pessimism Legend (click to expand)</p>
         </template>
         <div class="centent" :class="{tendScore: (enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList'].includes(checkedType))}">
-        <div class="des" v-if="
+    <section v-if="enlarged === 'Intraday'" class="des intraday-about">
+      <h3>5-Minute Intraday Optimism Index (Intraday Optix)</h3>
+      <h4>Construction</h4>
+      <p>The 5-Minute Intraday Optimism Index (Intraday Optix) applies our core daily sentiment modeling framework to a granular, intraday timeframe to measure real-time sentiment shifts within the trading session. The index evaluates:</p>
+      <ul><li>Intraday put option vs. call option volume and order flow</li><li>Real-time implied volatility and forward volatility expectations</li><li>High-frequency price action and intraday volume profiles</li></ul>
+      <p>Each metric is ranked against its historical intraday distribution to identify statistical extremes. For equities where direct options or derivative feeds are limited or unavailable, we apply price-and-volatility modeling algorithms calibrated to closely match the full multi-factor dataset. This ensures responsiveness to genuine sentiment shifts while extending real-time coverage across a broad universe of stocks.</p>
+      <p>The Intraday Optix ranges from 0 (maximum pessimism/panic) to 100 (maximum optimism/euphoria).</p>
+      <h4>Smoothing &amp; Noise Management</h4>
+      <p>Raw 5-minute readings are naturally subject to intraday noise. Rather than trading raw single-bar ticks, we recommend using moving averages tailored to your trading horizon:</p>
+      <ul><li>12-period Moving Average (~1 hour): Designed for active intraday and momentum traders to highlight rapid capitulation spikes or exhaustion surges.</li><li>39- to 78-period Moving Average (half-day to full 6.5-hour session): Filters out short-term fluctuations to reveal overarching session-level sentiment trends and multi-hour reversal setups.</li></ul>
+      <h4>Interpretation &amp; Contrarian Framework</h4>
+      <p>Consistent with its daily counterpart, the Intraday Optix functions as a contrarian indicator:</p>
+      <ul><li>Extreme Pessimism (e.g., 12-period MA below 30): Indicates intraday panic selling and washed-out expectations, alerting traders to a potential mean-reversion bounce to the upside.</li><li>Extreme Optimism (e.g., 12-period MA above 70): Reflects aggressive chasing and elevated complacency, warning of potential intraday momentum exhaustion and vulnerability to a pullback.</li></ul>
+      <p>When applying longer-term session smoothers (such as a 78-period full-day MA), extreme swings are compressed, typically fluctuating within a normal baseline range between 35 and 65.</p>
+    </section>
+        <div class="des" v-else-if="
         !enlarged || (enlarged === 'Stock Market Indicator & Optix (Optimism Index)' && (!checkedType || checkedType === 'stock'))
         || (enlarged === 'Bond & Commodity' && (!checkedType || checkedType === 'bond' || checkedType === 'commodity'))
         || (enlarged === 'Seasonality' && (!checkedType || checkedType === 'CommoditySeasonality'))

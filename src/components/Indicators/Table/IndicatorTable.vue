@@ -1,9 +1,9 @@
 <template>
   <div class="indicators-container" ref="indiRef">
-    <div class="footer-des">
-      <Description v-if="!isShowDetails" :enlargedTable="enlargedTable" :checkedType="checkedType"></Description>
-    </div>
     <div class="indicator-left">
+      <div class="footer-des">
+        <Description v-if="!isShowDetails" :enlargedTable="enlargedTable || 'Intraday'" :checkedType="checkedType"></Description>
+      </div>
       <template v-for="item in tableInfoList">
         <Table
           v-bind="$attrs"
@@ -21,8 +21,8 @@
          ></Table>
       </template>
       <!-- 点击之后详情页放在这里 -->
-      <Details class="details-container" v-show="enlargedTable && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
-      <Chart :id="'indiChart'"  v-if="enlargedTable !== null && (displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector')" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
+      <Details class="details-container" v-show="enlargedTable && enlargedTable !== 'Intraday' && isShowDetails"  :row="(enlargedTable && isShowDetails) ? displayRow : {}" @showDetails="showDetails" @downloadCSV="downloadCSV"></Details>
+      <Chart :id="'indiChart'" v-if="enlargedTable !== null && (displayRow && displayRow.type && !displayRow?.type.includes('seasonality') && checkedType !== 'TrendSector')" :row="displayRow" :style="{ height: isShowDetails ? '830px': '755px' }" @passIndicatorData="passIndicatorData" @downloadCSV="downloadCSV"></Chart>
       <SeasonalityChart :id="'indiChart'" :isShowDetails="isShowDetails" v-if="enlargedTable !== null && displayRow && displayRow.type && displayRow?.type.includes('seasonality')" :row="displayRow" class="indicators-chart" :style="{ height: isShowDetails ? '830px': '755px' }"></SeasonalityChart>
       <AboutUs></AboutUs>
     </div>
@@ -52,6 +52,33 @@ export default {
   data () {
     return {
       tableInfoList: [
+      {
+          label: 'Intraday',
+          type: 'intraday',
+          refName: 'intradayVirtualScroll',
+          itemSize: 50,
+          keyProp: 'url',
+          options: [
+            {
+              label: 'S&P 1500 Intraday Optix',
+              value: 'intraday',
+              type: 'intraday',
+              url: 'optix'
+            },
+            {
+              label: 'Intraday Charts',
+              value: 'charts',
+              type: 'intraday',
+              url: 'charts',
+            },
+            {
+              label: 'Intraday Watchlist',
+              value: 'watchlist',
+              type: 'intraday',
+              url: 'watchlist',
+            }
+          ]
+        },
         {
           label: 'Stock Market Indicator & Optix (Optimism Index)',
           type: 'stock',
@@ -406,7 +433,7 @@ export default {
   mounted() {
     if(this.$route.fullPath.includes('?enlarge=stock')) {
       this.$nextTick(() => {
-        this.enLargeTable = 'Stock Market Indicator & Optix (Optimism Index)'
+        this.enlargedTable = 'Stock Market Indicator & Optix (Optimism Index)'
         this.checkedType = 'stock'
       })
     }
@@ -414,6 +441,7 @@ export default {
   methods: {
     toggleEnlarge(label) {
       console.log('toggleEnlarge', label)
+      if (label === 'Intraday') this.isShowDetails = false
       if (this.enlargedTable === label) {
         this.enlargedTable = null; // Restore all tables if already enlarged
       } else {
@@ -454,6 +482,14 @@ export default {
       const findTable = this.tableInfoList.find(ele => ele.options.find(option => option.url === source_list))
       console.log('findTable', findTable)
       if(!findTable) return
+      if (findTable.type === 'intraday') {
+        const checked = findTable.options.find(option => option.url === source_list).value
+        const table = this.$refs[findTable.refName][0]
+        await table.loadMore(checked)
+        const selected = table.tableData.find(item => row && (item.symbol === row.symbol || item.url === row.url)) || table.firstRow
+        if (selected.url) await table.enLargeTable(checked, selected)
+        return
+      }
       const checked = findTable.options.find(ele => ele.url === source_list).value
       const findRefsName = findTable?.refName
       // 应该清空缩小已放大的 table
@@ -530,6 +566,9 @@ export default {
   .indicators-chart {
     width: 50%;
   }
+}
+.footer-des {
+  width: 100%;
 }
 .showDetailsChart {
   margin-top: 50px;

@@ -1566,6 +1566,20 @@ export function obtainIndicatorsList(type, page) {
 			})
 	})
 }
+
+export function getSp1500Intraday() {
+	return axios.get('/dev/st_data/sp_1500_intraday', { withCredentials: true })
+}
+
+export function getIntradayCharts() {
+	return axios.get('/dev/st_data/intraday_charts', { withCredentials: true})
+}
+
+export function getIntradayChart(symbol) {
+	return axios.get('/dev/st_data/intraday_chart', {
+		params: { symbol }, withCredentials: true
+	})
+}
 export function getIndicatorsRowData(url) {
 	const path =`/dev/st_data/search_url_info?url=${url}`
 
@@ -2412,6 +2426,13 @@ export function NotificationsMarkAllRead() {
 	})
   }
 	/* watch list start*/
+export function getIntradayWatchlist() {
+	return axios.get('/dev/watchlist_app/watchlist?category=5m', { withCredentials: true })
+}
+export function saveIntradayWatchlist(rowUrl, tickers) {
+	const data = { category: '5m', tickers: JSON.stringify(tickers), columns: JSON.stringify([]) }
+	return rowUrl ? updateWatchList(rowUrl, data) : postWatchList(data)
+}
 export function postWatchList(data) {
 	const url = `/dev/watchlist_app/watchlist`
 	const headers = {

@@ -202,7 +202,7 @@
               </template>
             </div>
           </template> -->
-          <el-table-column align="center" width="35px" v-if="!showRelated && !showConstituentConditions && type !== 'GlobalBreadthOverview'">
+          <el-table-column align="center" width="35px" v-if="!showRelated && !showConstituentConditions && type !== 'GlobalBreadthOverview' && checkedType !== 'charts'">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button v-if="scope.row.favorite === false && (enlarged && !isTrendScorePage)" size="small" type="text" icon="el-icon-star-off" @click="addRow(scope)" title="Add to favorite indicators" :loading="scope.row.loading"></el-button>
@@ -377,6 +377,31 @@ export default {
       if(this.isTrendScoreFullScreen && this.isTrendScorePage) return 'Exit Full Screen'
     },
     columns() {
+      if (this.type === 'intraday') {
+        if (this.checkedType === 'watchlist') {
+          return [
+            { key: 'chart_name', label: 'Name', value: 'chart_name', minWidth: '180px' },
+            { key: 'last_update', label: 'Time', value: 'last_update', minWidth: '145px' }
+          ]
+        }
+        if (this.checkedType === 'charts') {
+          return [
+            { key: 'chart_name', label: 'Name', value: 'chart_name', minWidth: '180px' },
+            { key: 'max', label: 'Max', value: 'max' },
+            { key: 'min', label: 'Min', value: 'min' },
+            { key: 'opt_extreme', label: 'Opt Extreme', value: 'opt_extreme' },
+            { key: 'pess_extreme', label: 'Pess Extreme', value: 'pess_extreme' }
+          ]
+        }
+        const columns = [
+          { key: 'chart_name', label: 'Name', value: 'chart_name', minWidth: '180px' },
+          { key: 'market_symbol', label: 'Symbol', value: 'market_symbol' },
+          { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' },
+          { key: 'close', label: 'Close', value: 'close' },
+          { key: 'optix', label: 'Optix', value: 'optix' }
+        ]
+        return this.enlarged ? columns : columns.filter(column => ['chart_name', 'close', 'optix'].includes(column.key))
+      }
       this.columnsMap = new Map(([
         ['stockColumns', 
           [
@@ -2526,6 +2551,10 @@ export default {
         this.toggleEnlarge(this.label);
         this.checkedOption( this.enlarged ? this.checkedType : null)
       }
+      if (this.type === 'intraday') {
+        this.$emit('updateChart', row)
+        return
+      }
       this.$emit("updateChart", row)
       this.$emit("showDetails", row, true, this.checkedType)
       // this.$emit("showDetails", {}, true, this.checkedType)
@@ -2701,6 +2730,10 @@ export default {
       // console.log('拆分后的 selectedStocks', this.form.selectedStocks);
     },
     async addRow(scope) {
+      if (this.type === 'intraday') {
+        this.$emit('saveIntradayTicker', scope.row)
+        return
+      }
       debugger
       try {
         if(scope.row.source !== 'Backtest Engine v2.0') {
@@ -2764,6 +2797,27 @@ export default {
       }
     },
     changeTableSort(column){
+			if (this.type === 'intraday') {
+				const { prop, order } = column
+				const rows = [...this.tableData]
+				if (!prop || !order) {
+					this.filterData = rows
+					return
+				}
+				const numericColumns = ['max', 'min', 'opt_extreme', 'pess_extreme', 'close', 'optix', 'last_value']
+				const direction = order === 'ascending' ? 1 : -1
+				rows.sort((a, b) => {
+					const left = a[prop]
+					const right = b[prop]
+					if (left == null || left === '' || left === '-') return right == null || right === '' || right === '-' ? 0 : 1
+					if (right == null || right === '' || right === '-') return -1
+					if (prop === 'last_update') return (Date.parse(left) - Date.parse(right)) * direction
+					if (numericColumns.includes(prop)) return (Number(left) - Number(right)) * direction
+					return String(left).localeCompare(String(right), 'en', { sensitivity: 'base' }) * direction
+				})
+				this.filterData = rows
+				return
+			}
 			var sortingOrder = column.order
 			var colName = column.prop
 			  // 数字字符串转数字类型排序

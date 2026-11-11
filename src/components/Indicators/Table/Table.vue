@@ -25,6 +25,7 @@
         :subTypeOptions="subTypeOptions"
         :breadthIndicatorsOption="breadthIndicatorsOption"
         @loadMore="loadMore"
+        @saveIntradayTicker="saveIntradayTicker"
         @updateChart="$emit('updateChart', row)"
         @showDetails="$emit('showDetails', row, isShowDetails, checkedType)"
         @forceUpdateTable="$emit('_forceUpdateTable', type, condition)"
@@ -37,7 +38,7 @@
 import VirtualScrollTable from "./VirtualScrollTable"
 import { mapActions, mapGetters } from 'vuex'
 import { isJson, capitalizeFirstLetter, unifyNumber } from '@/utils'
-import { getUserWatchlistTrend } from '@/service/service'
+import { getUserWatchlistTrend, getSp1500Intraday, getIntradayCharts, getIntradayWatchlist, saveIntradayWatchlist } from '@/service/service'
 
 export default {
   props: {
@@ -59,6 +60,8 @@ export default {
       isOver: {
       },
       loading: false,
+      intradayWatchlistUrl: null,
+      intradayWatchlistTickers: [],
       optionsChecked: '', // 默认值
       cssMonthLabel: '',
       urlMap:{
@@ -310,7 +313,102 @@ export default {
   },
   methods: {
     ...mapActions('chart', ['fetchIndicatorsPageList']),
+    async saveIntradayTicker(row) {
+      if (row.loading) return
+      row.loading = true
+      const symbol = row.market_symbol
+      const tickers = this.intradayWatchlistTickers.includes(symbol)
+        ? this.intradayWatchlistTickers.filter(item => item !== symbol)
+        : [...this.intradayWatchlistTickers, symbol]
+      try {
+        await saveIntradayWatchlist(this.intradayWatchlistUrl, tickers)
+        await this.loadMore(this.optionsChecked)
+      } catch (error) {
+        this.$message.error('Unable to update intraday watchlist.')
+      } finally {
+        row.loading = false
+      }
+    },
     async loadMore (type, isUpdateChart, condition) {
+      if (this.tableInfo.type === 'intraday') {
+        this.optionsChecked = type
+        this.loading = true
+        try {
+          if (type === 'charts') {
+            const response = await getIntradayCharts()
+            if (response.data.code !== 200 || !response.data.data || !Array.isArray(response.data.data.charts)) throw new Error('Invalid intraday charts response')
+            this.tableData = response.data.data.charts.map(chart => ({
+              url: chart.chart_id,
+              chart_name: chart.title,
+              max: chart.max,
+              min: chart.min,
+              opt_extreme: chart.opt_extreme,
+              pess_extreme: chart.pess_extreme,
+              market_symbol: chart.chart_name,
+              type: 'intraday_charts',
+              source_list: 'charts',
+              last_update: response.data.data.last_updated,
+              last_value: Array.isArray(chart.data) && chart.data.length ? chart.data[chart.data.length - 1][1] : null,
+              dashboardChart: chart
+            }))
+            this.firstRow = this.tableData[0] || {}
+            if (isUpdateChart) this.$emit('updateChart', this.firstRow)
+            return
+          }
+          let watchlist = null
+          let watchlistUrl = null
+          try {
+            const watchlistResponse = await getIntradayWatchlist()
+            watchlistUrl = watchlistResponse.data && watchlistResponse.data.url
+            watchlist = watchlistResponse.data && watchlistResponse.data.data !== undefined ? watchlistResponse.data.data : watchlistResponse.data
+            if (watchlist && watchlist.code === 404) watchlist = null
+          } catch (error) {
+            if (!error.response || error.response.status !== 404) throw error
+          }
+          const record = Array.isArray(watchlist) ? watchlist[0] : watchlist
+          let watched = record && record.tickers || (record && !Array.isArray(record) ? Object.keys(record).filter(key => record[key] && Array.isArray(record[key].records)) : [])
+          if (typeof watched === 'string') {
+            try { watched = JSON.parse(watched) } catch (e) { watched = [] }
+          }
+          if (!Array.isArray(watched)) watched = []
+          this.intradayWatchlistUrl = watchlistUrl || record && record.url || null
+          this.intradayWatchlistTickers = watched
+          if (type === 'watchlist') {
+            this.tableData = watched.map(symbol => {
+              const ticker = record && record[symbol]
+              if (!ticker) return null
+              const records = Array.isArray(ticker.records) ? ticker.records : []
+              const latest = records[records.length - 1] || {}
+              return {
+                url: symbol, market_symbol: symbol, chart_name: ticker.ticker_name || symbol,
+                last_update: ticker.latest_date, records, type: 'intraday',
+                source_list: 'watchlist', favorite: true, loading: false,
+                close: latest.Close, optix: latest.Optix
+              }
+            }).filter(Boolean)
+            this.firstRow = this.tableData[0] || {}
+            if (isUpdateChart && this.firstRow.url) this.$emit('updateChart', this.firstRow)
+            return
+          }
+          const response = await getSp1500Intraday()
+          if (response.data.code !== 200 || !response.data.data || !Array.isArray(response.data.data.items)) throw new Error('Invalid intraday response')
+          const items = response.data.data.items
+          this.tableData = items.map(item => ({
+            ...item, url: item.symbol, chart_name: item.name, market_symbol: item.symbol,
+            type: 'intraday', source_list: 'optix', last_value: item.optix,
+            favorite: watched.includes(item.symbol), last_update: item.date,
+            close: item.close == null ? '-' : Number(item.close).toFixed(2),
+            optix: item.optix == null ? '-' : Number(item.optix).toFixed(2)
+          }))
+          this.firstRow = this.tableData[0] || {}
+          if (isUpdateChart && this.firstRow.url) this.$emit('updateChart', this.firstRow)
+        } catch (error) {
+          this.tableData = []
+          this.firstRow = {}
+          this.$message.error(error.response && error.response.status === 410 ? 'Intraday data requires an eligible subscription.' : 'Unable to load intraday data.')
+        } finally { this.loading = false }
+        return
+      }
       debugger
       const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TSCRP'].includes(type)
       const isHistoricalTrendScore = ['HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(type)

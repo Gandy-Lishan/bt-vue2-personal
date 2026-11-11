@@ -9,6 +9,8 @@
  import Exporting from 'highcharts/modules/exporting';
  import ExportData from 'highcharts/modules/export-data';
  import axios from "@/axios";
+ import { getIntradayChart } from '@/service/service';
+ import { intradaySeries } from './intradaySeries';
 
  const getTickDecimals = tickInterval => {
   if (!Number.isFinite(tickInterval) || tickInterval <= 0) return 0;
@@ -42,6 +44,52 @@
   methods: {
     async renderChart() {
       if(!this.row.url) return;
+      if (this.row.type === 'intraday_charts') {
+        const chart = this.row.dashboardChart
+        if (!chart || !Array.isArray(chart.data)) return
+        const etTime = timestamp => new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/New_York', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', hour12: false
+        }).format(timestamp)
+        Highcharts.stockChart(this.id, {
+          chart: { type: chart.chart_type || 'line', zoomType: 'x' },
+          title: { text: chart.title },
+          time: { useUTC: true },
+          rangeSelector: {
+            inputEnabled: false,
+            buttons: [
+              { type: 'day', count: 1, text: '1D' },
+              { type: 'day', count: 5, text: '5D' },
+              { type: 'week', count: 1, text: '1W' },
+              { type: 'week', count: 2, text: '2W' },
+              { type: 'all', text: 'All' }
+            ],
+            selected: 2
+          },
+          xAxis: { type: 'datetime', labels: { formatter: function () { return etTime(this.value) } } },
+          yAxis: {
+            title: { text: chart.yaxistext || '' },
+            reversed: chart.reverse_axis,
+            min: chart.min == null ? undefined : chart.min,
+            max: chart.max == null ? undefined : chart.max,
+            plotLines: [
+              { value: chart.pess_extreme, color: 'green', dashStyle: 'shortdash', width: 1 },
+              { value: chart.opt_extreme, color: 'red', dashStyle: 'shortdash', width: 1 }
+            ].filter(line => line.value != null)
+          },
+          tooltip: {
+            formatter: function () { return `${etTime(this.x)} ET<br>${chart.title}: <b>${Highcharts.numberFormat(this.y, 2)}</b>` }
+          },
+          series: [{
+            name: chart.title,
+            type: chart.chart_type || 'line',
+            data: chart.data,
+            color: chart.line_color,
+            dataGrouping: { enabled: false }
+          }]
+        })
+        return
+      }
       const _this = this
       let {url, pess, opt, chart_name, market_symbol, type, sub_type, groups, last_value, last_change_type} = this.row
       var basicChartOptions = {
@@ -70,7 +118,9 @@
             const chart = this;
             const button = document.createElement('button');
             button.id = 'button'
-            button.innerHTML = '<i class="el-icon-s-data" style="margin-right: 5px;"></i>View Large Chart Or Backtest This Indicator';
+            button.innerHTML = type === 'intraday'
+              ? '<i class="el-icon-s-data" style="margin-right: 5px;"></i>View Daily Optix'
+              : '<i class="el-icon-s-data" style="margin-right: 5px;"></i>View Large Chart Or Backtest This Indicator';
             button.style.position = 'absolute';
             button.style.top = `${chart.chartHeight/10}px`;
             //button.style.left = (chart.chartWidth / 2 - 82) + 'px';
@@ -91,6 +141,10 @@
               _url = url.replace(/(.*?)_trend_reltrend/, "$1_trend");
             }
             button.onclick = function () {
+              if (type === 'intraday') {
+                window.location.href = `/indicators?indicator=${encodeURIComponent(market_symbol || url)}`;
+                return;
+              }
               let _market_symbol = market_symbol
               debugger
               if(sub_type === 'crp_trend_reltrend' || sub_type === 'crypto') {
@@ -202,11 +256,19 @@
         if(typeof type === 'string' && type.includes('trend_reltrend')) selector = 3
         // const maxX = Math.max(...allData.map(d => d[0]));
        Highcharts.stockChart(this.id, {
+          time: { useUTC: true },
           rangeSelector: {
-            inputEnabled: true,
+            enabled: true,
+            inputEnabled: type !== 'intraday',
             inputDateFormat: '%Y/%m/%d',
             inputEditDateFormat: '%Y/%m%d',
-            buttons: [
+            buttons: type === 'intraday' ? [
+              { type: 'day', count: 1, text: '1D' },
+              { type: 'day', count: 5, text: '5D' },
+              { type: 'week', count: 1, text: '1W' },
+              { type: 'week', count: 2, text: '2W' },
+              { type: 'all', text: 'All' }
+            ] : [
             {
               type: 'month',
               count: 3,
@@ -247,7 +309,7 @@
               text: 'All'
             }
           ],
-          selected: selector // Sets the default selected button (4 corresponds to '1y')
+          selected: type === 'intraday' ? 2 : selector
           },
           title: {
             text: chart_name || 'SPY Optix',
@@ -333,12 +395,12 @@
           },
           yAxis: yAxisConfig,
           xAxis: {
-            type: 'category',
+            type: type === 'intraday' ? 'datetime' : 'category',
             tickPixelInterval: 150, 
             crosshair: { label: { enabled: false } },
-            ordinal: false,
-            min: minX,
-            labels: {format: '{value:%Y}'},
+            ordinal: type === 'intraday',
+            min: type === 'intraday' ? undefined : minX,
+            labels: {format: type === 'intraday' ? '{value:%m-%d %H:%M}' : '{value:%Y}'},
             // labels: {
             //     formatter: function () {
             //         return Highcharts.dateFormat('%Y-%m-%d', this.value);  // 手动格式化日期
@@ -379,13 +441,13 @@
             }
           },
           tooltip: {
-           xDateFormat: '%m-%d-%Y',
+           xDateFormat: type === 'intraday' ? '%m-%d-%Y %H:%M ET' : '%m-%d-%Y',
            followTouchMove: true,
            shared: true,
            useHTML: true,
            crosshairs: true, 
            formatter: function () {
-             let s = `${Highcharts.dateFormat('%m-%d-%Y', this.x)}<br>`;
+             let s = `${Highcharts.dateFormat(type === 'intraday' ? '%m-%d-%Y %H:%M ET' : '%m-%d-%Y', this.x)}<br>`;
              this.points.forEach(point => {
                // Add a colored circle before the series name
                const colorSpan = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${point.series.color}; border-radius: 50%; margin-right: 5px;"></span>`;
@@ -521,7 +583,7 @@
             showInLegend: !isOptPess ? true : false,
             lineWidth: !isOptPess ? 2 : 1,
             dataGrouping: {
-                enabled: true
+                enabled: type !== 'intraday'
             }
           }}),
           chart: basicChartOptions
@@ -537,18 +599,54 @@
       let originalData
       if(this.row.source_list === 'country_breadth_overview' && !this.row.clickSource) url = 'breadth_all_country_above_10ma'
       try {
-        const res = await axios.get(`https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/get_data?index=${url || 'etf_spy'}`);
-        originalData = res.data
+        if (type === 'intraday') {
+          let prices
+          let optixPoints
+          if (this.row.source_list === 'watchlist') {
+            const series = intradaySeries({ records: this.row.records })
+            prices = series.prices
+            optixPoints = series.optix
+          } else {
+            const res = await getIntradayChart(market_symbol || url);
+            if (res.data.code !== 200 || !res.data.data) throw new Error('Invalid intraday chart response');
+            const intraday = res.data.data;
+            if (intraday.empty || !((Array.isArray(intraday.bars) && intraday.bars.length) || (Array.isArray(intraday.records) && intraday.records.length))) {
+              _this.popUpMsgBox('No intraday data is available for this symbol.');
+              return;
+            }
+            const series = intradaySeries(intraday)
+            prices = series.prices
+            optixPoints = series.optix
+          }
+          if (!prices.length) {
+            _this.popUpMsgBox('No valid intraday price points are available for this symbol.');
+            return;
+          }
+          createChart([
+            { name: market_symbol || url, data: prices },
+            { name: 'Intraday Optix', data: optixPoints }
+          ], [market_symbol || url, 'Intraday Optix'], basicChartOptions, this.row);
+          return;
+        } else {
+          const res = await axios.get(`https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/get_data?index=${url || 'etf_spy'}`);
+          originalData = res.data
+        }
         debugger
         if(typeof originalData === 'string') {
           originalData = originalData.replace(/NaN/g, 'null')
           originalData = JSON.parse(originalData)
         }
       } catch (error) {
-        if(error.response.status === 404) {
+        if(error.response && error.response.status === 404) {
           _this.popUpMsgBox('Data for this indicator is unavailable.')
           createChart([], [], {}, {});
           return
+        }
+        if(type === 'intraday') {
+          _this.popUpMsgBox(error.response && error.response.status === 410
+            ? 'Intraday data requires an eligible subscription.'
+            : 'Unable to load intraday chart.');
+          return;
         }
       }
         originalData = originalData.sort((a, b) => new Date(a.date) - new Date(b.date));
