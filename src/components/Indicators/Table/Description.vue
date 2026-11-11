@@ -4,12 +4,12 @@
       <el-collapse-item>
         <template slot="title">
           <p class="page-title" v-if="(enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList'].includes(checkedType))">Click for Indicator Description</p>
+          <p class="page-title" v-else-if="enlarged === 'Intraday'">Intraday Description (click to expand)</p>
           <p class="page-title" v-else>Table Description and Optimism/Pessimism Legend (click to expand)</p>
         </template>
         <div class="centent" :class="{tendScore: (enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList'].includes(checkedType))}">
     <section v-if="enlarged === 'Intraday'" class="des intraday-about">
       <h3>5-Minute Intraday Optimism Index (Intraday Optix)</h3>
-      <h4>Construction</h4>
       <p>The 5-Minute Intraday Optimism Index (Intraday Optix) applies our core daily sentiment modeling framework to a granular, intraday timeframe to measure real-time sentiment shifts within the trading session. The index evaluates:</p>
       <ul><li>Intraday put option vs. call option volume and order flow</li><li>Real-time implied volatility and forward volatility expectations</li><li>High-frequency price action and intraday volume profiles</li></ul>
       <p>Each metric is ranked against its historical intraday distribution to identify statistical extremes. For equities where direct options or derivative feeds are limited or unavailable, we apply price-and-volatility modeling algorithms calibrated to closely match the full multi-factor dataset. This ensures responsiveness to genuine sentiment shifts while extending real-time coverage across a broad universe of stocks.</p>
@@ -234,7 +234,7 @@
         <div class="des" v-else-if="enlarged === 'Overview' && (checkedType === 'ETFCountryOverview')">
           <p>This page displays thumbnail charts for Country ETF Optimism Index 10-Day Moving Averages. The chart titles are hyperlinks...click to be taken to the main chart page.Note: If page is blank, give it a second to load</p>
         </div>
-        <div class="col-md-3 thumbnail" v-show="!(((enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Historical Volatility' || enlarged === 'Crypto' || enlarged === 'Bond & Commodity')) && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList', 'CHMinMax', 'HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(checkedType))) && enlarged !== 'Overview'">
+        <div class="col-md-3 thumbnail" v-show="enlarged !== 'Intraday' && !(((enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Historical Volatility' || enlarged === 'Crypto' || enlarged === 'Bond & Commodity')) && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList', 'CHMinMax', 'HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(checkedType))) && enlarged !== 'Overview'">
         <div style="text-align: center; font-size: 18px; font-weight: 300">
           <span>Optimism/Pessimism Legend</span>
         </div>

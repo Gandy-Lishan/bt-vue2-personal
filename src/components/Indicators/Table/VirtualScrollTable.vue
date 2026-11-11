@@ -24,7 +24,7 @@
     <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated && !showConstituentConditions) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}
-          <i v-show="(checkedType  == item.value) && isShowFilter && !isOverview" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
+          <i v-show="(checkedType  == item.value) && (isShowFilter || type === 'intraday') && !isOverview" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
         </span>
       </template>
     </div>
@@ -381,7 +381,10 @@ export default {
         if (this.checkedType === 'watchlist') {
           return [
             { key: 'chart_name', label: 'Name', value: 'chart_name', minWidth: '180px' },
-            { key: 'last_update', label: 'Time', value: 'last_update', minWidth: '145px' }
+            { key: 'market_symbol', label: 'Symbol', value: 'market_symbol' },
+            { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' },
+            { key: 'close', label: 'Close', value: 'close' },
+            { key: 'optix', label: 'Optix', value: 'optix' }
           ]
         }
         if (this.checkedType === 'charts') {
@@ -2906,6 +2909,27 @@ export default {
       }
 		},
     async downloadCSV() {
+      if (this.type === 'intraday') {
+        const columns = this.columns
+        const rows = this.filterData
+        if (!rows.length) {
+          this.popUpMsgBox('No data available for download')
+          return
+        }
+        const escape = value => `"${String(value == null ? '' : value).replace(/"/g, '""')}"`
+        const header = columns.map(column => escape(column.label)).join(',')
+        const body = rows.map(row => columns.map(column => escape(row[column.value])).join(','))
+        const blob = new Blob([[header, ...body].join('\n')], { type: 'text/csv;charset=utf-8;' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `${this.options.find(option => option.value === this.checkedType)?.label || 'Intraday'}.csv`
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+        URL.revokeObjectURL(url)
+        return
+      }
       debugger
       // 访问组件示例数据
       const checks = [

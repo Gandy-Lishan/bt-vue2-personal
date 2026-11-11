@@ -381,9 +381,10 @@ export default {
               const latest = records[records.length - 1] || {}
               return {
                 url: symbol, market_symbol: symbol, chart_name: ticker.ticker_name || symbol,
-                last_update: ticker.latest_date, records, type: 'intraday',
+                last_update: ticker.latest_date || '-', records, type: 'intraday',
                 source_list: 'watchlist', favorite: true, loading: false,
-                close: latest.Close, optix: latest.Optix
+                close: latest.Close == null ? '-' : Number(latest.Close).toFixed(2),
+                optix: latest.Optix == null ? '-' : Number(latest.Optix).toFixed(2)
               }
             }).filter(Boolean)
             this.firstRow = this.tableData[0] || {}

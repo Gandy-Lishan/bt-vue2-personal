@@ -42,11 +42,43 @@
     }
   },
   methods: {
+    downloadIntradayCSV(series, filename) {
+      const points = series.flatMap(item => item.data || [])
+      const latest = Math.max(...points.map(point => Number(point[0])).filter(Number.isFinite))
+      if (!Number.isFinite(latest)) {
+        this.popUpMsgBox('No data available for download')
+        return
+      }
+      const start = latest - 24 * 60 * 60 * 1000
+      const rows = new Map()
+      series.forEach((item, index) => {
+        ;(item.data || []).forEach(point => {
+          const time = Number(point[0])
+          if (!Number.isFinite(time) || time < start || time > latest) return
+          if (!rows.has(time)) rows.set(time, Array(series.length).fill(''))
+          rows.get(time)[index] = point[1] == null ? '' : point[1]
+        })
+      })
+      const escape = value => `"${String(value).replace(/"/g, '""')}"`
+      const header = ['Date', ...series.map(item => item.name)].map(escape).join(',')
+      const body = [...rows].sort((a, b) => a[0] - b[0])
+        .map(([time, values]) => [new Date(time).toISOString(), ...values].map(escape).join(','))
+      const blob = new Blob([[header, ...body].join('\n')], { type: 'text/csv;charset=utf-8;' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${filename}_1D.csv`
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(url)
+    },
     async renderChart() {
       if(!this.row.url) return;
       if (this.row.type === 'intraday_charts') {
         const chart = this.row.dashboardChart
         if (!chart || !Array.isArray(chart.data)) return
+        const chartSeries = [{ name: chart.title, data: chart.data }]
         const etTime = timestamp => new Intl.DateTimeFormat('en-US', {
           timeZone: 'America/New_York', month: '2-digit', day: '2-digit',
           hour: '2-digit', minute: '2-digit', hour12: false
@@ -59,12 +91,22 @@
             inputEnabled: false,
             buttons: [
               { type: 'day', count: 1, text: '1D' },
-              { type: 'day', count: 5, text: '5D' },
-              { type: 'week', count: 1, text: '1W' },
-              { type: 'week', count: 2, text: '2W' },
-              { type: 'all', text: 'All' }
+              { type: 'day', count: 2, text: '2D' },
+              { type: 'day', count: 3, text: '3D' },
+              { type: 'day', count: 4, text: '4D' },
+              { type: 'day', count: 5, text: '5D' }
             ],
-            selected: 2
+            selected: 0
+          },
+          exporting: {
+            buttons: {
+              contextButton: {
+                menuItems: ['printChart', 'downloadPNG', 'downloadJPEG', 'downloadPDF', {
+                  text: 'Export CSV (1D)',
+                  onclick: () => this.downloadIntradayCSV(chartSeries, this.row.url)
+                }]
+              }
+            }
           },
           xAxis: { type: 'datetime', labels: { formatter: function () { return etTime(this.value) } } },
           yAxis: {
@@ -264,10 +306,10 @@
             inputEditDateFormat: '%Y/%m%d',
             buttons: type === 'intraday' ? [
               { type: 'day', count: 1, text: '1D' },
-              { type: 'day', count: 5, text: '5D' },
-              { type: 'week', count: 1, text: '1W' },
-              { type: 'week', count: 2, text: '2W' },
-              { type: 'all', text: 'All' }
+              { type: 'day', count: 2, text: '2D' },
+              { type: 'day', count: 3, text: '3D' },
+              { type: 'day', count: 4, text: '4D' },
+              { type: 'day', count: 5, text: '5D' }
             ] : [
             {
               type: 'month',
@@ -309,7 +351,7 @@
               text: 'All'
             }
           ],
-          selected: type === 'intraday' ? 2 : selector
+          selected: type === 'intraday' ? 0 : selector
           },
           title: {
             text: chart_name || 'SPY Optix',
@@ -383,10 +425,10 @@
                   'downloadJPEG',
                   'downloadPDF',
                   {
-                    text: 'Export CSV',
+                    text: type === 'intraday' ? 'Export CSV (1D)' : 'Export CSV',
                     onclick: function () {
-                      // 这里调用你指定的函数，执行导出 CSV 的逻辑
-                      _this.$emit('downloadCSV')
+                      if (type === 'intraday') _this.downloadIntradayCSV(series, market_symbol || url)
+                      else _this.$emit('downloadCSV')
                     }
                   }
                 ]
