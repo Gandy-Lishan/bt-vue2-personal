@@ -815,7 +815,8 @@ get_indicator_page_btv1_list({ commit, state }) {
 		})
 	},
 	async fetchIndicatorsPageList({ commit, dispatch, state }, url) {
-		if (!state.indicatorsPageListdata[url]) {
+		const cachedList = state.indicatorsPageListdata[url]
+		if (!cachedList || (isJson(cachedList) && JSON.parse(cachedList).length === 0)) {
 			try {
 				let requestUrl = url
 				// 替换板块的 url
@@ -1072,7 +1073,7 @@ get_indicator_page_btv1_list({ commit, state }) {
 				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: _results });
 			} catch (error) {
 				console.error('Error fetching data:', error);
-				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: [] });
+				commit('SET_INDICATORS_PAGE_LIST_DATA', { url, data: null });
 			}
 		}
 },

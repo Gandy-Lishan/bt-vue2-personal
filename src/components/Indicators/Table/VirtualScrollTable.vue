@@ -384,7 +384,7 @@ export default {
             { key: 'market_symbol', label: 'Symbol', value: 'market_symbol' },
             { key: 'close', label: 'Close', value: 'close' },
             { key: 'optix', label: 'Optix', value: 'optix' },
-            { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' }
+            { key: 'date', label: 'Time (ET)', value: 'date', minWidth: '145px' }
           ]
         }
         if (this.checkedType === 'charts') {
@@ -401,7 +401,7 @@ export default {
           { key: 'market_symbol', label: 'Symbol', value: 'market_symbol' },
           { key: 'close', label: 'Close', value: 'close' },
           { key: 'optix', label: 'Optix', value: 'optix' },
-          { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' }
+          { key: 'date', label: 'Time (ET)', value: 'date', minWidth: '145px' }
         ]
         return columns
       }
@@ -2814,7 +2814,7 @@ export default {
 					const right = b[prop]
 					if (left == null || left === '' || left === '-') return right == null || right === '' || right === '-' ? 0 : 1
 					if (right == null || right === '' || right === '-') return -1
-					if (prop === 'last_update') return (Date.parse(left) - Date.parse(right)) * direction
+					if (prop === 'last_update' || prop === 'date') return (Date.parse(left) - Date.parse(right)) * direction
 					if (numericColumns.includes(prop)) return (Number(left) - Number(right)) * direction
 					return String(left).localeCompare(String(right), 'en', { sensitivity: 'base' }) * direction
 				})

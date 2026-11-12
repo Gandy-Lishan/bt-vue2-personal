@@ -157,7 +157,12 @@ export default {
         let res = {}
         try {
           const {data:rowData} = await getIndicatorsRowData(searchUrl)
-          res = rowData
+          if (typeof rowData === 'string') {
+            const validJson = rowData.replace(/([:[,]\s*)(?:-?Infinity|NaN)(?=\s*[,}\]])/g, '$1null')
+            res = JSON.parse(validJson)
+          } else {
+            res = rowData
+          }
         } catch (error) {
           if(error?.response?.status === 404) {
             this.$message({
@@ -171,9 +176,20 @@ export default {
             })
             return
           }
+          this.$message({
+            message: '<strong>Unable to load indicator details. Please try again.</strong>',
+            center: true,
+            dangerouslyUseHTMLString: true,
+            showClose: true,
+            duration: 8000,
+            customClass: 'no-icon',
+            type: 'warning'
+          })
+          return
         }
         const {type, groups, sub_type} = res
         let requireUrl = ''
+        debugger
         if(type === 'stock_sent') {
           requireUrl = 'sp_1500_complete_list'
         }else if(type === 'stock_nasdaq') {

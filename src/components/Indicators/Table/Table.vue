@@ -406,7 +406,7 @@ export default {
               const optix = Array.isArray(latest) ? latest[6] : latest.Optix ?? latest.optix
               return {
                 url: symbol, market_symbol: symbol, chart_name: ticker.ticker_name || symbol,
-                last_update: formatIntradayTimeET(date), records, type: 'intraday',
+                date: formatIntradayTimeET(date), records, type: 'intraday',
                 source_list: 'watchlist', favorite: true, loading: false,
                 close: close == null || close === '' ? '-' : Number(close).toFixed(2),
                 optix: optix == null || optix === '' ? '-' : Number(optix).toFixed(2)
@@ -422,7 +422,7 @@ export default {
           this.tableData = items.map(item => ({
             ...item, url: item.symbol, chart_name: item.name, market_symbol: item.symbol,
             type: 'intraday', source_list: 'optix', last_value: item.optix,
-            favorite: watched.includes(item.symbol), last_update: item.date == null ? '-' : String(item.date).replace(/\s+ET$/i, ''),
+            favorite: watched.includes(item.symbol),
             close: item.close == null ? '-' : Number(item.close).toFixed(2),
             optix: item.optix == null ? '-' : Number(item.optix).toFixed(2)
           }))
