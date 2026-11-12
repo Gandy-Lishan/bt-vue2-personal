@@ -125,6 +125,7 @@
 					:prop="l.value"
 					:key="index"
 					min-width="70"
+					:sortable="'custom'"
 				>
 				<template slot="header">
 							<span v-html="l.labelHtml"></span>
@@ -466,6 +467,10 @@ export default {
 		changeTableSort(column){
 			var sortingOrder = column.order
 			var colName = column.prop
+			if (['Symbol', 'ticker'].includes(colName) && sortingOrder) {
+				const direction = sortingOrder === 'ascending' ? 1 : -1
+				this.data.content.sort((a, b) => direction * String(a[colName] || '').localeCompare(String(b[colName] || ''), 'en', { sensitivity: 'base' }))
+			}
 			// 数字字符串转数字类型排序
 			if(['StopLoss','TimeInMarket','ProfitTarget', 'stkpx', 'DTE', 'strike', 'be', 'POP_est', 'credit', 'margin', 'return_per', 'cagr'].indexOf(colName) !== -1){
 				if(sortingOrder == 'ascending'){
