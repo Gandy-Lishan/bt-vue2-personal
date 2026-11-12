@@ -38,7 +38,29 @@
 import VirtualScrollTable from "./VirtualScrollTable"
 import { mapActions, mapGetters } from 'vuex'
 import { isJson, capitalizeFirstLetter, unifyNumber } from '@/utils'
+import moment from 'moment-timezone'
 import { getUserWatchlistTrend, getSp1500Intraday, getIntradayCharts, getIntradayWatchlist, saveIntradayWatchlist } from '@/service/service'
+
+function formatIntradayTimeET(value) {
+  if (value == null || value === '') return '-'
+  const raw = String(value)
+  // The intraday chart uses UTC for its time axis. Keep the same clock time here.
+  const local = raw.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2})(?::\d{2})?(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/)
+  if (local && !/[+-]\d{2}:?\d{2}$/.test(raw)) return `${local[1]} ${local[2]} ET`
+  const date = /^\d+$/.test(raw) ? moment.utc(Number(raw) < 1e11 ? Number(raw) * 1000 : Number(raw)) : moment.utc(raw)
+  return date.isValid() ? `${date.format('YYYY-MM-DD HH:mm')} ET` : '-'
+}
+
+function intradayRecords(value) {
+  if (Array.isArray(value)) return value
+  if (typeof value !== 'string') return []
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch (error) {
+    return []
+  }
+}
 
 export default {
   props: {
@@ -366,7 +388,7 @@ export default {
             if (!error.response || error.response.status !== 404) throw error
           }
           const record = Array.isArray(watchlist) ? watchlist[0] : watchlist
-          let watched = record && record.tickers || (record && !Array.isArray(record) ? Object.keys(record).filter(key => record[key] && Array.isArray(record[key].records)) : [])
+          let watched = record && record.tickers || (record && !Array.isArray(record) ? Object.keys(record).filter(key => record[key] && intradayRecords(record[key].records).length) : [])
           if (typeof watched === 'string') {
             try { watched = JSON.parse(watched) } catch (e) { watched = [] }
           }
@@ -377,14 +399,17 @@ export default {
             this.tableData = watched.map(symbol => {
               const ticker = record && record[symbol]
               if (!ticker) return null
-              const records = Array.isArray(ticker.records) ? ticker.records : []
+              const records = intradayRecords(ticker.records)
               const latest = records[records.length - 1] || {}
+              const date = Array.isArray(latest) ? latest[0] : latest.Date ?? latest.date ?? latest.timestamp ?? latest.time
+              const close = Array.isArray(latest) ? latest[4] : latest.Close ?? latest.close
+              const optix = Array.isArray(latest) ? latest[6] : latest.Optix ?? latest.optix
               return {
                 url: symbol, market_symbol: symbol, chart_name: ticker.ticker_name || symbol,
-                last_update: ticker.latest_date || '-', records, type: 'intraday',
+                last_update: formatIntradayTimeET(date), records, type: 'intraday',
                 source_list: 'watchlist', favorite: true, loading: false,
-                close: latest.Close == null ? '-' : Number(latest.Close).toFixed(2),
-                optix: latest.Optix == null ? '-' : Number(latest.Optix).toFixed(2)
+                close: close == null || close === '' ? '-' : Number(close).toFixed(2),
+                optix: optix == null || optix === '' ? '-' : Number(optix).toFixed(2)
               }
             }).filter(Boolean)
             this.firstRow = this.tableData[0] || {}
