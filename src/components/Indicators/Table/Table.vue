@@ -46,9 +46,9 @@ function formatIntradayTimeET(value) {
   const raw = String(value)
   // The intraday chart uses UTC for its time axis. Keep the same clock time here.
   const local = raw.match(/^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2})(?::\d{2})?(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/)
-  if (local && !/[+-]\d{2}:?\d{2}$/.test(raw)) return `${local[1]} ${local[2]} ET`
+  if (local && !/[+-]\d{2}:?\d{2}$/.test(raw)) return `${local[1]} ${local[2]}`
   const date = /^\d+$/.test(raw) ? moment.utc(Number(raw) < 1e11 ? Number(raw) * 1000 : Number(raw)) : moment.utc(raw)
-  return date.isValid() ? `${date.format('YYYY-MM-DD HH:mm')} ET` : '-'
+  return date.isValid() ? date.format('YYYY-MM-DD HH:mm') : '-'
 }
 
 function intradayRecords(value) {
@@ -422,7 +422,7 @@ export default {
           this.tableData = items.map(item => ({
             ...item, url: item.symbol, chart_name: item.name, market_symbol: item.symbol,
             type: 'intraday', source_list: 'optix', last_value: item.optix,
-            favorite: watched.includes(item.symbol), last_update: item.date,
+            favorite: watched.includes(item.symbol), last_update: item.date == null ? '-' : String(item.date).replace(/\s+ET$/i, ''),
             close: item.close == null ? '-' : Number(item.close).toFixed(2),
             optix: item.optix == null ? '-' : Number(item.optix).toFixed(2)
           }))

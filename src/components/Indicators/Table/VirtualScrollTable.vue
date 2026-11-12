@@ -382,9 +382,9 @@ export default {
           return [
             { key: 'chart_name', label: 'Name', value: 'chart_name', minWidth: '180px' },
             { key: 'market_symbol', label: 'Symbol', value: 'market_symbol' },
-            { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' },
             { key: 'close', label: 'Close', value: 'close' },
-            { key: 'optix', label: 'Optix', value: 'optix' }
+            { key: 'optix', label: 'Optix', value: 'optix' },
+            { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' }
           ]
         }
         if (this.checkedType === 'charts') {
@@ -399,11 +399,11 @@ export default {
         const columns = [
           { key: 'chart_name', label: 'Name', value: 'chart_name', minWidth: '180px' },
           { key: 'market_symbol', label: 'Symbol', value: 'market_symbol' },
-          { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' },
           { key: 'close', label: 'Close', value: 'close' },
-          { key: 'optix', label: 'Optix', value: 'optix' }
+          { key: 'optix', label: 'Optix', value: 'optix' },
+          { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' }
         ]
-        return this.enlarged ? columns : columns.filter(column => ['chart_name', 'close', 'optix'].includes(column.key))
+        return columns
       }
       this.columnsMap = new Map(([
         ['stockColumns', 
