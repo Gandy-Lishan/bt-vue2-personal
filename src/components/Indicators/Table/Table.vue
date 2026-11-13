@@ -343,10 +343,13 @@ export default {
         ? this.intradayWatchlistTickers.filter(item => item !== symbol)
         : [...this.intradayWatchlistTickers, symbol]
       try {
-        await saveIntradayWatchlist(this.intradayWatchlistUrl, tickers)
+        const response = await saveIntradayWatchlist(this.intradayWatchlistUrl, tickers)
+        if (response.data && response.data.code && (response.data.code < 200 || response.data.code >= 300)) throw new Error('Unable to update intraday watchlist.')
+        this.intradayWatchlistTickers = tickers
+        row.favorite = tickers.includes(symbol)
         this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type: 'watchlist', data: null })
         this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type: 'optix', data: null })
-        await this.loadMore(this.optionsChecked)
+        if (this.optionsChecked === 'watchlist' && !row.favorite) this.tableData = this.tableData.filter(item => item.market_symbol !== symbol)
       } catch (error) {
         this.$message.error('Unable to update intraday watchlist.')
       } finally {
