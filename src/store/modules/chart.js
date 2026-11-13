@@ -130,6 +130,7 @@ const state = {
 	forecastMarket: 'SPY', //暂时用来单独存report forecast的symbol,因为他很特殊,可能是大小写不同甚至为url或者name
 
 	indicatorsPageListdata: {},
+	intradayPageListData: {},
 	cssMonthLabel: '',
 	indicatorPageBtv1List: [],
 	JumpToBTSymbol: '',
@@ -368,6 +369,9 @@ const mutations = {
 				});
 		}
 		state.indicatorsPageListdata[url] = !data ? null : JSON.stringify(removeDuplicates(data))
+	},
+	SET_INTRADAY_PAGE_LIST_DATA(state, { type, data }) {
+		state.intradayPageListData = { ...state.intradayPageListData, [type]: data }
 	},
 	SET_MI_SHIFT(state, obj) {
 		state.miFormShift = obj

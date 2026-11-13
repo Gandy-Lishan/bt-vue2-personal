@@ -344,6 +344,8 @@ export default {
         : [...this.intradayWatchlistTickers, symbol]
       try {
         await saveIntradayWatchlist(this.intradayWatchlistUrl, tickers)
+        this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type: 'watchlist', data: null })
+        this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type: 'optix', data: null })
         await this.loadMore(this.optionsChecked)
       } catch (error) {
         this.$message.error('Unable to update intraday watchlist.')
@@ -354,6 +356,15 @@ export default {
     async loadMore (type, isUpdateChart, condition) {
       if (this.tableInfo.type === 'intraday') {
         this.optionsChecked = type
+        const cached = this.$store.state.chart.intradayPageListData[type]
+        if (cached) {
+          this.tableData = cached.rows
+          this.firstRow = this.tableData[0] || {}
+          this.intradayWatchlistUrl = cached.watchlistUrl || null
+          this.intradayWatchlistTickers = cached.watchlistTickers || []
+          if (isUpdateChart && this.firstRow.url) this.$emit('updateChart', this.firstRow)
+          return
+        }
         this.loading = true
         try {
           if (type === 'charts') {
@@ -369,11 +380,12 @@ export default {
               market_symbol: chart.chart_name,
               type: 'intraday_charts',
               source_list: 'charts',
-              last_update: response.data.data.last_updated,
-              last_value: Array.isArray(chart.data) && chart.data.length ? chart.data[chart.data.length - 1][1] : null,
+              last_update: chart.last_updated,
+              last_value: chart.last_value,
               dashboardChart: chart
             }))
             this.firstRow = this.tableData[0] || {}
+            this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type, data: { rows: this.tableData } })
             if (isUpdateChart) this.$emit('updateChart', this.firstRow)
             return
           }
@@ -413,6 +425,7 @@ export default {
               }
             }).filter(Boolean)
             this.firstRow = this.tableData[0] || {}
+            this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type, data: { rows: this.tableData, watchlistUrl: this.intradayWatchlistUrl, watchlistTickers: watched } })
             if (isUpdateChart && this.firstRow.url) this.$emit('updateChart', this.firstRow)
             return
           }
@@ -427,6 +440,7 @@ export default {
             optix: item.optix == null ? '-' : Number(item.optix).toFixed(2)
           }))
           this.firstRow = this.tableData[0] || {}
+          this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type, data: { rows: this.tableData, watchlistUrl: this.intradayWatchlistUrl, watchlistTickers: watched } })
           if (isUpdateChart && this.firstRow.url) this.$emit('updateChart', this.firstRow)
         } catch (error) {
           this.tableData = []

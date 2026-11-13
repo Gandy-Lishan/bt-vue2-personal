@@ -234,6 +234,9 @@
               <a v-else-if="l.value === 'title'" :href="`https://sentimentrader.com/blog/${scope.row['blog_url']}`" target="_blank">{{ scope.row[l.value] }}</a>
               <el-button v-else-if="l.link" type="text" @click="overviewUpdateChart(scope.row, l.value)">{{ scope.row[l.value] }}</el-button>
               <img v-else-if="l.value === 'sentiment'" :src="`https://users.sentimentrader.com/static/img/bull_bear_${scope.row[l.value]}.gif`" :alt="scope.row[l.value]" style="width: 90px;"/>
+              <span v-else-if="type === 'intraday' && checkedType === 'intraday' && l.value === 'date'">{{ typeof scope.row.date === 'string' ? scope.row.date.replace(/\s+ET$/, '') : scope.row.date }}</span>
+              <span v-else-if="type === 'intraday' && checkedType === 'charts' && l.value === 'last_update'">{{ typeof scope.row.last_update === 'string' ? scope.row.last_update.replace(/\s+ET$/, '') : scope.row.last_update }}</span>
+              <span v-else-if="type === 'intraday' && checkedType === 'charts' && l.value === 'last_value'">{{ scope.row.last_value == null || scope.row.last_value === '' || !Number.isFinite(Number(scope.row.last_value)) ? '-' : Number(scope.row.last_value).toFixed(2) }}</span>
               <span v-else>{{ scope.row[l.value] }}</span>
 					  </template>
             </el-table-column>
@@ -390,10 +393,8 @@ export default {
         if (this.checkedType === 'charts') {
           return [
             { key: 'chart_name', label: 'Name', value: 'chart_name', minWidth: '180px' },
-            { key: 'max', label: 'Max', value: 'max' },
-            { key: 'min', label: 'Min', value: 'min' },
-            { key: 'opt_extreme', label: 'Opt Extreme', value: 'opt_extreme' },
-            { key: 'pess_extreme', label: 'Pess Extreme', value: 'pess_extreme' }
+            { key: 'last_value', label: 'Value', value: 'last_value' },
+            { key: 'last_update', label: 'Time (ET)', value: 'last_update', minWidth: '145px' }
           ]
         }
         const columns = [
@@ -2814,7 +2815,7 @@ export default {
 					const right = b[prop]
 					if (left == null || left === '' || left === '-') return right == null || right === '' || right === '-' ? 0 : 1
 					if (right == null || right === '' || right === '-') return -1
-					if (prop === 'last_update' || prop === 'date') return (Date.parse(left) - Date.parse(right)) * direction
+					if (prop === 'last_update' || prop === 'date') return (Date.parse(String(left).replace(/\s+ET$/, '')) - Date.parse(String(right).replace(/\s+ET$/, ''))) * direction
 					if (numericColumns.includes(prop)) return (Number(left) - Number(right)) * direction
 					return String(left).localeCompare(String(right), 'en', { sensitivity: 'base' }) * direction
 				})

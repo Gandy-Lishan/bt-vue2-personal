@@ -11,6 +11,7 @@ export default {
   },
   beforeDestroy() {
     this.$store.state.chart.indicatorsPageListdata = {}
+    this.$store.state.chart.intradayPageListData = {}
   }
 }
 </script>

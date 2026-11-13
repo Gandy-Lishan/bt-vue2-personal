@@ -91,10 +91,10 @@
             inputEnabled: false,
             buttons: [
               { type: 'day', count: 1, text: '1D' },
-              { type: 'day', count: 2, text: '2D' },
-              { type: 'day', count: 3, text: '3D' },
-              { type: 'day', count: 4, text: '4D' },
-              { type: 'day', count: 5, text: '5D' }
+              { type: 'day', count: 5, text: '5D' },
+              { type: 'week', count: 1, text: '1W' },
+              { type: 'week', count: 2, text: '2W' },
+              { type: 'all', text: 'All' }
             ],
             selected: 0
           },
@@ -115,9 +115,11 @@
             min: chart.min == null ? undefined : chart.min,
             max: chart.max == null ? undefined : chart.max,
             plotLines: [
-              { value: chart.pess_extreme, color: 'green', dashStyle: 'shortdash', width: 1 },
-              { value: chart.opt_extreme, color: 'red', dashStyle: 'shortdash', width: 1 }
-            ].filter(line => line.value != null)
+              { value: 20, color: 'rgba(0, 128, 0, 1)', dashStyle: 'shortdash', width: 1,
+                label: { text: '20', style: { fontSize: '10px', color: 'rgba(0, 128, 0, 1)' } }, zIndex: 5 },
+              { value: 80, color: 'rgba(255, 0, 0, 1)', dashStyle: 'shortdash', width: 1,
+                label: { text: '80', style: { fontSize: '10px', color: 'rgba(255, 0, 0, 1)' } }, zIndex: 5 }
+            ]
           },
           tooltip: {
             formatter: function () { return `${etTime(this.x)} ET<br>${chart.title}: <b>${Highcharts.numberFormat(this.y, 2)}</b>` }
@@ -161,7 +163,7 @@
             const button = document.createElement('button');
             button.id = 'button'
             button.innerHTML = type === 'intraday'
-              ? '<i class="el-icon-s-data" style="margin-right: 5px;"></i>View Daily Optix'
+              ? `<i class="el-icon-s-data" style="margin-right: 5px;"></i>View Daily ${market_symbol || url} Optix`
               : '<i class="el-icon-s-data" style="margin-right: 5px;"></i>View Large Chart Or Backtest This Indicator';
             button.style.position = 'absolute';
             button.style.top = `${chart.chartHeight/10}px`;
@@ -207,7 +209,7 @@
       };
 
       const createYAxisConfig = (series, row) => {
-        const { sub_type, source_list, url } = row;
+        const { sub_type, source_list, url, type } = row;
         const isCot = sub_type === 'cot' && url.startsWith('cot_') && source_list === 'commodity_complete_list';
         let sharedYAxisIndex = -1;
 
@@ -247,19 +249,19 @@
             getExtremesFromAll: false,
             plotLines: i >= 1 && i === series.length - 1 && !isCot ? [
               {
-                value: pess || null,
+                value: type === 'intraday' ? 20 : pess || null,
                 color: 'rgba(0, 128, 0, 1)',
                 dashStyle: 'shortdash',
                 width: 1,
-                label: { text: `${pess || ''}`, style: { fontSize: '10px', color: 'rgba(0, 128, 0, 1)' } },
+                label: { text: `${type === 'intraday' ? 20 : pess || ''}`, style: { fontSize: '10px', color: 'rgba(0, 128, 0, 1)' } },
                 zIndex: 5
               },
               {
-                value: opt || null,
+                value: type === 'intraday' ? 80 : opt || null,
                 color: 'rgba(255, 0, 0, 1)',
                 dashStyle: 'shortdash',
                 width: 1,
-                label: { text: `${opt || ''}`, style: { fontSize: '10px', color: 'rgba(255, 0, 0, 1)' } },
+                label: { text: `${type === 'intraday' ? 80 : opt || ''}`, style: { fontSize: '10px', color: 'rgba(255, 0, 0, 1)' } },
                 zIndex: 5
               }
             ] : [],
@@ -664,10 +666,12 @@
             _this.popUpMsgBox('No valid intraday price points are available for this symbol.');
             return;
           }
+          const symbol = market_symbol || url
+          const optixName = `${symbol} Intraday Optix`
           createChart([
-            { name: market_symbol || url, data: prices },
-            { name: 'Intraday Optix', data: optixPoints }
-          ], [market_symbol || url, 'Intraday Optix'], basicChartOptions, this.row);
+            { name: symbol, data: prices },
+            { name: optixName, data: optixPoints }
+          ], [symbol, optixName], basicChartOptions, this.row);
           return;
         } else {
           const res = await axios.get(`https://05kv55a2v9.execute-api.us-east-1.amazonaws.com/dev/get_data?index=${url || 'etf_spy'}`);

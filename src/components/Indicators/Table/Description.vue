@@ -21,6 +21,14 @@
       <p>Consistent with its daily counterpart, the Intraday Optix functions as a contrarian indicator:</p>
       <ul><li>Extreme Pessimism (e.g., 12-period MA below 30): Indicates intraday panic selling and washed-out expectations, alerting traders to a potential mean-reversion bounce to the upside.</li><li>Extreme Optimism (e.g., 12-period MA above 70): Reflects aggressive chasing and elevated complacency, warning of potential intraday momentum exhaustion and vulnerability to a pullback.</li></ul>
       <p>When applying longer-term session smoothers (such as a 78-period full-day MA), extreme swings are compressed, typically fluctuating within a normal baseline range between 35 and 65.</p>
+      <div v-if="checkedType === 'charts'" class="intraday-chart-descriptions">
+        <h4>Description of Intraday Charts</h4>
+        <el-tabs v-model="activeIntradayChartDescription" type="card">
+          <el-tab-pane v-for="tab in intradayChartTabs" :key="tab.key" :label="tab.label" :name="tab.key">
+            <div class="intraday-chart-description" v-html="intradayChartDescriptions[tab.key]"></div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </section>
         <div class="des" v-else-if="
         !enlarged || (enlarged === 'Stock Market Indicator & Optix (Optimism Index)' && (!checkedType || checkedType === 'stock'))
@@ -341,6 +349,8 @@
 </template>
 
 <script>
+import intradayChartDescriptions from './intradayChartDescriptions.json'
+
 export default {
   name: 'Description',
   props: {
@@ -350,7 +360,21 @@ export default {
   data() {
     return {
       type: 1,
-      isTrendScorePage: false
+      isTrendScorePage: false,
+      activeIntradayChartDescription: 'stem',
+      intradayChartDescriptions,
+      intradayChartTabs: [
+        { key: 'stem', label: 'STEM.MR' },
+        { key: 'tick', label: 'TICK' },
+        { key: 'po', label: 'Price Oscillator' },
+        { key: 'trin', label: 'TRIN' },
+        { key: 'upissues', label: 'Up Issues' },
+        { key: 'upvolume', label: 'Up Volume' },
+        { key: 'vix_vxn', label: 'VIX & VXN Strength' },
+        { key: 'equityputcall', label: 'Equity Put/Call' },
+        { key: 'iseputcall', label: 'ISE Put/Call' },
+        { key: 'oexputcall', label: 'OEX Put/Call' }
+      ]
     }
   },
   computed: {
@@ -431,6 +455,13 @@ export default {
 }
 .tendScore {
   grid-template-columns: 1fr;
+}
+.intraday-chart-descriptions {
+  margin-top: 24px;
+  min-width: 0;
+}
+.intraday-chart-description {
+  overflow-x: auto;
 }
 .col-md-3.thumbnail {
   border: 1px solid #e0e0e0;
