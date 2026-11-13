@@ -9,6 +9,7 @@
         </template>
         <div class="centent" :class="{tendScore: (enlarged === 'Absolute and Relative Trend Scores' || enlarged === 'Crypto') && (!checkedType || ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TrendSector', 'TSCRP', 'WatchList'].includes(checkedType))}">
     <section v-if="enlarged === 'Intraday'" class="des intraday-about">
+      <div v-if="checkedType !== 'charts'">
       <h3>5-Minute Intraday Optimism Index (Intraday Optix)</h3>
       <p>The 5-Minute Intraday Optimism Index (Intraday Optix) applies our core daily sentiment modeling framework to a granular, intraday timeframe to measure real-time sentiment shifts within the trading session. The index evaluates:</p>
       <ul><li>Intraday put option vs. call option volume and order flow</li><li>Real-time implied volatility and forward volatility expectations</li><li>High-frequency price action and intraday volume profiles</li></ul>
@@ -21,6 +22,7 @@
       <p>Consistent with its daily counterpart, the Intraday Optix functions as a contrarian indicator:</p>
       <ul><li>Extreme Pessimism (e.g., 12-period MA below 30): Indicates intraday panic selling and washed-out expectations, alerting traders to a potential mean-reversion bounce to the upside.</li><li>Extreme Optimism (e.g., 12-period MA above 70): Reflects aggressive chasing and elevated complacency, warning of potential intraday momentum exhaustion and vulnerability to a pullback.</li></ul>
       <p>When applying longer-term session smoothers (such as a 78-period full-day MA), extreme swings are compressed, typically fluctuating within a normal baseline range between 35 and 65.</p>
+      </div>
       <div v-if="checkedType === 'charts'" class="intraday-chart-descriptions">
         <h4>Description of Intraday Charts</h4>
         <el-tabs v-model="activeIntradayChartDescription" type="card">

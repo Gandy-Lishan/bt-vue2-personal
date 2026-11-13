@@ -4,7 +4,7 @@
     <div class="header-span" v-if="(!showReport && !showRelated && !showConstituentConditions)">
       <span>
         {{ label === 'Stock Trend' ? 'Absolute and Relative Trend Scores' : label }}{{trendUpdateDate}}
-        <i v-show="isMostPopular" class="el-icon-download" @click="downloadCSV" title="Download List" style="cursor: pointer;"></i>
+        <i v-show="isMostPopular && type !== 'intraday'" class="el-icon-download" @click="downloadCSV" title="Download List" style="cursor: pointer;"></i>
       </span>
       <el-tooltip effect="dark" placement="top" :content="tooltipsContent">
         <!-- <i class="el-icon-full-screen" ></i> -->
@@ -24,7 +24,7 @@
     <div class="header-span header-span-grid" v-if="!['commodity', 'cssScreen', 'cstScreen', 'CHMinMax'].includes(type) && (!showReport && !showRelated && !showConstituentConditions) && !isMostPopular">
       <template v-for="item in options">
         <span :key="item.label" @click="changeOption(item)" :class="{activated: (checkedType  == item.value), span: true}">{{ item.label }}
-          <i v-show="(checkedType  == item.value) && (isShowFilter || type === 'intraday') && !isOverview" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
+          <i v-show="type !== 'intraday' && (checkedType == item.value) && isShowFilter && !isOverview" class="el-icon-download" @click.stop="downloadCSV" title="Download List"></i>
         </span>
       </template>
     </div>
