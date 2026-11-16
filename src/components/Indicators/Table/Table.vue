@@ -345,11 +345,25 @@ export default {
       try {
         const response = await saveIntradayWatchlist(this.intradayWatchlistUrl, tickers)
         if (response.data && response.data.code && (response.data.code < 200 || response.data.code >= 300)) throw new Error('Unable to update intraday watchlist.')
+        this.intradayWatchlistUrl = this.intradayWatchlistUrl || response.data && (response.data.url || response.data.data && response.data.data.url)
+        if (!this.intradayWatchlistUrl) throw new Error('Intraday watchlist URL is missing.')
         this.intradayWatchlistTickers = tickers
-        row.favorite = tickers.includes(symbol)
+        this.tableData = this.optionsChecked === 'watchlist'
+          ? this.tableData.filter(item => tickers.includes(item.market_symbol))
+          : this.tableData.map(item => item.market_symbol === symbol ? { ...item, favorite: tickers.includes(symbol), loading: false } : item)
+        const optixCache = this.$store.state.chart.intradayPageListData.intraday
+        if (optixCache) {
+          this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', {
+            type: 'intraday',
+            data: {
+              ...optixCache,
+              rows: optixCache.rows.map(item => item.market_symbol === symbol ? { ...item, favorite: tickers.includes(symbol), loading: false } : item),
+              watchlistUrl: this.intradayWatchlistUrl,
+              watchlistTickers: tickers
+            }
+          })
+        }
         this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type: 'watchlist', data: null })
-        this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type: 'optix', data: null })
-        if (this.optionsChecked === 'watchlist' && !row.favorite) this.tableData = this.tableData.filter(item => item.market_symbol !== symbol)
       } catch (error) {
         this.$message.error('Unable to update intraday watchlist.')
       } finally {
