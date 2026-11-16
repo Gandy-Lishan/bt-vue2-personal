@@ -1,5 +1,5 @@
 <template>
-  <div class="trade-chart-backdrop" @click.self="$emit('close')">
+  <div class="trade-chart-backdrop">
     <section class="trade-chart-dialog" role="dialog" aria-modal="true" aria-label="Trade history chart">
       <header class="trade-chart-header">
         <div>
@@ -114,11 +114,9 @@ export default {
         }).filter(Boolean).sort((a, b) => a.x - b.x)
         const buys = []
         const sells = []
-        const buyConnectors = []
-        const sellConnectors = []
         let unmatched = 0
         this.tickerRows.forEach(row => {
-          ;[['entryDate', buys, buyConnectors, -1], ['exitDate', sells, sellConnectors, 1]].forEach(([dateField, target, connectors, direction]) => {
+          ;[['entryDate', buys, -1], ['exitDate', sells, 1]].forEach(([dateField, target, direction]) => {
             const x = timestamp(row[dateField])
             if (!Number.isFinite(x)) return
             const candle = byDate.get(x)
@@ -126,9 +124,8 @@ export default {
             const gap = Math.max(candle[2] - candle[3], candle[4] * 0.012)
             const sameDayCount = target.filter(point => point.x === x).length
             const y = direction < 0
-              ? candle[3] - gap * (1.5 + sameDayCount * 1.1)
-              : candle[2] + gap * (1.5 + sameDayCount * 1.1)
-            connectors.push([x, direction < 0 ? candle[3] : candle[2]], [x, y], null)
+              ? candle[3] - gap * (2.5 + sameDayCount * 1.1)
+              : candle[2] + gap * (2.5 + sameDayCount * 1.1)
             target.push({ x, y, custom: { row } })
           })
         })
@@ -194,8 +191,6 @@ export default {
           series: [
             { type: 'candlestick', name: symbol, data: candles, id: 'price', color: downColor, upColor, lineColor: '#111111', upLineColor: '#111111', lineWidth: 1 },
             { type: 'column', name: 'Volume', data: volume, yAxis: 1, borderColor: '#111111', borderWidth: 1 },
-            { type: 'line', name: 'Buy connector', data: buyConnectors, color: buyMarkerColor, lineWidth: 1.5, marker: { enabled: false }, enableMouseTracking: false, showInLegend: false },
-            { type: 'line', name: 'Sell connector', data: sellConnectors, color: sellMarkerColor, lineWidth: 1.5, marker: { enabled: false }, enableMouseTracking: false, showInLegend: false },
             { type: 'scatter', name: 'Buy', data: buys, color: buyMarkerColor, marker: { symbol: 'triangle', radius: 11, lineColor: '#ffffff', lineWidth: 2 } },
             { type: 'scatter', name: 'Sell', data: sells, color: sellMarkerColor, marker: { symbol: 'triangle-down', radius: 11, lineColor: '#ffffff', lineWidth: 2 } },
           ],
