@@ -702,6 +702,10 @@
 
       <div v-else-if="activeTab === 'history'" class="tab-content">
         <div class="history-toolbar">
+          <div class="history-toolbar-filters">
+            <input v-model.trim="historyTickerSearch" type="search" class="history-search" placeholder="Search ticker" aria-label="Search trade history by ticker" @input="resetHistoryPage">
+            <button type="button" class="history-chart-button" :disabled="!filteredHistoryRows.length" @click="historyChartVisible = true">View Trades on Chart</button>
+          </div>
           <button
             type="button"
             class="history-download-button"
@@ -734,8 +738,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="!historyRows.length">
-                <td :colspan="historyColumns.length" class="empty-cell">No Data</td>
+              <tr v-if="!filteredHistoryRows.length">
+                <td :colspan="historyColumns.length" class="empty-cell">{{ historyRows.length ? 'No matching trades' : 'No Data' }}</td>
               </tr>
               <tr v-for="row in visibleHistoryRows" :key="`history-${row.index}-${row.symbol}-${row.entryDate}`">
                 <td>{{ row.index }}</td>
@@ -756,7 +760,7 @@
             </tbody>
           </table>
         </div>
-        <div v-if="historyRows.length > historyPageSize" class="pagination-row">
+        <div v-if="filteredHistoryRows.length > historyPageSize" class="pagination-row">
           <form class="history-page-jump" @submit.prevent="submitHistoryPageJump">
             <label for="history-page-jump">Go to</label>
             <input
@@ -793,10 +797,11 @@
           </div>
           <div class="pagination-controls">
             <button type="button" :disabled="historyPage <= 1" @click="goToHistoryPage(historyPage - 1)">Previous</button>
-            <span class="pagination-status">Page {{ historyPage }} / {{ historyPageCount }} | {{ historyRows.length }} trades</span>
+            <span class="pagination-status">Page {{ historyPage }} / {{ historyPageCount }} | {{ filteredHistoryRows.length }} trades</span>
             <button type="button" :disabled="historyPage >= historyPageCount" @click="goToHistoryPage(historyPage + 1)">Next</button>
           </div>
         </div>
+        <TradeHistoryChartModal v-if="historyChartVisible" :rows="filteredHistoryRows" @close="historyChartVisible = false" />
       </div>
 
       <div v-else class="tab-content">
@@ -1063,6 +1068,7 @@ import {
   getSwingTradingDashboard,
   getSwingTradingStrategyDetail,
 } from '@/service/service'
+import TradeHistoryChartModal from './TradeHistoryChartModal.vue'
 import { getCookieData } from '@/utils/cryptoUtils/cookie'
 import { getSwingSignalDescription, getSwingSignalLabel } from '@/utils/swingSignalDescriptions'
 
@@ -1633,6 +1639,7 @@ const getLineChartHoverState = vm => {
 
 export default {
   name: 'SwingTradingDashboard',
+  components: { TradeHistoryChartModal },
   data() {
     return {
       tabs,
@@ -1672,6 +1679,8 @@ export default {
       historyPage: 1,
       historyPageSize: 12,
       historyPageInput: '',
+      historyTickerSearch: '',
+      historyChartVisible: false,
       expandedHoldingRows: {},
       compareSort: {
         key: '',
@@ -1940,15 +1949,19 @@ export default {
     historyRows() {
       return Array.isArray(this.currentDetail.history) ? this.currentDetail.history : []
     },
+    filteredHistoryRows() {
+      const query = this.historyTickerSearch.trim().toUpperCase()
+      return query ? this.historyRows.filter(row => String(row.symbol || '').toUpperCase().includes(query)) : this.historyRows
+    },
     sortedHistoryRows() {
-      return this.getSortedTableRows(this.historyRows, this.historyColumns, this.historySort)
+      return this.getSortedTableRows(this.filteredHistoryRows, this.historyColumns, this.historySort)
     },
     visibleHistoryRows() {
       const start = (this.historyPage - 1) * this.historyPageSize
       return this.sortedHistoryRows.slice(start, start + this.historyPageSize)
     },
     historyPageCount() {
-      return Math.max(Math.ceil(this.historyRows.length / this.historyPageSize), 1)
+      return Math.max(Math.ceil(this.filteredHistoryRows.length / this.historyPageSize), 1)
     },
     historyPageItems() {
       const total = this.historyPageCount
@@ -2035,6 +2048,8 @@ export default {
   watch: {
     currentStrategyId() {
       this.resetHistoryPage()
+      this.historyTickerSearch = ''
+      this.historyChartVisible = false
       this.resetHoldingSort()
       this.resetEmailSetupConfirmation()
       this.shareCalculatorCashTouched = false
@@ -7305,9 +7320,17 @@ export default {
 
 .history-toolbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-bottom: 12px;
 }
+
+.history-toolbar-filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.history-search { min-height: 34px; min-width: 190px; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 6px; font: inherit; }
+.history-chart-button { min-height: 34px; padding: 0 12px; border: 1px solid #2563eb; border-radius: 6px; background: #fff; color: #2563eb; font: inherit; font-weight: 700; cursor: pointer; }
+.history-chart-button:disabled { opacity: .5; cursor: not-allowed; }
 
 .history-download-button {
   display: inline-flex;
