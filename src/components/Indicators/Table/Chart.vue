@@ -11,6 +11,7 @@
  import axios from "@/axios";
  import { getIntradayChart } from '@/service/service';
  import { intradaySeries } from './intradaySeries';
+ import { isIntradayMarketOpen, startIntradayMarketRefresh } from './intradayMarketHours';
 
  const getTickDecimals = tickInterval => {
   if (!Number.isFinite(tickInterval) || tickInterval <= 0) return 0;
@@ -31,6 +32,12 @@
     Exporting(Highcharts);
     ExportData(Highcharts);
     this.renderChart();
+    this.stopIntradayChartRefresh = startIntradayMarketRefresh(this.checkIntradayChartRefresh)
+    document.addEventListener('visibilitychange', this.checkIntradayChartRefresh)
+  },
+  beforeDestroy() {
+    if (this.stopIntradayChartRefresh) this.stopIntradayChartRefresh()
+    document.removeEventListener('visibilitychange', this.checkIntradayChartRefresh)
   },
   watch: {
     row: {
@@ -42,6 +49,12 @@
     }
   },
   methods: {
+    checkIntradayChartRefresh() {
+      if (!isIntradayMarketOpen() || document.hidden || !this.$el || !this.$el.getClientRects().length) return
+      if (this.row.type !== 'intraday' || this.row.source_list === 'watchlist') return
+      if (this.intradayChartFetchedAt && Date.now() - this.intradayChartFetchedAt < 5 * 60 * 1000) return
+      if (!this.intradayChartLoading) this.renderChart()
+    },
     downloadIntradayCSV(series, filename) {
       const points = series.flatMap(item => item.data || [])
       const latest = Math.max(...points.map(point => Number(point[0])).filter(Number.isFinite))
@@ -651,7 +664,12 @@
             prices = series.prices
             optixPoints = series.optix
           } else {
+            if (this.intradayChartLoading === (market_symbol || url)) return
+            this.intradayChartLoading = market_symbol || url
             const res = await getIntradayChart(market_symbol || url);
+            if (this.row.url !== url) return
+            this.intradayChartLoading = null
+            this.intradayChartFetchedAt = Date.now()
             if (res.data.code !== 200 || !res.data.data) throw new Error('Invalid intraday chart response');
             const intraday = res.data.data;
             if (intraday.empty || !((Array.isArray(intraday.bars) && intraday.bars.length) || (Array.isArray(intraday.records) && intraday.records.length))) {
@@ -683,6 +701,7 @@
           originalData = JSON.parse(originalData)
         }
       } catch (error) {
+        if (type === 'intraday') this.intradayChartLoading = false
         if(error.response && error.response.status === 404) {
           _this.popUpMsgBox('Data for this indicator is unavailable.')
           createChart([], [], {}, {});

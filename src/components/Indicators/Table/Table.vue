@@ -17,6 +17,8 @@
         :tableData="tableData"
         :isOver="isOver"
         :loading="loading"
+        :intradayDataTime="intradayDataTime"
+        :intradayRefreshError="intradayRefreshError"
         :firstRow="firstRow"
         :cssMonthLabel="cssMonthLabel"
         :showReport="showReport"
@@ -26,6 +28,7 @@
         :breadthIndicatorsOption="breadthIndicatorsOption"
         @loadMore="loadMore"
         @saveIntradayTicker="saveIntradayTicker"
+        @retryIntraday="loadMore(optionsChecked, false, null, true)"
         @updateChart="$emit('updateChart', row)"
         @showDetails="$emit('showDetails', row, isShowDetails, checkedType)"
         @forceUpdateTable="$emit('_forceUpdateTable', type, condition)"
@@ -40,6 +43,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { isJson, capitalizeFirstLetter, unifyNumber } from '@/utils'
 import moment from 'moment-timezone'
 import { getUserWatchlistTrend, getSp1500Intraday, getIntradayCharts, getIntradayWatchlist, saveIntradayWatchlist } from '@/service/service'
+import { isIntradayMarketOpen, startIntradayMarketRefresh } from './intradayMarketHours'
 
 function formatIntradayTimeET(value) {
   if (value == null || value === '') return '-'
@@ -60,6 +64,15 @@ function intradayRecords(value) {
   } catch (error) {
     return []
   }
+}
+
+const INTRADAY_INTERVAL = { intraday: 5 * 60 * 1000, watchlist: 5 * 60 * 1000, charts: 30 * 60 * 1000 }
+
+function latestIntradayTime(rows, type) {
+  const values = rows.map(row => type === 'charts' ? row.last_update : row.date || row.last_update).filter(Boolean)
+  if (!values.length) return ''
+  const latest = values.reduce((a, b) => String(a) > String(b) ? a : b)
+  return formatIntradayTimeET(latest)
 }
 
 export default {
@@ -84,6 +97,10 @@ export default {
       loading: false,
       intradayWatchlistUrl: null,
       intradayWatchlistTickers: [],
+      intradayRefreshError: false,
+      intradayDataTime: '',
+      stopIntradayRefresh: null,
+      intradayRequest: null,
       optionsChecked: '', // 默认值
       cssMonthLabel: '',
       urlMap:{
@@ -332,8 +349,20 @@ export default {
   },
   async mounted() {
     await this.loadMore(this.tableInfo['type'])
+    if (this.tableInfo.type === 'intraday') {
+      this.stopIntradayRefresh = startIntradayMarketRefresh(this.checkIntradayRefresh)
+      document.addEventListener('visibilitychange', this.checkIntradayRefresh)
+    }
+  },
+  beforeDestroy() {
+    if (this.stopIntradayRefresh) this.stopIntradayRefresh()
+    document.removeEventListener('visibilitychange', this.checkIntradayRefresh)
   },
   methods: {
+    checkIntradayRefresh() {
+      if (!isIntradayMarketOpen() || document.hidden || !this.$el || !this.$el.getClientRects().length) return
+      this.loadMore(this.optionsChecked || 'intraday')
+    },
     ...mapActions('chart', ['fetchIndicatorsPageList']),
     async saveIntradayTicker(row) {
       if (row.loading) return
@@ -370,7 +399,7 @@ export default {
         row.loading = false
       }
     },
-    async loadMore (type, isUpdateChart, condition) {
+    async loadMore (type, isUpdateChart, condition, forceRefresh = false) {
       if (this.tableInfo.type === 'intraday') {
         this.optionsChecked = type
         const cached = this.$store.state.chart.intradayPageListData[type]
@@ -379,10 +408,23 @@ export default {
           this.firstRow = this.tableData[0] || {}
           this.intradayWatchlistUrl = cached.watchlistUrl || null
           this.intradayWatchlistTickers = cached.watchlistTickers || []
+          this.intradayDataTime = cached.dataTime || ''
           if (isUpdateChart && this.firstRow.url) this.$emit('updateChart', this.firstRow)
-          return
+          if (!forceRefresh && cached.fetchedAt && Date.now() - cached.fetchedAt < INTRADAY_INTERVAL[type]) return
         }
-        this.loading = true
+        if (this.intradayRequest) {
+          await this.intradayRequest
+          return this.optionsChecked === type ? this.loadMore(type, isUpdateChart, condition, forceRefresh) : undefined
+        }
+        this.loading = !cached
+        this.intradayRefreshError = false
+        this.intradayRequest = this.fetchIntraday(type, isUpdateChart, cached)
+        try { await this.intradayRequest } finally { this.intradayRequest = null }
+        return
+      }
+      return this.loadOther(type, isUpdateChart, condition)
+    },
+    async fetchIntraday(type, isUpdateChart, cached) {
         try {
           if (type === 'charts') {
             const response = await getIntradayCharts()
@@ -402,7 +444,7 @@ export default {
               dashboardChart: chart
             }))
             this.firstRow = this.tableData[0] || {}
-            this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type, data: { rows: this.tableData } })
+            this.cacheIntradayRows(type)
             if (isUpdateChart) this.$emit('updateChart', this.firstRow)
             return
           }
@@ -442,7 +484,7 @@ export default {
               }
             }).filter(Boolean)
             this.firstRow = this.tableData[0] || {}
-            this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type, data: { rows: this.tableData, watchlistUrl: this.intradayWatchlistUrl, watchlistTickers: watched } })
+            this.cacheIntradayRows(type)
             if (isUpdateChart && this.firstRow.url) this.$emit('updateChart', this.firstRow)
             return
           }
@@ -457,16 +499,26 @@ export default {
             optix: item.optix == null ? '-' : Number(item.optix).toFixed(2)
           }))
           this.firstRow = this.tableData[0] || {}
-          this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', { type, data: { rows: this.tableData, watchlistUrl: this.intradayWatchlistUrl, watchlistTickers: watched } })
+          this.cacheIntradayRows(type)
           if (isUpdateChart && this.firstRow.url) this.$emit('updateChart', this.firstRow)
         } catch (error) {
-          this.tableData = []
-          this.firstRow = {}
-          this.$message.error(error.response && error.response.status === 410 ? 'Intraday data requires an eligible subscription.' : 'Unable to load intraday data.')
+          if (!cached) {
+            this.tableData = []
+            this.firstRow = {}
+            this.$message.error(error.response && error.response.status === 410 ? 'Intraday data requires an eligible subscription.' : 'Unable to load intraday data.')
+          } else this.intradayRefreshError = true
         } finally { this.loading = false }
-        return
-      }
-      debugger
+    },
+    cacheIntradayRows(type) {
+      const dataTime = latestIntradayTime(this.tableData, type)
+      this.intradayDataTime = dataTime
+      this.$store.commit('chart/SET_INTRADAY_PAGE_LIST_DATA', {
+        type, data: { rows: this.tableData, watchlistUrl: this.intradayWatchlistUrl,
+          watchlistTickers: this.intradayWatchlistTickers, fetchedAt: Date.now(), dataTime }
+      })
+      this.$emit('intradayRowsRefreshed', type, this.tableData)
+    },
+    async loadOther(type, isUpdateChart, condition) {
       const isTrendScore = ['SP1500Score', 'SP500Score', 'NDX100Score', 'CRPScore', 'RussellScore', 'DomesticETFScore', 'ForeignETFScore', 'OtherAssetsETFScore', 'TSCRP'].includes(type)
       const isHistoricalTrendScore = ['HistoricalSP1500Score', 'HistoricalSP500Score', 'HistoricalNDX100Score', 'HistoricalCRPScore', 'HistoricalRussellScore', 'HistoricalDomesticETFScore', 'HistoricalForeignETFScore', 'HistoricalOtherAssetsETFScore'].includes(type)
       const indicator = this.$route.query.indicator

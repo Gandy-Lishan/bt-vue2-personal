@@ -31,7 +31,7 @@
   </div>
   <div :class="{'trend-score-filter': isTrendScorePage, 'filter-div': true}" v-if="isShowFilter">
     <el-row type="flex" align="middle" justify="space-between">
-      <el-col :span="20">
+      <el-col :span="type === 'intraday' ? 12 : 20">
         <div class="search-input" :class="{'search-input': true, 'full-screen-search-input': this.isTrendScoreFullScreen}">
           <el-input
             class="search-input" :class="{'search-input': true, 'full-screen-search-input': this.isTrendScoreFullScreen}"
@@ -44,7 +44,13 @@
         </el-input>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="type === 'intraday' ? 12 : 4">
+        <div v-if="type === 'intraday'" class="intraday-status">
+          <span>Updates every {{ checkedType === 'charts' ? '30' : '5' }} minutes</span>
+          <span v-if="intradayDataTime"> · Data as of {{ intradayDataTime }} ET</span>
+          <span v-if="intradayRefreshError"> · Update failed</span>
+          <el-button v-if="intradayRefreshError" type="text" size="mini" @click="$emit('retryIntraday')">Retry</el-button>
+        </div>
         <!-- 添加股票按钮 -->
         <el-button type="primary" size="small" v-show="!isVisible && checkedType === 'WatchList'" @click="toggleSelector" style="position: absolute; top: 10px; right: 5px;">
         Add Ticker
@@ -282,6 +288,8 @@ export default {
     type: String,
     label: String,
     loading: Boolean,
+    intradayDataTime: String,
+    intradayRefreshError: Boolean,
     firstRow: Object,
     showReport: Boolean,
     showRelated: Boolean,
@@ -3867,6 +3875,16 @@ export default {
   width: 218px;
   margin: 5px 0px 2px 0px;
   float: left;
+}
+.intraday-status {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  white-space: nowrap;
+  font-size: 12px;
+  color: #606266;
+  padding-right: 8px;
 }
 .full-screen-search-input {
   width: 538px;

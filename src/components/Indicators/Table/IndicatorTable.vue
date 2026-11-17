@@ -12,6 +12,7 @@
          :tableInfo="item"
          :ref="item.refName"
          @updateChart="updateChart" 
+         @intradayRowsRefreshed="refreshSelectedIntradayRow"
          @showDetails="showDetails"
          @forceUpdateTable="(type, condition) => {_forceUpdateTable(type, condition)}"
          :style="{ 
@@ -455,6 +456,14 @@ export default {
       console.log('updateChart', row)
       this.displayRow = row
       // this.displayRow = {...row}
+    },
+    refreshSelectedIntradayRow(type, rows) {
+      const selected = this.displayRow
+      if (!selected || !selected.url) return
+      const source = type === 'charts' ? 'charts' : type === 'watchlist' ? 'watchlist' : 'optix'
+      if (selected.source_list !== source) return
+      const fresh = rows.find(row => row.url === selected.url)
+      if (fresh) this.displayRow = fresh
     },
     showDetails(row, isShowDetails, checkedType) {
       console.log('showDetails', row)
